@@ -17,13 +17,13 @@ class _HomeScreenState extends State<HomeScreen>
   bool get wantKeepAlive => true;
 
   late AnimationController _colorAnimationController;
-  late Animation _colorTween, _iconColorTween;
+  late Animation _colorTween;
 
   List dataList = [];
   List swiperList = [];
 
   RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -38,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen>
     print("321");
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
-
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -54,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   bool _scrollListener(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.axis == Axis.vertical) {
-      _colorAnimationController.animateTo(scrollInfo.metrics.pixels / 350);
-
+      _colorAnimationController.animateTo(scrollInfo.metrics.pixels /
+          (260 - MediaQuery.of(context).padding.top));
       return true;
     }
     return false;
@@ -64,76 +63,78 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        NotificationListener<ScrollNotification>(
-            onNotification: _scrollListener,
-            child: SmartRefresher(
-              enablePullDown: true,
-              // enablePullUp: true,
-              header: WaterDropHeader(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              child: CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 300,
-                    child: Stack(children: [
-                      ConstrainedBox(
-                        child: Stack(children: [
-                          Container(
-                              height: 300,
-                              child: Image.network(
-                                  // item['imgUrl'],
-                                  'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647567926&t=5801838b202ca2811218d58da4f586bf',
-                                  fit: BoxFit.cover)),
-                          Container(
-                            child: new ClipRect(
-                              child: new BackdropFilter(
-                                filter: ImageFilter.blur(
-                                    sigmaX: 10.0, sigmaY: 10.0),
-                                child: Opacity(
-                                  opacity: 0.5,
-                                  child: new Container(
-                                    decoration: new BoxDecoration(
-                                      color:
-                                          Colors.grey.shade500.withOpacity(0.3),
+      body: NotificationListener<ScrollNotification>(
+          onNotification: _scrollListener,
+          child: Stack(
+            children: [
+              SmartRefresher(
+                enablePullDown: true,
+                // enablePullUp: true,
+                header: WaterDropMaterialHeader(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+                child:
+                    CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: 260,
+                      child: Stack(children: [
+                        ConstrainedBox(
+                          child: Stack(children: [
+                            Container(
+                                height: 260,
+                                child: Image.network(
+                                    // item['imgUrl'],
+                                    'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647567926&t=5801838b202ca2811218d58da4f586bf',
+                                    fit: BoxFit.cover)),
+                            Container(
+                              child: new ClipRect(
+                                child: new BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 10.0, sigmaY: 10.0),
+                                  child: Opacity(
+                                    opacity: 0.5,
+                                    child: new Container(
+                                      decoration: new BoxDecoration(
+                                        color: Colors.grey.shade500
+                                            .withOpacity(0.3),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        ]),
-                        constraints: new BoxConstraints.expand(),
-                      ),
-                      Container(
-                        // height: 200,
-                        child: SwiperScreen(swiperList: swiperList),
-                        alignment: AlignmentDirectional.bottomStart,
-                      )
-                    ]),
+                            )
+                          ]),
+                          constraints: new BoxConstraints.expand(),
+                        ),
+                        Container(
+                          child: SwiperScreen(swiperList: swiperList),
+                          alignment: AlignmentDirectional.bottomStart,
+                        )
+                      ]),
+                    ),
                   ),
-                ),
-                // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
-                SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(_buildListItem,
-                        childCount: dataList.length),
-                    itemExtent: 230),
-              ]),
-              // padding: EdgeInsets.fromLTRB(0, statusBarHeight, 0, 0),
-            )),
-        Container(
-          height: MediaQuery.of(context).padding.top,
-          child: AnimatedBuilder(
-              animation: _colorAnimationController,
-              builder: (context, child) => Container(
-                    color: _colorTween.value,
-                  )),
-        ),
-      ],
-    ));
+                  // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
+                  SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(_buildListItem,
+                          childCount: dataList.length),
+                      itemExtent: 230),
+                ]),
+                // padding: EdgeInsets.fromLTRB(0, statusBarHeight, 0, 0),
+              ),
+              Container(
+                height: MediaQuery.of(context).padding.top,
+                child: AnimatedBuilder(
+                    animation: _colorAnimationController,
+                    builder: (context, child) => Container(
+                          color: _colorTween.value,
+                        )),
+              ),
+            ],
+          )),
+      // ],
+    );
   }
 
   Widget _buildListItem(BuildContext context, int index) {

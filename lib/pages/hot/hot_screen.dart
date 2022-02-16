@@ -36,7 +36,7 @@ class HotScreen extends StatelessWidget {
 
         /// Calls `context.read` instead of `context.watch` so that it does not rebuild
         /// when [Counter] changes.
-        onPressed: () => context.read<Counter>().increment(),
+        onPressed: () => context.read<Counter>().increment(9890),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
