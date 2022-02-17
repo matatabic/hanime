@@ -61,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           controller: tabController,
           children: <Widget>[
             HomeScreen(),
-            HotScreen(),
+            SourceHeroPage(),
             FrostedGlassDemo(),
             MyScreen(),
           ],

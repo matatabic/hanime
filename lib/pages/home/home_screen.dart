@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/home_services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -27,15 +28,17 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _onRefresh() async {
     // monitor network fetch
-    print("123");
+    setState(() {
+      dataList = [];
+      swiperList = [];
+    });
+    loadData();
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    print("321");
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
@@ -69,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               SmartRefresher(
                 enablePullDown: true,
-                // enablePullUp: true,
                 header: WaterDropMaterialHeader(),
                 controller: _refreshController,
                 onRefresh: _onRefresh,
@@ -85,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen>
                             Container(
                                 height: 260,
                                 child: Image.network(
-                                    // item['imgUrl'],
+                                    // swiperList[context
+                                    //     .watch<HomeState>()
+                                    //     .swiper_index]['imgUrl'],
                                     'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647567926&t=5801838b202ca2811218d58da4f586bf',
                                     fit: BoxFit.cover)),
                             Container(
@@ -121,7 +125,6 @@ class _HomeScreenState extends State<HomeScreen>
                           childCount: dataList.length),
                       itemExtent: 230),
                 ]),
-                // padding: EdgeInsets.fromLTRB(0, statusBarHeight, 0, 0),
               ),
               Container(
                 height: MediaQuery.of(context).padding.top,
@@ -138,10 +141,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildListItem(BuildContext context, int index) {
-    return getItemContainer(dataList[index]);
+    return getGroupContainer(dataList[index]);
   }
 
-  Widget getItemContainer(item) {
+  Widget getGroupContainer(item) {
     return Column(children: <Widget>[
       Container(
         height: 35,
@@ -166,50 +169,56 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: item["data"].length,
               itemBuilder: (BuildContext context, int index) {
-                return getGridItemContainer(item["data"][index]);
+                return getItemContainer(item["data"][index]);
               }))
     ]);
   }
 
-  Widget getGridItemContainer(item) {
+  Widget getItemContainer(item) {
     return Container(
         width: 130,
         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: Stack(
-          children: <Widget>[
-            ConstrainedBox(
-              child: Image.network(
-                // item['imgUrl'],
-                'https://img0.baidu.com/it/u=3842015069,1925244851&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=652',
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!.toDouble()
-                          : null,
-                    ),
-                  );
-                },
-              ),
-              constraints: new BoxConstraints.expand(),
-            ),
-            Container(
-              alignment: AlignmentDirectional.bottomStart,
-              child: Text(
-                item['title'],
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        child: InkWell(
+          child: Stack(
+            children: <Widget>[
+              ConstrainedBox(
+                child: Image.network(
+                  // item['imgUrl'],
+                  'https://img0.baidu.com/it/u=3842015069,1925244851&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=652',
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!.toDouble()
+                            : null,
+                      ),
+                    );
+                  },
                 ),
+                constraints: new BoxConstraints.expand(),
               ),
-            )
-          ],
+              Container(
+                alignment: AlignmentDirectional.bottomStart,
+                child: Text(
+                  item['title'],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => WatchScreen()));
+          },
         ));
   }
 

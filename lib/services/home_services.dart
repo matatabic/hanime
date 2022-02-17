@@ -12,14 +12,21 @@ Future getHomeList() async {
   labels = labels.map((v) => v.firstChild.text).toList();
 
   List titles = document.querySelectorAll(".home-rows-videos-title");
-  // titles = titles.map((v) => {v.text}).toList();
+
   var groupCount = titles.length / labels.length;
   List images = document.querySelectorAll(".home-rows-videos-div img");
+
+  List urls = document.querySelectorAll(".home-rows-videos-wrapper a");
+
   var tempNum = 0;
   var addSwiper = false;
   for (var image in images) {
     var imgUrl = image.attributes['src'];
-    var temp = {"imgUrl": imgUrl, "title": titles[tempNum].text};
+    var temp = {
+      "imgUrl": imgUrl,
+      "title": titles[tempNum].text,
+      "url": urls[tempNum].attributes['href']
+    };
     if (addSwiper) {
       swiperList.add(temp);
       addSwiper = false;

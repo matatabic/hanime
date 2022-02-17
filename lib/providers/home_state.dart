@@ -6,9 +6,8 @@ class HomeState with ChangeNotifier, DiagnosticableTreeMixin {
 
   int get swiper_index => _swiper_index;
 
-  void increment(int i) {
-    print(i);
-    _swiper_index++;
+  void setIndex(int index) {
+    _swiper_index = index;
     notifyListeners();
   }
 
