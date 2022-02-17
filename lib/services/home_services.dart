@@ -1,13 +1,32 @@
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart' show parse;
 
+class Anime {
+  String url;
+  String imgUrl;
+  String title;
+  Anime(this.url, this.imgUrl, this.title);
+}
+
+class HomeList {
+  String label;
+  List<Anime> data;
+  HomeList(this.label, this.data);
+}
+
+class HomeData {
+  List<Anime> swiperList;
+  List<HomeList> dataList;
+  HomeData(this.swiperList, this.dataList);
+}
+
 Future getHomeList() async {
   Response response = await Dio().get("https://hanime1.me");
   final res = response.data;
   var document = parse(res);
   List dataList = [];
-  List tempData = [];
   List swiperList = [];
+  List tempData = [];
   List labels = document.querySelectorAll("#home-rows-wrapper h3");
   labels = labels.map((v) => v.firstChild.text).toList();
 
@@ -42,5 +61,6 @@ Future getHomeList() async {
       tempData = [];
     }
   }
+
   return {"swiperList": swiperList, "dataList": dataList};
 }

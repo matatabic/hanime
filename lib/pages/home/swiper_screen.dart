@@ -3,11 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hanime/providers/home_state.dart';
 import 'package:provider/src/provider.dart';
 
-class SwiperData {
-  final String image_url;
-  SwiperData(this.image_url);
-}
-
 class SwiperScreen extends StatelessWidget {
   final List swiperList;
   const SwiperScreen({Key? key, required this.swiperList}) : super(key: key);
@@ -24,7 +19,7 @@ class SwiperScreen extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Image.network(
             // swiperList[index]['imgUrl'],
-            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647567926&t=5801838b202ca2811218d58da4f586bf",
+            'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
             fit: BoxFit.cover,
           );
         },

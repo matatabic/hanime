@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hanime/pages/home/anime_photo.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/home_services.dart';
@@ -87,10 +88,10 @@ class _HomeScreenState extends State<HomeScreen>
                             Container(
                                 height: 260,
                                 child: Image.network(
+                                    'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
                                     // swiperList[context
                                     //     .watch<HomeState>()
                                     //     .swiper_index]['imgUrl'],
-                                    'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647567926&t=5801838b202ca2811218d58da4f586bf',
                                     fit: BoxFit.cover)),
                             Container(
                               child: new ClipRect(
@@ -169,7 +170,18 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: item["data"].length,
               itemBuilder: (BuildContext context, int index) {
-                return getItemContainer(item["data"][index]);
+                // return getItemContainer(item["data"][index]);
+                return AnimePhoto(
+                  data: item["data"][index],
+                  width: 130,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                WatchScreen(data: item["data"][index])));
+                  },
+                );
               }))
     ]);
   }
@@ -184,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen>
               ConstrainedBox(
                 child: Image.network(
                   // item['imgUrl'],
-                  'https://img0.baidu.com/it/u=3842015069,1925244851&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=652',
+                  'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -216,8 +228,8 @@ class _HomeScreenState extends State<HomeScreen>
             ],
           ),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => WatchScreen()));
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => WatchScreen()));
           },
         ));
   }
