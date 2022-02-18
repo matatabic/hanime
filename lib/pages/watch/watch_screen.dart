@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:hanime/utils/logUtil.dart';
 
 class WatchScreen extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -13,15 +15,20 @@ class _WatchScreenState extends State<WatchScreen> {
   final Map<String, dynamic> data;
   _WatchScreenState(this.data);
 
+  Map<String, List<Map<String, dynamic>>> dataList = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("213"),
+      ),
       body: SafeArea(
         child: SizedBox.expand(
-          child: Container(
-            child: Text("123"),
-            color: Colors.red,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: VideoScreen(),
           ),
         ),
       ),
@@ -35,6 +42,9 @@ class _WatchScreenState extends State<WatchScreen> {
 
   loadData() async {
     var data = await getWatchData(this.data['url']);
-    setState(() {});
+    LogUtil.d(data);
+    setState(() {
+      dataList = data;
+    });
   }
 }

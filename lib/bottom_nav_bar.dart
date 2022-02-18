@@ -2,8 +2,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/pages/find/find_screen.dart';
-import 'package:hanime/pages/home/frosted_glass_demo.dart';
 import 'package:hanime/pages/home/home_screen.dart';
+import 'package:hanime/pages/hot/hot_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -16,8 +16,6 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-
-  // List colors = [Colors.blue, Colors.pink, Colors.orange];
 
   int currentIndex = 0;
 
@@ -62,7 +60,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           children: <Widget>[
             HomeScreen(),
             StackNavBar(),
-            FrostedGlassDemo(),
+            SourceHeroPage(),
             MyScreen(),
           ],
         ));

@@ -2,14 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
-  print(url);
   Response response = await Dio().get(url);
-  final res = response.data;
-  var document = parse(res);
+  final resHtml = response.data;
+  var document = parse(resHtml);
 
   List tagList = [];
   List commendList = [];
   List videoList = [];
+  List playerList = [];
+  List sizeList = [];
   var tags = document
       .querySelectorAll(".video-show-panel-width .single-video-tag a[href]");
   for (var tag in tags) {
@@ -41,9 +42,30 @@ Future getWatchData(url) async {
 
   var playerElements = document.querySelectorAll("#player source");
   for (var playerElement in playerElements) {
-    print(playerElement.attributes['size']);
-    print(playerElement.attributes['src']);
+    playerList.add({
+      'url': playerElement.attributes['src'],
+      'size': playerElement.attributes['size']
+    });
   }
 
-  RegExp playerReg = new RegExp(r'');
+  if (playerList.length == 0) {
+    RegExp playerReg = RegExp(r"(?<=source = ')(.*)(?=';)");
+    var match = playerReg.firstMatch(resHtml);
+    if (match != null) {
+      playerList.add({'source': match.group(0), 'size': 720});
+    }
+  }
+
+  var titleElement = document.querySelector("meta[property='og:title']");
+  var title = titleElement!.attributes['content'];
+
+  var descriptionElement =
+      document.querySelector("meta[property='og:description']");
+  var description = descriptionElement!.attributes['content'];
+
+  return {
+    "video": [
+      {"name": "选集", "list": playerList},
+    ]
+  };
 }
