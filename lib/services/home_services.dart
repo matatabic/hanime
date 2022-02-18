@@ -20,7 +20,7 @@ class HomeData {
   HomeData(this.swiperList, this.dataList);
 }
 
-Future getHomeList() async {
+Future getHomeData() async {
   Response response = await Dio().get("https://hanime1.me");
   final res = response.data;
   var document = parse(res);

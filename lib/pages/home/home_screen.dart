@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/pages/home/anime_photo.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -177,65 +178,18 @@ class _HomeScreenState extends State<HomeScreen>
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                WatchScreen(data: item["data"][index])));
+                        Right2LeftRouter(
+                            child: WatchScreen(
+                          data: item["data"][index],
+                        )));
                   },
                 );
               }))
     ]);
   }
 
-  Widget getItemContainer(item) {
-    return Container(
-        width: 130,
-        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: InkWell(
-          child: Stack(
-            children: <Widget>[
-              ConstrainedBox(
-                child: Image.network(
-                  // item['imgUrl'],
-                  'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!.toDouble()
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-                constraints: new BoxConstraints.expand(),
-              ),
-              Container(
-                alignment: AlignmentDirectional.bottomStart,
-                child: Text(
-                  item['title'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-          onTap: () {
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => WatchScreen()));
-          },
-        ));
-  }
-
   loadData() async {
-    var data = await getHomeList();
+    var data = await getHomeData();
     setState(() {
       dataList = data['dataList'];
       swiperList = data['swiperList'];
