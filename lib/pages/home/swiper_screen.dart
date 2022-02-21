@@ -15,11 +15,11 @@ class SwiperScreen extends StatelessWidget {
     return Container(
       height: 200,
       child: Swiper(
-        autoplay: false,
+        autoplay: true,
         itemBuilder: (BuildContext context, int index) {
           return Image.network(
             // swiperList[index]['imgUrl'],
-            'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
+            'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
             fit: BoxFit.cover,
           );
         },
@@ -27,8 +27,8 @@ class SwiperScreen extends StatelessWidget {
           context.read<HomeState>().setIndex(index);
         },
         itemCount: swiperList.length,
-        viewportFraction: 0.8,
-        scale: 0.8,
+        viewportFraction: 0.9,
+        scale: 0.9,
         pagination: SwiperPagination(
             margin: EdgeInsets.zero,
             builder: SwiperCustomPagination(builder: (context, config) {

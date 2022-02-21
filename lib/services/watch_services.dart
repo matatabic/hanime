@@ -1,6 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart' show parse;
 
+class Video {
+  final String title;
+  final String htmlUrl;
+  final String imgUrl;
+  Video(this.title, this.htmlUrl, this.imgUrl);
+}
+
 Future getWatchData(url) async {
   Response response = await Dio().get(url);
   final resHtml = response.data;
@@ -11,12 +18,44 @@ Future getWatchData(url) async {
   List videoList = [];
   List playerList = [];
   List sizeList = [];
+
+  var titleElement = document.querySelector("meta[property='og:title']");
+  var title = titleElement!.attributes['content'];
+
+  var currentPlayer;
+  RegExp playerReg = RegExp(r'(?<="contentUrl": ")(.*)(?=",)');
+  var match = playerReg.firstMatch(resHtml);
+  if (match != null) {
+    currentPlayer = match.group(0)!;
+  }
+
+  var watchImg = document
+      .querySelector(".hidden-md #video-playlist-wrapper img")!
+      .attributes['src'];
+
+  var watchTitleElements =
+      document.querySelectorAll(".hidden-md #video-playlist-wrapper h4");
+  var watchTitle = watchTitleElements[0].text;
+  var watchCountTitle = watchTitleElements[1].text;
+
+  print(watchImg);
+  print(watchTitle);
+  print(watchCountTitle);
+
+  var descriptionElement =
+      document.querySelector("meta[property='og:description']");
+  var description = descriptionElement!.attributes['content'];
+
+  var currentVideo = [
+    {"name": title, 'url': currentPlayer}
+  ];
+
   var tags = document
       .querySelectorAll(".video-show-panel-width .single-video-tag a[href]");
   for (var tag in tags) {
     tagList.add(tag.text);
   }
-  print(tagList);
+
   var commendElements =
       document.querySelectorAll("#related-tabcontent .related-video-width");
 
@@ -27,45 +66,46 @@ Future getWatchData(url) async {
       "url": commendElement.querySelector("a")!.attributes['href']
     });
   }
-  print(commendList);
 
   var videoElements = document.querySelectorAll(
       ".hidden-md #video-playlist-wrapper #playlist-scroll .related-watch-wrap");
+  // var currentElement = document.querySelector(
+  //     '.hidden-md #video-playlist-wrapper #playlist-scroll .related-watch-wrap img[style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; filter: brightness(15%);"]');
+  // var currentImgUrl = currentElement!.attributes['src'];
+
   for (var videoElement in videoElements) {
+    var imgUrl = videoElement.querySelector("img[alt]")!.attributes['src'];
+    var title = videoElement.querySelector("h4")!.text;
+    var htmlUrl = videoElement.querySelector("a")!.attributes['href'];
     videoList.add({
-      "imgUrl": videoElement.querySelector("img[alt]")!.attributes['src'],
-      "title": videoElement.querySelector("h4")!.text,
-      "url": videoElement.querySelector("a")!.attributes['href']
+      "imgUrl": imgUrl,
+      "title": title,
+      "htmlUrl": htmlUrl,
     });
   }
-  print(videoList);
-
-  var playerElements = document.querySelectorAll("#player source");
-  for (var playerElement in playerElements) {
-    playerList.add({
-      'url': playerElement.attributes['src'],
-      'size': playerElement.attributes['size']
-    });
-  }
-
-  if (playerList.length == 0) {
-    RegExp playerReg = RegExp(r"(?<=source = ')(.*)(?=';)");
-    var match = playerReg.firstMatch(resHtml);
-    if (match != null) {
-      playerList.add({'source': match.group(0), 'size': 720});
-    }
-  }
-
-  var titleElement = document.querySelector("meta[property='og:title']");
-  var title = titleElement!.attributes['content'];
-
-  var descriptionElement =
-      document.querySelector("meta[property='og:description']");
-  var description = descriptionElement!.attributes['content'];
+  // var playerElements = document.querySelectorAll("#player source"); //多分辨率
+  // for (var playerElement in playerElements) {
+  //   // var size = playerElement.attributes['size'];
+  //   // var url = playerElement.attributes['src'];
+  //   playerList.add({
+  //     'url': playerElement.attributes['src'],
+  //     'name': playerElement.attributes['name']
+  //   });
+  // }
 
   return {
-    "video": [
-      {"name": "选集", "list": playerList},
-    ]
+    "info": {
+      "title": watchTitle,
+      "imgUrl": watchImg,
+      "countTitle": watchCountTitle,
+    },
+    "videoData": {
+      "video": [
+        {"name": "选集", "list": currentVideo},
+      ]
+    },
+    "videoList": videoList,
+    "tagList": tagList,
+    "commendList": commendList
   };
 }

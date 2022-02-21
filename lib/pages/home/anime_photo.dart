@@ -20,7 +20,7 @@ class AnimePhoto extends StatelessWidget {
               ConstrainedBox(
                 child: Image.network(
                   // data['imgUrl'],
-                  'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
+                  'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;

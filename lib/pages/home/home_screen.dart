@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen>
                             Container(
                                 height: 260,
                                 child: Image.network(
-                                    'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
+                                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
                                     // swiperList[context
                                     //     .watch<HomeState>()
                                     //     .swiper_index]['imgUrl'],
@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen>
                         context,
                         Right2LeftRouter(
                             child: WatchScreen(
-                          data: item["data"][index],
+                          htmlUrl: item["data"][index]["url"],
                         )));
                   },
                 );
