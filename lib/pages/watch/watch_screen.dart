@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hanime/Entity/watch_entity.dart';
+import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:hanime/utils/logUtil.dart';
@@ -46,36 +46,35 @@ class _WatchScreenState extends State<WatchScreen> {
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
     // LogUtil.d(json.encode(data));
-    WatchEntity newsBean = WatchEntity.fromJson(data);
+    // WatchEntity newsBean = WatchEntity.fromJson(data);
     // LogUtil.d(json);
     // /*将Json转成实体类*/
-    // WatchBeanEntity newsBean = WatchBeanEntity.fromJson(data);
-    LogUtil.d(newsBean.videoData.video);
-    print("pojuqwpfrjqw");
-    return data;
+    WatchEntity newsBean = WatchEntity.fromJson(data);
+    // LogUtil.d(newsBean);
+    // LogUtil.d(json.encode(data));
+    return newsBean;
   }
 
   Widget _createListView(BuildContext context, AsyncSnapshot snapshot) {
-    // List movies = snapshot.data['subjects'];
-    print("ccc");
-    print(snapshot.data['videoList']);
-    print("888");
-    List videoList = snapshot.data['videoList'];
-    print("999");
+    // List movies<WatchEntity> = snapshot.data;
+    print("JJJ");
+    WatchEntity newsBean = snapshot.data;
+    LogUtil.d(newsBean.videoData);
+    print("JJJ");
     return SizedBox.expand(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
             VideoScreen(
-              // data: snapshot.data,
+              // data: newsBean,
               // info: snapshot.data['info'],
-              videoData: snapshot.data['videoData'],
+              videoData: newsBean.videoData,
               // videoLisaat: snapshot.data['videoData'],
             ),
-            Center(
-              child: Text(snapshot.data['commendList'].length.toString()),
-            ),
+            // Center(
+            //   child: Text(snapshot.data['commendList'].length.toString()),
+            // ),
           ],
         ),
         // child: VideoScreen(

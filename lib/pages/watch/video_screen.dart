@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
-import 'package:hanime/utils/logUtil.dart';
+import 'package:hanime/entity/watch_entity.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -29,7 +29,8 @@ class PlayerShowConfig implements ShowConfigAbs {
 
 class VideoScreen extends StatefulWidget {
   // WatchEntity data;
-  Map<String, List<Map<String, dynamic>>> videoData;
+  // Map<String, List<Map<String, dynamic>>> videoData;
+  WatchVideoData videoData;
   // Map<String, dynamic> info;
   // List videoList;
   VideoScreen({
@@ -77,10 +78,10 @@ class _VideoScreenState extends State<VideoScreen>
   @override
   void initState() {
     super.initState();
-    LogUtil.d(widget.videoData);
-    setState(() {
-      videoList = widget.videoData;
-    });
+    // LogUtil.d(widget.videoData);
+    // setState(() {
+    //   videoList = widget.videoData;
+    // });
     // 格式化json转对象
     _videoSourceTabs = VideoSourceFormat.fromJson(videoList);
     // 这句不能省，必须有

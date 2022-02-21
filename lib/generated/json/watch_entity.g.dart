@@ -1,4 +1,4 @@
-import 'package:hanime/Entity/watch_entity.dart';
+import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/generated/json/base/json_convert_content.dart';
 
 WatchEntity $WatchEntityFromJson(Map<String, dynamic> json) {
