@@ -5,6 +5,8 @@ import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
 
+import 'episode.dart';
+
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
   WatchScreen({Key? key, required this.htmlUrl}) : super(key: key);
@@ -14,12 +16,8 @@ class WatchScreen extends StatefulWidget {
 }
 
 class _WatchScreenState extends State<WatchScreen> {
-  // Map<String, dynamic> info = {};
-  // Map<String, List<Map<String, dynamic>>> video = {};
-  // List<String> tagList = [];
-  // List<String> commendList = [];
-  bool _isExpanded = false;
   var _futureBuilderFuture;
+  var _currentVideoIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -90,86 +88,76 @@ class _WatchScreenState extends State<WatchScreen> {
                         padding: EdgeInsets.only(top: 15),
                         child: Wrap(
                           children: _buildTagWidget(watchEntity.tagList),
-                          spacing: 25,
+                          spacing: 10,
                           runSpacing: 10,
                         )),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Container(
-                        color: Colors.red,
-                        height: 100,
-                        child: Center(
-                          child: Text("123"),
-                        ),
-                      ),
-                    ),
-                    ExpansionPanelList(
-                      // 点击折叠按钮实现面板的伸缩
-                      expansionCallback: (int panelIndex, bool isExpanded) {
-                        setState(() {
-                          _isExpanded = !isExpanded;
-                        });
-                      },
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                color: Color(0x5757571C),
+                height: 100,
+                margin: EdgeInsets.only(top: 15),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        ExpansionPanel(
-                          headerBuilder:
-                              (BuildContext context, bool isExpanded) {
-                            return Container(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text(
-                                'Panel A',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            );
-                          },
-                          body: new Center(
-                            child: new Column(
-                              children: <Widget>[
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.blue,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.yellow,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.pink,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.blue,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.yellow,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.pink,
-                                ),
-                                Container(
-                                  width: 300.0,
-                                  height: 200.0,
-                                  color: Colors.blue,
-                                ),
-                              ],
-                            ),
+                        ClipOval(
+                          //圆形头像
+                          child: Image.network(
+                            watchEntity.info.imgUrl,
+                            // 'https://pic2.zhimg.com/v2-639b49f2f6578eabddc458b84eb3c6a1.jpg',
+                            fit: BoxFit.cover,
+                            width: 70.0,
+                            height: 70.0,
                           ),
-                          isExpanded: _isExpanded, // 设置面板的状态，true展开，false折叠
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(watchEntity.info.title),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(watchEntity.info.countTitle),
+                              )
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ],
                 ),
               ),
+              Container(
+                height: 110,
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: watchEntity.videoList.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        VerticalDivider(
+                          width: 20.0,
+                          // color: Color(0xFFFFFFFF),
+                        ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Episode(
+                        videoList: watchEntity.videoList[index],
+                        selector: _currentVideoIndex == index,
+                        onTap: () {
+                          loadData();
+                          setState(() {
+                            _currentVideoIndex = index;
+                          });
+                        },
+                      );
+                    }),
+              )
             ],
           ),
         ),
