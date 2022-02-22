@@ -1,13 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart' show parse;
 
-class Video {
-  final String title;
-  final String htmlUrl;
-  final String imgUrl;
-  Video(this.title, this.htmlUrl, this.imgUrl);
-}
-
 Future getWatchData(url) async {
   Response response = await Dio().get(url);
   final resHtml = response.data;
@@ -21,6 +14,7 @@ Future getWatchData(url) async {
 
   var titleElement = document.querySelector("meta[property='og:title']");
   var title = titleElement!.attributes['content'];
+  var shareTitle = document.querySelector("#shareBtn-title")!.text;
 
   var currentPlayer;
   RegExp playerReg = RegExp(r'(?<="contentUrl": ")(.*)(?=",)');
@@ -38,13 +32,12 @@ Future getWatchData(url) async {
   var watchTitle = watchTitleElements[0].text;
   var watchCountTitle = watchTitleElements[1].text;
 
-  print(watchImg);
-  print(watchTitle);
-  print(watchCountTitle);
-
   var descriptionElement =
       document.querySelector("meta[property='og:description']");
   var description = descriptionElement!.attributes['content'];
+
+  String? aa = document.querySelector("#caption")!.firstChild!.text;
+  description = description!.replaceFirst(aa!, "");
 
   var currentVideo = [
     {"name": title, 'url': currentPlayer}
@@ -97,7 +90,9 @@ Future getWatchData(url) async {
     "info": {
       "title": watchTitle,
       "imgUrl": watchImg,
+      "shareTitle": shareTitle,
       "countTitle": watchCountTitle,
+      "description": description,
     },
     "videoData": {
       "video": [

@@ -50,9 +50,17 @@ WatchInfo $WatchInfoFromJson(Map<String, dynamic> json) {
   if (imgUrl != null) {
     watchInfo.imgUrl = imgUrl;
   }
+  final String? shareTitle = jsonConvert.convert<String>(json['shareTitle']);
+  if (shareTitle != null) {
+    watchInfo.shareTitle = shareTitle;
+  }
   final String? countTitle = jsonConvert.convert<String>(json['countTitle']);
   if (countTitle != null) {
     watchInfo.countTitle = countTitle;
+  }
+  final String? description = jsonConvert.convert<String>(json['description']);
+  if (description != null) {
+    watchInfo.description = description;
   }
   return watchInfo;
 }
@@ -61,7 +69,9 @@ Map<String, dynamic> $WatchInfoToJson(WatchInfo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['imgUrl'] = entity.imgUrl;
+  data['shareTitle'] = entity.shareTitle;
   data['countTitle'] = entity.countTitle;
+  data['description'] = entity.description;
   return data;
 }
 

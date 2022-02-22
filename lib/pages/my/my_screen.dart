@@ -28,7 +28,7 @@ class _MyScreenState extends State<MyScreen>
         ),
         body: new SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: new Center(
+          child: new Container(
             child: new Column(
               children: <Widget>[
                 Container(

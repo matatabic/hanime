@@ -56,10 +56,11 @@ class _BottomNavBarState extends State<BottomNavBar>
           },
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           controller: tabController,
           children: <Widget>[
             HomeScreen(),
-            StackNavBar(),
+            ExpansionPanelDemo(),
             SourceHeroPage(),
             MyScreen(),
           ],

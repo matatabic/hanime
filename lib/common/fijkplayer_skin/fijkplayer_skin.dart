@@ -54,7 +54,6 @@ class CustomFijkPanel extends StatefulWidget {
   final Rect texturePos;
   final BuildContext? pageContent;
   final String playerTitle;
-  final String testTitle;
   final Function? onChangeVideo;
   final int curTabIdx;
   final int curActiveIdx;
@@ -67,7 +66,6 @@ class CustomFijkPanel extends StatefulWidget {
     required this.texturePos,
     this.pageContent,
     this.playerTitle = "",
-    this.testTitle = "",
     required this.showConfig,
     this.onChangeVideo,
     required this.videoFormat,
@@ -340,8 +338,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           tabs:
-              // _videoSourceTabs.video!.map((e) => Tab(text: e!.name!)).toList(),
-              _videoSourceTabs.video!.map((e) => Tab(text: "aaax")).toList(),
+              _videoSourceTabs.video!.map((e) => Tab(text: e!.name!)).toList(),
           isScrollable: true,
           controller: _tabController,
         ),
@@ -386,8 +383,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               changeCurPlayVideo(newTabIdx, newActiveIdx);
             },
             child: Text(
-              // "qwerqw",
-              _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.imgUrl!,
+              _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -440,8 +436,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                           Expanded(
                             child: Container(
                               child: Text(
-                                widget.testTitle,
-                                // widget.playerTitle,
+                                widget.playerTitle,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 textAlign: TextAlign.left,
@@ -618,7 +613,6 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             showConfig: widget.showConfig,
             pageContent: widget.pageContent,
             playerTitle: widget.playerTitle,
-            testTitle: widget.testTitle,
             viewSize: widget.viewSize,
             videoFormat: widget.videoFormat,
             changeDrawerState: changeDrawerState,
@@ -652,7 +646,6 @@ class _buildGestureDetector extends StatefulWidget {
   final Rect texturePos;
   final BuildContext? pageContent;
   final String playerTitle;
-  final String testTitle;
   final Function? onChangeVideo;
   final int curTabIdx;
   final int curActiveIdx;
@@ -667,7 +660,6 @@ class _buildGestureDetector extends StatefulWidget {
     required this.texturePos,
     this.pageContent,
     this.playerTitle = "",
-    this.testTitle = "",
     required this.showConfig,
     this.onChangeVideo,
     required this.curTabIdx,
@@ -1318,7 +1310,6 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                 child: Container(
                   child: Text(
                     widget.playerTitle,
-                    // widget.testTitle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     textAlign: TextAlign.left,

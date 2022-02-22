@@ -171,7 +171,6 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: item["data"].length,
               itemBuilder: (BuildContext context, int index) {
-                // return getItemContainer(item["data"][index]);
                 return AnimePhoto(
                   data: item["data"][index],
                   width: 130,

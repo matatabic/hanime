@@ -1,8 +1,9 @@
+import 'package:expandable_text/expandable_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:hanime/utils/logUtil.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
@@ -17,17 +18,11 @@ class _WatchScreenState extends State<WatchScreen> {
   // Map<String, List<Map<String, dynamic>>> video = {};
   // List<String> tagList = [];
   // List<String> commendList = [];
+  bool _isExpanded = false;
   var _futureBuilderFuture;
 
   @override
   Widget build(BuildContext context) {
-    // print(data);
-    // print(data.length);
-    // if (data.length == 0) {
-    //   return Center(
-    //     child: Text("PPP"),
-    //   );
-    // }
     return Scaffold(
       backgroundColor: Colors.black,
       body: FutureBuilder(
@@ -46,45 +41,161 @@ class _WatchScreenState extends State<WatchScreen> {
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
     // LogUtil.d(json.encode(data));
-    // WatchEntity newsBean = WatchEntity.fromJson(data);
-    // LogUtil.d(json);
     // /*将Json转成实体类*/
-    WatchEntity newsBean = WatchEntity.fromJson(data);
+    WatchEntity watchEntity = WatchEntity.fromJson(data);
     // LogUtil.d(newsBean);
-    // LogUtil.d(json.encode(data));
-    return newsBean;
+
+    return watchEntity;
   }
 
   Widget _createListView(BuildContext context, AsyncSnapshot snapshot) {
-    // List movies<WatchEntity> = snapshot.data;
-    print("JJJ");
-    WatchEntity newsBean = snapshot.data;
-    LogUtil.d(newsBean.videoData);
-    print("JJJ");
-    return SizedBox.expand(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            VideoScreen(
-              // data: newsBean,
-              // info: snapshot.data['info'],
-              videoData: newsBean.videoData,
-              // videoLisaat: snapshot.data['videoData'],
-            ),
-            // Center(
-            //   child: Text(snapshot.data['commendList'].length.toString()),
-            // ),
-          ],
+    WatchEntity watchEntity = snapshot.data;
+    return SafeArea(
+      child: SizedBox.expand(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              VideoScreen(
+                data: watchEntity,
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      watchEntity.info.shareTitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Container(
+                      child: ExpandableText(
+                        watchEntity.info.description,
+                        animation: true,
+                        prefixText: watchEntity.info.title,
+                        prefixStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: Colors.orange),
+                        expandText: '顯示完整資訊',
+                        collapseText: '只顯示部分資訊',
+                        maxLines: 3,
+                        linkColor: Colors.cyan,
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Wrap(
+                          children: _buildTagWidget(watchEntity.tagList),
+                          spacing: 25,
+                          runSpacing: 10,
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Container(
+                        color: Colors.red,
+                        height: 100,
+                        child: Center(
+                          child: Text("123"),
+                        ),
+                      ),
+                    ),
+                    ExpansionPanelList(
+                      // 点击折叠按钮实现面板的伸缩
+                      expansionCallback: (int panelIndex, bool isExpanded) {
+                        setState(() {
+                          _isExpanded = !isExpanded;
+                        });
+                      },
+                      children: [
+                        ExpansionPanel(
+                          headerBuilder:
+                              (BuildContext context, bool isExpanded) {
+                            return Container(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(
+                                'Panel A',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            );
+                          },
+                          body: new Center(
+                            child: new Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.blue,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.yellow,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.pink,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.blue,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.yellow,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.pink,
+                                ),
+                                Container(
+                                  width: 300.0,
+                                  height: 200.0,
+                                  color: Colors.blue,
+                                ),
+                              ],
+                            ),
+                          ),
+                          isExpanded: _isExpanded, // 设置面板的状态，true展开，false折叠
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        // child: VideoScreen(
-        //   data: dataList,
-        // ),
-        // child: Center(
-        //   child: Text(dataList.length.toString()),
-        // ),
       ),
     );
+  }
+
+  List<Widget> _buildTagWidget(tagList) {
+    List<Widget> tagWidgetList = [];
+
+    for (var item in tagList) {
+      tagWidgetList.add(Container(
+        padding: EdgeInsets.all(3.5),
+        decoration: BoxDecoration(
+            border: new Border.all(
+          color: Colors.grey, //边框颜色
+          width: 2.0, //边框粗细
+        )),
+        child: Text(
+          item,
+          style: TextStyle(fontSize: 17),
+        ),
+      ));
+    }
+
+    return tagWidgetList;
   }
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
