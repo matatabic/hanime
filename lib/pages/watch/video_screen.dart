@@ -66,7 +66,6 @@ class _VideoScreenState extends State<VideoScreen>
   }
 
   playerChange(String url) async {
-    // print(url);
     if (player.value.state == FijkState.completed) {
       await player.stop();
     }

@@ -96,7 +96,7 @@ Future getWatchData(url) async {
       "videoIndex": videoIndex,
       "shareTitle": shareTitle,
       "countTitle": watchCountTitle,
-      "description": "2312312",
+      "description": description,
     },
     "videoData": {
       "video": [

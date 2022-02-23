@@ -1,4 +1,3 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
@@ -6,7 +5,8 @@ import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:hanime/utils/logUtil.dart';
 
-import 'episode.dart';
+import 'brief_screen.dart';
+import 'episode_screen.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
@@ -20,7 +20,7 @@ class WatchScreen extends StatefulWidget {
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
   var _videoIndex;
-  var _title;
+  var _shareTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -87,114 +87,25 @@ class _WatchScreenState extends State<WatchScreen> {
                 key: videoScreenKey,
                 data: watchEntity,
               ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _title == null ? watchEntity.info.shareTitle : _title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Container(
-                      child: ExpandableText(
-                        watchEntity.info.description,
-                        animation: true,
-                        prefixText: watchEntity.info.title,
-                        prefixStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                            color: Colors.orange),
-                        expandText: '顯示完整資訊',
-                        collapseText: '只顯示部分資訊',
-                        maxLines: 3,
-                        linkColor: Colors.cyan,
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Wrap(
-                          children: _buildTagWidget(watchEntity.tagList),
-                          spacing: 10,
-                          runSpacing: 10,
-                        )),
-                  ],
-                ),
+              BriefScreen(
+                watchEntity: watchEntity,
+                title: _shareTitle == null
+                    ? watchEntity.info.shareTitle
+                    : _shareTitle,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                color: Color(0x5757571C),
-                height: 100,
-                margin: EdgeInsets.only(top: 15),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        ClipOval(
-                          //圆形头像
-                          child: Image.network(
-                            watchEntity.info.imgUrl,
-                            // 'https://pic2.zhimg.com/v2-639b49f2f6578eabddc458b84eb3c6a1.jpg',
-                            fit: BoxFit.cover,
-                            width: 70.0,
-                            height: 70.0,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(watchEntity.info.title),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text(watchEntity.info.countTitle),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 110,
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: ListView.separated(
-                    shrinkWrap: true,
-                    controller: ScrollController(initialScrollOffset: 300),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: watchEntity.videoList.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        VerticalDivider(
-                          width: 20.0,
-                          // color: Color(0xFFFFFFFF),
-                        ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Episode(
-                        videoList: watchEntity.videoList[index],
-                        selector: _videoIndex == null
-                            ? watchEntity.info.videoIndex == index.toString()
-                            : _videoIndex == index,
-                        onTap: () async {
-                          WatchEntity data = await getEpisodeData(
-                              watchEntity.videoList[index].htmlUrl);
-                          videoScreenKey.currentState!.playerChange(
-                              data.videoData.video[0].list[0].url);
-                          setState(() {
-                            _videoIndex = index;
-                            _title = data.info.shareTitle;
-                          });
-                        },
-                      );
-                    }),
-              )
+              EpisodeScreen(
+                  watchEntity: watchEntity,
+                  videoIndex: _videoIndex,
+                  onTap: (index) async {
+                    WatchEntity data = await getEpisodeData(
+                        watchEntity.videoList[index].htmlUrl);
+                    videoScreenKey.currentState!
+                        .playerChange(data.videoData.video[0].list[0].url);
+                    setState(() {
+                      _videoIndex = index;
+                      _shareTitle = data.info.shareTitle;
+                    });
+                  })
             ],
           ),
         ),
