@@ -65,7 +65,7 @@ Future getWatchData(url) async {
   // var currentElement = document.querySelector(
   //     '.hidden-md #video-playlist-wrapper #playlist-scroll .related-watch-wrap img[style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; filter: brightness(15%);"]');
   // var currentImgUrl = currentElement!.attributes['src'];
-
+  var videoIndex;
   for (var videoElement in videoElements) {
     var imgUrl = videoElement.querySelector("img[alt]")!.attributes['src'];
     var title = videoElement.querySelector("h4")!.text;
@@ -75,6 +75,9 @@ Future getWatchData(url) async {
       "title": title,
       "htmlUrl": htmlUrl,
     });
+    if (htmlUrl == url) {
+      videoIndex = videoElements.length - videoList.length;
+    }
   }
   // var playerElements = document.querySelectorAll("#player source"); //多分辨率
   // for (var playerElement in playerElements) {
@@ -90,16 +93,17 @@ Future getWatchData(url) async {
     "info": {
       "title": watchTitle,
       "imgUrl": watchImg,
+      "videoIndex": videoIndex,
       "shareTitle": shareTitle,
       "countTitle": watchCountTitle,
-      "description": description,
+      "description": "2312312",
     },
     "videoData": {
       "video": [
         {"name": "选集", "list": currentVideo},
       ]
     },
-    "videoList": videoList,
+    "videoList": videoList.reversed.toList(),
     "tagList": tagList,
     "commendList": commendList
   };

@@ -28,6 +28,7 @@ class WatchEntity {
 class WatchInfo {
   late String title;
   late String imgUrl;
+  late String videoIndex;
   late String shareTitle;
   late String countTitle;
   late String description;

@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:hanime/utils/logUtil.dart';
 
 import 'episode.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
+
   WatchScreen({Key? key, required this.htmlUrl}) : super(key: key);
 
   @override
@@ -17,7 +19,8 @@ class WatchScreen extends StatefulWidget {
 
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
-  var _currentVideoIndex = 0;
+  var _videoIndex;
+  var _title;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +41,38 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
-    // LogUtil.d(json.encode(data));
-    // /*将Json转成实体类*/
     WatchEntity watchEntity = WatchEntity.fromJson(data);
-    // LogUtil.d(newsBean);
+    LogUtil.d(watchEntity);
+    return watchEntity;
+  }
+
+  getEpisodeData(htmlUrl) async {
+    var data = await getWatchData(htmlUrl);
+    WatchEntity watchEntity = WatchEntity.fromJson(data);
 
     return watchEntity;
+  }
+
+  Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
+    switch (snapshot.connectionState) {
+      case ConnectionState.none:
+        print('还没有开始网络请求');
+        return Text('还没有开始网络请求');
+      case ConnectionState.active:
+        print('active');
+        return Text('ConnectionState.active');
+      case ConnectionState.waiting:
+        print('waiting');
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      case ConnectionState.done:
+        print('done');
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+        return _createListView(context, snapshot);
+      // default:
+      //   return Center();
+    }
   }
 
   Widget _createListView(BuildContext context, AsyncSnapshot snapshot) {
@@ -55,6 +84,7 @@ class _WatchScreenState extends State<WatchScreen> {
           child: Column(
             children: [
               VideoScreen(
+                key: videoScreenKey,
                 data: watchEntity,
               ),
               Padding(
@@ -63,7 +93,7 @@ class _WatchScreenState extends State<WatchScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      watchEntity.info.shareTitle,
+                      _title == null ? watchEntity.info.shareTitle : _title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -138,6 +168,7 @@ class _WatchScreenState extends State<WatchScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: ListView.separated(
                     shrinkWrap: true,
+                    controller: ScrollController(initialScrollOffset: 300),
                     scrollDirection: Axis.horizontal,
                     itemCount: watchEntity.videoList.length,
                     separatorBuilder: (BuildContext context, int index) =>
@@ -148,11 +179,17 @@ class _WatchScreenState extends State<WatchScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return Episode(
                         videoList: watchEntity.videoList[index],
-                        selector: _currentVideoIndex == index,
-                        onTap: () {
-                          loadData();
+                        selector: _videoIndex == null
+                            ? watchEntity.info.videoIndex == index.toString()
+                            : _videoIndex == index,
+                        onTap: () async {
+                          WatchEntity data = await getEpisodeData(
+                              watchEntity.videoList[index].htmlUrl);
+                          videoScreenKey.currentState!.playerChange(
+                              data.videoData.video[0].list[0].url);
                           setState(() {
-                            _currentVideoIndex = index;
+                            _videoIndex = index;
+                            _title = data.info.shareTitle;
                           });
                         },
                       );
@@ -167,7 +204,6 @@ class _WatchScreenState extends State<WatchScreen> {
 
   List<Widget> _buildTagWidget(tagList) {
     List<Widget> tagWidgetList = [];
-
     for (var item in tagList) {
       tagWidgetList.add(Container(
         padding: EdgeInsets.all(3.5),
@@ -184,27 +220,5 @@ class _WatchScreenState extends State<WatchScreen> {
     }
 
     return tagWidgetList;
-  }
-
-  Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
-    switch (snapshot.connectionState) {
-      case ConnectionState.none:
-        print('还没有开始网络请求');
-        return Text('还没有开始网络请求');
-      case ConnectionState.active:
-        print('active');
-        return Text('ConnectionState.active');
-      case ConnectionState.waiting:
-        print('waiting');
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      case ConnectionState.done:
-        print('done');
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-        return _createListView(context, snapshot);
-      default:
-        return Center();
-    }
   }
 }
