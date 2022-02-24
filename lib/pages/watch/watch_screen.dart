@@ -87,12 +87,6 @@ class _WatchScreenState extends State<WatchScreen> {
                 key: videoScreenKey,
                 data: watchEntity,
               ),
-              BriefScreen(
-                watchEntity: watchEntity,
-                title: _shareTitle == null
-                    ? watchEntity.info.shareTitle
-                    : _shareTitle,
-              ),
               EpisodeScreen(
                   watchEntity: watchEntity,
                   videoIndex: _videoIndex,
@@ -105,7 +99,13 @@ class _WatchScreenState extends State<WatchScreen> {
                       _videoIndex = index;
                       _shareTitle = data.info.shareTitle;
                     });
-                  })
+                  }),
+              BriefScreen(
+                watchEntity: watchEntity,
+                title: _shareTitle == null
+                    ? watchEntity.info.shareTitle
+                    : _shareTitle,
+              )
             ],
           ),
         ),

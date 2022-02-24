@@ -4,14 +4,14 @@ import 'package:hanime/entity/watch_entity.dart';
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
-  final String videoIndex;
-  final Future<Null> onTap;
+  final dynamic videoIndex;
+  final Function(int index) onTap;
 
   const EpisodeScreen({
     Key? key,
     required this.watchEntity,
     required this.videoIndex,
-    required Future<Null> Function(int) onTap,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -43,7 +43,12 @@ class EpisodeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(watchEntity.info.title),
+                        Text(
+                          watchEntity.info.title,
+                          maxLines: 1,
+                          style: TextStyle(decoration: TextDecoration.none),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         Padding(
                           padding: EdgeInsets.only(top: 5),
                           child: Text(watchEntity.info.countTitle),
@@ -61,13 +66,17 @@ class EpisodeScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: ListView.separated(
               shrinkWrap: true,
-              controller: ScrollController(initialScrollOffset: 300),
+              controller: ScrollController(
+                  initialScrollOffset: 160 +
+                      20 +
+                      80 -
+                      (MediaQuery.of(context).size.width / 2) +
+                      15),
               scrollDirection: Axis.horizontal,
               itemCount: watchEntity.videoList.length,
               separatorBuilder: (BuildContext context, int index) =>
                   VerticalDivider(
                     width: 20.0,
-                    // color: Color(0xFFFFFFFF),
                   ),
               itemBuilder: (BuildContext context, int index) {
                 return Episode(
@@ -75,7 +84,7 @@ class EpisodeScreen extends StatelessWidget {
                   selector: videoIndex == null
                       ? watchEntity.info.videoIndex == index.toString()
                       : videoIndex == index,
-                  onTap: onTap(index),
+                  onTap: () => {onTap(index)},
                 );
               }),
         )
@@ -103,7 +112,7 @@ class Episode extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              // width: 160,
+              width: 160,
               height: 90,
               decoration: BoxDecoration(
                   border: new Border.all(
@@ -114,6 +123,10 @@ class Episode extends StatelessWidget {
                 this.videoList.imgUrl,
                 // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  print(error);
+                  return Text("1231");
+                },
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Container(
