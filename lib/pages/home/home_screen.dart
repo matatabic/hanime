@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/pages/home/anime_photo.dart';
+import 'package:hanime/pages/home/cover_photo.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/home_services.dart';
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: item["data"].length,
               itemBuilder: (BuildContext context, int index) {
-                return AnimePhoto(
+                return CoverPhoto(
                   data: item["data"][index],
                   width: 130,
                   onTap: () {

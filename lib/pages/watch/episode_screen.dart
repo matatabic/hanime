@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/pages/watch/episode_image.dart';
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -16,62 +17,74 @@ class EpisodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scrollOffset;
+    print(watchEntity.info.videoIndex == '0');
+    if (watchEntity.info.videoIndex == '0') {
+      print("555");
+      scrollOffset = 0;
+    } else if (watchEntity.info.videoIndex ==
+        (watchEntity.videoList.length - 1).toString()) {
+      print("888");
+      scrollOffset = (watchEntity.videoList.length - 2) * 180 + 10;
+    } else {
+      scrollOffset = (double.parse(watchEntity.info.videoIndex)) * 180 -
+          (MediaQuery.of(context).size.width / 4) +
+          10;
+    }
+    scrollOffset = double.parse(scrollOffset.toString());
+
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          color: Color(0x5757571C),
-          height: 100,
-          margin: EdgeInsets.only(top: 15),
-          child: Flex(
-            direction: Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  ClipOval(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+            color: Color(0x685F5F00),
+            height: 100,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: [
+                ClipOval(
+                  child: Container(
+                    width: 70.0,
+                    height: 70.0,
                     child: Image.network(
                       watchEntity.info.imgUrl,
-                      // 'https://pic2.zhimg.com/v2-639b49f2f6578eabddc458b84eb3c6a1.jpg',
                       fit: BoxFit.cover,
-                      width: 70.0,
-                      height: 70.0,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          child: Image.asset(
+                            'assets/images/error.png',
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          watchEntity.info.title,
-                          maxLines: 1,
-                          style: TextStyle(decoration: TextDecoration.none),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        Text(watchEntity.info.shareTitle,
+                            maxLines: 2, overflow: TextOverflow.ellipsis),
                         Padding(
                           padding: EdgeInsets.only(top: 5),
                           child: Text(watchEntity.info.countTitle),
                         )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+                  ),
+                ),
+              ],
+            )),
         Container(
+          alignment: Alignment.topLeft,
           height: 110,
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: ListView.separated(
               shrinkWrap: true,
-              controller: ScrollController(
-                  initialScrollOffset: 160 +
-                      20 +
-                      80 -
-                      (MediaQuery.of(context).size.width / 2) +
-                      15),
+              controller: ScrollController(initialScrollOffset: scrollOffset),
               scrollDirection: Axis.horizontal,
               itemCount: watchEntity.videoList.length,
               separatorBuilder: (BuildContext context, int index) =>
@@ -109,42 +122,21 @@ class Episode extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        width: 160,
         child: Column(
           children: [
-            Container(
+            EpisodePhoto(
+              imgUrl: this.videoList.imgUrl,
+              selector: this.selector,
               width: 160,
               height: 90,
-              decoration: BoxDecoration(
-                  border: new Border.all(
-                color: this.selector ? Colors.pinkAccent : Colors.grey, //边框颜色
-                width: 1.0, //边框粗细
-              )),
-              child: Image.network(
-                this.videoList.imgUrl,
-                // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  print(error);
-                  return Text("1231");
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!.toDouble()
-                          : null,
-                    ),
-                  );
-                },
-              ),
             ),
-            Text(
-              this.videoList.title,
-              style: TextStyle(
-                  color: this.selector ? Colors.pinkAccent : Colors.white),
+            Expanded(
+              child: Text(
+                this.videoList.title,
+                style: TextStyle(
+                    color: this.selector ? Colors.pinkAccent : Colors.white),
+              ),
             )
           ],
         ),

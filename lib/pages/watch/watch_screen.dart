@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:hanime/utils/logUtil.dart';
 
 import 'brief_screen.dart';
 import 'episode_screen.dart';
@@ -42,7 +41,7 @@ class _WatchScreenState extends State<WatchScreen> {
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
     WatchEntity watchEntity = WatchEntity.fromJson(data);
-    LogUtil.d(watchEntity);
+
     return watchEntity;
   }
 
@@ -91,6 +90,9 @@ class _WatchScreenState extends State<WatchScreen> {
                   watchEntity: watchEntity,
                   videoIndex: _videoIndex,
                   onTap: (index) async {
+                    if (index == _videoIndex) {
+                      return;
+                    }
                     WatchEntity data = await getEpisodeData(
                         watchEntity.videoList[index].htmlUrl);
                     videoScreenKey.currentState!
