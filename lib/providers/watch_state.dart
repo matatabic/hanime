@@ -1,21 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-class Counter with ChangeNotifier, DiagnosticableTreeMixin {
-  int _count = 0;
+class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
+  bool _loading = false;
 
-  int get count => _count;
-
-  void increment(int i) {
-    print(i);
-    _count++;
-    notifyListeners();
-  }
+  bool get loading => _loading;
 
   /// Makes `Counter` readable inside the devtools by listing all of its properties
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(IntProperty('count', count));
+    properties.add(FlagProperty('loading', value: false));
   }
 }

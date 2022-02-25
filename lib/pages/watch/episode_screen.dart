@@ -122,15 +122,27 @@ class Episode extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 160,
         child: Column(
           children: [
-            EpisodePhoto(
-              imgUrl: this.videoList.imgUrl,
-              selector: this.selector,
-              width: 160,
-              height: 90,
-            ),
+            Stack(alignment: Alignment.center, children: [
+              EpisodePhoto(
+                width: 160,
+                height: 90,
+                imgUrl: this.videoList.imgUrl,
+                selector: this.selector,
+              ),
+              Opacity(
+                opacity: 0.7,
+                child: Container(
+                  width: 160,
+                  height: 90,
+                  color: Colors.black,
+                ),
+              ),
+              CircularProgressIndicator(
+                value: null,
+              ),
+            ]),
             Expanded(
               child: Text(
                 this.videoList.title,

@@ -20,6 +20,7 @@ class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
   var _videoIndex;
   var _shareTitle;
+  var _loading;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +70,6 @@ class _WatchScreenState extends State<WatchScreen> {
         print('done');
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         return _createListView(context, snapshot);
-      // default:
-      //   return Center();
     }
   }
 

@@ -51,7 +51,9 @@ class _VideoScreenState extends State<VideoScreen>
 
   @override
   void dispose() {
+    player.removeListener(_fijkValueListener);
     player.dispose();
+
     super.dispose();
   }
 
@@ -59,10 +61,16 @@ class _VideoScreenState extends State<VideoScreen>
   void initState() {
     super.initState();
     // 格式化json转对象
-    print("reload");
+    player.addListener(_fijkValueListener);
     _videoSource = VideoSourceFormat.fromJson(widget.data.videoData.toJson());
     // 这句不能省，必须有
     speed = 1.0;
+  }
+
+  void _fijkValueListener() {
+    FijkValue value = player.value;
+    print("wqoihfrqwo");
+    print(value.prepared);
   }
 
   playerChange(String url) async {
