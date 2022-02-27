@@ -1,25 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart' show parse;
 
-class Anime {
-  String url;
-  String imgUrl;
-  String title;
-  Anime(this.url, this.imgUrl, this.title);
-}
-
-class HomeList {
-  String label;
-  List<Anime> data;
-  HomeList(this.label, this.data);
-}
-
-class HomeData {
-  List<Anime> swiperList;
-  List<HomeList> dataList;
-  HomeData(this.swiperList, this.dataList);
-}
-
 Future getHomeData() async {
   Response response = await Dio().get("https://hanime1.me");
   final res = response.data;
@@ -62,5 +43,5 @@ Future getHomeData() async {
     }
   }
 
-  return {"swiperList": swiperList, "dataList": dataList};
+  return {"swiperList": swiperList, "List": dataList};
 }

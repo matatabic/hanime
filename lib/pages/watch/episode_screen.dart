@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
+import 'package:hanime/providers/watch_state.dart';
+import 'package:provider/src/provider.dart';
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -18,13 +20,10 @@ class EpisodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scrollOffset;
-    print(watchEntity.info.videoIndex == '0');
     if (watchEntity.info.videoIndex == '0') {
-      print("555");
       scrollOffset = 0;
     } else if (watchEntity.info.videoIndex ==
         (watchEntity.videoList.length - 1).toString()) {
-      print("888");
       scrollOffset = (watchEntity.videoList.length - 2) * 180 + 10;
     } else {
       scrollOffset = (double.parse(watchEntity.info.videoIndex)) * 180 -
@@ -122,26 +121,18 @@ class Episode extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        width: 160,
         child: Column(
           children: [
-            Stack(alignment: Alignment.center, children: [
+            Stack(children: [
               EpisodePhoto(
                 width: 160,
                 height: 90,
                 imgUrl: this.videoList.imgUrl,
                 selector: this.selector,
               ),
-              Opacity(
-                opacity: 0.7,
-                child: Container(
-                  width: 160,
-                  height: 90,
-                  color: Colors.black,
-                ),
-              ),
-              CircularProgressIndicator(
-                value: null,
-              ),
+              if (context.watch<WatchState>().loading && selector)
+                LoadingCover(),
             ]),
             Expanded(
               child: Text(
@@ -153,6 +144,30 @@ class Episode extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class LoadingCover extends StatelessWidget {
+  const LoadingCover({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Opacity(
+          opacity: 0.7,
+          child: Container(
+            width: 160,
+            height: 90,
+            color: Colors.black,
+          ),
+        ),
+        CircularProgressIndicator(
+          value: null,
+        ),
+      ],
     );
   }
 }

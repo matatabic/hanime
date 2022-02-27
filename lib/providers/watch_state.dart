@@ -6,10 +6,15 @@ class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
 
   bool get loading => _loading;
 
+  void setLoading(bool aa) {
+    _loading = aa;
+    notifyListeners();
+  }
+
   /// Makes `Counter` readable inside the devtools by listing all of its properties
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(FlagProperty('loading', value: false));
+    properties.add(FlagProperty('loading', value: _loading));
   }
 }

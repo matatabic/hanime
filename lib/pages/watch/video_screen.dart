@@ -4,6 +4,8 @@ import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/providers/watch_state.dart';
+import 'package:provider/src/provider.dart';
 
 GlobalKey<_VideoScreenState> videoScreenKey = GlobalKey();
 
@@ -46,20 +48,25 @@ class _VideoScreenState extends State<VideoScreen>
 
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
+  bool playerDestroy = false;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
   @override
   void dispose() {
-    player.removeListener(_fijkValueListener);
-    player.dispose();
-
     super.dispose();
+    player.removeListener(_fijkValueListener);
+    // player.dispose();
+    player.release();
   }
 
   @override
   void initState() {
     super.initState();
+    playerDestroy = true;
+    Future.delayed(Duration(), () {
+      context.read<WatchState>().setLoading(false);
+    });
     // 格式化json转对象
     player.addListener(_fijkValueListener);
     _videoSource = VideoSourceFormat.fromJson(widget.data.videoData.toJson());
@@ -69,14 +76,16 @@ class _VideoScreenState extends State<VideoScreen>
 
   void _fijkValueListener() {
     FijkValue value = player.value;
-    print("wqoihfrqwo");
-    print(value.prepared);
+    if (value.prepared) {
+      context.read<WatchState>().setLoading(false);
+    }
   }
 
   playerChange(String url) async {
     if (player.value.state == FijkState.completed) {
       await player.stop();
     }
+
     await player.reset().then((_) async {
       player.setDataSource(url, autoPlay: true);
     });
