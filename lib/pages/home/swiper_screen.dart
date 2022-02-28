@@ -6,7 +6,7 @@ import 'package:hanime/providers/home_state.dart';
 import 'package:provider/src/provider.dart';
 
 class SwiperScreen extends StatelessWidget {
-  final List<HomeSwiperList> swiperList;
+  final List<HomeSwiper> swiperList;
   const SwiperScreen({Key? key, required this.swiperList}) : super(key: key);
 
   @override

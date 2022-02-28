@@ -5,9 +5,8 @@ import 'package:hanime/generated/json/home_entity.g.dart';
 
 @JsonSerializable()
 class HomeEntity {
-  late List<HomeSwiperList> swiperList;
-  @JSONField(name: "List")
-  late List<HomeList> list;
+  late List<HomeSwiper> swiper;
+  late List<HomeVideo> video;
 
   HomeEntity();
 
@@ -23,17 +22,17 @@ class HomeEntity {
 }
 
 @JsonSerializable()
-class HomeSwiperList {
+class HomeSwiper {
   late String imgUrl;
   late String title;
   late String url;
 
-  HomeSwiperList();
+  HomeSwiper();
 
-  factory HomeSwiperList.fromJson(Map<String, dynamic> json) =>
-      $HomeSwiperListFromJson(json);
+  factory HomeSwiper.fromJson(Map<String, dynamic> json) =>
+      $HomeSwiperFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeSwiperListToJson(this);
+  Map<String, dynamic> toJson() => $HomeSwiperToJson(this);
 
   @override
   String toString() {
@@ -42,16 +41,16 @@ class HomeSwiperList {
 }
 
 @JsonSerializable()
-class HomeList {
+class HomeVideo {
   late String label;
-  late List<HomeListData> data;
+  late List<HomeVideoData> data;
 
-  HomeList();
+  HomeVideo();
 
-  factory HomeList.fromJson(Map<String, dynamic> json) =>
-      $HomeListFromJson(json);
+  factory HomeVideo.fromJson(Map<String, dynamic> json) =>
+      $HomeVideoFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeListToJson(this);
+  Map<String, dynamic> toJson() => $HomeVideoToJson(this);
 
   @override
   String toString() {
@@ -60,17 +59,17 @@ class HomeList {
 }
 
 @JsonSerializable()
-class HomeListData {
+class HomeVideoData {
   late String imgUrl;
   late String title;
   late String url;
 
-  HomeListData();
+  HomeVideoData();
 
-  factory HomeListData.fromJson(Map<String, dynamic> json) =>
-      $HomeListDataFromJson(json);
+  factory HomeVideoData.fromJson(Map<String, dynamic> json) =>
+      $HomeVideoDataFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeListDataToJson(this);
+  Map<String, dynamic> toJson() => $HomeVideoDataToJson(this);
 
   @override
   String toString() {

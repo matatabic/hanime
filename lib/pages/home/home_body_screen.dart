@@ -6,7 +6,7 @@ import 'package:hanime/pages/watch/watch_screen.dart';
 
 import 'cover_photo.dart';
 
-Widget getGroupContainer(HomeList item) {
+Widget getGroupContainer(HomeVideo item) {
   return Column(children: <Widget>[
     Container(
       height: 35,

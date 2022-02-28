@@ -7,7 +7,7 @@ import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 
 class HomeHeaderScreen extends StatelessWidget {
-  final List<HomeSwiperList> swiperList;
+  final List<HomeSwiper> swiperList;
   final String current_swiper_image;
 
   const HomeHeaderScreen(
@@ -25,8 +25,8 @@ class HomeHeaderScreen extends StatelessWidget {
             Container(
                 child: CommonImages(
               imgUrl:
-              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                  // current_swiper_image,
+                  'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+              // current_swiper_image,
             )),
             Container(
               child: new ClipRect(

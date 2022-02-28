@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
-  bool _loading = false;
+  String _title = "";
 
-  bool get loading => _loading;
+  String get title => _title;
 
-  void setLoading(bool aa) {
-    _loading = aa;
+  void setLoading(String title) {
+    _title = title;
     notifyListeners();
   }
 
@@ -15,6 +15,6 @@ class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(FlagProperty('loading', value: _loading));
+    properties.add(StringProperty('title', title));
   }
 }

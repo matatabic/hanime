@@ -80,14 +80,14 @@ class JsonConvert {
     if (type == (HomeEntity).toString()) {
       return HomeEntity.fromJson(json) as M;
     }
-    if (type == (HomeSwiperList).toString()) {
-      return HomeSwiperList.fromJson(json) as M;
+    if (type == (HomeSwiper).toString()) {
+      return HomeSwiper.fromJson(json) as M;
     }
-    if (type == (HomeList).toString()) {
-      return HomeList.fromJson(json) as M;
+    if (type == (HomeVideo).toString()) {
+      return HomeVideo.fromJson(json) as M;
     }
-    if (type == (HomeListData).toString()) {
-      return HomeListData.fromJson(json) as M;
+    if (type == (HomeVideoData).toString()) {
+      return HomeVideoData.fromJson(json) as M;
     }
     if (type == (WatchEntity).toString()) {
       return WatchEntity.fromJson(json) as M;
@@ -104,11 +104,14 @@ class JsonConvert {
     if (type == (WatchVideoDataVideoList).toString()) {
       return WatchVideoDataVideoList.fromJson(json) as M;
     }
-    if (type == (WatchVideoList).toString()) {
-      return WatchVideoList.fromJson(json) as M;
+    if (type == (WatchEpisode).toString()) {
+      return WatchEpisode.fromJson(json) as M;
     }
-    if (type == (WatchCommendList).toString()) {
-      return WatchCommendList.fromJson(json) as M;
+    if (type == (WatchTag).toString()) {
+      return WatchTag.fromJson(json) as M;
+    }
+    if (type == (WatchCommend).toString()) {
+      return WatchCommend.fromJson(json) as M;
     }
 
     print("$type not found");
@@ -123,21 +126,20 @@ class JsonConvert {
           .map<HomeEntity>((Map<String, dynamic> e) => HomeEntity.fromJson(e))
           .toList() as M;
     }
-    if (<HomeSwiperList>[] is M) {
+    if (<HomeSwiper>[] is M) {
       return data
-          .map<HomeSwiperList>(
-              (Map<String, dynamic> e) => HomeSwiperList.fromJson(e))
+          .map<HomeSwiper>((Map<String, dynamic> e) => HomeSwiper.fromJson(e))
           .toList() as M;
     }
-    if (<HomeList>[] is M) {
+    if (<HomeVideo>[] is M) {
       return data
-          .map<HomeList>((Map<String, dynamic> e) => HomeList.fromJson(e))
+          .map<HomeVideo>((Map<String, dynamic> e) => HomeVideo.fromJson(e))
           .toList() as M;
     }
-    if (<HomeListData>[] is M) {
+    if (<HomeVideoData>[] is M) {
       return data
-          .map<HomeListData>(
-              (Map<String, dynamic> e) => HomeListData.fromJson(e))
+          .map<HomeVideoData>(
+              (Map<String, dynamic> e) => HomeVideoData.fromJson(e))
           .toList() as M;
     }
     if (<WatchEntity>[] is M) {
@@ -168,16 +170,21 @@ class JsonConvert {
               (Map<String, dynamic> e) => WatchVideoDataVideoList.fromJson(e))
           .toList() as M;
     }
-    if (<WatchVideoList>[] is M) {
+    if (<WatchEpisode>[] is M) {
       return data
-          .map<WatchVideoList>(
-              (Map<String, dynamic> e) => WatchVideoList.fromJson(e))
+          .map<WatchEpisode>(
+              (Map<String, dynamic> e) => WatchEpisode.fromJson(e))
           .toList() as M;
     }
-    if (<WatchCommendList>[] is M) {
+    if (<WatchTag>[] is M) {
       return data
-          .map<WatchCommendList>(
-              (Map<String, dynamic> e) => WatchCommendList.fromJson(e))
+          .map<WatchTag>((Map<String, dynamic> e) => WatchTag.fromJson(e))
+          .toList() as M;
+    }
+    if (<WatchCommend>[] is M) {
+      return data
+          .map<WatchCommend>(
+              (Map<String, dynamic> e) => WatchCommend.fromJson(e))
           .toList() as M;
     }
 

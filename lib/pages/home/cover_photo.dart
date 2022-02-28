@@ -4,7 +4,7 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 
 class CoverPhoto extends StatelessWidget {
-  final HomeListData data;
+  final HomeVideoData data;
   final VoidCallback onTap;
   final double width;
 

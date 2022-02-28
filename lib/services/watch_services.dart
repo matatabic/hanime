@@ -46,18 +46,37 @@ Future getWatchData(url) async {
   var tags = document
       .querySelectorAll(".video-show-panel-width .single-video-tag a[href]");
   for (var tag in tags) {
-    tagList.add(tag.text);
+    tagList.add({
+      "title": tag.text,
+      "htmlUrl": "https://hanime1.me${tag.attributes['href']}"
+    });
   }
 
   var commendElements =
       document.querySelectorAll("#related-tabcontent .related-video-width");
-
+  var commendCount = 3;
   for (var commendElement in commendElements) {
     commendList.add({
-      "imgUrl": commendElement.querySelector("img")!.attributes['src'],
+      "imgUrl": commendElement.querySelector("img")!.attributes["src"],
       "title": commendElement.querySelector(".home-rows-videos-title")!.text,
       "url": commendElement.querySelector("a")!.attributes['href']
     });
+  }
+
+  if (commendList.length == 0) {
+    commendCount = 2;
+    commendElements = document.querySelectorAll(
+        "#related-tabcontent .related-video-width-horizontal");
+    print(commendElements.length);
+    for (var commendElement in commendElements) {
+      commendList.add({
+        "imgUrl": commendElement
+            .querySelector(".video-card")!
+            .attributes["data-poster"],
+        "title": commendElement.querySelector("a")!.attributes['title'],
+        "url": commendElement.querySelector("a")!.attributes['href']
+      });
+    }
   }
 
   var videoElements = document.querySelectorAll(
@@ -103,8 +122,9 @@ Future getWatchData(url) async {
         {"name": "选集", "list": currentVideo},
       ]
     },
-    "videoList": videoList.reversed.toList(),
-    "tagList": tagList,
-    "commendList": commendList
+    "episode": videoList.reversed.toList(),
+    "tag": tagList,
+    "commendCount": commendCount,
+    "commend": commendList
   };
 }

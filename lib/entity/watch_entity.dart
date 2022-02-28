@@ -7,9 +7,10 @@ import 'package:hanime/generated/json/watch_entity.g.dart';
 class WatchEntity {
   late WatchInfo info;
   late WatchVideoData videoData;
-  late List<WatchVideoList> videoList;
-  late List<String> tagList;
-  late List<WatchCommendList> commendList;
+  late List<WatchEpisode> episode;
+  late List<WatchTag> tag;
+  late int commendCount;
+  late List<WatchCommend> commend;
 
   WatchEntity();
 
@@ -28,7 +29,7 @@ class WatchEntity {
 class WatchInfo {
   late String title;
   late String imgUrl;
-  late String videoIndex;
+  late int videoIndex;
   late String shareTitle;
   late String countTitle;
   late String description;
@@ -100,17 +101,17 @@ class WatchVideoDataVideoList {
 }
 
 @JsonSerializable()
-class WatchVideoList {
+class WatchEpisode {
   late String imgUrl;
   late String title;
   late String htmlUrl;
 
-  WatchVideoList();
+  WatchEpisode();
 
-  factory WatchVideoList.fromJson(Map<String, dynamic> json) =>
-      $WatchVideoListFromJson(json);
+  factory WatchEpisode.fromJson(Map<String, dynamic> json) =>
+      $WatchEpisodeFromJson(json);
 
-  Map<String, dynamic> toJson() => $WatchVideoListToJson(this);
+  Map<String, dynamic> toJson() => $WatchEpisodeToJson(this);
 
   @override
   String toString() {
@@ -119,17 +120,36 @@ class WatchVideoList {
 }
 
 @JsonSerializable()
-class WatchCommendList {
+class WatchTag {
+  late String title;
+  late String htmlUrl;
+  late String htle;
+
+  WatchTag();
+
+  factory WatchTag.fromJson(Map<String, dynamic> json) =>
+      $WatchTagFromJson(json);
+
+  Map<String, dynamic> toJson() => $WatchTagToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class WatchCommend {
   late String imgUrl;
   late String title;
   late String url;
 
-  WatchCommendList();
+  WatchCommend();
 
-  factory WatchCommendList.fromJson(Map<String, dynamic> json) =>
-      $WatchCommendListFromJson(json);
+  factory WatchCommend.fromJson(Map<String, dynamic> json) =>
+      $WatchCommendFromJson(json);
 
-  Map<String, dynamic> toJson() => $WatchCommendListToJson(this);
+  Map<String, dynamic> toJson() => $WatchCommendToJson(this);
 
   @override
   String toString() {

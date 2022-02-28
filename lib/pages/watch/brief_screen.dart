@@ -42,7 +42,7 @@ class BriefScreen extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: 15),
               child: Wrap(
-                children: _buildTagWidget(watchEntity.tagList),
+                children: _buildTagWidget(watchEntity.tag),
                 spacing: 10,
                 runSpacing: 10,
               )),
@@ -52,7 +52,7 @@ class BriefScreen extends StatelessWidget {
   }
 }
 
-List<Widget> _buildTagWidget(tagList) {
+List<Widget> _buildTagWidget(List<WatchTag> tagList) {
   List<Widget> tagWidgetList = [];
   for (var item in tagList) {
     tagWidgetList.add(Container(
@@ -63,7 +63,7 @@ List<Widget> _buildTagWidget(tagList) {
         width: 2.0, //边框粗细
       )),
       child: Text(
-        item,
+        item.title,
         style: TextStyle(fontSize: 17),
       ),
     ));

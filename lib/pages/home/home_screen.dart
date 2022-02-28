@@ -90,17 +90,16 @@ class _HomeScreenState extends State<HomeScreen>
                     CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
                   SliverToBoxAdapter(
                       child: HomeHeaderScreen(
-                    swiperList: homeEntity.swiperList,
+                    swiperList: homeEntity.swiper,
                     current_swiper_image: homeEntity
-                        .swiperList[context.watch<HomeState>().swiper_index]
-                        .imgUrl,
+                        .swiper[context.watch<HomeState>().swiper_index].imgUrl,
                   )),
                   // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
                   SliverFixedExtentList(
                       delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                        return getGroupContainer(homeEntity.list[index]);
-                      }, childCount: homeEntity.list.length),
+                        return getGroupContainer(homeEntity.video[index]);
+                      }, childCount: homeEntity.video.length),
                       itemExtent: 230),
                 ]),
               ),

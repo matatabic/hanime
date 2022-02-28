@@ -3,44 +3,44 @@ import 'package:hanime/generated/json/base/json_convert_content.dart';
 
 HomeEntity $HomeEntityFromJson(Map<String, dynamic> json) {
   final HomeEntity homeEntity = HomeEntity();
-  final List<HomeSwiperList>? swiperList =
-      jsonConvert.convertListNotNull<HomeSwiperList>(json['swiperList']);
-  if (swiperList != null) {
-    homeEntity.swiperList = swiperList;
+  final List<HomeSwiper>? swiper =
+      jsonConvert.convertListNotNull<HomeSwiper>(json['swiper']);
+  if (swiper != null) {
+    homeEntity.swiper = swiper;
   }
-  final List<HomeList>? list =
-      jsonConvert.convertListNotNull<HomeList>(json['List']);
-  if (list != null) {
-    homeEntity.list = list;
+  final List<HomeVideo>? video =
+      jsonConvert.convertListNotNull<HomeVideo>(json['video']);
+  if (video != null) {
+    homeEntity.video = video;
   }
   return homeEntity;
 }
 
 Map<String, dynamic> $HomeEntityToJson(HomeEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['swiperList'] = entity.swiperList.map((v) => v.toJson()).toList();
-  data['List'] = entity.list.map((v) => v.toJson()).toList();
+  data['swiper'] = entity.swiper.map((v) => v.toJson()).toList();
+  data['video'] = entity.video.map((v) => v.toJson()).toList();
   return data;
 }
 
-HomeSwiperList $HomeSwiperListFromJson(Map<String, dynamic> json) {
-  final HomeSwiperList homeSwiperList = HomeSwiperList();
+HomeSwiper $HomeSwiperFromJson(Map<String, dynamic> json) {
+  final HomeSwiper homeSwiper = HomeSwiper();
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    homeSwiperList.imgUrl = imgUrl;
+    homeSwiper.imgUrl = imgUrl;
   }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    homeSwiperList.title = title;
+    homeSwiper.title = title;
   }
   final String? url = jsonConvert.convert<String>(json['url']);
   if (url != null) {
-    homeSwiperList.url = url;
+    homeSwiper.url = url;
   }
-  return homeSwiperList;
+  return homeSwiper;
 }
 
-Map<String, dynamic> $HomeSwiperListToJson(HomeSwiperList entity) {
+Map<String, dynamic> $HomeSwiperToJson(HomeSwiper entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;
@@ -48,45 +48,45 @@ Map<String, dynamic> $HomeSwiperListToJson(HomeSwiperList entity) {
   return data;
 }
 
-HomeList $HomeListFromJson(Map<String, dynamic> json) {
-  final HomeList homeList = HomeList();
+HomeVideo $HomeVideoFromJson(Map<String, dynamic> json) {
+  final HomeVideo homeVideo = HomeVideo();
   final String? label = jsonConvert.convert<String>(json['label']);
   if (label != null) {
-    homeList.label = label;
+    homeVideo.label = label;
   }
-  final List<HomeListData>? data =
-      jsonConvert.convertListNotNull<HomeListData>(json['data']);
+  final List<HomeVideoData>? data =
+      jsonConvert.convertListNotNull<HomeVideoData>(json['data']);
   if (data != null) {
-    homeList.data = data;
+    homeVideo.data = data;
   }
-  return homeList;
+  return homeVideo;
 }
 
-Map<String, dynamic> $HomeListToJson(HomeList entity) {
+Map<String, dynamic> $HomeVideoToJson(HomeVideo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['data'] = entity.data.map((v) => v.toJson()).toList();
   return data;
 }
 
-HomeListData $HomeListDataFromJson(Map<String, dynamic> json) {
-  final HomeListData homeListData = HomeListData();
+HomeVideoData $HomeVideoDataFromJson(Map<String, dynamic> json) {
+  final HomeVideoData homeVideoData = HomeVideoData();
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    homeListData.imgUrl = imgUrl;
+    homeVideoData.imgUrl = imgUrl;
   }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    homeListData.title = title;
+    homeVideoData.title = title;
   }
   final String? url = jsonConvert.convert<String>(json['url']);
   if (url != null) {
-    homeListData.url = url;
+    homeVideoData.url = url;
   }
-  return homeListData;
+  return homeVideoData;
 }
 
-Map<String, dynamic> $HomeListDataToJson(HomeListData entity) {
+Map<String, dynamic> $HomeVideoDataToJson(HomeVideoData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;

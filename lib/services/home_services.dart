@@ -43,5 +43,5 @@ Future getHomeData() async {
     }
   }
 
-  return {"swiperList": swiperList, "List": dataList};
+  return {"swiper": swiperList, "video": dataList};
 }

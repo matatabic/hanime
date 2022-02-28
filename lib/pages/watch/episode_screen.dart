@@ -2,33 +2,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
-import 'package:hanime/providers/watch_state.dart';
-import 'package:provider/src/provider.dart';
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final dynamic videoIndex;
+  final bool loading;
   final Function(int index) onTap;
 
   const EpisodeScreen({
     Key? key,
     required this.watchEntity,
     required this.videoIndex,
+    required this.loading,
     required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var scrollOffset;
-    if (watchEntity.info.videoIndex == '0') {
+    if (watchEntity.info.videoIndex.toString() == '0') {
       scrollOffset = 0;
     } else if (watchEntity.info.videoIndex ==
-        (watchEntity.videoList.length - 1).toString()) {
-      scrollOffset = (watchEntity.videoList.length - 2) * 180 + 10;
+        (watchEntity.episode.length - 1)) {
+      scrollOffset = (watchEntity.episode.length - 2) * 180 + 10;
     } else {
-      scrollOffset = (double.parse(watchEntity.info.videoIndex)) * 180 -
-          (MediaQuery.of(context).size.width / 4) +
-          10;
+      scrollOffset =
+          (double.parse(watchEntity.info.videoIndex.toString())) * 180 -
+              (MediaQuery.of(context).size.width / 4) +
+              10;
     }
     scrollOffset = double.parse(scrollOffset.toString());
 
@@ -69,7 +70,9 @@ class EpisodeScreen extends StatelessWidget {
                             maxLines: 2, overflow: TextOverflow.ellipsis),
                         Padding(
                           padding: EdgeInsets.only(top: 5),
-                          child: Text(watchEntity.info.countTitle),
+                          child: Text(
+                            watchEntity.info.countTitle,
+                          ),
                         )
                       ],
                     ),
@@ -85,17 +88,18 @@ class EpisodeScreen extends StatelessWidget {
               shrinkWrap: true,
               controller: ScrollController(initialScrollOffset: scrollOffset),
               scrollDirection: Axis.horizontal,
-              itemCount: watchEntity.videoList.length,
+              itemCount: watchEntity.episode.length,
               separatorBuilder: (BuildContext context, int index) =>
                   VerticalDivider(
                     width: 20.0,
                   ),
               itemBuilder: (BuildContext context, int index) {
                 return Episode(
-                  videoList: watchEntity.videoList[index],
+                  videoList: watchEntity.episode[index],
                   selector: videoIndex == null
-                      ? watchEntity.info.videoIndex == index.toString()
+                      ? watchEntity.info.videoIndex == index
                       : videoIndex == index,
+                  loading: loading,
                   onTap: () => {onTap(index)},
                 );
               }),
@@ -106,14 +110,16 @@ class EpisodeScreen extends StatelessWidget {
 }
 
 class Episode extends StatelessWidget {
-  final WatchVideoList videoList;
+  final WatchEpisode videoList;
   final VoidCallback onTap;
   final bool selector;
+  final bool loading;
   const Episode(
       {Key? key,
       required this.videoList,
       required this.onTap,
-      required this.selector})
+      required this.selector,
+      required this.loading})
       : super(key: key);
 
   @override
@@ -128,17 +134,17 @@ class Episode extends StatelessWidget {
               EpisodePhoto(
                 width: 160,
                 height: 90,
-                imgUrl: this.videoList.imgUrl,
-                selector: this.selector,
+                imgUrl: videoList.imgUrl,
+                selector: selector,
               ),
-              if (context.watch<WatchState>().loading && selector)
-                LoadingCover(),
+              if (loading && selector) LoadingCover(),
             ]),
             Expanded(
               child: Text(
-                this.videoList.title,
+                videoList.title,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: this.selector ? Colors.pinkAccent : Colors.white),
+                    color: selector ? Colors.pinkAccent : Colors.white),
               ),
             )
           ],
@@ -148,26 +154,44 @@ class Episode extends StatelessWidget {
   }
 }
 
-class LoadingCover extends StatelessWidget {
-  const LoadingCover({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Opacity(
-          opacity: 0.7,
-          child: Container(
-            width: 160,
-            height: 90,
-            color: Colors.black,
-          ),
+Widget LoadingCover() {
+  return Stack(
+    alignment: Alignment.center,
+    children: [
+      Opacity(
+        opacity: 0.7,
+        child: Container(
+          width: 160,
+          height: 90,
+          color: Colors.black,
         ),
-        CircularProgressIndicator(
-          value: null,
-        ),
-      ],
-    );
-  }
+      ),
+      CircularProgressIndicator(
+        value: null,
+      ),
+    ],
+  );
 }
+// class LoadingCover extends StatelessWidget {
+//   const LoadingCover({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: Alignment.center,
+//       children: [
+//         Opacity(
+//           opacity: 0.7,
+//           child: Container(
+//             width: 160,
+//             height: 90,
+//             color: Colors.black,
+//           ),
+//         ),
+//         CircularProgressIndicator(
+//           value: null,
+//         ),
+//       ],
+//     );
+//   }
+// }

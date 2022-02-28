@@ -27,7 +27,9 @@ class EpisodePhoto extends StatelessWidget {
           width: 1.0, //边框粗细
         )),
         child: CommonImages(
-          imgUrl: imgUrl,
+          imgUrl:
+              // imgUrl,
+              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
         ));
   }
 }

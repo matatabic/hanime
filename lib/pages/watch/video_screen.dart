@@ -4,10 +4,9 @@ import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/providers/watch_state.dart';
-import 'package:provider/src/provider.dart';
+import 'package:hanime/services/watch_services.dart';
 
-GlobalKey<_VideoScreenState> videoScreenKey = GlobalKey();
+import 'episode_screen.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -32,9 +31,9 @@ class PlayerShowConfig implements ShowConfigAbs {
 }
 
 class VideoScreen extends StatefulWidget {
-  WatchEntity data;
+  WatchEntity watchEntity;
 
-  VideoScreen({Key? key, required this.data}) : super(key: key);
+  VideoScreen({Key? key, required this.watchEntity}) : super(key: key);
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -48,7 +47,8 @@ class _VideoScreenState extends State<VideoScreen>
 
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
-  bool playerDestroy = false;
+  var _videoIndex;
+  bool _loading = false;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -63,13 +63,10 @@ class _VideoScreenState extends State<VideoScreen>
   @override
   void initState() {
     super.initState();
-    playerDestroy = true;
-    Future.delayed(Duration(), () {
-      context.read<WatchState>().setLoading(false);
-    });
     // 格式化json转对象
     player.addListener(_fijkValueListener);
-    _videoSource = VideoSourceFormat.fromJson(widget.data.videoData.toJson());
+    _videoSource =
+        VideoSourceFormat.fromJson(widget.watchEntity.videoData.toJson());
     // 这句不能省，必须有
     speed = 1.0;
   }
@@ -77,7 +74,7 @@ class _VideoScreenState extends State<VideoScreen>
   void _fijkValueListener() {
     FijkValue value = player.value;
     if (value.prepared) {
-      context.read<WatchState>().setLoading(false);
+      // context.read<WatchState>().setLoading(false);
     }
   }
 
@@ -115,7 +112,7 @@ class _VideoScreenState extends State<VideoScreen>
               texturePos: texturePos,
               pageContent: context,
               // 标题 当前页面顶部的标题部分
-              playerTitle: widget.data.info.title,
+              playerTitle: widget.watchEntity.info.title,
               // 当前视频源tabIndex
               curTabIdx: _curTabIdx,
               // 当前视频源activeIndex
@@ -127,7 +124,33 @@ class _VideoScreenState extends State<VideoScreen>
             );
           },
         ),
+        EpisodeScreen(
+            watchEntity: widget.watchEntity,
+            videoIndex: _videoIndex,
+            loading: _loading,
+            onTap: (index) async {
+              if (index == _videoIndex || _loading) {
+                return;
+              }
+              setState(() {
+                _loading = true;
+                _videoIndex = index;
+              });
+              WatchEntity data = await getEpisodeData(
+                  widget.watchEntity.episode[index].htmlUrl);
+              playerChange(data.videoData.video[0].list[0].url);
+              setState(() {
+                _loading = false;
+              });
+            }),
       ],
     );
+  }
+
+  getEpisodeData(htmlUrl) async {
+    var data = await getWatchData(htmlUrl);
+    WatchEntity watchEntity = WatchEntity.fromJson(data);
+
+    return watchEntity;
   }
 }

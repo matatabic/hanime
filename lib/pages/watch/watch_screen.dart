@@ -1,13 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/common_image.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
-import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:provider/src/provider.dart';
+import 'package:hanime/utils/logUtil.dart';
 
 import 'brief_screen.dart';
-import 'episode_screen.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
@@ -62,6 +64,7 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
+    LogUtil.d(json.encode(data));
     WatchEntity watchEntity = WatchEntity.fromJson(data);
 
     return watchEntity;
@@ -76,7 +79,6 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     WatchEntity watchEntity = snapshot.data;
-    bool loading = context.watch<WatchState>().loading;
 
     return SafeArea(
       child: SizedBox.expand(
@@ -85,28 +87,27 @@ class _WatchScreenState extends State<WatchScreen> {
           child: Column(
             children: [
               VideoScreen(
-                key: videoScreenKey,
-                data: watchEntity,
+                watchEntity: watchEntity,
               ),
-              EpisodeScreen(
-                  watchEntity: watchEntity,
-                  videoIndex: _videoIndex,
-                  onTap: (index) async {
-                    if (index == _videoIndex || loading) {
-                      return;
-                    }
-                    context.read<WatchState>().setLoading(true);
-                    setState(() {
-                      _videoIndex = index;
-                    });
-                    WatchEntity data = await getEpisodeData(
-                        watchEntity.videoList[index].htmlUrl);
-                    videoScreenKey.currentState!
-                        .playerChange(data.videoData.video[0].list[0].url);
-                    setState(() {
-                      _shareTitle = data.info.shareTitle;
-                    });
-                  }),
+              // EpisodeScreen(
+              //     watchEntity: watchEntity,
+              //     videoIndex: _videoIndex,
+              //     onTap: (index) async {
+              //       if (index == _videoIndex || loading) {
+              //         return;
+              //       }
+              //       context.read<WatchState>().setLoading(true);
+              //       setState(() {
+              //         _videoIndex = index;
+              //       });
+              //       WatchEntity data = await getEpisodeData(
+              //           watchEntity.episode[index].htmlUrl);
+              //       videoScreenKey.currentState!
+              //           .playerChange(data.videoData.video[0].list[0].url);
+              //       setState(() {
+              //         _shareTitle = data.info.shareTitle;
+              //       });
+              //     }),
               BriefScreen(
                 watchEntity: watchEntity,
                 title: _shareTitle == null
@@ -118,20 +119,20 @@ class _WatchScreenState extends State<WatchScreen> {
                 child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: watchEntity.commendList.length,
+                    itemCount: watchEntity.commend.length,
                     //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         //横轴元素个数
-                        crossAxisCount: 3,
+                        crossAxisCount: watchEntity.commendCount,
                         //纵轴间距
                         mainAxisSpacing: 5.0,
                         //横轴间距
                         crossAxisSpacing: 5.0,
                         //子组件宽高长度比例
-                        childAspectRatio: 90 / 160),
+                        childAspectRatio:
+                            watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
                     itemBuilder: (BuildContext context, int index) {
-                      //Widget Function(BuildContext context, int index)
-                      return getItemContainer(watchEntity.commendList[index]);
+                      return getItemContainer(watchEntity.commend[index]);
                     }),
               )
             ],
@@ -141,16 +142,42 @@ class _WatchScreenState extends State<WatchScreen> {
     );
   }
 
-  Widget getItemContainer(WatchCommendList item) {
-    return Container(
-      width: 50.0,
-      height: 50.0,
-      alignment: Alignment.center,
-      child: Text(
-        item.title,
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      ),
-      color: Colors.blue,
-    );
+  Widget getItemContainer(WatchCommend item) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context, Right2LeftRouter(child: WatchScreen(htmlUrl: item.url)));
+        },
+        child: Stack(
+          alignment: Alignment(-1, 1),
+          children: <Widget>[
+            ConstrainedBox(
+              child: CommonImages(
+                imgUrl:
+                    // item.imgUrl
+                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+              ),
+              constraints: new BoxConstraints.expand(),
+            ),
+            Container(
+              child: Text(
+                item.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.5, 2.5),
+                      blurRadius: 3.5,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }

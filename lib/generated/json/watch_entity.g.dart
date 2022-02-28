@@ -12,20 +12,24 @@ WatchEntity $WatchEntityFromJson(Map<String, dynamic> json) {
   if (videoData != null) {
     watchEntity.videoData = videoData;
   }
-  final List<WatchVideoList>? videoList =
-      jsonConvert.convertListNotNull<WatchVideoList>(json['videoList']);
-  if (videoList != null) {
-    watchEntity.videoList = videoList;
+  final List<WatchEpisode>? episode =
+      jsonConvert.convertListNotNull<WatchEpisode>(json['episode']);
+  if (episode != null) {
+    watchEntity.episode = episode;
   }
-  final List<String>? tagList =
-      jsonConvert.convertListNotNull<String>(json['tagList']);
-  if (tagList != null) {
-    watchEntity.tagList = tagList;
+  final List<WatchTag>? tag =
+      jsonConvert.convertListNotNull<WatchTag>(json['tag']);
+  if (tag != null) {
+    watchEntity.tag = tag;
   }
-  final List<WatchCommendList>? commendList =
-      jsonConvert.convertListNotNull<WatchCommendList>(json['commendList']);
-  if (commendList != null) {
-    watchEntity.commendList = commendList;
+  final int? commendCount = jsonConvert.convert<int>(json['commendCount']);
+  if (commendCount != null) {
+    watchEntity.commendCount = commendCount;
+  }
+  final List<WatchCommend>? commend =
+      jsonConvert.convertListNotNull<WatchCommend>(json['commend']);
+  if (commend != null) {
+    watchEntity.commend = commend;
   }
   return watchEntity;
 }
@@ -34,9 +38,10 @@ Map<String, dynamic> $WatchEntityToJson(WatchEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['info'] = entity.info.toJson();
   data['videoData'] = entity.videoData.toJson();
-  data['videoList'] = entity.videoList.map((v) => v.toJson()).toList();
-  data['tagList'] = entity.tagList;
-  data['commendList'] = entity.commendList.map((v) => v.toJson()).toList();
+  data['episode'] = entity.episode.map((v) => v.toJson()).toList();
+  data['tag'] = entity.tag.map((v) => v.toJson()).toList();
+  data['commendCount'] = entity.commendCount;
+  data['commend'] = entity.commend.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -50,7 +55,7 @@ WatchInfo $WatchInfoFromJson(Map<String, dynamic> json) {
   if (imgUrl != null) {
     watchInfo.imgUrl = imgUrl;
   }
-  final String? videoIndex = jsonConvert.convert<String>(json['videoIndex']);
+  final int? videoIndex = jsonConvert.convert<int>(json['videoIndex']);
   if (videoIndex != null) {
     watchInfo.videoIndex = videoIndex;
   }
@@ -140,24 +145,24 @@ Map<String, dynamic> $WatchVideoDataVideoListToJson(
   return data;
 }
 
-WatchVideoList $WatchVideoListFromJson(Map<String, dynamic> json) {
-  final WatchVideoList watchVideoList = WatchVideoList();
+WatchEpisode $WatchEpisodeFromJson(Map<String, dynamic> json) {
+  final WatchEpisode watchEpisode = WatchEpisode();
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    watchVideoList.imgUrl = imgUrl;
+    watchEpisode.imgUrl = imgUrl;
   }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    watchVideoList.title = title;
+    watchEpisode.title = title;
   }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
-    watchVideoList.htmlUrl = htmlUrl;
+    watchEpisode.htmlUrl = htmlUrl;
   }
-  return watchVideoList;
+  return watchEpisode;
 }
 
-Map<String, dynamic> $WatchVideoListToJson(WatchVideoList entity) {
+Map<String, dynamic> $WatchEpisodeToJson(WatchEpisode entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;
@@ -165,24 +170,49 @@ Map<String, dynamic> $WatchVideoListToJson(WatchVideoList entity) {
   return data;
 }
 
-WatchCommendList $WatchCommendListFromJson(Map<String, dynamic> json) {
-  final WatchCommendList watchCommendList = WatchCommendList();
+WatchTag $WatchTagFromJson(Map<String, dynamic> json) {
+  final WatchTag watchTag = WatchTag();
+  final String? title = jsonConvert.convert<String>(json['title']);
+  if (title != null) {
+    watchTag.title = title;
+  }
+  final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
+  if (htmlUrl != null) {
+    watchTag.htmlUrl = htmlUrl;
+  }
+  final String? htle = jsonConvert.convert<String>(json['htle']);
+  if (htle != null) {
+    watchTag.htle = htle;
+  }
+  return watchTag;
+}
+
+Map<String, dynamic> $WatchTagToJson(WatchTag entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['title'] = entity.title;
+  data['htmlUrl'] = entity.htmlUrl;
+  data['htle'] = entity.htle;
+  return data;
+}
+
+WatchCommend $WatchCommendFromJson(Map<String, dynamic> json) {
+  final WatchCommend watchCommend = WatchCommend();
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    watchCommendList.imgUrl = imgUrl;
+    watchCommend.imgUrl = imgUrl;
   }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    watchCommendList.title = title;
+    watchCommend.title = title;
   }
   final String? url = jsonConvert.convert<String>(json['url']);
   if (url != null) {
-    watchCommendList.url = url;
+    watchCommend.url = url;
   }
-  return watchCommendList;
+  return watchCommend;
 }
 
-Map<String, dynamic> $WatchCommendListToJson(WatchCommendList entity) {
+Map<String, dynamic> $WatchCommendToJson(WatchCommend entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;
