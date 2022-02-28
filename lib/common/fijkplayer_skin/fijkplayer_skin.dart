@@ -59,19 +59,20 @@ class CustomFijkPanel extends StatefulWidget {
   final int curActiveIdx;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
+  Widget createConList;
 
-  CustomFijkPanel({
-    required this.player,
-    required this.viewSize,
-    required this.texturePos,
-    this.pageContent,
-    this.playerTitle = "",
-    required this.showConfig,
-    this.onChangeVideo,
-    required this.videoFormat,
-    required this.curTabIdx,
-    required this.curActiveIdx,
-  });
+  CustomFijkPanel(
+      {required this.player,
+      required this.viewSize,
+      required this.texturePos,
+      this.pageContent,
+      this.playerTitle = "",
+      required this.showConfig,
+      this.onChangeVideo,
+      required this.videoFormat,
+      required this.curTabIdx,
+      required this.curActiveIdx,
+      required this.createConList});
 
   @override
   _CustomFijkPanelState createState() => _CustomFijkPanelState();
@@ -334,7 +335,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             fontSize: 14,
           ),
           indicator: BoxDecoration(
-            color: Colors.purple[700],
+            color: Colors.orange,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           tabs:
@@ -343,69 +344,74 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
           controller: _tabController,
         ),
       ),
-      body: Container(
-        color: Color.fromRGBO(0, 0, 0, 0.5),
-        child: TabBarView(
-          controller: _tabController,
-          children: _createTabConList(),
-        ),
-      ),
+      body:
+          // Container(
+          //   color: Color.fromRGBO(0, 0, 0, 0.5),
+          //   child:
+          widget.createConList,
+      // Container(
+      //     color: Color.fromRGBO(0, 0, 0, 0.5),
+      // child: TabBarView(
+      //   controller: _tabController,
+      //   children: widget.createTabConList,
+      // ),
+      // ),
     );
   }
 
   // 剧集 tabCon
-  List<Widget> _createTabConList() {
-    List<Widget> list = [];
-    _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
-      List<Widget> playListBtns = _videoSourceTabs.video![tabIdx]!.list!
-          .asMap()
-          .keys
-          .map((int activeIdx) {
-        return Padding(
-          padding: EdgeInsets.only(left: 5, right: 5),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
-                  tabIdx == widget.curTabIdx && activeIdx == widget.curActiveIdx
-                      ? Colors.red
-                      : Colors.blue),
-            ),
-            onPressed: () {
-              int newTabIdx = tabIdx;
-              int newActiveIdx = activeIdx;
-              // 切换播放源
-              changeCurPlayVideo(newTabIdx, newActiveIdx);
-            },
-            child: Text(
-              _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }).toList();
-      //
-      list.add(
-        SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: playListBtns,
-            ),
-          ),
-        ),
-      );
-    });
-    return list;
-  }
+  // List<Widget> _createTabConList() {
+  //   List<Widget> list = [];
+  //   _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
+  //     List<Widget> playListBtns = _videoSourceTabs.video![tabIdx]!.list!
+  //         .asMap()
+  //         .keys
+  //         .map((int activeIdx) {
+  //       return Padding(
+  //         padding: EdgeInsets.only(left: 5, right: 5),
+  //         child: ElevatedButton(
+  //           style: ButtonStyle(
+  //             shape: MaterialStateProperty.all(
+  //               RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(8),
+  //               ),
+  //             ),
+  //             elevation: MaterialStateProperty.all(0),
+  //             backgroundColor: MaterialStateProperty.all(
+  //                 tabIdx == widget.curTabIdx && activeIdx == widget.curActiveIdx
+  //                     ? Colors.red
+  //                     : Colors.blue),
+  //           ),
+  //           onPressed: () {
+  //             int newTabIdx = tabIdx;
+  //             int newActiveIdx = activeIdx;
+  //             // 切换播放源
+  //             changeCurPlayVideo(newTabIdx, newActiveIdx);
+  //           },
+  //           child: Text(
+  //             _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
+  //             style: TextStyle(
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     }).toList();
+  //     //
+  //     list.add(
+  //       SingleChildScrollView(
+  //         child: Padding(
+  //           padding: EdgeInsets.only(left: 5, right: 5),
+  //           child: Wrap(
+  //             direction: Axis.horizontal,
+  //             children: playListBtns,
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   });
+  //   return list;
+  // }
 
   // 可以共用的架子
   Widget _buildPublicFrameWidget({
@@ -605,19 +611,19 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       } else {
         ws.add(
           _buildGestureDetector(
-            curActiveIdx: widget.curActiveIdx,
-            curTabIdx: widget.curTabIdx,
-            onChangeVideo: widget.onChangeVideo,
-            player: widget.player,
-            texturePos: widget.texturePos,
-            showConfig: widget.showConfig,
-            pageContent: widget.pageContent,
-            playerTitle: widget.playerTitle,
-            viewSize: widget.viewSize,
-            videoFormat: widget.videoFormat,
-            changeDrawerState: changeDrawerState,
-            changeLockState: changeLockState,
-          ),
+              curActiveIdx: widget.curActiveIdx,
+              curTabIdx: widget.curTabIdx,
+              onChangeVideo: widget.onChangeVideo,
+              player: widget.player,
+              texturePos: widget.texturePos,
+              showConfig: widget.showConfig,
+              pageContent: widget.pageContent,
+              playerTitle: widget.playerTitle,
+              viewSize: widget.viewSize,
+              videoFormat: widget.videoFormat,
+              changeDrawerState: changeDrawerState,
+              changeLockState: changeLockState,
+              createConList: widget.createConList),
         );
       }
     }
@@ -653,21 +659,24 @@ class _buildGestureDetector extends StatefulWidget {
   final Function changeLockState;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
-  _buildGestureDetector({
-    Key? key,
-    required this.player,
-    required this.viewSize,
-    required this.texturePos,
-    this.pageContent,
-    this.playerTitle = "",
-    required this.showConfig,
-    this.onChangeVideo,
-    required this.curTabIdx,
-    required this.curActiveIdx,
-    required this.videoFormat,
-    required this.changeDrawerState,
-    required this.changeLockState,
-  }) : super(key: key);
+  Widget createConList;
+
+  _buildGestureDetector(
+      {Key? key,
+      required this.player,
+      required this.viewSize,
+      required this.texturePos,
+      this.pageContent,
+      this.playerTitle = "",
+      required this.showConfig,
+      this.onChangeVideo,
+      required this.curTabIdx,
+      required this.curActiveIdx,
+      required this.videoFormat,
+      required this.changeDrawerState,
+      required this.changeLockState,
+      required this.createConList})
+      : super(key: key);
 
   @override
   _buildGestureDetectorState createState() => _buildGestureDetectorState();

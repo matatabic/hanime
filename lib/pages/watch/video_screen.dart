@@ -1,10 +1,13 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:provider/src/provider.dart';
 
 import 'episode_screen.dart';
 
@@ -55,7 +58,6 @@ class _VideoScreenState extends State<VideoScreen>
   @override
   void dispose() {
     super.dispose();
-    player.removeListener(_fijkValueListener);
     // player.dispose();
     player.release();
   }
@@ -64,18 +66,10 @@ class _VideoScreenState extends State<VideoScreen>
   void initState() {
     super.initState();
     // 格式化json转对象
-    player.addListener(_fijkValueListener);
     _videoSource =
         VideoSourceFormat.fromJson(widget.watchEntity.videoData.toJson());
     // 这句不能省，必须有
     speed = 1.0;
-  }
-
-  void _fijkValueListener() {
-    FijkValue value = player.value;
-    if (value.prepared) {
-      // context.read<WatchState>().setLoading(false);
-    }
   }
 
   playerChange(String url) async {
@@ -107,21 +101,21 @@ class _VideoScreenState extends State<VideoScreen>
             /// 使用自定义的布局
             /// 精简模式，可不传递onChangeVideo
             return CustomFijkPanel(
-              player: player,
-              viewSize: viewSize,
-              texturePos: texturePos,
-              pageContent: context,
-              // 标题 当前页面顶部的标题部分
-              playerTitle: widget.watchEntity.info.title,
-              // 当前视频源tabIndex
-              curTabIdx: _curTabIdx,
-              // 当前视频源activeIndex
-              curActiveIdx: _curActiveIdx,
-              // 显示的配置
-              showConfig: vCfg,
-              // json格式化后的视频数据
-              videoFormat: _videoSource,
-            );
+                player: player,
+                viewSize: viewSize,
+                texturePos: texturePos,
+                pageContent: context,
+                // 标题 当前页面顶部的标题部分
+                playerTitle: widget.watchEntity.info.title,
+                // 当前视频源tabIndex
+                curTabIdx: _curTabIdx,
+                // 当前视频源activeIndex
+                curActiveIdx: _curActiveIdx,
+                // 显示的配置
+                showConfig: vCfg,
+                // json格式化后的视频数据
+                videoFormat: _videoSource,
+                createConList: _createTabConList(widget.watchEntity.episode));
           },
         ),
         EpisodeScreen(
@@ -139,12 +133,40 @@ class _VideoScreenState extends State<VideoScreen>
               WatchEntity data = await getEpisodeData(
                   widget.watchEntity.episode[index].htmlUrl);
               playerChange(data.videoData.video[0].list[0].url);
+              context.read<WatchState>().setTitle(data.info.shareTitle);
               setState(() {
                 _loading = false;
               });
             }),
       ],
     );
+  }
+
+  Widget _createTabConList(List<WatchEpisode> episodeList) {
+    ListView episodeData = ListView.separated(
+        shrinkWrap: true,
+        itemCount: episodeList.length,
+        separatorBuilder: (BuildContext context, int index) => Container(
+              height: 20.0,
+            ),
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return Container(
+            child: Row(
+              children: [
+                Container(
+                    width: 160,
+                    height: 90,
+                    child: CommonImages(imgUrl: episodeList[index].imgUrl)),
+                Expanded(
+                    child: Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(episodeList[index].title)))
+              ],
+            ),
+          );
+        });
+    return Container(color: Color.fromRGBO(0, 0, 0, 0.5), child: episodeData);
   }
 
   getEpisodeData(htmlUrl) async {

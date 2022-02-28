@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
 
+import 'loading_cover.dart';
+
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final dynamic videoIndex;
@@ -37,7 +39,7 @@ class EpisodeScreen extends StatelessWidget {
       children: [
         Container(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            color: Color(0x685F5F00),
+            color: Color.fromRGBO(58, 60, 63, 1),
             height: 100,
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -66,7 +68,7 @@ class EpisodeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(watchEntity.info.shareTitle,
+                        Text(watchEntity.info.title,
                             maxLines: 2, overflow: TextOverflow.ellipsis),
                         Padding(
                           padding: EdgeInsets.only(top: 5),
@@ -82,7 +84,8 @@ class EpisodeScreen extends StatelessWidget {
             )),
         Container(
           alignment: Alignment.topLeft,
-          height: 110,
+          color: Color.fromRGBO(48, 48, 48, 1),
+          height: 130,
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: ListView.separated(
               shrinkWrap: true,
@@ -137,14 +140,21 @@ class Episode extends StatelessWidget {
                 imgUrl: videoList.imgUrl,
                 selector: selector,
               ),
-              if (loading && selector) LoadingCover(),
+              if (loading && selector) loadingCover(160, 90),
             ]),
-            Expanded(
-              child: Text(
-                videoList.title,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: selector ? Colors.pinkAccent : Colors.white),
+            Container(
+              height: 40,
+              alignment: AlignmentDirectional.bottomEnd,
+              child: Center(
+                child: Text(
+                  videoList.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: selector ? Colors.pinkAccent : Colors.white,
+                      fontWeight:
+                          selector ? FontWeight.bold : FontWeight.normal),
+                ),
               ),
             )
           ],
@@ -153,45 +163,3 @@ class Episode extends StatelessWidget {
     );
   }
 }
-
-Widget LoadingCover() {
-  return Stack(
-    alignment: Alignment.center,
-    children: [
-      Opacity(
-        opacity: 0.7,
-        child: Container(
-          width: 160,
-          height: 90,
-          color: Colors.black,
-        ),
-      ),
-      CircularProgressIndicator(
-        value: null,
-      ),
-    ],
-  );
-}
-// class LoadingCover extends StatelessWidget {
-//   const LoadingCover({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: Alignment.center,
-//       children: [
-//         Opacity(
-//           opacity: 0.7,
-//           child: Container(
-//             width: 160,
-//             height: 90,
-//             color: Colors.black,
-//           ),
-//         ),
-//         CircularProgressIndicator(
-//           value: null,
-//         ),
-//       ],
-//     );
-//   }
-// }

@@ -2,13 +2,13 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/providers/watch_state.dart';
+import 'package:provider/src/provider.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
-  final String title;
 
-  const BriefScreen({Key? key, required this.watchEntity, required this.title})
-      : super(key: key);
+  const BriefScreen({Key? key, required this.watchEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class BriefScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            context.watch<WatchState>().title,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,

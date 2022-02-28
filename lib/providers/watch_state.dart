@@ -6,7 +6,7 @@ class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
 
   String get title => _title;
 
-  void setLoading(String title) {
+  void setTitle(String title) {
     _title = title;
     notifyListeners();
   }

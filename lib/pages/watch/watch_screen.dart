@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
+import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:hanime/utils/logUtil.dart';
+import 'package:provider/src/provider.dart';
 
 import 'brief_screen.dart';
 
@@ -64,7 +63,6 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
-    LogUtil.d(json.encode(data));
     WatchEntity watchEntity = WatchEntity.fromJson(data);
 
     return watchEntity;
@@ -79,6 +77,9 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     WatchEntity watchEntity = snapshot.data;
+    Future.delayed(Duration(milliseconds: 200)).then((e) {
+      context.read<WatchState>().setTitle(watchEntity.info.shareTitle);
+    });
 
     return SafeArea(
       child: SizedBox.expand(
@@ -89,31 +90,7 @@ class _WatchScreenState extends State<WatchScreen> {
               VideoScreen(
                 watchEntity: watchEntity,
               ),
-              // EpisodeScreen(
-              //     watchEntity: watchEntity,
-              //     videoIndex: _videoIndex,
-              //     onTap: (index) async {
-              //       if (index == _videoIndex || loading) {
-              //         return;
-              //       }
-              //       context.read<WatchState>().setLoading(true);
-              //       setState(() {
-              //         _videoIndex = index;
-              //       });
-              //       WatchEntity data = await getEpisodeData(
-              //           watchEntity.episode[index].htmlUrl);
-              //       videoScreenKey.currentState!
-              //           .playerChange(data.videoData.video[0].list[0].url);
-              //       setState(() {
-              //         _shareTitle = data.info.shareTitle;
-              //       });
-              //     }),
-              BriefScreen(
-                watchEntity: watchEntity,
-                title: _shareTitle == null
-                    ? watchEntity.info.shareTitle
-                    : _shareTitle,
-              ),
+              BriefScreen(watchEntity: watchEntity),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
                 child: GridView.builder(
