@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
@@ -5,10 +7,17 @@ import 'package:hanime/pages/watch/episode_image.dart';
 
 import 'loading_cover.dart';
 
+const double LIST_SPACE = 20;
+
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final dynamic videoIndex;
   final bool loading;
+  final bool direction;
+  final double? containerHeight;
+  final double itemWidth;
+  final double itemHeight;
+
   final Function(int index) onTap;
 
   const EpisodeScreen({
@@ -17,97 +26,62 @@ class EpisodeScreen extends StatelessWidget {
     required this.videoIndex,
     required this.loading,
     required this.onTap,
+    required this.direction,
+    this.containerHeight,
+    required this.itemWidth,
+    required this.itemHeight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // final episodeHeight = MediaQuery.of(context).size.width - 50;
+    // final
+    //  print(MediaQuery.of(context).size.height);
     var scrollOffset;
-    if (watchEntity.info.videoIndex.toString() == '0') {
+    if (watchEntity.info.videoIndex == 0) {
       scrollOffset = 0;
-    } else if (watchEntity.info.videoIndex ==
-        (watchEntity.episode.length - 1)) {
-      scrollOffset = (watchEntity.episode.length - 2) * 180 + 10;
     } else {
-      scrollOffset =
-          (double.parse(watchEntity.info.videoIndex.toString())) * 180 -
-              (MediaQuery.of(context).size.width / 4) +
-              10;
+      if (direction) {
+        scrollOffset =
+            (watchEntity.info.videoIndex) * (itemWidth + LIST_SPACE) -
+                (MediaQuery.of(context).size.width / 4) +
+                10;
+      } else {
+        scrollOffset =
+            ((watchEntity.info.videoIndex) * (itemHeight + LIST_SPACE)) -
+                ((MediaQuery.of(context).size.height - 50) / 2) +
+                itemHeight / 2;
+      }
     }
     scrollOffset = double.parse(scrollOffset.toString());
 
-    return Column(
-      children: [
-        Container(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            color: Color.fromRGBO(58, 60, 63, 1),
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              children: [
-                ClipOval(
-                  child: Container(
-                    width: 70.0,
-                    height: 70.0,
-                    child: Image.network(
-                      watchEntity.info.imgUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          child: Image.asset(
-                            'assets/images/error.png',
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(watchEntity.info.title,
-                            maxLines: 2, overflow: TextOverflow.ellipsis),
-                        Padding(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Text(
-                            watchEntity.info.countTitle,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )),
-        Container(
-          alignment: Alignment.topLeft,
-          color: Color.fromRGBO(48, 48, 48, 1),
-          height: 130,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: ListView.separated(
-              shrinkWrap: true,
-              controller: ScrollController(initialScrollOffset: scrollOffset),
-              scrollDirection: Axis.horizontal,
-              itemCount: watchEntity.episode.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  VerticalDivider(
-                    width: 20.0,
-                  ),
-              itemBuilder: (BuildContext context, int index) {
-                return Episode(
-                  videoList: watchEntity.episode[index],
-                  selector: videoIndex == null
-                      ? watchEntity.info.videoIndex == index
-                      : videoIndex == index,
-                  loading: loading,
-                  onTap: () => {onTap(index)},
-                );
-              }),
-        )
-      ],
+    return Container(
+      color: Color.fromRGBO(48, 48, 48, 1),
+      height:
+          direction ? containerHeight : MediaQuery.of(context).size.height - 50,
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: ListView.separated(
+          // shrinkWrap: true,
+          controller: ScrollController(initialScrollOffset: scrollOffset),
+          scrollDirection: direction ? Axis.horizontal : Axis.vertical,
+          itemCount: watchEntity.episode.length,
+          separatorBuilder: (BuildContext context, int index) => Container(
+                width: direction ? LIST_SPACE : 0,
+                height: direction ? 0 : LIST_SPACE,
+              ),
+          itemBuilder: (BuildContext context, int index) {
+            return Episode(
+              videoList: watchEntity.episode[index],
+              selector: videoIndex == null
+                  ? watchEntity.info.videoIndex == index
+                  : videoIndex == index,
+              loading: loading,
+              itemWidth: itemWidth,
+              itemHeight: itemHeight,
+              direction: direction,
+              onTap: () => {onTap(index)},
+            );
+          }),
     );
   }
 }
@@ -117,12 +91,19 @@ class Episode extends StatelessWidget {
   final VoidCallback onTap;
   final bool selector;
   final bool loading;
+  final bool direction;
+  final double itemWidth;
+  final double itemHeight;
+
   const Episode(
       {Key? key,
       required this.videoList,
       required this.onTap,
       required this.selector,
-      required this.loading})
+      required this.loading,
+      required this.direction,
+      required this.itemWidth,
+      required this.itemHeight})
       : super(key: key);
 
   @override
@@ -130,24 +111,28 @@ class Episode extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 160,
-        child: Column(
+        width: itemWidth,
+        child: Flex(
+          direction: direction ? Axis.vertical : Axis.horizontal,
           children: [
             Stack(children: [
               EpisodePhoto(
-                width: 160,
-                height: 90,
+                width: itemWidth,
+                height: itemHeight,
                 imgUrl: videoList.imgUrl,
                 selector: selector,
               ),
-              if (loading && selector) loadingCover(160, 90),
+              if (loading && selector)
+                LoadingCover(
+                  width: itemWidth,
+                  height: itemHeight,
+                )
             ]),
-            Container(
-              height: 40,
-              alignment: AlignmentDirectional.bottomEnd,
+            Expanded(
               child: Center(
                 child: Text(
-                  videoList.title,
+                  "12312" * 50,
+                  // videoList.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

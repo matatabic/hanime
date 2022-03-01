@@ -1,6 +1,5 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
@@ -9,6 +8,8 @@ import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
+import 'brief_screen.dart';
+import 'episode_image.dart';
 import 'episode_screen.dart';
 
 // 定制UI配置项
@@ -115,13 +116,42 @@ class _VideoScreenState extends State<VideoScreen>
                 showConfig: vCfg,
                 // json格式化后的视频数据
                 videoFormat: _videoSource,
-                createConList: _createTabConList(widget.watchEntity.episode));
+                // createConList: _createTabConList(widget.watchEntity.episode)
+                createConList: EpisodeScreen(
+                    watchEntity: widget.watchEntity,
+                    videoIndex: _videoIndex,
+                    loading: _loading,
+                    containerHeight: 500,
+                    itemWidth: 160,
+                    itemHeight: 110,
+                    direction: false,
+                    onTap: (index) async {
+                      if (index == _videoIndex || _loading) {
+                        return;
+                      }
+                      setState(() {
+                        _loading = true;
+                        _videoIndex = index;
+                      });
+                      WatchEntity data = await getEpisodeData(
+                          widget.watchEntity.episode[index].htmlUrl);
+                      playerChange(data.videoData.video[0].list[0].url);
+                      context.read<WatchState>().setTitle(data.info.shareTitle);
+                      setState(() {
+                        _loading = false;
+                      });
+                    }));
           },
         ),
+        BriefScreen(watchEntity: widget.watchEntity),
         EpisodeScreen(
             watchEntity: widget.watchEntity,
             videoIndex: _videoIndex,
             loading: _loading,
+            containerHeight: 120,
+            itemWidth: 160,
+            itemHeight: 90,
+            direction: true,
             onTap: (index) async {
               if (index == _videoIndex || _loading) {
                 return;
@@ -144,7 +174,6 @@ class _VideoScreenState extends State<VideoScreen>
 
   Widget _createTabConList(List<WatchEpisode> episodeList) {
     ListView episodeData = ListView.separated(
-        shrinkWrap: true,
         itemCount: episodeList.length,
         separatorBuilder: (BuildContext context, int index) => Container(
               height: 20.0,
@@ -154,10 +183,15 @@ class _VideoScreenState extends State<VideoScreen>
           return Container(
             child: Row(
               children: [
-                Container(
+                Stack(children: [
+                  EpisodePhoto(
                     width: 160,
                     height: 90,
-                    child: CommonImages(imgUrl: episodeList[index].imgUrl)),
+                    imgUrl: episodeList[index].imgUrl,
+                    selector: false,
+                  ),
+                  // loadingCover(160, 90),
+                ]),
                 Expanded(
                     child: Container(
                         padding: EdgeInsets.only(left: 5),

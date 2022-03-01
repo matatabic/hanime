@@ -319,31 +319,49 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   Widget _buildPlayDrawer() {
     return Scaffold(
       backgroundColor: Color.fromRGBO(0, 0, 0, 0.4),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
-        automaticallyImplyLeading: false,
-        elevation: 0.1,
-        title: TabBar(
-          labelColor: Colors.white,
-          labelStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50.0), // here the desired height
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+          elevation: 0.1,
+          title: Container(
+            width: 60,
+            height: 45,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Text("剧集", textAlign: TextAlign.center),
+            // borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          unselectedLabelColor: Colors.white,
-          unselectedLabelStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
-          indicator: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          tabs:
-              _videoSourceTabs.video!.map((e) => Tab(text: e!.name!)).toList(),
-          isScrollable: true,
-          controller: _tabController,
         ),
       ),
+      // appBar: AppBar(
+      //   backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+      //   automaticallyImplyLeading: false,
+      //   elevation: 0.1,
+      //   title: TabBar(
+      //     labelColor: Colors.white,
+      //     labelStyle: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: 14,
+      //     ),
+      //     unselectedLabelColor: Colors.white,
+      //     unselectedLabelStyle: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: 14,
+      //     ),
+      //     indicator: BoxDecoration(
+      //       color: Colors.orange,
+      //       borderRadius: BorderRadius.all(Radius.circular(10)),
+      //     ),
+      //     tabs:
+      //         _videoSourceTabs.video!.map((e) => Tab(text: e!.name!)).toList(),
+      //     isScrollable: true,
+      //     controller: _tabController,
+      //   ),
+      // ),
       body:
           // Container(
           //   color: Color.fromRGBO(0, 0, 0, 0.5),

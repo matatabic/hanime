@@ -8,7 +8,7 @@ import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
-import 'brief_screen.dart';
+import 'detail _screen.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
@@ -21,8 +21,6 @@ class WatchScreen extends StatefulWidget {
 
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
-  var _videoIndex;
-  var _shareTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +88,7 @@ class _WatchScreenState extends State<WatchScreen> {
               VideoScreen(
                 watchEntity: watchEntity,
               ),
-              BriefScreen(watchEntity: watchEntity),
+              DetailScreen(watchEntity: watchEntity),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
                 child: GridView.builder(
