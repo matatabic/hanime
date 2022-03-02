@@ -76,45 +76,41 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     HomeEntity homeEntity = snapshot.data;
-    return Scaffold(
-      body: NotificationListener<ScrollNotification>(
-          onNotification: _scrollListener,
-          child: Stack(
-            children: [
-              SmartRefresher(
-                enablePullDown: true,
-                header: WaterDropMaterialHeader(),
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                child:
-                    CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
-                  SliverToBoxAdapter(
-                      child: HomeHeaderScreen(
-                    swiperList: homeEntity.swiper,
-                    current_swiper_image: homeEntity
-                        .swiper[context.watch<HomeState>().swiper_index].imgUrl,
-                  )),
-                  // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
-                  SliverFixedExtentList(
-                      delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                        return getGroupContainer(homeEntity.video[index]);
-                      }, childCount: homeEntity.video.length),
-                      itemExtent: 230),
-                ]),
-              ),
-              Container(
-                height: MediaQuery.of(context).padding.top,
-                child: AnimatedBuilder(
-                    animation: _colorAnimationController,
-                    builder: (context, child) => Container(
-                          color: _colorTween.value,
-                        )),
-              ),
-            ],
-          )),
-      // ],
-    );
+    return NotificationListener<ScrollNotification>(
+        onNotification: _scrollListener,
+        child: Stack(
+          children: [
+            SmartRefresher(
+              enablePullDown: true,
+              header: WaterDropMaterialHeader(),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
+                SliverToBoxAdapter(
+                    child: HomeHeaderScreen(
+                  swiperList: homeEntity.swiper,
+                  current_swiper_image: homeEntity
+                      .swiper[context.watch<HomeState>().swiper_index].imgUrl,
+                )),
+                // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
+                SliverFixedExtentList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return getGroupContainer(homeEntity.video[index]);
+                    }, childCount: homeEntity.video.length),
+                    itemExtent: 230),
+              ]),
+            ),
+            Container(
+              height: MediaQuery.of(context).padding.top,
+              child: AnimatedBuilder(
+                  animation: _colorAnimationController,
+                  builder: (context, child) => Container(
+                        color: _colorTween.value,
+                      )),
+            ),
+          ],
+        ));
   }
 
   void _onRefresh() async {

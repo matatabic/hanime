@@ -1,20 +1,26 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart';
 
 Future getSearchData() async {
   Response response = await Dio().get("https://hanime1.me/search");
   final resHtml = response.data;
   var document = parse(resHtml);
-  var a = [];
-  var data = document.querySelectorAll(".checkmark");
+  var videoList = [];
 
-  for (var item in data) {
-    a.add(item.text);
+  var pages = document.querySelectorAll(".page-item");
+
+  var videoElements = document.querySelectorAll(".video-card");
+
+  for (var videoElement in videoElements) {
+    videoList.add({
+      "title": videoElement.querySelector("a")!.attributes['title'],
+      "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
+      "author": videoElement
+          .querySelector(".card-info-wrapper div:nth-child(3)")!
+          .text
+    });
   }
-  LogUtil.d(json.encode(a));
+
   var genre = {
     "label": "影片類型",
     "genre": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
@@ -139,7 +145,7 @@ Future getSearchData() async {
         "異世界",
         "怪獸",
         "世界末日"
-      ] //H漫畫
+      ]
     },
     {
       "label": "故事劇情：",
@@ -177,4 +183,70 @@ Future getSearchData() async {
       ]
     },
   ];
+
+  var date = {
+    "year": [
+      "2021",
+      "2020",
+      "2019",
+      "2018",
+      "2017",
+      "2016",
+      "2015",
+      "2014",
+      "2013",
+      "2012",
+      "2011",
+      "2010",
+      "2009",
+      "2008",
+      "2007",
+      "2006",
+      "2005",
+      "2004",
+      "2003",
+      "2002",
+      "2001",
+      "2000",
+      "1999",
+      "1998",
+      "1997",
+      "1996",
+      "1995",
+      "1994",
+      "1993",
+      "1992",
+      "1991",
+      "1990",
+    ],
+    "month": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+    ],
+  };
+
+  var duration = [
+    "全部",
+    "短片（4 分鐘內）",
+    "中長片（4 至 20 分鐘）",
+    "長片（20 分鐘以上）",
+  ];
+
+  return {
+    "genre": genre,
+    "tag": tag,
+    "date": date,
+    "duration": duration,
+    "video": videoList
+  };
 }
