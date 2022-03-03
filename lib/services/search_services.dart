@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart';
 
 Future getSearchData() async {
@@ -14,13 +15,14 @@ Future getSearchData() async {
   for (var videoElement in videoElements) {
     videoList.add({
       "title": videoElement.querySelector("a")!.attributes['title'],
+      "imgUrl": videoElement.querySelector("img")!.attributes['src'],
       "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
       "author": videoElement
           .querySelector(".card-info-wrapper div:nth-child(3)")!
           .text
     });
   }
-
+  LogUtil.d(videoList);
   var genre = {
     "label": "影片類型",
     "genre": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
