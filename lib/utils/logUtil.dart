@@ -4,7 +4,7 @@ class LogUtil {
       "$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator";
   static var _title = "Yl-Log";
   static var _isDebug = true;
-  static int _limitLength = 80;
+  static int _limitLength = 200;
   static String _startLine = "$_split$_title$_split";
   static String _endLine = "$_split$_separator$_separator$_separator$_split";
 

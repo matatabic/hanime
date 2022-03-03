@@ -13,9 +13,10 @@ Future getSearchData() async {
   var videoElements = document.querySelectorAll(".video-card");
 
   for (var videoElement in videoElements) {
+    // print(videoElement.querySelector("img")!.attributes['src']);
     videoList.add({
       "title": videoElement.querySelector("a")!.attributes['title'],
-      "imgUrl": videoElement.querySelector("img")!.attributes['src'],
+      "imgUrl": videoElement.attributes['data-poster'],
       "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
       "author": videoElement
           .querySelector(".card-info-wrapper div:nth-child(3)")!

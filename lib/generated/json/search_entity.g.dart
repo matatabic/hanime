@@ -109,6 +109,10 @@ SearchVideo $SearchVideoFromJson(Map<String, dynamic> json) {
   if (title != null) {
     searchVideo.title = title;
   }
+  final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
+  if (imgUrl != null) {
+    searchVideo.imgUrl = imgUrl;
+  }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
     searchVideo.htmlUrl = htmlUrl;
@@ -123,6 +127,7 @@ SearchVideo $SearchVideoFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $SearchVideoToJson(SearchVideo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
+  data['imgUrl'] = entity.imgUrl;
   data['htmlUrl'] = entity.htmlUrl;
   data['author'] = entity.author;
   return data;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
+import 'package:hanime/pages/search/search_engine.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
 
@@ -71,6 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
+              SearchEngine(),
               GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -106,11 +108,9 @@ class _SearchScreenState extends State<SearchScreen> {
           alignment: Alignment(-1, 1),
           children: <Widget>[
             ConstrainedBox(
-              child: CommonImages(
-                imgUrl:
-                    // item.imgUrl
-                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-              ),
+              child: CommonImages(imgUrl: item.imgUrl
+                  // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                  ),
               constraints: new BoxConstraints.expand(),
             ),
             Container(
