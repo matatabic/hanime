@@ -66,36 +66,33 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     SearchEntity searchEntity = snapshot.data;
 
-    return SafeArea(
-      child: SizedBox.expand(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              SearchEngine(),
-              GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: searchEntity.video.length,
-                  //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      //横轴元素个数
-                      crossAxisCount: 2,
-                      //纵轴间距
-                      mainAxisSpacing: 5.0,
-                      //横轴间距
-                      crossAxisSpacing: 5.0,
-                      //子组件宽高长度比例
-                      childAspectRatio: 4 / 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    return getItemContainer(searchEntity.video[index]);
-                  }),
-            ],
-          ),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          SearchEngine(),
+          SearchNav(),
+          GridView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 0),
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: searchEntity.video.length,
+              //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //横轴元素个数
+                  crossAxisCount: 2,
+                  //纵轴间距
+                  mainAxisSpacing: 5.0,
+                  //横轴间距
+                  crossAxisSpacing: 5.0,
+                  //子组件宽高长度比例
+                  childAspectRatio: 4 / 3),
+              itemBuilder: (BuildContext context, int index) {
+                return getItemContainer(searchEntity.video[index]);
+              }),
+        ],
       ),
     );
-    ;
   }
 
   Widget getItemContainer(SearchVideo item) {
@@ -108,9 +105,11 @@ class _SearchScreenState extends State<SearchScreen> {
           alignment: Alignment(-1, 1),
           children: <Widget>[
             ConstrainedBox(
-              child: CommonImages(imgUrl: item.imgUrl
-                  // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                  ),
+              child: CommonImages(
+                imgUrl:
+                    // item.imgUrl
+                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+              ),
               constraints: new BoxConstraints.expand(),
             ),
             Container(
@@ -145,5 +144,49 @@ class _SearchScreenState extends State<SearchScreen> {
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
     return searchEntity;
+  }
+}
+
+class SearchNav extends StatelessWidget {
+  const SearchNav({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 75,
+      color: Colors.red,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 30.0,
+              color: Colors.green,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 30.0,
+              color: Colors.blue,
+            ),
+          ),
+
+          // new ListTile(
+          //   leading: new Icon(Icons.map),
+          //   title: new Text('Maps'),
+          // ),
+          // new ListTile(
+          //   leading: new Icon(Icons.photo_album),
+          //   title: new Text('Album'),
+          // ),
+          // new ListTile(
+          //   leading: new Icon(Icons.phone),
+          //   title: new Text('Phone'),
+          // ),
+        ],
+      ),
+    );
   }
 }

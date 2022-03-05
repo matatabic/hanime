@@ -25,7 +25,7 @@ class _SearchEngineState extends State<SearchEngine> {
         child: Container(
           height: 52.0,
           child: new Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(0.0),
               child: new Card(
                   child: new Container(
                 child: new Row(
