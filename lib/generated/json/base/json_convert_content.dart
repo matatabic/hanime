@@ -99,6 +99,9 @@ class JsonConvert {
     if (type == (SearchTag).toString()) {
       return SearchTag.fromJson(json) as M;
     }
+    if (type == (SearchBrand).toString()) {
+      return SearchBrand.fromJson(json) as M;
+    }
     if (type == (SearchDate).toString()) {
       return SearchDate.fromJson(json) as M;
     }
@@ -172,6 +175,11 @@ class JsonConvert {
     if (<SearchTag>[] is M) {
       return data
           .map<SearchTag>((Map<String, dynamic> e) => SearchTag.fromJson(e))
+          .toList() as M;
+    }
+    if (<SearchBrand>[] is M) {
+      return data
+          .map<SearchBrand>((Map<String, dynamic> e) => SearchBrand.fromJson(e))
           .toList() as M;
     }
     if (<SearchDate>[] is M) {

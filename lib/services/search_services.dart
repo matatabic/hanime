@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart';
 
 Future getSearchData() async {
@@ -13,7 +12,6 @@ Future getSearchData() async {
   var videoElements = document.querySelectorAll(".video-card");
 
   for (var videoElement in videoElements) {
-    // print(videoElement.querySelector("img")!.attributes['src']);
     videoList.add({
       "title": videoElement.querySelector("a")!.attributes['title'],
       "imgUrl": videoElement.attributes['data-poster'],
@@ -23,20 +21,20 @@ Future getSearchData() async {
           .text
     });
   }
-  LogUtil.d(videoList);
+
   var genre = {
     "label": "影片類型",
-    "genre": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
+    "data": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
   };
 
   var tag = [
     {
       "label": "影片屬性：",
-      "group": ["無碼", "番劇", "1080p", "新番預告"]
+      "data": ["無碼", "番劇", "1080p", "新番預告"]
     },
     {
       "label": "人物關係：",
-      "group": [
+      "data": [
         "近親",
         "姐",
         "妹",
@@ -45,11 +43,11 @@ Future getSearchData() async {
         "師生",
         "情侶",
         "青梅竹馬",
-      ] //H漫畫
+      ]
     },
     {
       "label": "角色設定：",
-      "group": [
+      "data": [
         "JK",
         "處女",
         "御姐",
@@ -82,7 +80,7 @@ Future getSearchData() async {
     },
     {
       "label": "外貌身材：",
-      "group": [
+      "data": [
         "短髮",
         "長髮",
         "馬尾",
@@ -112,11 +110,11 @@ Future getSearchData() async {
         "性感內衣",
         "丁字褲",
         "高跟鞋"
-      ] //H漫畫
+      ]
     },
     {
       "label": "故事劇情：",
-      "group": [
+      "data": [
         "純愛",
         "戀愛喜劇",
         "後宮",
@@ -152,7 +150,7 @@ Future getSearchData() async {
     },
     {
       "label": "故事劇情：",
-      "group": [
+      "data": [
         "手交",
         "指交",
         "乳交",
@@ -186,6 +184,75 @@ Future getSearchData() async {
       ]
     },
   ];
+
+  var brand = {
+    "label": "品牌 / 製作",
+    "data": [
+      "妄想実現めでぃあ",
+      "メリー・ジェーン",
+      "ピンクパイナップル",
+      "ばにぃうぉ～か～",
+      "Queen Bee",
+      "PoRO",
+      "せるふぃっしゅ",
+      "鈴木みら乃",
+      "ショーテン",
+      "GOLD BEAR",
+      "ZIZ",
+      "EDGE",
+      "Collaboration Works",
+      "BOOTLEG",
+      "BOMB!CUTE!BOMB!",
+      "nur",
+      "あんてきぬすっ",
+      "魔人",
+      "ルネ",
+      "Princess Sugar",
+      "パシュミナ",
+      "White Bear",
+      "AniMan",
+      "chippai",
+      "トップマーシャル",
+      "erozuki",
+      "サークルトリビュート",
+      "spermation",
+      "Milky",
+      "King Bee",
+      "PashminaA",
+      "じゅうしぃまんご～",
+      "Hills",
+      "妄想専科",
+      "ディスカバリー",
+      "ひまじん",
+      "37℃",
+      "schoolzone",
+      "GREEN BUNNY",
+      "バニラ",
+      "L.",
+      "PIXY",
+      "こっとんど～る",
+      "ANIMAC",
+      "Celeb",
+      "MOON ROCK",
+      "Dream",
+      "ミンク",
+      "オズ・インク",
+      "サン出版",
+      "ポニーキャニオン",
+      "わるきゅ～れ＋＋",
+      "株式会社虎の穴",
+      "エンゼルフィッシュ",
+      "UNION-CHO",
+      "TOHO",
+      "ミルクセーキ",
+      "2匹目のどぜう",
+      "じゅうしぃまんご～",
+      "ツクルノモリ",
+      "サークルトリビュート",
+      "トップマーシャル",
+      "サークルトリビュート"
+    ]
+  };
 
   var date = {
     "year": [
@@ -248,6 +315,7 @@ Future getSearchData() async {
   return {
     "genre": genre,
     "tag": tag,
+    "brand": brand,
     "date": date,
     "duration": duration,
     "video": videoList

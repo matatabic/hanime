@@ -7,6 +7,7 @@ import 'package:hanime/generated/json/search_entity.g.dart';
 class SearchEntity {
   late SearchGenre genre;
   late List<SearchTag> tag;
+  late SearchBrand brand;
   late SearchDate date;
   late List<String> duration;
   late List<SearchVideo> video;
@@ -27,7 +28,7 @@ class SearchEntity {
 @JsonSerializable()
 class SearchGenre {
   late String label;
-  late List<String> genre;
+  late List<String> data;
 
   SearchGenre();
 
@@ -45,7 +46,7 @@ class SearchGenre {
 @JsonSerializable()
 class SearchTag {
   late String label;
-  late List<String> group;
+  late List<String> data;
 
   SearchTag();
 
@@ -53,6 +54,24 @@ class SearchTag {
       $SearchTagFromJson(json);
 
   Map<String, dynamic> toJson() => $SearchTagToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class SearchBrand {
+  late String label;
+  late List<String> data;
+
+  SearchBrand();
+
+  factory SearchBrand.fromJson(Map<String, dynamic> json) =>
+      $SearchBrandFromJson(json);
+
+  Map<String, dynamic> toJson() => $SearchBrandToJson(this);
 
   @override
   String toString() {

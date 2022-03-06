@@ -154,6 +154,7 @@ class SearchNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 75,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       color: Colors.red,
       child: Flex(
         direction: Axis.horizontal,
@@ -161,30 +162,51 @@ class SearchNav extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              height: 30.0,
+              height: 75,
               color: Colors.green,
+              child: Icon(Icons.dashboard, size: 45),
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              height: 30.0,
+              height: 75,
               color: Colors.blue,
+              child: Icon(Icons.loyalty, size: 45),
             ),
           ),
-
-          // new ListTile(
-          //   leading: new Icon(Icons.map),
-          //   title: new Text('Maps'),
-          // ),
-          // new ListTile(
-          //   leading: new Icon(Icons.photo_album),
-          //   title: new Text('Album'),
-          // ),
-          // new ListTile(
-          //   leading: new Icon(Icons.phone),
-          //   title: new Text('Phone'),
-          // ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 75,
+              color: Colors.green,
+              child: Icon(Icons.sort, size: 45),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 75,
+              color: Colors.blue,
+              child: Icon(Icons.business, size: 45),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 75,
+              color: Colors.yellow,
+              child: Icon(Icons.date_range, size: 45),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 75,
+              color: Colors.yellow,
+              child: Icon(Icons.update, size: 45),
+            ),
+          ),
         ],
       ),
     );
