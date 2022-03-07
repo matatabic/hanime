@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/watch_entity.dart';
 
@@ -13,14 +14,14 @@ class BriefScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         color: Color.fromRGBO(58, 60, 63, 1),
-        height: 100,
+        height: Adapt.px(200),
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
             ClipOval(
               child: Container(
-                width: 70.0,
-                height: 70.0,
+                width: Adapt.px(140),
+                height: Adapt.px(140),
                 child: CommonImages(
                   imgUrl: watchEntity.info.imgUrl,
                 ),
@@ -28,14 +29,14 @@ class BriefScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: Adapt.px(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(watchEntity.info.title,
                         maxLines: 2, overflow: TextOverflow.ellipsis),
                     Padding(
-                      padding: EdgeInsets.only(top: 5),
+                      padding: EdgeInsets.only(top: Adapt.px(5)),
                       child: Text(
                         watchEntity.info.countTitle,
                       ),

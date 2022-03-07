@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
 
@@ -34,9 +35,6 @@ class EpisodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final episodeHeight = MediaQuery.of(context).size.width - 50;
-    // final
-    //  print(MediaQuery.of(context).size.height);
     var scrollOffset;
     if (watchEntity.info.videoIndex == 0) {
       scrollOffset = 0;
@@ -44,30 +42,30 @@ class EpisodeScreen extends StatelessWidget {
       if (direction) {
         scrollOffset =
             (watchEntity.info.videoIndex) * (itemWidth + LIST_SPACE) -
-                (MediaQuery.of(context).size.width / 4) +
-                10;
+                (MediaQuery.of(context).size.width / 2);
       } else {
         scrollOffset =
-            ((watchEntity.info.videoIndex) * (itemHeight + LIST_SPACE)) -
-                ((MediaQuery.of(context).size.height - 50) / 2) +
-                itemHeight / 2;
+            (watchEntity.info.videoIndex) * (itemHeight + LIST_SPACE) -
+                ((MediaQuery.of(context).size.height) / 2);
       }
     }
-    scrollOffset = double.parse(scrollOffset.toString());
+    // scrollOffset = double.parse(scrollOffset.toString());
 
     return Container(
       color: Color.fromRGBO(48, 48, 48, 1),
-      height:
-          direction ? containerHeight : MediaQuery.of(context).size.height - 50,
+      height: direction
+          ? Adapt.px(containerHeight)
+          : MediaQuery.of(context).size.height - Adapt.px(50),
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: ListView.separated(
           // shrinkWrap: true,
-          controller: ScrollController(initialScrollOffset: scrollOffset),
+          controller:
+              ScrollController(initialScrollOffset: Adapt.px(scrollOffset)),
           scrollDirection: direction ? Axis.horizontal : Axis.vertical,
           itemCount: watchEntity.episode.length,
           separatorBuilder: (BuildContext context, int index) => Container(
-                width: direction ? LIST_SPACE : 0,
-                height: direction ? 0 : LIST_SPACE,
+                width: Adapt.px(direction ? LIST_SPACE : 0),
+                height: Adapt.px(direction ? 0 : LIST_SPACE),
               ),
           itemBuilder: (BuildContext context, int index) {
             return Episode(
@@ -76,8 +74,8 @@ class EpisodeScreen extends StatelessWidget {
                   ? watchEntity.info.videoIndex == index
                   : videoIndex == index,
               loading: loading,
-              itemWidth: itemWidth,
-              itemHeight: itemHeight,
+              itemWidth: Adapt.px(itemWidth),
+              itemHeight: Adapt.px(itemHeight),
               direction: direction,
               onTap: () => {onTap(index)},
             );
@@ -131,8 +129,8 @@ class Episode extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Text(
-                  "12312" * 50,
-                  // videoList.title,
+                  // "12312" * 50,
+                  videoList.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/providers/home_state.dart';
@@ -12,7 +13,7 @@ class SwiperScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: Adapt.px(400),
       child: Swiper(
         autoplay: false,
         itemBuilder: (BuildContext context, int index) {
@@ -38,16 +39,16 @@ class SwiperScreen extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           '${config.activeIndex + 1}/${config.itemCount}',
-                          style: const TextStyle(fontSize: 15.0),
+                          style: TextStyle(fontSize: Adapt.px(30)),
                         ),
                         Text(
                           '${swiperList[config.activeIndex].title}',
-                          style: const TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: Adapt.px(32)),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     )),
-                constraints: const BoxConstraints.expand(height: 50.0),
+                constraints: BoxConstraints.expand(height: Adapt.px(90)),
               );
             })),
       ),

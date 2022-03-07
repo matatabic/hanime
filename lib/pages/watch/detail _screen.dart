@@ -1,6 +1,7 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/watch_state.dart';
 import 'package:provider/src/provider.dart';
@@ -13,7 +14,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(Adapt.px(5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,7 +22,7 @@ class DetailScreen extends StatelessWidget {
             context.watch<WatchState>().title,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: Adapt.px(36),
             ),
           ),
           Container(
@@ -31,7 +32,7 @@ class DetailScreen extends StatelessWidget {
               prefixText: watchEntity.info.title,
               prefixStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: Adapt.px(22),
                   color: Colors.orange),
               expandText: '顯示完整資訊',
               collapseText: '只顯示部分資訊',
@@ -40,11 +41,11 @@ class DetailScreen extends StatelessWidget {
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 15),
+              padding: EdgeInsets.only(top: Adapt.px(30)),
               child: Wrap(
                 children: _buildTagWidget(watchEntity.tag),
-                spacing: 10,
-                runSpacing: 10,
+                spacing: Adapt.px(20),
+                runSpacing: Adapt.px(20),
               )),
         ],
       ),
@@ -60,7 +61,7 @@ List<Widget> _buildTagWidget(List<WatchTag> tagList) {
       decoration: BoxDecoration(
           border: new Border.all(
         color: Colors.grey, //边框颜色
-        width: 2.0, //边框粗细
+        width: Adapt.px(2), //边框粗细
       )),
       child: Text(
         item.title,

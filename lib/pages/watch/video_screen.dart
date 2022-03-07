@@ -1,5 +1,6 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
@@ -9,7 +10,6 @@ import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
 import 'brief_screen.dart';
-import 'episode_image.dart';
 import 'episode_screen.dart';
 
 // 定制UI配置项
@@ -88,7 +88,7 @@ class _VideoScreenState extends State<VideoScreen>
     return Column(
       children: [
         FijkView(
-          height: 260,
+          height: Adapt.px(520),
           color: Colors.black,
           fit: FijkFit.cover,
           player: player,
@@ -121,9 +121,9 @@ class _VideoScreenState extends State<VideoScreen>
                     watchEntity: widget.watchEntity,
                     videoIndex: _videoIndex,
                     loading: _loading,
-                    containerHeight: 500,
-                    itemWidth: 160,
-                    itemHeight: 110,
+                    // containerHeight: 1000,
+                    itemWidth: 320,
+                    itemHeight: 220,
                     direction: false,
                     onTap: (index) async {
                       if (index == _videoIndex || _loading) {
@@ -148,9 +148,9 @@ class _VideoScreenState extends State<VideoScreen>
             watchEntity: widget.watchEntity,
             videoIndex: _videoIndex,
             loading: _loading,
-            containerHeight: 120,
-            itemWidth: 160,
-            itemHeight: 90,
+            containerHeight: 240,
+            itemWidth: 320,
+            itemHeight: 180,
             direction: true,
             onTap: (index) async {
               if (index == _videoIndex || _loading) {
@@ -170,37 +170,6 @@ class _VideoScreenState extends State<VideoScreen>
             }),
       ],
     );
-  }
-
-  Widget _createTabConList(List<WatchEpisode> episodeList) {
-    ListView episodeData = ListView.separated(
-        itemCount: episodeList.length,
-        separatorBuilder: (BuildContext context, int index) => Container(
-              height: 20.0,
-            ),
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return Container(
-            child: Row(
-              children: [
-                Stack(children: [
-                  EpisodePhoto(
-                    width: 160,
-                    height: 90,
-                    imgUrl: episodeList[index].imgUrl,
-                    selector: false,
-                  ),
-                  // loadingCover(160, 90),
-                ]),
-                Expanded(
-                    child: Container(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text(episodeList[index].title)))
-              ],
-            ),
-          );
-        });
-    return Container(color: Color.fromRGBO(0, 0, 0, 0.5), child: episodeData);
   }
 
   getEpisodeData(htmlUrl) async {

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
 import 'package:hanime/providers/home_state.dart';
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
                         (BuildContext context, int index) {
                       return getGroupContainer(homeEntity.video[index]);
                     }, childCount: homeEntity.video.length),
-                    itemExtent: 230),
+                    itemExtent: Adapt.px(450)),
               ]),
             ),
             Container(
@@ -114,12 +115,9 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onRefresh() async {
-    // monitor network fetch
     setState(() {
       _futureBuilderFuture = loadData();
     });
-    // if failed,use refreshFailed()
-    // _refreshController.refreshCompleted();
   }
 
   initState() {
@@ -134,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen>
   bool _scrollListener(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.axis == Axis.vertical) {
       _colorAnimationController.animateTo(scrollInfo.metrics.pixels /
-          (260 - MediaQuery.of(context).padding.top));
+          (Adapt.px(520) - MediaQuery.of(context).padding.top));
       return true;
     }
     return false;

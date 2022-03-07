@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
@@ -90,7 +91,8 @@ class _WatchScreenState extends State<WatchScreen> {
               ),
               DetailScreen(watchEntity: watchEntity),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                padding: EdgeInsets.symmetric(
+                    vertical: Adapt.px(30), horizontal: Adapt.px(10)),
                 child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -100,9 +102,9 @@ class _WatchScreenState extends State<WatchScreen> {
                         //横轴元素个数
                         crossAxisCount: watchEntity.commendCount,
                         //纵轴间距
-                        mainAxisSpacing: 5.0,
+                        mainAxisSpacing: Adapt.px(10),
                         //横轴间距
-                        crossAxisSpacing: 5.0,
+                        crossAxisSpacing: Adapt.px(10),
                         //子组件宽高长度比例
                         childAspectRatio:
                             watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),

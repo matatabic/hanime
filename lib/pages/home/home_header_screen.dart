@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
@@ -17,7 +18,7 @@ class HomeHeaderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 260,
+      height: Adapt.px(520),
       child: Stack(children: [
         ConstrainedBox(
           constraints: new BoxConstraints.expand(),
