@@ -14,7 +14,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(Adapt.px(5)),
+      padding: EdgeInsets.all(Adapt.px(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

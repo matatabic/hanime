@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
@@ -153,57 +154,59 @@ class SearchNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 75,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      color: Colors.red,
+      height: Adapt.px(150),
+      padding: EdgeInsets.symmetric(horizontal: Adapt.px(20)),
       child: Flex(
         direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.green,
-              child: Icon(Icons.dashboard, size: 45),
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
+              child: InkWell(
+                  onTap: () {},
+                  child: Icon(Icons.dashboard, size: Adapt.px(60))),
             ),
           ),
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.blue,
-              child: Icon(Icons.loyalty, size: 45),
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
+              child: Icon(Icons.loyalty, size: Adapt.px(60)),
             ),
           ),
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.green,
-              child: Icon(Icons.sort, size: 45),
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
+              child: Icon(Icons.sort, size: Adapt.px(60)),
             ),
           ),
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.blue,
-              child: Icon(Icons.business, size: 45),
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
+              child: Icon(Icons.business, size: Adapt.px(60)),
             ),
           ),
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.yellow,
-              child: Icon(Icons.date_range, size: 45),
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
+              child: Icon(Icons.date_range, size: Adapt.px(60)),
             ),
           ),
-          Expanded(
-            flex: 1,
+          ClipOval(
             child: Container(
-              height: 75,
-              color: Colors.yellow,
+              width: Adapt.px(100),
+              height: Adapt.px(100),
+              color: Color.fromRGBO(51, 51, 51, 1),
               child: Icon(Icons.update, size: 45),
             ),
           ),

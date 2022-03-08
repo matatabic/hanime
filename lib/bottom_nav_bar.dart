@@ -6,6 +6,8 @@ import 'package:hanime/pages/hot/hot_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 
+import 'common/adapt.dart';
+
 class BottomNavBar extends StatefulWidget {
   BottomNavBar({Key? key}) : super(key: key);
 
@@ -41,10 +43,10 @@ class _BottomNavBarState extends State<BottomNavBar>
           backgroundColor: Colors.black26,
           index: currentIndex,
           items: <Widget>[
-            Icon(Icons.home, size: 30),
-            Icon(Icons.fiber_new, size: 30),
-            Icon(Icons.person, size: 30),
-            Icon(Icons.repeat, size: 30),
+            Icon(Icons.home, size: Adapt.px(60)),
+            Icon(Icons.fiber_new, size: Adapt.px(60)),
+            Icon(Icons.person, size: Adapt.px(60)),
+            Icon(Icons.repeat, size: Adapt.px(60)),
           ],
           onTap: (index) {
             //Handle button tap
