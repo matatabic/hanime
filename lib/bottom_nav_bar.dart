@@ -57,15 +57,20 @@ class _BottomNavBarState extends State<BottomNavBar>
                 duration: Duration(milliseconds: 300), curve: Curves.ease);
           },
         ),
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: tabController,
-          children: <Widget>[
-            HomeScreen(),
-            SearchScreen(),
-            SourceHeroPage(),
-            MyScreen(),
-          ],
+        body: WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: tabController,
+            children: <Widget>[
+              HomeScreen(),
+              SearchScreen(),
+              SourceHeroPage(),
+              MyScreen(),
+            ],
+          ),
         ));
   }
 }

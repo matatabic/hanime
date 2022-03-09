@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 
 class SearchEngine extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _SearchEngineState extends State<SearchEngine> {
           top: MediaQueryData.fromWindow(window).padding.top,
         ),
         child: Container(
-          height: 52.0,
+          height: Adapt.px(110),
           child: new Padding(
               padding: const EdgeInsets.all(0.0),
               child: new Card(

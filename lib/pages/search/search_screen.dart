@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
@@ -166,7 +169,19 @@ class SearchNav extends StatelessWidget {
               height: Adapt.px(100),
               color: Color.fromRGBO(51, 51, 51, 1),
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    BotToast.showAttachedWidget(
+                        // duration: Duration(seconds: 2),
+                        target: Offset(0, 0),
+                        verticalOffset: 0,
+                        attachedBuilder: (void Function() cancelFunc) {
+                          return Container(
+                            width: 100,
+                            height: 100,
+                            color: Colors.blueGrey,
+                          );
+                        });
+                  },
                   child: Icon(Icons.dashboard, size: Adapt.px(60))),
             ),
           ),
@@ -212,6 +227,148 @@ class SearchNav extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+void showAlertDialog(BackButtonBehavior backButtonBehavior,
+    {VoidCallback? cancel,
+    VoidCallback? confirm,
+    VoidCallback? backgroundReturn,
+    required double ww,
+    required double hh}) {
+  BotToast.showAttachedWidget(attachedBuilder: (void Function() cancelFunc) {
+    return Container(width: 100, height: 100, color: Colors.red);
+  });
+  // BotToast.showAnimationWidget(
+  //     clickClose: false,
+  //     allowClick: false,
+  //     onlyOne: true,
+  //     crossPage: true,
+  //     backButtonBehavior: backButtonBehavior,
+  //     wrapToastAnimation: (controller, cancel, child) => Stack(
+  //           children: <Widget>[
+  //             GestureDetector(
+  //               onTap: () {
+  //                 cancel();
+  //                 backgroundReturn?.call();
+  //               },
+  //               //The DecoratedBox here is very important,he will fill the entire parent component
+  //               child: AnimatedBuilder(
+  //                 builder: (_, child) => Opacity(
+  //                   opacity: controller.value,
+  //                   child: child,
+  //                 ),
+  //                 child: DecoratedBox(
+  //                   decoration: BoxDecoration(color: Colors.blueGrey),
+  //                   child: SizedBox.expand(),
+  //                 ),
+  //                 animation: controller,
+  //               ),
+  //             ),
+  //             CustomOffsetAnimation(
+  //               controller: controller,
+  //               child: child,
+  //             )
+  //           ],
+  //         ),
+  //     toastBuilder: (cancelFunc) => Container(
+  //         width: ww,
+  //         height: hh,
+  //         color: Colors.red,
+  //         padding: const EdgeInsets.only(top: 0)),
+  //     animationDuration: Duration(milliseconds: 300));
+}
+
+class CustomWidget extends StatefulWidget {
+  @override
+  _CustomWidgetState createState() => _CustomWidgetState();
+}
+
+class _CustomWidgetState extends State<CustomWidget> {
+  BackButtonBehavior backButtonBehavior = BackButtonBehavior.none;
+
+  @override
+  Widget build(BuildContext context) {
+    var ww = MediaQuery.of(context).size.width;
+    var hh = MediaQuery.of(context).size.height -
+        Adapt.px(110) -
+        MediaQueryData.fromWindow(window).padding.top;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('CustomWidget'),
+      ),
+      body: Container(
+        padding: const EdgeInsets.only(top: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {
+                  showAlertDialog(backButtonBehavior, ww: ww, hh: hh);
+                },
+                child: const Text('customWidget'),
+              ),
+              Center(
+                child: Text('BackButtonBehavior'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomOffsetAnimation extends StatefulWidget {
+  final AnimationController controller;
+  final Widget child;
+
+  const CustomOffsetAnimation(
+      {Key? key, required this.controller, required this.child})
+      : super(key: key);
+
+  @override
+  _CustomOffsetAnimationState createState() => _CustomOffsetAnimationState();
+}
+
+class _CustomOffsetAnimationState extends State<CustomOffsetAnimation> {
+  Tween<Offset>? tweenOffset;
+  Tween<double>? tweenScale;
+
+  Animation<double>? animation;
+
+  @override
+  void initState() {
+    tweenOffset = Tween<Offset>(
+      begin: const Offset(0, 0),
+      end: const Offset(0, 0.1),
+    );
+    tweenScale = Tween<double>(begin: 0, end: 1);
+    animation =
+        CurvedAnimation(parent: widget.controller, curve: Curves.decelerate);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      child: widget.child,
+      animation: widget.controller,
+      builder: (BuildContext context, Widget? child) {
+        return FractionalTranslation(
+            translation: tweenOffset!.evaluate(animation!),
+            child: ClipRect(
+              child: Transform.scale(
+                scale: tweenScale!.evaluate(animation!),
+                child: Opacity(
+                  child: child,
+                  opacity: animation!.value,
+                ),
+              ),
+            ));
+      },
     );
   }
 }
