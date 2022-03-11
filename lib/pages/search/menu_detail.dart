@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'menu/genre_menu.dart';
 
 class MenuDetail extends StatefulWidget {
-  const MenuDetail({Key? key}) : super(key: key);
+  final String id;
+  const MenuDetail({Key? key, required this.id}) : super(key: key);
 
   @override
   _MenuDetailState createState() => _MenuDetailState();
@@ -30,8 +31,3 @@ class _MenuDetailState extends State<MenuDetail> {
     );
   }
 }
-
-var genre = {
-  "label": "影片類型",
-  "data": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
-};

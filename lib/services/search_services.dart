@@ -254,6 +254,8 @@ Future getSearchData() async {
     ]
   };
 
+  var sort = ["本日排行", "最新內容", "最新上傳", "觀看次數"];
+
   var date = {
     "year": [
       "2021",

@@ -10,6 +10,8 @@ import 'package:hanime/pages/search/search_engine.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
 
+import 'menu_detail.dart';
+
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -150,120 +152,61 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
+List menuList = [
+  {
+    "id": 0,
+    "icon": Icons.dashboard,
+  },
+  {
+    "id": 1,
+    "icon": Icons.loyalty,
+  },
+  {
+    "id": 2,
+    "icon": Icons.sort,
+  },
+  {
+    "id": 3,
+    "icon": Icons.business,
+  },
+  {
+    "id": 4,
+    "icon": Icons.date_range,
+  },
+  {
+    "id": 5,
+    "icon": Icons.update,
+  }
+];
+
 class SearchNav extends StatelessWidget {
-  const SearchNav({Key? key}) : super(key: key);
+  SearchNav({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> dataList = [];
+    for (var menu in menuList) {
+      dataList.add(ClipOval(
+        child: Container(
+          width: Adapt.px(100),
+          height: Adapt.px(100),
+          color: Color.fromRGBO(51, 51, 51, 1),
+          child: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    ScaleFadeRotateRouter(child: MenuDetail(id: menu['id'])));
+              },
+              child: Icon(menu['icon'] as IconData, size: Adapt.px(60))),
+        ),
+      ));
+    }
     return Container(
       height: Adapt.px(150),
       padding: EdgeInsets.symmetric(horizontal: Adapt.px(20)),
       child: Flex(
           direction: Axis.horizontal,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: getMenuList()
-          // <Widget>[
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: InkWell(
-          //           onTap: () {
-          //             Navigator.push(
-          //                 context, ScaleFadeRotateRouter(child: MenuDetail()));
-          //           },
-          //           child: Icon(Icons.dashboard, size: Adapt.px(60))),
-          //     ),
-          //   ),
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: Icon(Icons.loyalty, size: Adapt.px(60)),
-          //     ),
-          //   ),
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: Icon(Icons.sort, size: Adapt.px(60)),
-          //     ),
-          //   ),
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: Icon(Icons.business, size: Adapt.px(60)),
-          //     ),
-          //   ),
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: Icon(Icons.date_range, size: Adapt.px(60)),
-          //     ),
-          //   ),
-          //   ClipOval(
-          //     child: Container(
-          //       width: Adapt.px(100),
-          //       height: Adapt.px(100),
-          //       color: Color.fromRGBO(51, 51, 51, 1),
-          //       child: Icon(Icons.update, size: 45),
-          //     ),
-          //   ),
-          // ],
-          ),
+          children: dataList),
     );
   }
-}
-
-getMenuList() {
-  List<Widget> dataList = [];
-  var menuList = [
-    {
-      "id": 0,
-      "icon": Icons.dashboard,
-    },
-    {
-      "id": 1,
-      "icon": Icons.loyalty,
-    },
-    {
-      "id": 2,
-      "icon": Icons.sort,
-    },
-    {
-      "id": 3,
-      "icon": Icons.business,
-    },
-    {
-      "id": 4,
-      "icon": Icons.date_range,
-    },
-    {
-      "id": 5,
-      "icon": Icons.update,
-    }
-  ];
-  for (var menu in menuList) {
-    dataList.add(ClipOval(
-      child: Container(
-        width: Adapt.px(100),
-        height: Adapt.px(100),
-        color: Color.fromRGBO(51, 51, 51, 1),
-        child: InkWell(
-            onTap: () {
-              // Navigator.push(
-              //     context, ScaleFadeRotateRouter(child: MenuDetail()));
-            },
-            child: Icon(menu['icon'] as IconData, size: Adapt.px(60))),
-      ),
-    ));
-  }
-  return dataList;
 }

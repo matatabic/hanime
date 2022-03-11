@@ -6,8 +6,8 @@ SearchBrand genre = SearchBrand.fromJson({
   "data": ["H動漫", "3D動畫", "同人作品", "Cosplay"]
 });
 
-class GenreMenu extends StatelessWidget {
-  GenreMenu({Key? key}) : super(key: key);
+class DateMenu extends StatelessWidget {
+  const DateMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
