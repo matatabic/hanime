@@ -150,7 +150,7 @@ class _VideoScreenState extends State<VideoScreen>
             loading: _loading,
             containerHeight: 240,
             itemWidth: 320,
-            itemHeight: 180,
+            itemHeight: 165,
             direction: true,
             onTap: (index) async {
               if (index == _videoIndex || _loading) {

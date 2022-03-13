@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 
@@ -37,11 +36,13 @@ Widget getGroupContainer(HomeVideo item) {
                 width: Adapt.px(260),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      Right2LeftRouter(
-                          child: WatchScreen(
-                        htmlUrl: item.data[index].url,
-                      )));
+                    //1
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => WatchScreen(
+                              htmlUrl: item.data[index].url,
+                            )),
+                  );
                 },
               );
             }))

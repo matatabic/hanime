@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart';
 
 Future getSearchData() async {
@@ -149,7 +152,7 @@ Future getSearchData() async {
       ]
     },
     {
-      "label": "故事劇情：",
+      "label": "性交體位：",
       "data": [
         "手交",
         "指交",
@@ -313,11 +316,12 @@ Future getSearchData() async {
     "中長片（4 至 20 分鐘）",
     "長片（20 分鐘以上）",
   ];
-
+  LogUtil.d(json.encode(tag));
   return {
     "genre": genre,
     "tag": tag,
     "brand": brand,
+    "sort": sort,
     "date": date,
     "duration": duration,
     "video": videoList

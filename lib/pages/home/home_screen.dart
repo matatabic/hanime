@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                     child: HomeHeaderScreen(
                   swiperList: homeEntity.swiper,
                   current_swiper_image: homeEntity
-                      .swiper[context.watch<HomeState>().swiper_index].imgUrl,
+                      .swiper[context.watch<HomeState>().swiperIndex].imgUrl,
                 )),
                 // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
                 SliverFixedExtentList(

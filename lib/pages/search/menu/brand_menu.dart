@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hanime/entity/search_entity.dart';
 
 SearchBrand genre = SearchBrand.fromJson({
@@ -11,8 +12,20 @@ class BrandMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(genre.label),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: new AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: Icon(Icons.close_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('品牌'),
+      ),
+      body: Text(""),
     );
   }
 }

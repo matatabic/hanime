@@ -2,15 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/pages/search/search_engine.dart';
+import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
 
-import 'menu_detail.dart';
+import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -75,8 +74,8 @@ class _SearchScreenState extends State<SearchScreen> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
-          SearchEngine(),
-          SearchNav(),
+          SearchEngineScreen(),
+          SearchMenuScreen(),
           GridView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 0),
@@ -146,67 +145,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future loadData() async {
     var data = await getSearchData();
+    // LogUtil.d(json.encode(data));
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
     return searchEntity;
-  }
-}
-
-List menuList = [
-  {
-    "id": 0,
-    "icon": Icons.dashboard,
-  },
-  {
-    "id": 1,
-    "icon": Icons.loyalty,
-  },
-  {
-    "id": 2,
-    "icon": Icons.sort,
-  },
-  {
-    "id": 3,
-    "icon": Icons.business,
-  },
-  {
-    "id": 4,
-    "icon": Icons.date_range,
-  },
-  {
-    "id": 5,
-    "icon": Icons.update,
-  }
-];
-
-class SearchNav extends StatelessWidget {
-  SearchNav({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> dataList = [];
-    for (var menu in menuList) {
-      dataList.add(ClipOval(
-        child: Container(
-          width: Adapt.px(100),
-          height: Adapt.px(100),
-          color: Color.fromRGBO(51, 51, 51, 1),
-          child: InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    ScaleFadeRotateRouter(child: MenuDetail(id: menu['id'])));
-              },
-              child: Icon(menu['icon'] as IconData, size: Adapt.px(60))),
-        ),
-      ));
-    }
-    return Container(
-      height: Adapt.px(150),
-      padding: EdgeInsets.symmetric(horizontal: Adapt.px(20)),
-      child: Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: dataList),
-    );
   }
 }

@@ -8,7 +8,9 @@ class SearchEntity {
   late SearchGenre genre;
   late List<SearchTag> tag;
   late SearchBrand brand;
+  late List<String> sort;
   late SearchDate date;
+  late List<SearchMenu> menu;
   late List<String> duration;
   late List<SearchVideo> video;
 
@@ -90,6 +92,25 @@ class SearchDate {
       $SearchDateFromJson(json);
 
   Map<String, dynamic> toJson() => $SearchDateToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class SearchMenu {
+  late int id;
+  late String icon;
+  late bool selector;
+
+  SearchMenu();
+
+  factory SearchMenu.fromJson(Map<String, dynamic> json) =>
+      $SearchMenuFromJson(json);
+
+  Map<String, dynamic> toJson() => $SearchMenuToJson(this);
 
   @override
   String toString() {

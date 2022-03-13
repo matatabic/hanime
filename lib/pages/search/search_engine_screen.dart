@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 
-class SearchEngine extends StatefulWidget {
+class SearchEngineScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new _SearchEngineState();
+  State<StatefulWidget> createState() => new _SearchEngineScreenState();
 }
 
-class _SearchEngineState extends State<SearchEngine> {
+class _SearchEngineScreenState extends State<SearchEngineScreen> {
   final controller = TextEditingController();
 
   @override

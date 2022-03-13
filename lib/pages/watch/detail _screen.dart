@@ -32,7 +32,7 @@ class DetailScreen extends StatelessWidget {
               prefixText: watchEntity.info.title,
               prefixStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Adapt.px(22),
+                  fontSize: Adapt.px(45),
                   color: Colors.orange),
               expandText: '顯示完整資訊',
               collapseText: '只顯示部分資訊',

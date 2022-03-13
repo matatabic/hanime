@@ -105,6 +105,9 @@ class JsonConvert {
     if (type == (SearchDate).toString()) {
       return SearchDate.fromJson(json) as M;
     }
+    if (type == (SearchMenu).toString()) {
+      return SearchMenu.fromJson(json) as M;
+    }
     if (type == (SearchVideo).toString()) {
       return SearchVideo.fromJson(json) as M;
     }
@@ -185,6 +188,11 @@ class JsonConvert {
     if (<SearchDate>[] is M) {
       return data
           .map<SearchDate>((Map<String, dynamic> e) => SearchDate.fromJson(e))
+          .toList() as M;
+    }
+    if (<SearchMenu>[] is M) {
+      return data
+          .map<SearchMenu>((Map<String, dynamic> e) => SearchMenu.fromJson(e))
           .toList() as M;
     }
     if (<SearchVideo>[] is M) {
