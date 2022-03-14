@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+        showPerformanceOverlay: true,
         builder: BotToastInit(), //1.调用BotToastInit
         navigatorObservers: [BotToastNavigatorObserver()], //2.注册路由观察者
         theme: new ThemeData(
