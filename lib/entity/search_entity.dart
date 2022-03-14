@@ -6,12 +6,11 @@ import 'package:hanime/generated/json/search_entity.g.dart';
 @JsonSerializable()
 class SearchEntity {
   late SearchGenre genre;
-  late List<SearchTag> tag;
+  late SearchTag tag;
   late SearchBrand brand;
-  late List<String> sort;
+  late SearchSort sort;
   late SearchDate date;
-  late List<SearchMenu> menu;
-  late List<String> duration;
+  late SearchDuration duration;
   late List<SearchVideo> video;
 
   SearchEntity();
@@ -48,7 +47,7 @@ class SearchGenre {
 @JsonSerializable()
 class SearchTag {
   late String label;
-  late List<String> data;
+  late List<SearchTagData> data;
 
   SearchTag();
 
@@ -56,6 +55,24 @@ class SearchTag {
       $SearchTagFromJson(json);
 
   Map<String, dynamic> toJson() => $SearchTagToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class SearchTagData {
+  late String label;
+  late List<String> data;
+
+  SearchTagData();
+
+  factory SearchTagData.fromJson(Map<String, dynamic> json) =>
+      $SearchTagDataFromJson(json);
+
+  Map<String, dynamic> toJson() => $SearchTagDataToJson(this);
 
   @override
   String toString() {
@@ -82,9 +99,27 @@ class SearchBrand {
 }
 
 @JsonSerializable()
+class SearchSort {
+  late String label;
+  late List<String> data;
+
+  SearchSort();
+
+  factory SearchSort.fromJson(Map<String, dynamic> json) =>
+      $SearchSortFromJson(json);
+
+  Map<String, dynamic> toJson() => $SearchSortToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
 class SearchDate {
-  late List<String> year;
-  late List<String> month;
+  late String label;
+  late SearchDateData data;
 
   SearchDate();
 
@@ -100,17 +135,34 @@ class SearchDate {
 }
 
 @JsonSerializable()
-class SearchMenu {
-  late int id;
-  late String icon;
-  late bool selector;
+class SearchDateData {
+  late List<String> year;
+  late List<String> month;
 
-  SearchMenu();
+  SearchDateData();
 
-  factory SearchMenu.fromJson(Map<String, dynamic> json) =>
-      $SearchMenuFromJson(json);
+  factory SearchDateData.fromJson(Map<String, dynamic> json) =>
+      $SearchDateDataFromJson(json);
 
-  Map<String, dynamic> toJson() => $SearchMenuToJson(this);
+  Map<String, dynamic> toJson() => $SearchDateDataToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class SearchDuration {
+  late String label;
+  late List<String> data;
+
+  SearchDuration();
+
+  factory SearchDuration.fromJson(Map<String, dynamic> json) =>
+      $SearchDurationFromJson(json);
+
+  Map<String, dynamic> toJson() => $SearchDurationToJson(this);
 
   @override
   String toString() {

@@ -13,12 +13,12 @@ import 'menu/sort_menu.dart';
 import 'menu/tag_menu.dart';
 
 List _menuList = [
-  {"id": 0, "icon": Icons.dashboard, "selector": false},
-  {"id": 1, "icon": Icons.loyalty, "selector": false},
-  {"id": 2, "icon": Icons.sort, "selector": false},
-  {"id": 3, "icon": Icons.business, "selector": false},
-  {"id": 4, "icon": Icons.date_range, "selector": false},
-  {"id": 5, "icon": Icons.update, "selector": false}
+  {"id": 0, "icon": Icons.dashboard},
+  {"id": 1, "icon": Icons.loyalty},
+  {"id": 2, "icon": Icons.sort},
+  {"id": 3, "icon": Icons.business},
+  {"id": 4, "icon": Icons.date_range},
+  {"id": 5, "icon": Icons.update}
 ];
 
 const double _fabDimension = 100.0;
@@ -42,7 +42,7 @@ class SearchMenuScreen extends StatelessWidget {
             Radius.circular(_fabDimension / 2),
           ),
         ),
-        closedColor: getActive(context, menu['id']),
+        closedColor: getActive(context.watch<SearchState>(), menu['id']),
         closedBuilder: (BuildContext context, VoidCallback openContainer) {
           return SizedBox(
             height: Adapt.px(100),
@@ -68,22 +68,30 @@ class SearchMenuScreen extends StatelessWidget {
   }
 }
 
-Color getActive(BuildContext context, index) {
+Color getActive(SearchState searchState, index) {
   switch (index) {
     case 0:
-      return context.watch<SearchState>().genreIndex > 0
-          ? Colors.red
+      return searchState.genreIndex > 0
+          ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 1:
-      return Color.fromRGBO(51, 51, 51, 1);
+      return searchState.selectedTag.length > 0
+          ? Colors.orangeAccent
+          : Color.fromRGBO(51, 51, 51, 1);
     case 2:
-      return Color.fromRGBO(51, 51, 51, 1);
+      return searchState.sortIndex > 0
+          ? Colors.orangeAccent
+          : Color.fromRGBO(51, 51, 51, 1);
     case 3:
-      return Color.fromRGBO(51, 51, 51, 1);
+      return searchState.selectedBrand.length > 0
+          ? Colors.orangeAccent
+          : Color.fromRGBO(51, 51, 51, 1);
     case 4:
       return Color.fromRGBO(51, 51, 51, 1);
     case 5:
-      return Color.fromRGBO(51, 51, 51, 1);
+      return searchState.durationIndex > 0
+          ? Colors.orangeAccent
+          : Color.fromRGBO(51, 51, 51, 1);
   }
   return Color.fromRGBO(51, 51, 51, 1);
 }

@@ -99,14 +99,23 @@ class JsonConvert {
     if (type == (SearchTag).toString()) {
       return SearchTag.fromJson(json) as M;
     }
+    if (type == (SearchTagData).toString()) {
+      return SearchTagData.fromJson(json) as M;
+    }
     if (type == (SearchBrand).toString()) {
       return SearchBrand.fromJson(json) as M;
+    }
+    if (type == (SearchSort).toString()) {
+      return SearchSort.fromJson(json) as M;
     }
     if (type == (SearchDate).toString()) {
       return SearchDate.fromJson(json) as M;
     }
-    if (type == (SearchMenu).toString()) {
-      return SearchMenu.fromJson(json) as M;
+    if (type == (SearchDateData).toString()) {
+      return SearchDateData.fromJson(json) as M;
+    }
+    if (type == (SearchDuration).toString()) {
+      return SearchDuration.fromJson(json) as M;
     }
     if (type == (SearchVideo).toString()) {
       return SearchVideo.fromJson(json) as M;
@@ -180,9 +189,20 @@ class JsonConvert {
           .map<SearchTag>((Map<String, dynamic> e) => SearchTag.fromJson(e))
           .toList() as M;
     }
+    if (<SearchTagData>[] is M) {
+      return data
+          .map<SearchTagData>(
+              (Map<String, dynamic> e) => SearchTagData.fromJson(e))
+          .toList() as M;
+    }
     if (<SearchBrand>[] is M) {
       return data
           .map<SearchBrand>((Map<String, dynamic> e) => SearchBrand.fromJson(e))
+          .toList() as M;
+    }
+    if (<SearchSort>[] is M) {
+      return data
+          .map<SearchSort>((Map<String, dynamic> e) => SearchSort.fromJson(e))
           .toList() as M;
     }
     if (<SearchDate>[] is M) {
@@ -190,9 +210,16 @@ class JsonConvert {
           .map<SearchDate>((Map<String, dynamic> e) => SearchDate.fromJson(e))
           .toList() as M;
     }
-    if (<SearchMenu>[] is M) {
+    if (<SearchDateData>[] is M) {
       return data
-          .map<SearchMenu>((Map<String, dynamic> e) => SearchMenu.fromJson(e))
+          .map<SearchDateData>(
+              (Map<String, dynamic> e) => SearchDateData.fromJson(e))
+          .toList() as M;
+    }
+    if (<SearchDuration>[] is M) {
+      return data
+          .map<SearchDuration>(
+              (Map<String, dynamic> e) => SearchDuration.fromJson(e))
           .toList() as M;
     }
     if (<SearchVideo>[] is M) {

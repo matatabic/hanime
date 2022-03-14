@@ -7,8 +7,7 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
   if (genre != null) {
     searchEntity.genre = genre;
   }
-  final List<SearchTag>? tag =
-      jsonConvert.convertListNotNull<SearchTag>(json['tag']);
+  final SearchTag? tag = jsonConvert.convert<SearchTag>(json['tag']);
   if (tag != null) {
     searchEntity.tag = tag;
   }
@@ -16,8 +15,7 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
   if (brand != null) {
     searchEntity.brand = brand;
   }
-  final List<String>? sort =
-      jsonConvert.convertListNotNull<String>(json['sort']);
+  final SearchSort? sort = jsonConvert.convert<SearchSort>(json['sort']);
   if (sort != null) {
     searchEntity.sort = sort;
   }
@@ -25,13 +23,8 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
   if (date != null) {
     searchEntity.date = date;
   }
-  final List<SearchMenu>? menu =
-      jsonConvert.convertListNotNull<SearchMenu>(json['menu']);
-  if (menu != null) {
-    searchEntity.menu = menu;
-  }
-  final List<String>? duration =
-      jsonConvert.convertListNotNull<String>(json['duration']);
+  final SearchDuration? duration =
+      jsonConvert.convert<SearchDuration>(json['duration']);
   if (duration != null) {
     searchEntity.duration = duration;
   }
@@ -46,12 +39,11 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $SearchEntityToJson(SearchEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['genre'] = entity.genre.toJson();
-  data['tag'] = entity.tag.map((v) => v.toJson()).toList();
+  data['tag'] = entity.tag.toJson();
   data['brand'] = entity.brand.toJson();
-  data['sort'] = entity.sort;
+  data['sort'] = entity.sort.toJson();
   data['date'] = entity.date.toJson();
-  data['menu'] = entity.menu.map((v) => v.toJson()).toList();
-  data['duration'] = entity.duration;
+  data['duration'] = entity.duration.toJson();
   data['video'] = entity.video.map((v) => v.toJson()).toList();
   return data;
 }
@@ -83,8 +75,8 @@ SearchTag $SearchTagFromJson(Map<String, dynamic> json) {
   if (label != null) {
     searchTag.label = label;
   }
-  final List<String>? data =
-      jsonConvert.convertListNotNull<String>(json['data']);
+  final List<SearchTagData>? data =
+      jsonConvert.convertListNotNull<SearchTagData>(json['data']);
   if (data != null) {
     searchTag.data = data;
   }
@@ -92,6 +84,27 @@ SearchTag $SearchTagFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> $SearchTagToJson(SearchTag entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['label'] = entity.label;
+  data['data'] = entity.data.map((v) => v.toJson()).toList();
+  return data;
+}
+
+SearchTagData $SearchTagDataFromJson(Map<String, dynamic> json) {
+  final SearchTagData searchTagData = SearchTagData();
+  final String? label = jsonConvert.convert<String>(json['label']);
+  if (label != null) {
+    searchTagData.label = label;
+  }
+  final List<String>? data =
+      jsonConvert.convertListNotNull<String>(json['data']);
+  if (data != null) {
+    searchTagData.data = data;
+  }
+  return searchTagData;
+}
+
+Map<String, dynamic> $SearchTagDataToJson(SearchTagData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['data'] = entity.data;
@@ -119,50 +132,88 @@ Map<String, dynamic> $SearchBrandToJson(SearchBrand entity) {
   return data;
 }
 
+SearchSort $SearchSortFromJson(Map<String, dynamic> json) {
+  final SearchSort searchSort = SearchSort();
+  final String? label = jsonConvert.convert<String>(json['label']);
+  if (label != null) {
+    searchSort.label = label;
+  }
+  final List<String>? data =
+      jsonConvert.convertListNotNull<String>(json['data']);
+  if (data != null) {
+    searchSort.data = data;
+  }
+  return searchSort;
+}
+
+Map<String, dynamic> $SearchSortToJson(SearchSort entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['label'] = entity.label;
+  data['data'] = entity.data;
+  return data;
+}
+
 SearchDate $SearchDateFromJson(Map<String, dynamic> json) {
   final SearchDate searchDate = SearchDate();
-  final List<String>? year =
-      jsonConvert.convertListNotNull<String>(json['year']);
-  if (year != null) {
-    searchDate.year = year;
+  final String? label = jsonConvert.convert<String>(json['label']);
+  if (label != null) {
+    searchDate.label = label;
   }
-  final List<String>? month =
-      jsonConvert.convertListNotNull<String>(json['month']);
-  if (month != null) {
-    searchDate.month = month;
+  final SearchDateData? data =
+      jsonConvert.convert<SearchDateData>(json['data']);
+  if (data != null) {
+    searchDate.data = data;
   }
   return searchDate;
 }
 
 Map<String, dynamic> $SearchDateToJson(SearchDate entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['label'] = entity.label;
+  data['data'] = entity.data.toJson();
+  return data;
+}
+
+SearchDateData $SearchDateDataFromJson(Map<String, dynamic> json) {
+  final SearchDateData searchDateData = SearchDateData();
+  final List<String>? year =
+      jsonConvert.convertListNotNull<String>(json['year']);
+  if (year != null) {
+    searchDateData.year = year;
+  }
+  final List<String>? month =
+      jsonConvert.convertListNotNull<String>(json['month']);
+  if (month != null) {
+    searchDateData.month = month;
+  }
+  return searchDateData;
+}
+
+Map<String, dynamic> $SearchDateDataToJson(SearchDateData entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
   data['year'] = entity.year;
   data['month'] = entity.month;
   return data;
 }
 
-SearchMenu $SearchMenuFromJson(Map<String, dynamic> json) {
-  final SearchMenu searchMenu = SearchMenu();
-  final int? id = jsonConvert.convert<int>(json['id']);
-  if (id != null) {
-    searchMenu.id = id;
+SearchDuration $SearchDurationFromJson(Map<String, dynamic> json) {
+  final SearchDuration searchDuration = SearchDuration();
+  final String? label = jsonConvert.convert<String>(json['label']);
+  if (label != null) {
+    searchDuration.label = label;
   }
-  final String? icon = jsonConvert.convert<String>(json['icon']);
-  if (icon != null) {
-    searchMenu.icon = icon;
+  final List<String>? data =
+      jsonConvert.convertListNotNull<String>(json['data']);
+  if (data != null) {
+    searchDuration.data = data;
   }
-  final bool? selector = jsonConvert.convert<bool>(json['selector']);
-  if (selector != null) {
-    searchMenu.selector = selector;
-  }
-  return searchMenu;
+  return searchDuration;
 }
 
-Map<String, dynamic> $SearchMenuToJson(SearchMenu entity) {
+Map<String, dynamic> $SearchDurationToJson(SearchDuration entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['id'] = entity.id;
-  data['icon'] = entity.icon;
-  data['selector'] = entity.selector;
+  data['label'] = entity.label;
+  data['data'] = entity.data;
   return data;
 }
 
