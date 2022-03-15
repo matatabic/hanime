@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -9,7 +8,6 @@ import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:hanime/utils/logUtil.dart';
 
 import 'search_menu_screen.dart';
 
@@ -77,7 +75,12 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         children: [
           SearchEngineScreen(),
-          SearchMenuScreen(),
+          SearchMenuScreen(
+              loadData: () => {
+                    setState(() {
+                      _futureBuilderFuture = loadData();
+                    })
+                  }),
           GridView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 0),
@@ -147,7 +150,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future loadData() async {
     var data = await getSearchData();
-    LogUtil.d(json.encode(data));
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
     return searchEntity;

@@ -25,7 +25,8 @@ const double _fabDimension = 100.0;
 ContainerTransitionType _transitionType = ContainerTransitionType.fade;
 
 class SearchMenuScreen extends StatelessWidget {
-  SearchMenuScreen({Key? key}) : super(key: key);
+  final VoidCallback loadData;
+  SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,10 @@ class SearchMenuScreen extends StatelessWidget {
         openBuilder: (BuildContext context, VoidCallback _) {
           return menuDetail(menu['id']);
         },
-        closedElevation: 6.0,
+        closedElevation: 1.0,
+        onClosed: (_) {
+          loadData();
+        },
         closedShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(_fabDimension / 2),

@@ -16,6 +16,7 @@ Future getSearchData() async {
       "title": videoElement.querySelector("a")!.attributes['title'],
       "imgUrl": videoElement.attributes['data-poster'],
       "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
+      "duration": videoElement.querySelector(".preview-wrapper div")!.text,
       "author": videoElement
           .querySelector(".card-info-wrapper div:nth-child(3)")!
           .text

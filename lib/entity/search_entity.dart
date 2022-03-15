@@ -174,6 +174,7 @@ class SearchDuration {
 class SearchVideo {
   late String title;
   late String imgUrl;
+  late String duration;
   late String htmlUrl;
   late String author;
 

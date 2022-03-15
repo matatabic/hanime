@@ -36,7 +36,6 @@ Widget getGroupContainer(HomeVideo item) {
                 width: Adapt.px(260),
                 onTap: () {
                   Navigator.push(
-                    //1
                     context,
                     CupertinoPageRoute(
                         builder: (context) => WatchScreen(

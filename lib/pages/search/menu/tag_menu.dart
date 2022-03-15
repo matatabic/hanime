@@ -5,7 +5,7 @@ import 'package:hanime/providers/search_state.dart';
 import 'package:provider/src/provider.dart';
 
 SearchTag searchTag = SearchTag.fromJson({
-  "label": "標籤",
+  "label": "内容標籤",
   "data": [
     {
       "label": "影片屬性：",
@@ -171,29 +171,70 @@ class TagMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: new AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.orange,
-        leading: IconButton(
-          icon: Icon(Icons.close_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        backgroundColor: Colors.black,
+        appBar: new AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.orange,
+          leading: IconButton(
+            icon: Icon(Icons.close_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(searchTag.label),
         ),
-        title: Text(searchTag.label),
-      ),
-      body: ListView.builder(
-          shrinkWrap: true,
-          itemCount: searchTag.data.length,
-          itemBuilder: (BuildContext context, int index) {
-            return TagContainer(
-                searchTagData: searchTag.data[index].data,
-                onTap: (String title) {
-                  context.read<SearchState>().selectedTagHandle(title);
-                });
-          }),
-    );
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  color: Color.fromRGBO(51, 51, 51, 1),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Adapt.px(32), vertical: Adapt.px(15)),
+                  height: Adapt.px(220),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "廣泛配對",
+                            style: TextStyle(
+                                fontSize: Adapt.px(45),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Switch(
+                            value: context.watch<SearchState>().broad,
+                            activeColor: Colors.orange,
+                            onChanged: (value) {
+                              context.read<SearchState>().setBroadFlag(value);
+                            },
+                          ),
+                        ],
+                      ),
+                      Container(
+                          child: Text("較多結果，較不精準。配對所有包含任何一個選擇的標籤的影片，而非全部標籤。"))
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: searchTag.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TagContainer(
+                          searchTagData: searchTag.data[index].data,
+                          onTap: (String title) {
+                            context
+                                .read<SearchState>()
+                                .selectedTagHandle(title);
+                          });
+                    }),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -217,7 +258,8 @@ class TagContainer extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: Adapt.px(32), vertical: Adapt.px(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
