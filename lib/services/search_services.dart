@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:html/parser.dart';
 
 Future getSearchData() async {
-  Response response = await Dio().get("https://hanime1.me/search");
+  Response response = await Dio().get(
+      "https://hanime1.me/search?query=&genre=H%E5%8B%95%E6%BC%AB&tags[]=%E5%A7%90");
   final resHtml = response.data;
   var document = parse(resHtml);
   var videoList = [];

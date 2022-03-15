@@ -95,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   //横轴间距
                   crossAxisSpacing: 5.0,
                   //子组件宽高长度比例
-                  childAspectRatio: 4 / 3),
+                  childAspectRatio: 1.1),
               itemBuilder: (BuildContext context, int index) {
                 return getItemContainer(searchEntity.video[index]);
               }),
@@ -110,35 +110,65 @@ class _SearchScreenState extends State<SearchScreen> {
           Navigator.push(context,
               Right2LeftRouter(child: WatchScreen(htmlUrl: item.htmlUrl)));
         },
-        child: Stack(
-          alignment: Alignment(-1, 1),
-          children: <Widget>[
-            ConstrainedBox(
-              child: CommonImages(
-                imgUrl:
-                    // item.imgUrl
-                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-              ),
-              constraints: new BoxConstraints.expand(),
-            ),
-            Container(
-              child: Text(
-                item.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(2.5, 2.5),
-                      blurRadius: 3.5,
-                      color: Color.fromARGB(255, 0, 0, 0),
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Stack(
+                alignment: Alignment(0.9, 0.9),
+                children: <Widget>[
+                  ConstrainedBox(
+                    child: CommonImages(
+                      imgUrl:
+                          // item.imgUrl
+                          'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
                     ),
-                  ],
-                ),
+                    constraints: new BoxConstraints.expand(),
+                  ),
+                  Container(
+                    child: Text(
+                      item.duration,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(1.5, 1.5),
+                            blurRadius: 3.5,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+            Expanded(
+                flex: 2,
+                child: Center(
+                  child: Container(
+                    child: Text(
+                      item.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(2.5, 2.5),
+                            blurRadius: 3.5,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ))
           ],
         ));
   }
