@@ -12,6 +12,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   List<String> _tagList = [];
   List<String> _brandList = [];
 
+  String get htmlUrl => _htmlUrl;
   String get query => _query;
   int get genreIndex => _genreIndex;
   int get sortIndex => _sortIndex;
@@ -21,6 +22,11 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   bool get broad => _broad;
   List get tagList => _tagList;
   List get brandList => _brandList;
+
+  void setHtmlUrl(String data) {
+    _htmlUrl = data;
+    notifyListeners();
+  }
 
   void setQuery(String data) {
     _query = data;
@@ -80,6 +86,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(StringProperty('htmlUrl', htmlUrl));
     properties.add(StringProperty('query', query));
     properties.add(IntProperty('genreIndex', genreIndex));
     properties.add(IntProperty('sortIndex', sortIndex));

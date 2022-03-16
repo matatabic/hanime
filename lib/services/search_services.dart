@@ -306,28 +306,7 @@ SearchDuration duration = SearchDuration.fromJson({
   ]
 });
 
-Future getSearchData(String query, int genreIndex, List tagList, int sortIndex,
-    List brandList, dynamic year, dynamic month, int durationIndex) async {
-  var _htmlUrl =
-      "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}&sort=${sort.data[sortIndex]}&duration=${duration.data[durationIndex]}";
-  if (year != null) {
-    print("yyyyyyyyyyyyyyyyyy");
-    _htmlUrl = "$_htmlUrl&year=$year";
-    if (month != null) {
-      _htmlUrl = "$_htmlUrl&month=$month";
-    }
-  }
-  if (tagList.length > 0) {
-    for (String tag in tagList) {
-      _htmlUrl = "$_htmlUrl&tags[]=$tag";
-    }
-  }
-
-  if (brandList.length > 0) {
-    for (String brand in brandList) {
-      _htmlUrl = "$_htmlUrl&brands[]=$brand";
-    }
-  }
+Future getSearchData(_htmlUrl) async {
   print(_htmlUrl);
   Response response = await Dio().get(_htmlUrl);
 

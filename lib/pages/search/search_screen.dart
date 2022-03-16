@@ -7,9 +7,7 @@ import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
-import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 
 import 'search_menu_screen.dart';
 
@@ -22,6 +20,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   var _futureBuilderFuture;
+  String baseUrl = "https://hanime1.me/search";
+  String _currentUrl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Text('网络异常,点击重新加载'),
             onPressed: () {
               setState(() {
-                _futureBuilderFuture =
-                    loadData("", 0, [], 0, [], null, null, 0);
+                _futureBuilderFuture = loadData(baseUrl);
               });
             },
           ));
@@ -72,14 +71,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     SearchEntity searchEntity = snapshot.data;
-    String query = context.watch<SearchState>().query;
-    int genreIndex = context.watch<SearchState>().genreIndex;
-    List tagList = context.watch<SearchState>().tagList;
-    int sortIndex = context.watch<SearchState>().sortIndex;
-    List brandList = context.watch<SearchState>().brandList;
-    var year = context.watch<SearchState>().year;
-    var month = context.watch<SearchState>().month;
-    int durationIndex = context.watch<SearchState>().durationIndex;
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -87,17 +78,10 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           SearchEngineScreen(),
           SearchMenuScreen(
-              loadData: () => {
+              currentUrl: _currentUrl,
+              loadData: (String url) => {
                     setState(() {
-                      _futureBuilderFuture = loadData(
-                          query,
-                          genreIndex,
-                          tagList,
-                          sortIndex,
-                          brandList,
-                          year,
-                          month,
-                          durationIndex);
+                      _futureBuilderFuture = loadData(url);
                     })
                   }),
           GridView.builder(
@@ -194,31 +178,51 @@ class _SearchScreenState extends State<SearchScreen> {
 
   initState() {
     super.initState();
-    _futureBuilderFuture = loadData("", 0, [], 0, [], null, null, 0);
+    _futureBuilderFuture = loadData(baseUrl);
   }
 
-  Future loadData(String query, int genreIndex, List tagList, int sortIndex,
-      List brandList, dynamic year, dynamic month, int durationIndex) async {
-    var data = await getSearchData(query, genreIndex, tagList, sortIndex,
-        brandList, year, month, durationIndex);
+  Future loadData(url) async {
+    var data = await getSearchData(url);
+
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
     return searchEntity;
   }
 
-  Future loadQueryData(
-      String query,
-      int genreIndex,
-      List tagList,
-      int sortIndex,
-      List brandList,
-      dynamic year,
-      dynamic month,
-      int durationIndex) async {
-    var data = await getSearchDataByQuery(query, genreIndex, tagList, sortIndex,
-        brandList, year, month, durationIndex);
-    SearchEntity searchEntity = SearchEntity.fromJson(data);
-
-    return searchEntity;
-  }
+  // Future loadData(
+  //     [String query = "",
+  //     int genreIndex = 0,
+  //     List? tagList,
+  //     int sortIndex = 0,
+  //     List? brandList,
+  //     dynamic year,
+  //     dynamic month,
+  //     int durationIndex = 0]) async {
+  //   var htmlUrl =
+  //       "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}&sort=${sort.data[sortIndex]}&duration=${duration.data[durationIndex]}";
+  //   if (year != null) {
+  //     htmlUrl = "$htmlUrl&year=$year";
+  //     if (month != null) {
+  //       htmlUrl = "$htmlUrl&month=$month";
+  //     }
+  //   }
+  //   if (tagList != null && tagList.length > 0) {
+  //     for (String tag in tagList) {
+  //       htmlUrl = "$htmlUrl&tags[]=$tag";
+  //     }
+  //   }
+  //
+  //   if (brandList != null && brandList.length > 0) {
+  //     for (String brand in brandList) {
+  //       htmlUrl = "$htmlUrl&brands[]=$brand";
+  //     }
+  //   }
+  //
+  //   _currentHtmlUrl = htmlUrl;
+  //   var data = await getSearchData(htmlUrl);
+  //
+  //   SearchEntity searchEntity = SearchEntity.fromJson(data);
+  //
+  //   return searchEntity;
+  // }
 }
