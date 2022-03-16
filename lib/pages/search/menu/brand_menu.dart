@@ -87,7 +87,7 @@ class BrandMenu extends StatelessWidget {
           },
           title: title,
           selected:
-              context.watch<SearchState>().selectedBrand.indexOf(title) > -1));
+              context.watch<SearchState>().brandList.indexOf(title) > -1));
     }
 
     return Scaffold(

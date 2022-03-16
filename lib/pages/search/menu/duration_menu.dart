@@ -38,9 +38,9 @@ class DurationMenu extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return MenuRow(
               title: duration.data[index],
-              selected: index == context.watch<SearchState>().sortIndex,
+              selected: index == context.watch<SearchState>().durationIndex,
               onTap: () {
-                context.read<SearchState>().setSortIndex(index);
+                context.read<SearchState>().setDurationIndex(index);
               },
             );
           },

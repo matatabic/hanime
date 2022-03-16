@@ -2,23 +2,30 @@ import 'package:flutter/foundation.dart';
 
 class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   String _htmlUrl = "";
+  String _query = "";
   int _genreIndex = 0;
   int _sortIndex = 0;
   int _durationIndex = 0;
   dynamic _year;
   dynamic _month;
   bool _broad = false;
-  List<String> _selectedTag = [];
-  List<String> _selectedBrand = [];
+  List<String> _tagList = [];
+  List<String> _brandList = [];
 
+  String get query => _query;
   int get genreIndex => _genreIndex;
   int get sortIndex => _sortIndex;
   int get durationIndex => _durationIndex;
   dynamic get year => _year;
   dynamic get month => _month;
   bool get broad => _broad;
-  List get selectedTag => _selectedTag;
-  List get selectedBrand => _selectedBrand;
+  List get tagList => _tagList;
+  List get brandList => _brandList;
+
+  void setQuery(String data) {
+    _query = data;
+    notifyListeners();
+  }
 
   void setGenreIndex(int index) {
     _genreIndex = index;
@@ -51,20 +58,20 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void selectedTagHandle(String title) {
-    if (_selectedTag.indexOf(title) > -1) {
-      _selectedTag.remove(title);
+    if (_tagList.indexOf(title) > -1) {
+      _tagList.remove(title);
     } else {
-      _selectedTag.add(title);
+      _tagList.add(title);
     }
 
     notifyListeners();
   }
 
   void selectedBrandHandle(String title) {
-    if (_selectedBrand.indexOf(title) > -1) {
-      _selectedBrand.remove(title);
+    if (_brandList.indexOf(title) > -1) {
+      _brandList.remove(title);
     } else {
-      _selectedBrand.add(title);
+      _brandList.add(title);
     }
 
     notifyListeners();
@@ -73,13 +80,14 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(StringProperty('query', query));
     properties.add(IntProperty('genreIndex', genreIndex));
     properties.add(IntProperty('sortIndex', sortIndex));
     properties.add(IntProperty('durationIndex', durationIndex));
     properties.add(ObjectFlagProperty('year', year));
     properties.add(ObjectFlagProperty('month', month));
     properties.add(FlagProperty('broad', value: broad));
-    properties.add(ObjectFlagProperty('selectedTag', selectedTag));
-    properties.add(ObjectFlagProperty('selectedBrand', selectedBrand));
+    properties.add(ObjectFlagProperty('tagList', tagList));
+    properties.add(ObjectFlagProperty('brandList', brandList));
   }
 }

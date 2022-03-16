@@ -79,7 +79,7 @@ Color getActive(SearchState searchState, index) {
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 1:
-      return searchState.selectedTag.length > 0
+      return searchState.tagList.length > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 2:
@@ -87,7 +87,7 @@ Color getActive(SearchState searchState, index) {
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 3:
-      return searchState.selectedBrand.length > 0
+      return searchState.brandList.length > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 4:

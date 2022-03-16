@@ -253,8 +253,7 @@ class TagContainer extends StatelessWidget {
       tagWidgetList.add(TagDetail(
           onTap: () => onTap(title),
           title: title,
-          selected:
-              context.watch<SearchState>().selectedTag.indexOf(title) > -1));
+          selected: context.watch<SearchState>().tagList.indexOf(title) > -1));
     }
 
     return Container(
