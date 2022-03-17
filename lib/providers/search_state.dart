@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 
 class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
-  String _htmlUrl = "";
+  String _htmlUrl =
+      "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   String _query = "";
   int _genreIndex = 0;
   int _sortIndex = 0;

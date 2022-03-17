@@ -12,7 +12,7 @@ SearchGenre genre = SearchGenre.fromJson({
 });
 
 class GenreMenu extends StatelessWidget {
-  const GenreMenu({Key? key}) : super(key: key);
+  GenreMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

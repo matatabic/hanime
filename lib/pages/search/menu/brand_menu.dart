@@ -81,13 +81,16 @@ class BrandMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
-      tagWidgetList.add(BrandDetail(
-          onTap: () {
-            context.read<SearchState>().selectedBrandHandle(title);
-          },
-          title: title,
-          selected:
-              context.watch<SearchState>().brandList.indexOf(title) > -1));
+      tagWidgetList.add(InkWell(
+        onTap: () {
+          context.read<SearchState>().selectedBrandHandle(title);
+        },
+        child: BrandDetail(
+            title: title,
+            color: context.watch<SearchState>().brandList.indexOf(title) > -1
+                ? Colors.orange
+                : Colors.black),
+      ));
     }
 
     return Scaffold(
@@ -132,36 +135,28 @@ class BrandMenu extends StatelessWidget {
 }
 
 class BrandDetail extends StatelessWidget {
-  final VoidCallback onTap;
   final String title;
-  final bool selected;
+  final Color color;
 
-  const BrandDetail(
-      {Key? key,
-      required this.onTap,
-      required this.title,
-      required this.selected})
+  const BrandDetail({Key? key, required this.title, required this.color})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(Adapt.px(10)),
-        decoration: BoxDecoration(
-            color: selected ? Colors.orange : Colors.black,
-            borderRadius: BorderRadius.all(
-              Radius.circular(Adapt.px(15)),
-            ),
-            border: new Border.all(
-              color: Colors.grey, //边框颜色
-              width: Adapt.px(5), //边框粗细
-            )),
-        child: Text(
-          title,
-          style: TextStyle(fontSize: 17),
-        ),
+    return Container(
+      padding: EdgeInsets.all(Adapt.px(10)),
+      decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(
+            Radius.circular(Adapt.px(15)),
+          ),
+          border: new Border.all(
+            color: Colors.grey, //边框颜色
+            width: Adapt.px(5), //边框粗细
+          )),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: Adapt.px(34)),
       ),
     );
   }

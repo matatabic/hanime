@@ -1,113 +1,183 @@
-/**
- * 当HeroAnimation作为app的home属性提供时，
- * MaterialApp会隐式推送起始路径。
- * InkWell包装图像，使得向源和目标英雄添加轻击手势变得非常简单。
- * 使用透明颜色定义“材质”窗口小部件可使图像在飞往目标时“弹出”背景。
- * SizedBox指定动画开始和结束时英雄的大小。
- * 将图像的fit属性设置为BoxFit.contain，可确保图像在过渡期间尽可能大，
- * 而不会更改其纵横比。
- */
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
+import 'package:flutter/rendering.dart';
 
-class SourceHeroPage extends StatelessWidget {
-  Widget build(BuildContext context) {
-    timeDilation = 1.0; // 1.0 means normal animation speed.
+class MySliver extends StatefulWidget {
+  MySliver({Key? key}) : super(key: key);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Basic Hero Animation'),
-      ),
-      // body: Center(
-      //   child: PhotoHero(
-      //     photo: 'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
-      //     width: 300.0,
-      //     onTap: () {
-      //       Navigator.of(context).push(MaterialPageRoute<Null>(
-      //           builder: (BuildContext context) => DestinationHeroPage()));
-      //     },
-      //   ),
-      // ),
-      body: Column(
-        children: [
-          PhotoHero(
-            photo:
-                'https://www.baidu.com/img/PC_880906d2a4ad95f5fafb2e540c5cdad7.png',
-            width: 300.0,
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute<Null>(
-                  builder: (BuildContext context) => DestinationHeroPage(
-                      a: 'https://www.baidu.com/img/PC_880906d2a4ad95f5fafb2e540c5cdad7.png')));
-            },
-          ),
-          PhotoHero(
-            photo: 'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
-            width: 300.0,
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute<Null>(
-                  builder: (BuildContext context) => DestinationHeroPage(
-                        a: 'http://pic1.win4000.com/wallpaper/e/537ebd9b60603.jpg',
-                      )));
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  @override
+  _MySliverState createState() => _MySliverState();
 }
 
-class DestinationHeroPage extends StatelessWidget {
-  final String a;
-  // ProductDetail({Key key, @required this.product}) : super(key: key);
-  DestinationHeroPage({Key? key, required this.a}) : super(key: key);
+class _MySliverState extends State<MySliver>
+    with SingleTickerProviderStateMixin {
+  final keys = [];
+  ScrollController _controller = ScrollController();
+  late TabController _tabController;
+  late double _height0 = 0.0;
+  late double _height1 = 0.0;
+  late double _height2 = 0.0;
+  late double _height3 = 0.0;
+  var childCount = 6;
+  double _opacity = 0.0;
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    // TODO: implement initState
+    super.initState();
+    keys.add(GlobalKey());
+    keys.add(GlobalKey());
+    keys.add(GlobalKey());
+    keys.add(GlobalKey());
+    _controller.addListener(() {
+      print(_controller.offset ~/ 1);
+      int _scrollHeight = _controller.offset ~/ 1;
+      if (_scrollHeight > 0) {
+        if (_scrollHeight > 100) {
+          this.setState(() {
+            _opacity = _scrollHeight > 300 ? 1 : _scrollHeight / 300;
+          });
+        } else {
+          this.setState(() {
+            _opacity = 0;
+          });
+        }
+      }
+      if (_height0 == 0.0) {
+        _height0 = _getHeiget(0);
+      }
+      if (_height1 == 0.0) {
+        _height1 = _height0 + _getHeiget(1);
+      }
+      if (_height2 == 0.0) {
+        _height2 = _height1 + _getHeiget(2);
+      }
+      if (_height3 == 0.0) {
+        _height3 = _height2 + _getHeiget(3);
+      }
+      if (_controller.offset < _height0) {
+        _tabController.animateTo(0);
+      } else if (_controller.offset >= _height0 &&
+          _controller.offset < _height1) {
+        _tabController.animateTo(1);
+      } else if (_controller.offset >= _height1 &&
+          _controller.offset < _height2) {
+        _tabController.animateTo(2);
+      } else if (_controller.offset >= _height2 &&
+          _controller.offset < _height3) {
+        _tabController.animateTo(3);
+      }
+    });
+  }
+
+  double _getHeiget(int i) {
+    double height = 0;
+    RenderObject? renderObject = keys[i].currentContext.findRenderObject();
+    if (renderObject is RenderSliverToBoxAdapter) {
+      height = renderObject.child?.size.height ?? 0.0;
+    } else if (renderObject is RenderSliverFixedExtentList) {
+      height = childCount * renderObject.itemExtent;
+    }
+    return height;
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    _controller.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Flippers Page'),
-      ),
-      body: Container(
-        // The blue background emphasizes that it's a new route.
-        color: Colors.lightBlueAccent,
-        padding: const EdgeInsets.all(16.0),
-        alignment: Alignment.topLeft,
-        child: PhotoHero(
-          photo: a,
-          width: 100.0,
-          onTap: () {
-            Navigator.of(context).pop();
+        elevation: 0,
+        backgroundColor: Color.fromRGBO(10, 80, 250, _opacity),
+        title: TabBar(
+          isScrollable: true,
+          controller: _tabController,
+          labelColor: Color.fromRGBO(0, 0, 0, _opacity),
+          unselectedLabelColor: Color.fromRGBO(200, 200, 200, _opacity),
+          indicatorColor: Color.fromRGBO(0, 0, 0, _opacity),
+          tabs: [
+            Container(
+              height: 48,
+              alignment: Alignment.center,
+              child: Text('宝贝'),
+            ),
+            Text('评价'),
+            Text('详情'),
+            Text('推荐')
+          ],
+          onTap: (index) {
+            //通关循环计算offset
+            double height = 0;
+            for (int i = 0; i < index; i++) {
+              height += _getHeiget(i);
+            }
+            _controller.animateTo(height.toDouble(),
+                duration: Duration(milliseconds: 200), curve: Curves.linear);
           },
         ),
       ),
-    );
-  }
-}
-
-class PhotoHero extends StatelessWidget {
-  const PhotoHero(
-      {Key? key, required this.photo, required this.onTap, required this.width})
-      : super(key: key);
-
-  final String photo;
-  final VoidCallback onTap;
-  final double width;
-
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Hero(
-        tag: photo,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: Image.network(
-              photo,
-              fit: BoxFit.contain,
+      body: CustomScrollView(
+        controller: _controller,
+        scrollDirection: Axis.vertical,
+        slivers: <Widget>[
+          //宝贝详情
+          SliverToBoxAdapter(
+            key: keys[0],
+            child: Container(
+              color: Colors.red,
+              alignment: Alignment.center,
+              child: Image.network(
+                  'https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1713f41581ce4815a9a146b48072f266~tplv-k3u1fbpfcp-watermark.image',
+                  fit: BoxFit.cover),
             ),
           ),
-        ),
+          //买家评价
+          SliverToBoxAdapter(
+            key: keys[1],
+            child: Container(
+              // height: 200,
+              color: Colors.green,
+              alignment: Alignment.center,
+              child: Image.network(
+                  'https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ade16ab8b4714751987cc205eb91041b~tplv-k3u1fbpfcp-watermark.image'),
+            ),
+          ),
+          //产品详情
+          SliverFixedExtentList(
+            key: keys[2],
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                color: Colors.lightBlue[index % 8 * 100 + 100],
+                child: Center(
+                  child: Text("我是宝贝详情：$index"),
+                ),
+              );
+            }, childCount: childCount),
+            itemExtent: 300,
+          ),
+          //相关推荐
+          SliverToBoxAdapter(
+            key: keys[3],
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Image.network(
+                      'https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/52783f7c06c347e8b938d637f96ceda4~tplv-k3u1fbpfcp-watermark.image'),
+                  Image.network(
+                      'https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/52783f7c06c347e8b938d637f96ceda4~tplv-k3u1fbpfcp-watermark.image'),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

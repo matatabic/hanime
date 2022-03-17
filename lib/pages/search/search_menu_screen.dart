@@ -35,20 +35,28 @@ class SearchMenuScreen extends StatelessWidget {
     String query = context.watch<SearchState>().query;
     int genreIndex = context.watch<SearchState>().genreIndex;
     List tagList = context.watch<SearchState>().tagList;
+    bool broadFlag = context.watch<SearchState>().broad;
     int sortIndex = context.watch<SearchState>().sortIndex;
     List brandList = context.watch<SearchState>().brandList;
     var year = context.watch<SearchState>().year;
     var month = context.watch<SearchState>().month;
     int durationIndex = context.watch<SearchState>().durationIndex;
+    String _htmlUrl = context.watch<SearchState>().htmlUrl;
 
     var htmlUrl =
         "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}&sort=${sort.data[sortIndex]}&duration=${duration.data[durationIndex]}";
+
+    if (broadFlag) {
+      htmlUrl = "$htmlUrl&broad=on";
+    }
+
     if (year != null) {
       htmlUrl = "$htmlUrl&year=$year";
       if (month != null) {
         htmlUrl = "$htmlUrl&month=$month";
       }
     }
+
     if (tagList.length > 0) {
       for (String tag in tagList) {
         htmlUrl = "$htmlUrl&tags[]=$tag";
@@ -70,7 +78,10 @@ class SearchMenuScreen extends StatelessWidget {
         },
         closedElevation: 1.0,
         onClosed: (data) {
-          print(data);
+          if (htmlUrl != _htmlUrl) {
+            context.read<SearchState>().setHtmlUrl(htmlUrl);
+            loadData(htmlUrl);
+          }
           // loadData("AD");
         },
         closedShape: const RoundedRectangleBorder(

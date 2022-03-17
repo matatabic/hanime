@@ -7,7 +7,9 @@ import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
+import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/services/search_services.dart';
+import 'package:provider/src/provider.dart';
 
 import 'search_menu_screen.dart';
 
@@ -20,7 +22,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   var _futureBuilderFuture;
-  String baseUrl = "https://hanime1.me/search";
+  String baseUrl =
+      "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   String _currentUrl = "";
 
   @override
@@ -51,6 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
       case ConnectionState.done:
         print('done');
         if (snapshot.hasError) {
+          String htmlUrl = context.watch<SearchState>().htmlUrl;
           return Center(
               child: MaterialButton(
             color: Colors.blue,
@@ -58,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Text('网络异常,点击重新加载'),
             onPressed: () {
               setState(() {
-                _futureBuilderFuture = loadData(baseUrl);
+                _futureBuilderFuture = loadData(htmlUrl);
               });
             },
           ));
@@ -183,46 +187,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future loadData(url) async {
     var data = await getSearchData(url);
-
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
     return searchEntity;
   }
-
-  // Future loadData(
-  //     [String query = "",
-  //     int genreIndex = 0,
-  //     List? tagList,
-  //     int sortIndex = 0,
-  //     List? brandList,
-  //     dynamic year,
-  //     dynamic month,
-  //     int durationIndex = 0]) async {
-  //   var htmlUrl =
-  //       "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}&sort=${sort.data[sortIndex]}&duration=${duration.data[durationIndex]}";
-  //   if (year != null) {
-  //     htmlUrl = "$htmlUrl&year=$year";
-  //     if (month != null) {
-  //       htmlUrl = "$htmlUrl&month=$month";
-  //     }
-  //   }
-  //   if (tagList != null && tagList.length > 0) {
-  //     for (String tag in tagList) {
-  //       htmlUrl = "$htmlUrl&tags[]=$tag";
-  //     }
-  //   }
-  //
-  //   if (brandList != null && brandList.length > 0) {
-  //     for (String brand in brandList) {
-  //       htmlUrl = "$htmlUrl&brands[]=$brand";
-  //     }
-  //   }
-  //
-  //   _currentHtmlUrl = htmlUrl;
-  //   var data = await getSearchData(htmlUrl);
-  //
-  //   SearchEntity searchEntity = SearchEntity.fromJson(data);
-  //
-  //   return searchEntity;
-  // }
 }
