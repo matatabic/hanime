@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
@@ -75,7 +76,56 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     SearchEntity searchEntity = snapshot.data;
-
+    double topHeight =
+        MediaQueryData.fromWindow(window).padding.top + Adapt.px(190);
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: false,
+          floating: true,
+          stretch: true,
+          toolbarHeight: topHeight,
+          expandedHeight: topHeight,
+          flexibleSpace: Column(
+            children: [
+              SearchEngineScreen(),
+              SearchMenuScreen(
+                  currentUrl: _currentUrl,
+                  loadData: (String url) => {
+                        setState(() {
+                          _futureBuilderFuture = loadData(url);
+                        })
+                      }),
+            ],
+          ),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.only(top: 10),
+        ),
+        SliverGrid(
+          //调整间距
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //横轴元素个数
+              crossAxisCount: 2,
+              //纵轴间距
+              mainAxisSpacing: 5.0,
+              //横轴间距
+              crossAxisSpacing: 5.0,
+              //子组件宽高长度比例
+              childAspectRatio: 1.1),
+          //加载内容
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return getItemContainer(searchEntity.video[index]);
+            },
+            childCount: searchEntity.video.length, //设置个数
+          ),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      ],
+    );
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(

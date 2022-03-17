@@ -21,7 +21,7 @@ List _menuList = [
   {"id": 5, "icon": Icons.update}
 ];
 
-const double _fabDimension = 100.0;
+const double _fabDimension = 500.0;
 ContainerTransitionType _transitionType = ContainerTransitionType.fade;
 
 class SearchMenuScreen extends StatelessWidget {
