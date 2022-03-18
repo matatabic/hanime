@@ -15,7 +15,7 @@ import 'package:provider/src/provider.dart';
 import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  SearchScreen({Key? key}) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -78,84 +78,67 @@ class _SearchScreenState extends State<SearchScreen> {
     SearchEntity searchEntity = snapshot.data;
     double topHeight =
         MediaQueryData.fromWindow(window).padding.top + Adapt.px(190);
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          pinned: false,
-          floating: true,
-          stretch: true,
-          toolbarHeight: topHeight,
-          expandedHeight: topHeight,
-          flexibleSpace: Column(
-            children: [
-              SearchEngineScreen(),
-              SearchMenuScreen(
-                  currentUrl: _currentUrl,
-                  loadData: (String url) => {
-                        setState(() {
-                          _futureBuilderFuture = loadData(url);
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        /// 页面点击响应
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      onPanDown: (_) {
+        /// 列表滑动响应
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: false,
+            floating: true,
+            stretch: true,
+            toolbarHeight: topHeight,
+            expandedHeight: topHeight,
+            flexibleSpace: Column(
+              children: [
+                SearchEngineScreen(
+                    loadData: (String url) => {
+                          setState(() {
+                            _futureBuilderFuture = loadData(url);
+                          })
+                        }),
+                SearchMenuScreen(
+                    currentUrl: _currentUrl,
+                    loadData: (String url) => {
+                          setState(() {
+                            _futureBuilderFuture = loadData(url);
+                          })
                         })
-                      }),
-            ],
+              ],
+            ),
           ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(top: 10),
-        ),
-        SliverGrid(
-          //调整间距
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //横轴元素个数
-              crossAxisCount: 2,
-              //纵轴间距
-              mainAxisSpacing: 5.0,
-              //横轴间距
-              crossAxisSpacing: 5.0,
-              //子组件宽高长度比例
-              childAspectRatio: 1.1),
-          //加载内容
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return getItemContainer(searchEntity.video[index]);
-            },
-            childCount: searchEntity.video.length, //设置个数
+          SliverPadding(
+            padding: EdgeInsets.only(top: 10),
           ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(bottom: 10),
-        ),
-      ],
-    );
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          SearchEngineScreen(),
-          SearchMenuScreen(
-              currentUrl: _currentUrl,
-              loadData: (String url) => {
-                    setState(() {
-                      _futureBuilderFuture = loadData(url);
-                    })
-                  }),
-          GridView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 0),
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: searchEntity.video.length,
-              //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //横轴元素个数
-                  crossAxisCount: 2,
-                  //纵轴间距
-                  mainAxisSpacing: 5.0,
-                  //横轴间距
-                  crossAxisSpacing: 5.0,
-                  //子组件宽高长度比例
-                  childAspectRatio: 1.1),
-              itemBuilder: (BuildContext context, int index) {
+          SliverGrid(
+            //调整间距
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //横轴元素个数
+                crossAxisCount: 2,
+                //纵轴间距
+                mainAxisSpacing: 5.0,
+                //横轴间距
+                crossAxisSpacing: 5.0,
+                //子组件宽高长度比例
+                childAspectRatio: 1.1),
+            //加载内容
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
                 return getItemContainer(searchEntity.video[index]);
-              }),
+              },
+              childCount: searchEntity.video.length, //设置个数
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(bottom: 10),
+          ),
         ],
       ),
     );
