@@ -43,7 +43,7 @@ class DetailScreen extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: Adapt.px(30)),
               child: Wrap(
-                children: _buildTagWidget(watchEntity.tag),
+                children: _buildTagWidget(watchEntity.tag, () => {}),
                 spacing: Adapt.px(20),
                 runSpacing: Adapt.px(20),
               )),
@@ -53,19 +53,22 @@ class DetailScreen extends StatelessWidget {
   }
 }
 
-List<Widget> _buildTagWidget(List<WatchTag> tagList) {
+List<Widget> _buildTagWidget(List<WatchTag> tagList, onTap) {
   List<Widget> tagWidgetList = [];
   for (var item in tagList) {
-    tagWidgetList.add(Container(
-      padding: EdgeInsets.all(3.5),
-      decoration: BoxDecoration(
-          border: new Border.all(
-        color: Colors.grey, //边框颜色
-        width: Adapt.px(2), //边框粗细
-      )),
-      child: Text(
-        item.title,
-        style: TextStyle(fontSize: 17),
+    tagWidgetList.add(InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(3.5),
+        decoration: BoxDecoration(
+            border: new Border.all(
+          color: Colors.grey, //边框颜色
+          width: Adapt.px(2), //边框粗细
+        )),
+        child: Text(
+          item.title,
+          style: TextStyle(fontSize: 17),
+        ),
       ),
     ));
   }

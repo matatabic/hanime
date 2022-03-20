@@ -26,9 +26,8 @@ ContainerTransitionType _transitionType = ContainerTransitionType.fade;
 
 class SearchMenuScreen extends StatelessWidget {
   final Function(String url) loadData;
-  final String currentUrl;
-  SearchMenuScreen({Key? key, required this.loadData, required this.currentUrl})
-      : super(key: key);
+
+  SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

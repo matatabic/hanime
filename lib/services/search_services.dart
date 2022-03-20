@@ -313,8 +313,13 @@ Future getSearchData(_htmlUrl) async {
   final resHtml = response.data;
   var document = parse(resHtml);
   var videoList = [];
+  var page;
+  RegExp pageReg = RegExp(r"(?<=\) < )(.*?)(?=- 1)");
 
-  var pages = document.querySelectorAll(".page-item");
+  var match = pageReg.firstMatch(resHtml);
+  if (match != null) {
+    page = int.parse(match.group(0)!);
+  }
 
   var videoElements = document.querySelectorAll(".video-card");
   if (videoElements.length > 0) {
@@ -342,38 +347,38 @@ Future getSearchData(_htmlUrl) async {
       });
     }
   }
-  return {"video": videoList};
+  return {"video": videoList, "page": page};
 }
 
-Future getSearchDataByQuery(
-    String query,
-    int genreIndex,
-    List tagList,
-    int sortIndex,
-    List brandList,
-    dynamic year,
-    dynamic month,
-    int durationIndex) async {
-  var _htmlUrl =
-      "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}";
-  print(_htmlUrl);
-  Response response = await Dio().get(_htmlUrl);
-  final resHtml = response.data;
-  print(resHtml);
-  var document = parse(resHtml);
-  var videoList = [];
-
-  var videoElements = document.querySelectorAll(".home-rows-videos-wrapper a");
-  print(videoElements.length);
-  for (var videoElement in videoElements) {
-    videoList.add({
-      "title": videoElement.querySelector(".home-rows-videos-title")!.text,
-      "imgUrl": videoElement.querySelector("img")!.attributes['src'],
-      "htmlUrl": videoElement.attributes['href'],
-      "duration": "",
-      "author": ""
-    });
-  }
-
-  return {"video": videoList};
-}
+// Future getSearchDataByQuery(
+//     String query,
+//     int genreIndex,
+//     List tagList,
+//     int sortIndex,
+//     List brandList,
+//     dynamic year,
+//     dynamic month,
+//     int durationIndex) async {
+//   var _htmlUrl =
+//       "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}";
+//
+//   Response response = await Dio().get(_htmlUrl);
+//   final resHtml = response.data;
+//   print(resHtml);
+//   var document = parse(resHtml);
+//   var videoList = [];
+//
+//   var videoElements = document.querySelectorAll(".home-rows-videos-wrapper a");
+//
+//   for (var videoElement in videoElements) {
+//     videoList.add({
+//       "title": videoElement.querySelector(".home-rows-videos-title")!.text,
+//       "imgUrl": videoElement.querySelector("img")!.attributes['src'],
+//       "htmlUrl": videoElement.attributes['href'],
+//       "duration": "",
+//       "author": ""
+//     });
+//   }
+//
+//   return {"video": videoList};
+// }
