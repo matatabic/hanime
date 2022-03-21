@@ -129,7 +129,6 @@ class Episode extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Text(
-                  // "12312" * 50,
                   videoList.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

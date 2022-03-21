@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -22,8 +23,14 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   var _futureBuilderFuture;
+  var _random = "a";
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String baseUrl =
@@ -32,7 +39,6 @@ class _SearchScreenState extends State<SearchScreen> {
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(190);
 
   void _onLoading() async {
-    // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
@@ -41,6 +47,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var rng = new Random();
+
+    setState(() {
+      _random = rng.nextInt(100).toString();
+    });
+
     return Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -82,6 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   pinned: false,
                   floating: true,
                   stretch: true,
+                  automaticallyImplyLeading: false,
                   toolbarHeight: topHeight,
                   expandedHeight: topHeight,
                   flexibleSpace: Column(
@@ -171,8 +184,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     SearchEntity searchEntity = snapshot.data;
-    double topHeight =
-        MediaQueryData.fromWindow(window).padding.top + Adapt.px(190);
     return SliverGrid(
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -271,7 +282,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future loadData(url) async {
     var data = await getSearchData(url);
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-
+    print(data);
     return searchEntity;
   }
 }

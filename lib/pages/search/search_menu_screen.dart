@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/providers/search_state.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/src/provider.dart';
 
 import 'menu/brand_menu.dart';
@@ -70,27 +71,24 @@ class SearchMenuScreen extends StatelessWidget {
 
     List<Widget> dataList = [];
     for (var menu in _menuList) {
-      dataList.add(OpenContainer(
-        transitionType: _transitionType,
-        openBuilder: (BuildContext context, VoidCallback _) {
-          return menuDetail(menu['id']);
-        },
-        closedElevation: 1.0,
-        onClosed: (data) {
-          if (htmlUrl != _htmlUrl) {
-            context.read<SearchState>().setHtmlUrl(htmlUrl);
-            loadData(htmlUrl);
-          }
-          // loadData("AD");
-        },
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(_fabDimension / 2),
-          ),
-        ),
-        closedColor: getActive(context.watch<SearchState>(), menu['id']),
-        closedBuilder: (BuildContext context, VoidCallback openContainer) {
-          return SizedBox(
+      dataList.add(InkWell(
+          onTap: () {
+            showBarModalBottomSheet(
+                expand: true,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => TagMenu());
+          },
+          // onTap: () {
+          //   print("123");
+          //   CupertinoScaffold.showCupertinoModalBottomSheet(
+          //     expand: true,
+          //     context: context,
+          //     backgroundColor: Colors.transparent,
+          //     builder: (context) => menuDetail(menu['id']),
+          //   );
+          // },
+          child: SizedBox(
             height: Adapt.px(100),
             width: Adapt.px(100),
             child: Center(
@@ -99,18 +97,56 @@ class SearchMenuScreen extends StatelessWidget {
                 color: Colors.white70,
               ),
             ),
-          );
-        },
-      ));
+          )));
+      // dataList.add(OpenContainer(
+      //   transitionType: _transitionType,
+      //   openBuilder: (BuildContext context, VoidCallback _) {
+      //     return menuDetail(menu['id']);
+      //   },
+      //   closedElevation: 1.0,
+      //   onClosed: (data) {
+      //     if (htmlUrl != _htmlUrl) {
+      //       context.read<SearchState>().setHtmlUrl(htmlUrl);
+      //       loadData(htmlUrl);
+      //     }
+      //     // loadData("AD");
+      //   },
+      //   closedShape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(
+      //       Radius.circular(_fabDimension / 2),
+      //     ),
+      //   ),
+      //   closedColor: getActive(context.watch<SearchState>(), menu['id']),
+      //   closedBuilder: (BuildContext context, VoidCallback openContainer) {
+      //     return SizedBox(
+      //       height: Adapt.px(100),
+      //       width: Adapt.px(100),
+      //       child: Center(
+      //         child: Icon(
+      //           menu['icon'] as IconData,
+      //           color: Colors.white70,
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ));
     }
-    return Container(
-      height: Adapt.px(150),
-      padding: EdgeInsets.symmetric(horizontal: Adapt.px(20)),
-      child: Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: dataList),
-    );
+    return CupertinoScaffold(
+        body: CupertinoPageScaffold(
+            child:
+                // ListTile(
+                //     title: Text('Bar Modal'),
+                //     onTap: () => showBarModalBottomSheet(
+                //         expand: true,
+                //         context: context,
+                //         backgroundColor: Colors.transparent,
+                //         builder: (context) => HomeScreen())))
+                // ));
+                Flex(
+      direction: Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: dataList,
+    )));
   }
 }
 

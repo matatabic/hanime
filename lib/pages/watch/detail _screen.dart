@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/watch_state.dart';
 import 'package:provider/src/provider.dart';
 
@@ -43,7 +44,15 @@ class DetailScreen extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: Adapt.px(30)),
               child: Wrap(
-                children: _buildTagWidget(watchEntity.tag, () => {}),
+                children: _buildTagWidget(
+                    watchEntity.tag,
+                    () => {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => SearchScreen()),
+                          )
+                        }),
                 spacing: Adapt.px(20),
                 runSpacing: Adapt.px(20),
               )),

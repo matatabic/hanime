@@ -12,6 +12,7 @@ class SearchEntity {
   late SearchDate date;
   late SearchDuration duration;
   late List<SearchVideo> video;
+  late int page;
 
   SearchEntity();
 

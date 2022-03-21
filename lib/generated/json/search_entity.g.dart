@@ -33,6 +33,10 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
   if (video != null) {
     searchEntity.video = video;
   }
+  final int? page = jsonConvert.convert<int>(json['page']);
+  if (page != null) {
+    searchEntity.page = page;
+  }
   return searchEntity;
 }
 
@@ -45,6 +49,7 @@ Map<String, dynamic> $SearchEntityToJson(SearchEntity entity) {
   data['date'] = entity.date.toJson();
   data['duration'] = entity.duration.toJson();
   data['video'] = entity.video.map((v) => v.toJson()).toList();
+  data['page'] = entity.page;
   return data;
 }
 
