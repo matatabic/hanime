@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -30,13 +29,13 @@ class _SearchScreenState extends State<SearchScreen>
   bool get wantKeepAlive => true;
 
   var _futureBuilderFuture;
-  var _random = "a";
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
   String baseUrl =
       "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   double topHeight =
-      MediaQueryData.fromWindow(window).padding.top + Adapt.px(190);
+      MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -47,12 +46,6 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    var rng = new Random();
-
-    setState(() {
-      _random = rng.nextInt(100).toString();
-    });
-
     return Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -282,7 +275,7 @@ class _SearchScreenState extends State<SearchScreen>
   Future loadData(url) async {
     var data = await getSearchData(url);
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-    print(data);
+
     return searchEntity;
   }
 }

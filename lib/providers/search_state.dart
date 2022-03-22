@@ -13,6 +13,8 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   List<String> _tagList = [];
   List<String> _brandList = [];
 
+  List<Map<String, dynamic>> searchList = [];
+
   String get htmlUrl => _htmlUrl;
   String get query => _query;
   int get genreIndex => _genreIndex;

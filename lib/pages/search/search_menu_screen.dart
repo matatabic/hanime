@@ -71,82 +71,41 @@ class SearchMenuScreen extends StatelessWidget {
 
     List<Widget> dataList = [];
     for (var menu in _menuList) {
-      dataList.add(InkWell(
-          onTap: () {
-            showBarModalBottomSheet(
-                expand: true,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => TagMenu());
-          },
-          // onTap: () {
-          //   print("123");
-          //   CupertinoScaffold.showCupertinoModalBottomSheet(
-          //     expand: true,
-          //     context: context,
-          //     backgroundColor: Colors.transparent,
-          //     builder: (context) => menuDetail(menu['id']),
-          //   );
-          // },
-          child: SizedBox(
-            height: Adapt.px(100),
-            width: Adapt.px(100),
-            child: Center(
-              child: Icon(
-                menu['icon'] as IconData,
-                color: Colors.white70,
+      dataList.add(Ink(
+        child: InkWell(
+            onTap: () {
+              showBarModalBottomSheet(
+                  expand: true,
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) =>
+                      menuDetail(menu['id'], () => {loadData}));
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+              child: ClipOval(
+                child: Container(
+                  height: Adapt.px(100),
+                  width: Adapt.px(100),
+                  color: getActive(context.watch<SearchState>(), menu['id']),
+                  child: Center(
+                    child: Icon(
+                      menu['icon'] as IconData,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          )));
-      // dataList.add(OpenContainer(
-      //   transitionType: _transitionType,
-      //   openBuilder: (BuildContext context, VoidCallback _) {
-      //     return menuDetail(menu['id']);
-      //   },
-      //   closedElevation: 1.0,
-      //   onClosed: (data) {
-      //     if (htmlUrl != _htmlUrl) {
-      //       context.read<SearchState>().setHtmlUrl(htmlUrl);
-      //       loadData(htmlUrl);
-      //     }
-      //     // loadData("AD");
-      //   },
-      //   closedShape: const RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.all(
-      //       Radius.circular(_fabDimension / 2),
-      //     ),
-      //   ),
-      //   closedColor: getActive(context.watch<SearchState>(), menu['id']),
-      //   closedBuilder: (BuildContext context, VoidCallback openContainer) {
-      //     return SizedBox(
-      //       height: Adapt.px(100),
-      //       width: Adapt.px(100),
-      //       child: Center(
-      //         child: Icon(
-      //           menu['icon'] as IconData,
-      //           color: Colors.white70,
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ));
+            )),
+      ));
     }
     return CupertinoScaffold(
-        body: CupertinoPageScaffold(
-            child:
-                // ListTile(
-                //     title: Text('Bar Modal'),
-                //     onTap: () => showBarModalBottomSheet(
-                //         expand: true,
-                //         context: context,
-                //         backgroundColor: Colors.transparent,
-                //         builder: (context) => HomeScreen())))
-                // ));
-                Flex(
+        body: Flex(
       direction: Axis.horizontal,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: dataList,
-    )));
+    ));
   }
 }
 
@@ -178,7 +137,7 @@ Color getActive(SearchState searchState, index) {
   return Color.fromRGBO(51, 51, 51, 1);
 }
 
-Widget menuDetail(id) {
+Widget menuDetail(id, onTap) {
   switch (id) {
     case 0:
       return GenreMenu();
