@@ -13,8 +13,6 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   List<String> _tagList = [];
   List<String> _brandList = [];
 
-  List<Map<String, dynamic>> searchList = [];
-
   String get htmlUrl => _htmlUrl;
   String get query => _query;
   int get genreIndex => _genreIndex;
@@ -25,6 +23,21 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   bool get broad => _broad;
   List get tagList => _tagList;
   List get brandList => _brandList;
+  List get searchList => _searchList;
+
+  List<Map<String, dynamic>> _searchList = [
+    {
+      "query": "",
+      "genreIndex": 77,
+      "sortIndex": 0,
+      "durationIndex": 0,
+      "year": null,
+      "month": null,
+      "broad": false,
+      "tagList": [],
+      "brandList": []
+    }
+  ];
 
   void setHtmlUrl(String data) {
     _htmlUrl = data;
@@ -99,5 +112,6 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     properties.add(FlagProperty('broad', value: broad));
     properties.add(ObjectFlagProperty('tagList', tagList));
     properties.add(ObjectFlagProperty('brandList', brandList));
+    properties.add(ObjectFlagProperty('searchList', searchList));
   }
 }

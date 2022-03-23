@@ -50,7 +50,9 @@ class DetailScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => SearchScreen()),
+                                builder: (context) => SearchScreen(
+                                      currentScreen: 1,
+                                    )),
                           )
                         }),
                 spacing: Adapt.px(20),
@@ -76,7 +78,7 @@ List<Widget> _buildTagWidget(List<WatchTag> tagList, onTap) {
         )),
         child: Text(
           item.title,
-          style: TextStyle(fontSize: 17),
+          style: TextStyle(fontSize: Adapt.px(35)),
         ),
       ),
     ));

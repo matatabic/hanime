@@ -16,7 +16,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({Key? key}) : super(key: key);
+  final int currentScreen;
+  SearchScreen({Key? key, this.currentScreen = 0}) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -31,14 +32,14 @@ class _SearchScreenState extends State<SearchScreen>
   var _futureBuilderFuture;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
   String baseUrl =
       "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   double topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
-  void _onLoading() async {
+  void _onLoading(BuildContext context) async {
     await Future.delayed(Duration(milliseconds: 1000));
+    print(context.read<SearchState>().searchList);
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) setState(() {});
     _refreshController.loadComplete();
@@ -46,6 +47,8 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
+    print("3333222");
+    print(widget.currentScreen);
     return Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -60,18 +63,18 @@ class _SearchScreenState extends State<SearchScreen>
             enablePullDown: false,
             enablePullUp: true,
             controller: _refreshController,
-            onLoading: _onLoading,
+            onLoading: () => _onLoading(context),
             footer: CustomFooter(
               builder: (BuildContext context, LoadStatus? mode) {
                 Widget body;
-                if (mode == LoadStatus.idle) {
-                  body = Text("上拉加载");
-                } else if (mode == LoadStatus.loading) {
+                if (mode == LoadStatus.loading) {
                   body = CupertinoActivityIndicator();
                 } else if (mode == LoadStatus.failed) {
                   body = Text("加载失败！点击重试！");
                 } else if (mode == LoadStatus.canLoading) {
                   body = Text("松手,加载更多!");
+                } else if (mode == LoadStatus.noMore) {
+                  body = Text("没有更多数据了!");
                 } else {
                   body = Text("没有更多数据了!");
                 }
