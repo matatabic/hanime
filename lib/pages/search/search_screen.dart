@@ -30,6 +30,8 @@ class _SearchScreenState extends State<SearchScreen>
   bool get wantKeepAlive => true;
 
   var _futureBuilderFuture;
+  int page = 1;
+  int totalPage = 1;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String baseUrl =
@@ -37,12 +39,52 @@ class _SearchScreenState extends State<SearchScreen>
   double topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
-  void _onLoading(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    print(context.read<SearchState>().searchList);
+  void _onLoading(BuildContext context, bool lastPage) async {
+    // await Future.delayed(Duration(milliseconds: 1000));
+    print(context.read<SearchState>().searchList[widget.currentScreen]);
+    Search search =
+        context.read<SearchState>().searchList[widget.currentScreen];
+    var htmlUrl =
+        "https://hanime1.me/search?query=${search.query}&genre=${genre.data[search.genreIndex]}&sort=${sort.data[search.sortIndex]}&duration=${duration.data[search.durationIndex]}";
+
+    if (search.broad) {
+      htmlUrl = "$htmlUrl&broad=on";
+    }
+
+    if (search.year != null) {
+      htmlUrl = "$htmlUrl&year=${search.year}";
+      if (search.month != null) {
+        htmlUrl = "$htmlUrl&month=${search.month}";
+      }
+    }
+
+    if (search.tagList.length > 0) {
+      for (String tag in search.tagList) {
+        htmlUrl = "$htmlUrl&tags[]=$tag";
+      }
+    }
+
+    if (search.brandList.length > 0) {
+      for (String brand in search.brandList) {
+        htmlUrl = "$htmlUrl&brands[]=$brand";
+      }
+    }
+
+    // if(search)
+    print(search.htmlUrl);
+    print(htmlUrl);
+    print(totalPage);
+    if (search.htmlUrl != htmlUrl) {
+      await Future.delayed(Duration(milliseconds: 1000));
+      _refreshController.loadNoData();
+    } else {
+      if (mounted)
+        setState(() {
+          _futureBuilderFuture = loadData(htmlUrl);
+        });
+      _refreshController.loadComplete();
+    }
     // if failed,use loadFailed(),if no data return,use LoadNodata()
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
   }
 
   @override
@@ -63,7 +105,7 @@ class _SearchScreenState extends State<SearchScreen>
             enablePullDown: false,
             enablePullUp: true,
             controller: _refreshController,
-            onLoading: () => _onLoading(context),
+            onLoading: () => _onLoading(context, true),
             footer: CustomFooter(
               builder: (BuildContext context, LoadStatus? mode) {
                 Widget body;
@@ -180,6 +222,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     SearchEntity searchEntity = snapshot.data;
+    totalPage = searchEntity.page;
     return SliverGrid(
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

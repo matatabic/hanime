@@ -1,5 +1,30 @@
 import 'package:flutter/foundation.dart';
 
+class Search {
+  final String query;
+  final int genreIndex;
+  final int sortIndex;
+  final int durationIndex;
+  final dynamic year;
+  final dynamic month;
+  final bool broad;
+  final List<String> tagList;
+  final List<String> brandList;
+  final String htmlUrl;
+
+  Search(
+      this.query,
+      this.genreIndex,
+      this.sortIndex,
+      this.durationIndex,
+      this.year,
+      this.month,
+      this.broad,
+      this.tagList,
+      this.brandList,
+      this.htmlUrl);
+}
+
 class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   String _htmlUrl =
       "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
@@ -25,19 +50,22 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   List get brandList => _brandList;
   List get searchList => _searchList;
 
-  List<Map<String, dynamic>> _searchList = [
-    {
-      "query": "",
-      "genreIndex": 77,
-      "sortIndex": 0,
-      "durationIndex": 0,
-      "year": null,
-      "month": null,
-      "broad": false,
-      "tagList": [],
-      "brandList": []
-    }
+  List<Search> _searchList = [
+    Search("", 0, 0, 0, null, null, false, [], [],
+        "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部")
+    // {
+    //   "query": "",
+    //   "genreIndex": 0,
+    //   "sortIndex": 0,
+    //   "durationIndex": 0,
+    //   "year": null,
+    //   "month": null,
+    //   "broad": false,
+    //   "tagList": [],
+    //   "brandList": []
+    // }
   ];
+  // .map((e) => Search("", 0, 0, 0, null, null, false, [], [], "")).toList();
 
   void setHtmlUrl(String data) {
     _htmlUrl = data;
