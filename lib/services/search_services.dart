@@ -347,5 +347,5 @@ Future getSearchData(_htmlUrl) async {
       });
     }
   }
-  return {"video": videoList, "page": page};
+  return {"video": videoList};
 }

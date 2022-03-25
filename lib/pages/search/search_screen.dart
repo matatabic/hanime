@@ -32,6 +32,8 @@ class _SearchScreenState extends State<SearchScreen>
   var _futureBuilderFuture;
   int page = 1;
   int totalPage = 1;
+  List<SearchVideo> searchVideoList = [];
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String baseUrl =
@@ -39,9 +41,8 @@ class _SearchScreenState extends State<SearchScreen>
   double topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
-  void _onLoading(BuildContext context, bool lastPage) async {
+  void _onLoading(BuildContext context, bool loadMore) async {
     // await Future.delayed(Duration(milliseconds: 1000));
-    print(context.read<SearchState>().searchList[widget.currentScreen]);
     Search search =
         context.read<SearchState>().searchList[widget.currentScreen];
     var htmlUrl =
@@ -69,28 +70,27 @@ class _SearchScreenState extends State<SearchScreen>
         htmlUrl = "$htmlUrl&brands[]=$brand";
       }
     }
+    if (loadMore) {
+      htmlUrl = "$htmlUrl&page=${page + 1}";
+    }
 
-    // if(search)
-    print(search.htmlUrl);
-    print(htmlUrl);
-    print(totalPage);
     if (search.htmlUrl != htmlUrl) {
-      await Future.delayed(Duration(milliseconds: 1000));
-      _refreshController.loadNoData();
-    } else {
-      if (mounted)
+      if (loadMore) {
+        page = page + 1;
+        await loadData(htmlUrl);
+        setState(() {});
+      } else {
+        page = 1;
         setState(() {
           _futureBuilderFuture = loadData(htmlUrl);
         });
+      }
       _refreshController.loadComplete();
     }
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
   }
 
   @override
   Widget build(BuildContext context) {
-    print("3333222");
-    print(widget.currentScreen);
     return Scaffold(
         backgroundColor: Colors.black,
         body: GestureDetector(
@@ -138,17 +138,9 @@ class _SearchScreenState extends State<SearchScreen>
                   flexibleSpace: Column(
                     children: [
                       SearchEngineScreen(
-                          loadData: (String url) => {
-                                setState(() {
-                                  _futureBuilderFuture = loadData(url);
-                                })
-                              }),
+                          loadData: () => _onLoading(context, false)),
                       SearchMenuScreen(
-                          loadData: (String url) => {
-                                setState(() {
-                                  _futureBuilderFuture = loadData(url);
-                                })
-                              })
+                          loadData: () => _onLoading(context, false))
                     ],
                   ),
                 ),
@@ -221,8 +213,8 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
-    SearchEntity searchEntity = snapshot.data;
-    totalPage = searchEntity.page;
+    List<SearchVideo> videoList = snapshot.data;
+    print(videoList.length);
     return SliverGrid(
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -237,9 +229,9 @@ class _SearchScreenState extends State<SearchScreen>
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return getItemContainer(searchEntity.video[index]);
+          return getItemContainer(videoList[index]);
         },
-        childCount: searchEntity.video.length, //设置个数
+        childCount: videoList.length, //设置个数
       ),
     );
   }
@@ -319,9 +311,14 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future loadData(url) async {
+    print("213");
     var data = await getSearchData(url);
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-
-    return searchEntity;
+    print(searchVideoList.length);
+    print(searchEntity.video.length);
+    totalPage = searchEntity.page;
+    searchVideoList.addAll(searchEntity.video);
+    print(searchVideoList.length);
+    return searchEntity.video;
   }
 }

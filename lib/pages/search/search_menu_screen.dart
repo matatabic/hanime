@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
@@ -22,53 +21,13 @@ List _menuList = [
   {"id": 5, "icon": Icons.update}
 ];
 
-const double _fabDimension = 500.0;
-ContainerTransitionType _transitionType = ContainerTransitionType.fade;
-
 class SearchMenuScreen extends StatelessWidget {
-  final Function(String url) loadData;
+  final VoidCallback loadData;
 
   SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String query = context.watch<SearchState>().query;
-    int genreIndex = context.watch<SearchState>().genreIndex;
-    List tagList = context.watch<SearchState>().tagList;
-    bool broadFlag = context.watch<SearchState>().broad;
-    int sortIndex = context.watch<SearchState>().sortIndex;
-    List brandList = context.watch<SearchState>().brandList;
-    var year = context.watch<SearchState>().year;
-    var month = context.watch<SearchState>().month;
-    int durationIndex = context.watch<SearchState>().durationIndex;
-    String _htmlUrl = context.watch<SearchState>().htmlUrl;
-
-    var htmlUrl =
-        "https://hanime1.me/search?query=$query&genre=${genre.data[genreIndex]}&sort=${sort.data[sortIndex]}&duration=${duration.data[durationIndex]}";
-
-    if (broadFlag) {
-      htmlUrl = "$htmlUrl&broad=on";
-    }
-
-    if (year != null) {
-      htmlUrl = "$htmlUrl&year=$year";
-      if (month != null) {
-        htmlUrl = "$htmlUrl&month=$month";
-      }
-    }
-
-    if (tagList.length > 0) {
-      for (String tag in tagList) {
-        htmlUrl = "$htmlUrl&tags[]=$tag";
-      }
-    }
-
-    if (brandList.length > 0) {
-      for (String brand in brandList) {
-        htmlUrl = "$htmlUrl&brands[]=$brand";
-      }
-    }
-
     List<Widget> dataList = [];
     for (var menu in _menuList) {
       dataList.add(Ink(
