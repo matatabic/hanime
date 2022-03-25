@@ -2,15 +2,15 @@ import 'package:flutter/foundation.dart';
 
 class Search {
   final String query;
-  final int genreIndex;
+  late int genreIndex;
   final int sortIndex;
   final int durationIndex;
   final dynamic year;
   final dynamic month;
-  final bool broad;
-  final List<String> tagList;
+  late bool broad;
+  late List<String> tagList;
   final List<String> brandList;
-  final String htmlUrl;
+  late String htmlUrl;
 
   Search(
       this.query,
@@ -29,7 +29,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   String _htmlUrl =
       "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   String _query = "";
-  int _genreIndex = 0;
+  // int _genreIndex = 0;
   int _sortIndex = 0;
   int _durationIndex = 0;
   dynamic _year;
@@ -40,7 +40,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
 
   String get htmlUrl => _htmlUrl;
   String get query => _query;
-  int get genreIndex => _genreIndex;
+  // int get genreIndex => _genreIndex;
   int get sortIndex => _sortIndex;
   int get durationIndex => _durationIndex;
   dynamic get year => _year;
@@ -67,8 +67,8 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   ];
   // .map((e) => Search("", 0, 0, 0, null, null, false, [], [], "")).toList();
 
-  void setHtmlUrl(String data) {
-    _htmlUrl = data;
+  void setHtmlUrl(int currentScreen, String data) {
+    _searchList[currentScreen].htmlUrl = data;
     notifyListeners();
   }
 
@@ -77,8 +77,8 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setGenreIndex(int index) {
-    _genreIndex = index;
+  void setGenreIndex(int currentScreen, int index) {
+    _searchList[currentScreen].genreIndex = index;
     notifyListeners();
   }
 
@@ -102,16 +102,16 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setBroadFlag(bool flag) {
-    _broad = flag;
+  void setBroadFlag(int currentScreen, bool flag) {
+    _searchList[currentScreen].broad = flag;
     notifyListeners();
   }
 
-  void selectedTagHandle(String title) {
-    if (_tagList.indexOf(title) > -1) {
-      _tagList.remove(title);
+  void selectedTagHandle(int currentScreen, String title) {
+    if (_searchList[currentScreen].tagList.indexOf(title) > -1) {
+      _searchList[currentScreen].tagList.remove(title);
     } else {
-      _tagList.add(title);
+      _searchList[currentScreen].tagList.add(title);
     }
 
     notifyListeners();
@@ -132,7 +132,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties.add(StringProperty('htmlUrl', htmlUrl));
     properties.add(StringProperty('query', query));
-    properties.add(IntProperty('genreIndex', genreIndex));
+    // properties.add(IntProperty('genreIndex', genreIndex));
     properties.add(IntProperty('sortIndex', sortIndex));
     properties.add(IntProperty('durationIndex', durationIndex));
     properties.add(ObjectFlagProperty('year', year));

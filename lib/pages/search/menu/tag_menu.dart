@@ -166,88 +166,107 @@ SearchTag searchTag = SearchTag.fromJson({
 });
 
 class TagMenu extends StatelessWidget {
-  const TagMenu({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: new AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.orange,
-          leading: IconButton(
-            icon: Icon(Icons.close_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(searchTag.label),
-        ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  color: Color.fromRGBO(51, 51, 51, 1),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Adapt.px(32), vertical: Adapt.px(15)),
-                  height: Adapt.px(220),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "廣泛配對",
-                            style: TextStyle(
-                                fontSize: Adapt.px(45),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Switch(
-                            value: context.watch<SearchState>().broad,
-                            activeColor: Colors.orange,
-                            onChanged: (value) {
-                              context.read<SearchState>().setBroadFlag(value);
-                            },
-                          ),
-                        ],
-                      ),
-                      Container(
-                          child: Text("較多結果，較不精準。配對所有包含任何一個選擇的標籤的影片，而非全部標籤。"))
-                    ],
-                  ),
-                ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: searchTag.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return TagContainer(
-                          searchTagData: searchTag.data[index].data,
-                          onTap: (String title) {
-                            context
-                                .read<SearchState>()
-                                .selectedTagHandle(title);
-                          });
-                    }),
-              ],
-            ),
-          ),
-        ));
-  }
-}
-
-class TagContainer extends StatelessWidget {
-  final List<String> searchTagData;
-  final Function(String title) onTap;
-
-  const TagContainer(
-      {Key? key, required this.searchTagData, required this.onTap})
+  final int currentScreen;
+  final VoidCallback loadData;
+  const TagMenu({Key? key, required this.currentScreen, required this.loadData})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Search search = context.watch<SearchState>().searchList[currentScreen];
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: new AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            leading: IconButton(
+              icon: Icon(Icons.close_rounded),
+              onPressed: () {
+                loadData();
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(searchTag.label),
+          ),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              child: Column(
+                children: [
+                  Container(
+                    color: Color.fromRGBO(51, 51, 51, 1),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Adapt.px(32), vertical: Adapt.px(15)),
+                    height: Adapt.px(220),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "廣泛配對",
+                              style: TextStyle(
+                                  fontSize: Adapt.px(45),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Switch(
+                              value: search.broad,
+                              activeColor: Colors.orange,
+                              onChanged: (value) {
+                                context
+                                    .read<SearchState>()
+                                    .setBroadFlag(currentScreen, value);
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                            child: Text("較多結果，較不精準。配對所有包含任何一個選擇的標籤的影片，而非全部標籤。"))
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: searchTag.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return TagContainer(
+                            currentScreen: currentScreen,
+                            searchTagData: searchTag.data[index].data,
+                            onTap: (String title) {
+                              context
+                                  .read<SearchState>()
+                                  .selectedTagHandle(currentScreen, title);
+                            });
+                      }),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+}
+
+class TagContainer extends StatelessWidget {
+  final int currentScreen;
+  final List<String> searchTagData;
+  final Function(String title) onTap;
+
+  const TagContainer(
+      {Key? key,
+      required this.currentScreen,
+      required this.searchTagData,
+      required this.onTap})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Search search = context.watch<SearchState>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     for (String title in searchTagData) {
       tagWidgetList.add(InkWell(
@@ -256,9 +275,8 @@ class TagContainer extends StatelessWidget {
         },
         child: TagDetail(
           title: title,
-          color: context.watch<SearchState>().tagList.indexOf(title) > -1
-              ? Colors.orange
-              : Colors.black,
+          color:
+              search.tagList.indexOf(title) > -1 ? Colors.orange : Colors.black,
         ),
       ));
     }

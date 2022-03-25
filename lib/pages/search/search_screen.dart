@@ -45,6 +45,8 @@ class _SearchScreenState extends State<SearchScreen>
     // await Future.delayed(Duration(milliseconds: 1000));
     Search search =
         context.read<SearchState>().searchList[widget.currentScreen];
+    print(search.genreIndex);
+    print(genre.data[search.genreIndex]);
     var htmlUrl =
         "https://hanime1.me/search?query=${search.query}&genre=${genre.data[search.genreIndex]}&sort=${sort.data[search.sortIndex]}&duration=${duration.data[search.durationIndex]}";
 
@@ -73,7 +75,8 @@ class _SearchScreenState extends State<SearchScreen>
     if (loadMore) {
       htmlUrl = "$htmlUrl&page=${page + 1}";
     }
-
+    print(search.htmlUrl);
+    print(htmlUrl);
     if (search.htmlUrl != htmlUrl) {
       if (loadMore) {
         page = page + 1;
@@ -81,10 +84,12 @@ class _SearchScreenState extends State<SearchScreen>
         setState(() {});
       } else {
         page = 1;
+        searchVideoList = [];
         setState(() {
           _futureBuilderFuture = loadData(htmlUrl);
         });
       }
+      context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
       _refreshController.loadComplete();
     }
   }
@@ -140,6 +145,7 @@ class _SearchScreenState extends State<SearchScreen>
                       SearchEngineScreen(
                           loadData: () => _onLoading(context, false)),
                       SearchMenuScreen(
+                          currentScreen: widget.currentScreen,
                           loadData: () => _onLoading(context, false))
                     ],
                   ),
@@ -214,6 +220,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     List<SearchVideo> videoList = snapshot.data;
+    print("1233321");
     print(videoList.length);
     return SliverGrid(
       //调整间距
@@ -311,14 +318,12 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future loadData(url) async {
-    print("213");
     var data = await getSearchData(url);
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-    print(searchVideoList.length);
-    print(searchEntity.video.length);
+
     totalPage = searchEntity.page;
     searchVideoList.addAll(searchEntity.video);
-    print(searchVideoList.length);
-    return searchEntity.video;
+
+    return searchVideoList;
   }
 }

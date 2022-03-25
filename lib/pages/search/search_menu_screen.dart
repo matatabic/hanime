@@ -22,9 +22,11 @@ List _menuList = [
 ];
 
 class SearchMenuScreen extends StatelessWidget {
+  final int currentScreen;
   final VoidCallback loadData;
-
-  SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
+  SearchMenuScreen(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class SearchMenuScreen extends StatelessWidget {
                   context: context,
                   backgroundColor: Colors.transparent,
                   builder: (context) =>
-                      menuDetail(menu['id'], () => {loadData}));
+                      menuDetail(menu['id'], currentScreen, () => loadData()));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -47,7 +49,9 @@ class SearchMenuScreen extends StatelessWidget {
                 child: Container(
                   height: Adapt.px(100),
                   width: Adapt.px(100),
-                  color: getActive(context.watch<SearchState>(), menu['id']),
+                  color: getActive(
+                      context.watch<SearchState>().searchList[currentScreen],
+                      menu['id']),
                   child: Center(
                     child: Icon(
                       menu['icon'] as IconData,
@@ -68,7 +72,7 @@ class SearchMenuScreen extends StatelessWidget {
   }
 }
 
-Color getActive(SearchState searchState, index) {
+Color getActive(Search searchState, index) {
   switch (index) {
     case 0:
       return searchState.genreIndex > 0
@@ -96,12 +100,18 @@ Color getActive(SearchState searchState, index) {
   return Color.fromRGBO(51, 51, 51, 1);
 }
 
-Widget menuDetail(id, onTap) {
+Widget menuDetail(id, currentScreen, loadData) {
   switch (id) {
     case 0:
-      return GenreMenu();
+      return GenreMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
     case 1:
-      return TagMenu();
+      return TagMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
     case 2:
       return SortMenu();
     case 3:

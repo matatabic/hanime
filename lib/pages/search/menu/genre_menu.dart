@@ -12,40 +12,51 @@ SearchGenre genre = SearchGenre.fromJson({
 });
 
 class GenreMenu extends StatelessWidget {
-  GenreMenu({Key? key}) : super(key: key);
+  final int currentScreen;
+  final VoidCallback loadData;
+  GenreMenu({Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: new AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.orange,
-        leading: IconButton(
-          icon: Icon(Icons.close_rounded),
-          onPressed: () {
-            Navigator.pop(context);
+    Search search = context.watch<SearchState>().searchList[currentScreen];
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: new AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.orange,
+          leading: IconButton(
+            icon: Icon(Icons.close_rounded),
+            onPressed: () {
+              loadData();
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(genre.label),
+        ),
+        body: ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            return MenuRow(
+              title: genre.data[index],
+              selected: index == search.genreIndex,
+              onTap: () {
+                context.read<SearchState>().setGenreIndex(currentScreen, index);
+              },
+            );
+          },
+          itemCount: genre.data.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return Container(
+              height: Adapt.px(5),
+              color: Colors.white30,
+            );
           },
         ),
-        title: Text(genre.label),
-      ),
-      body: ListView.separated(
-        itemBuilder: (BuildContext context, int index) {
-          return MenuRow(
-            title: genre.data[index],
-            selected: index == context.watch<SearchState>().genreIndex,
-            onTap: () {
-              context.read<SearchState>().setGenreIndex(index);
-            },
-          );
-        },
-        itemCount: genre.data.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return Container(
-            height: Adapt.px(5),
-            color: Colors.white30,
-          );
-        },
       ),
     );
   }
