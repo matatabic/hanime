@@ -75,62 +75,60 @@ SearchBrand brand = SearchBrand.fromJson({
 });
 
 class BrandMenu extends StatelessWidget {
-  const BrandMenu({Key? key}) : super(key: key);
+  final int currentScreen;
+  final VoidCallback loadData;
+  const BrandMenu(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Search search = context.watch<SearchState>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
       tagWidgetList.add(InkWell(
         onTap: () {
-          context.read<SearchState>().selectedBrandHandle(title);
+          context.read<SearchState>().selectedBrandHandle(currentScreen, title);
         },
         child: BrandDetail(
             title: title,
-            color: context.watch<SearchState>().brandList.indexOf(title) > -1
+            color: search.brandList.indexOf(title) > -1
                 ? Colors.orange
                 : Colors.black),
       ));
     }
 
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: new AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.orange,
-          leading: IconButton(
-            icon: Icon(Icons.close_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: new AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            leading: IconButton(
+              icon: Icon(Icons.close_rounded),
+              onPressed: () {
+                loadData();
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(brand.label),
           ),
-          title: Text(brand.label),
-        ),
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: Adapt.px(10)),
-                  child: Text(
-                    brand.label,
-                    style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Adapt.px(40)),
-                  ),
-                ),
-                Wrap(
+          body: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: Adapt.px(20)),
+                physics: const ClampingScrollPhysics(),
+                child: Wrap(
                   children: tagWidgetList,
                   spacing: Adapt.px(20),
                   runSpacing: Adapt.px(20),
-                )
-              ],
-            ),
-          ),
-        ));
+                )),
+          )),
+    );
   }
 }
 

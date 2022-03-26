@@ -91,7 +91,9 @@ Color getActive(Search searchState, index) {
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 4:
-      return Color.fromRGBO(51, 51, 51, 1);
+      return searchState.year != "全部" && searchState.year != null
+          ? Colors.orangeAccent
+          : Color.fromRGBO(51, 51, 51, 1);
     case 5:
       return searchState.durationIndex > 0
           ? Colors.orangeAccent
@@ -113,13 +115,25 @@ Widget menuDetail(id, currentScreen, loadData) {
         loadData: () => loadData(),
       );
     case 2:
-      return SortMenu();
+      return SortMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
     case 3:
-      return BrandMenu();
+      return BrandMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
     case 4:
-      return DateMenu();
+      return DateMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
     case 5:
-      return DurationMenu();
+      return DurationMenu(
+        currentScreen: currentScreen,
+        loadData: () => loadData(),
+      );
   }
 
   return Container();

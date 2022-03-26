@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 
 class Search {
-  final String query;
+  late String query;
   late int genreIndex;
-  final int sortIndex;
-  final int durationIndex;
-  final dynamic year;
-  final dynamic month;
+  late int sortIndex;
+  late int durationIndex;
+  late dynamic year;
+  late dynamic month;
   late bool broad;
   late List<String> tagList;
-  final List<String> brandList;
+  late List<String> brandList;
   late String htmlUrl;
 
   Search(
@@ -52,7 +52,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<Search> _searchList = [
     Search("", 0, 0, 0, null, null, false, [], [],
-        "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部")
+        "https://hanime1.me/search?query=")
     // {
     //   "query": "",
     //   "genreIndex": 0,
@@ -72,8 +72,8 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setQuery(String data) {
-    _query = data;
+  void setQuery(int currentScreen, String data) {
+    _searchList[currentScreen].query = data;
     notifyListeners();
   }
 
@@ -82,23 +82,23 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void setSortIndex(int index) {
-    _sortIndex = index;
+  void setSortIndex(int currentScreen, int index) {
+    _searchList[currentScreen].sortIndex = index;
     notifyListeners();
   }
 
-  void setDurationIndex(int index) {
-    _durationIndex = index;
+  void setDurationIndex(int currentScreen, int index) {
+    _searchList[currentScreen].durationIndex = index;
     notifyListeners();
   }
 
-  void setYear(String year) {
-    _year = year;
+  void setYear(int currentScreen, String year) {
+    _searchList[currentScreen].year = year;
     notifyListeners();
   }
 
-  void setMonth(String month) {
-    _month = month;
+  void setMonth(int currentScreen, String month) {
+    _searchList[currentScreen].month = month;
     notifyListeners();
   }
 
@@ -117,29 +117,40 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void selectedBrandHandle(String title) {
-    if (_brandList.indexOf(title) > -1) {
-      _brandList.remove(title);
+  void selectedBrandHandle(int currentScreen, String title) {
+    if (_searchList[currentScreen].brandList.indexOf(title) > -1) {
+      _searchList[currentScreen].brandList.remove(title);
     } else {
-      _brandList.add(title);
+      _searchList[currentScreen].brandList.add(title);
     }
 
+    notifyListeners();
+  }
+
+  void addSearchList() {
+    _searchList.add(Search("", 0, 0, 0, null, null, false, [], [],
+        "https://hanime1.me/search?query="));
+    notifyListeners();
+  }
+
+  void removeSearchList() {
+    _searchList.removeLast();
     notifyListeners();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty('htmlUrl', htmlUrl));
-    properties.add(StringProperty('query', query));
-    // properties.add(IntProperty('genreIndex', genreIndex));
-    properties.add(IntProperty('sortIndex', sortIndex));
-    properties.add(IntProperty('durationIndex', durationIndex));
-    properties.add(ObjectFlagProperty('year', year));
-    properties.add(ObjectFlagProperty('month', month));
-    properties.add(FlagProperty('broad', value: broad));
-    properties.add(ObjectFlagProperty('tagList', tagList));
-    properties.add(ObjectFlagProperty('brandList', brandList));
+    // properties.add(StringProperty('htmlUrl', htmlUrl));
+    // properties.add(StringProperty('query', query));
+    // // properties.add(IntProperty('genreIndex', genreIndex));
+    // properties.add(IntProperty('sortIndex', sortIndex));
+    // properties.add(IntProperty('durationIndex', durationIndex));
+    // properties.add(ObjectFlagProperty('year', year));
+    // properties.add(ObjectFlagProperty('month', month));
+    // properties.add(FlagProperty('broad', value: broad));
+    // properties.add(ObjectFlagProperty('tagList', tagList));
+    // properties.add(ObjectFlagProperty('brandList', brandList));
     properties.add(ObjectFlagProperty('searchList', searchList));
   }
 }

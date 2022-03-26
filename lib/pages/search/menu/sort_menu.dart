@@ -12,40 +12,55 @@ SearchSort sort = SearchSort.fromJson({
 });
 
 class SortMenu extends StatelessWidget {
-  const SortMenu({Key? key}) : super(key: key);
+  final int currentScreen;
+  final VoidCallback loadData;
+  const SortMenu(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: new AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.orange,
-          leading: IconButton(
-            icon: Icon(Icons.close_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(sort.label),
-        ),
-        body: ListView.separated(
-          itemBuilder: (BuildContext context, int index) {
-            return MenuRow(
-              title: sort.data[index],
-              selected: index == context.watch<SearchState>().sortIndex,
-              onTap: () {
-                context.read<SearchState>().setSortIndex(index);
+    Search search = context.watch<SearchState>().searchList[currentScreen];
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: new AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            leading: IconButton(
+              icon: Icon(Icons.close_rounded),
+              onPressed: () {
+                loadData();
+                Navigator.pop(context);
               },
-            );
-          },
-          itemCount: sort.data.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return Container(
-              height: Adapt.px(5),
-              color: Colors.white30,
-            );
-          },
-        ));
+            ),
+            title: Text(sort.label),
+          ),
+          body: ListView.separated(
+            padding: EdgeInsets.only(top: Adapt.px(20)),
+            itemBuilder: (BuildContext context, int index) {
+              return MenuRow(
+                title: sort.data[index],
+                selected: index == search.sortIndex,
+                onTap: () {
+                  context
+                      .read<SearchState>()
+                      .setSortIndex(currentScreen, index);
+                },
+              );
+            },
+            itemCount: sort.data.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return Container(
+                height: Adapt.px(5),
+                color: Colors.white30,
+              );
+            },
+          )),
+    );
   }
 }

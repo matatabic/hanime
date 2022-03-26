@@ -148,7 +148,7 @@ class _VideoScreenState extends State<VideoScreen>
             watchEntity: widget.watchEntity,
             videoIndex: _videoIndex,
             loading: _loading,
-            containerHeight: 240,
+            containerHeight: 250,
             itemWidth: 320,
             itemHeight: 165,
             direction: true,

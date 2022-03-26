@@ -6,12 +6,15 @@ import 'package:hanime/providers/search_state.dart';
 import 'package:provider/src/provider.dart';
 
 class SearchEngineScreen extends StatelessWidget {
+  final int currentScreen;
   final VoidCallback loadData;
-  SearchEngineScreen({Key? key, required this.loadData}) : super(key: key);
+  SearchEngineScreen(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String query = context.watch<SearchState>().query;
+    Search search = context.watch<SearchState>().searchList[currentScreen];
 
     return Container(
       color: Theme.of(context).primaryColor,
@@ -45,16 +48,18 @@ class SearchEngineScreen extends StatelessWidget {
                             controller: TextEditingController.fromValue(
                                 TextEditingValue(
                                     text:
-                                        '${query.length == 0 ? "" : query}', //判断keyword是否为空
+                                        '${search.query.length == 0 ? "" : search.query}', //判断keyword是否为空
                                     // 保持光标在最后
                                     selection: TextSelection.fromPosition(
                                         TextPosition(
                                             affinity: TextAffinity.downstream,
-                                            offset: query.length)))),
+                                            offset: search.query.length)))),
                             maxLines: 1,
                             maxLength: 10,
                             onChanged: (value) {
-                              context.read<SearchState>().setQuery(value);
+                              context
+                                  .read<SearchState>()
+                                  .setQuery(currentScreen, value);
                             },
                             onSubmitted: (value) {
                               loadData();
@@ -74,7 +79,9 @@ class SearchEngineScreen extends StatelessWidget {
                           color: Colors.grey,
                           iconSize: Adapt.px(40),
                           onPressed: () {
-                            context.read<SearchState>().setQuery("");
+                            context
+                                .read<SearchState>()
+                                .setQuery(currentScreen, "");
                             // _controller.clear();
                             // onSearchTextChanged('');
                           },

@@ -194,6 +194,7 @@ class TagMenu extends StatelessWidget {
             title: Text(searchTag.label),
           ),
           body: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
             child: Container(
               child: Column(
@@ -237,7 +238,7 @@ class TagMenu extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return TagContainer(
                             currentScreen: currentScreen,
-                            searchTagData: searchTag.data[index].data,
+                            searchTagData: searchTag.data[index],
                             onTap: (String title) {
                               context
                                   .read<SearchState>()
@@ -254,7 +255,7 @@ class TagMenu extends StatelessWidget {
 
 class TagContainer extends StatelessWidget {
   final int currentScreen;
-  final List<String> searchTagData;
+  final SearchTagData searchTagData;
   final Function(String title) onTap;
 
   const TagContainer(
@@ -268,7 +269,7 @@ class TagContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Search search = context.watch<SearchState>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
-    for (String title in searchTagData) {
+    for (String title in searchTagData.data) {
       tagWidgetList.add(InkWell(
         onTap: () {
           onTap(title);
@@ -290,7 +291,7 @@ class TagContainer extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: Adapt.px(10)),
             child: Text(
-              searchTag.label,
+              searchTagData.label,
               style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,

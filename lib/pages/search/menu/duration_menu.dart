@@ -17,40 +17,55 @@ SearchDuration duration = SearchDuration.fromJson({
 });
 
 class DurationMenu extends StatelessWidget {
-  const DurationMenu({Key? key}) : super(key: key);
+  final int currentScreen;
+  final VoidCallback loadData;
+  const DurationMenu(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: new AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.orange,
-          leading: IconButton(
-            icon: Icon(Icons.close_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(duration.label),
-        ),
-        body: ListView.separated(
-          itemBuilder: (BuildContext context, int index) {
-            return MenuRow(
-              title: duration.data[index],
-              selected: index == context.watch<SearchState>().durationIndex,
-              onTap: () {
-                context.read<SearchState>().setDurationIndex(index);
+    Search search = context.watch<SearchState>().searchList[currentScreen];
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: new AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            leading: IconButton(
+              icon: Icon(Icons.close_rounded),
+              onPressed: () {
+                loadData();
+                Navigator.pop(context);
               },
-            );
-          },
-          itemCount: duration.data.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return Container(
-              height: Adapt.px(5),
-              color: Colors.white30,
-            );
-          },
-        ));
+            ),
+            title: Text(duration.label),
+          ),
+          body: ListView.separated(
+            padding: EdgeInsets.only(top: Adapt.px(20)),
+            itemBuilder: (BuildContext context, int index) {
+              return MenuRow(
+                title: duration.data[index],
+                selected: index == search.durationIndex,
+                onTap: () {
+                  context
+                      .read<SearchState>()
+                      .setDurationIndex(currentScreen, index);
+                },
+              );
+            },
+            itemCount: duration.data.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return Container(
+                height: Adapt.px(5),
+                color: Colors.white30,
+              );
+            },
+          )),
+    );
   }
 }

@@ -40,6 +40,8 @@ class GenreMenu extends StatelessWidget {
           title: Text(genre.label),
         ),
         body: ListView.separated(
+          padding: EdgeInsets.only(top: Adapt.px(20)),
+          physics: const ClampingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return MenuRow(
               title: genre.data[index],

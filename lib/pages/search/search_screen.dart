@@ -31,32 +31,43 @@ class _SearchScreenState extends State<SearchScreen>
 
   var _futureBuilderFuture;
   int page = 1;
-  int totalPage = 1;
+  late int totalPage;
   List<SearchVideo> searchVideoList = [];
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  String baseUrl =
-      "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
+
+  String baseUrl = "https://hanime1.me/search?query=";
   double topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
   void _onLoading(BuildContext context, bool loadMore) async {
+    print("_onLoading");
     // await Future.delayed(Duration(milliseconds: 1000));
     Search search =
         context.read<SearchState>().searchList[widget.currentScreen];
-    print(search.genreIndex);
-    print(genre.data[search.genreIndex]);
-    var htmlUrl =
-        "https://hanime1.me/search?query=${search.query}&genre=${genre.data[search.genreIndex]}&sort=${sort.data[search.sortIndex]}&duration=${duration.data[search.durationIndex]}";
+
+    var htmlUrl = "https://hanime1.me/search?query=${search.query}";
+
+    if (search.genreIndex > 0) {
+      htmlUrl = "$htmlUrl&genre=${genre.data[search.genreIndex]}";
+    }
+
+    if (search.sortIndex > 0) {
+      htmlUrl = "$htmlUrl&sort=${genre.data[search.sortIndex]}";
+    }
+
+    if (search.durationIndex > 0) {
+      htmlUrl = "$htmlUrl&duration=${genre.data[search.durationIndex]}";
+    }
 
     if (search.broad) {
       htmlUrl = "$htmlUrl&broad=on";
     }
 
-    if (search.year != null) {
+    if (search.year != null && search.year != "全部") {
       htmlUrl = "$htmlUrl&year=${search.year}";
-      if (search.month != null) {
+      if (search.month != null && search.month != "全部") {
         htmlUrl = "$htmlUrl&month=${search.month}";
       }
     }
@@ -72,25 +83,33 @@ class _SearchScreenState extends State<SearchScreen>
         htmlUrl = "$htmlUrl&brands[]=$brand";
       }
     }
-    if (loadMore) {
-      htmlUrl = "$htmlUrl&page=${page + 1}";
-    }
+    // if (loadMore) {
+    //   htmlUrl = "$htmlUrl&page=${page + 1}";
+    // }
     print(search.htmlUrl);
     print(htmlUrl);
-    if (search.htmlUrl != htmlUrl) {
-      if (loadMore) {
-        page = page + 1;
+
+    if (loadMore) {
+      if (totalPage - page > 0) {
+        htmlUrl = "$htmlUrl&page=${page + 1}";
         await loadData(htmlUrl);
+        page = page + 1;
+        context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
         setState(() {});
+        _refreshController.loadComplete();
       } else {
+        _refreshController.loadNoData();
+      }
+    } else {
+      if (search.htmlUrl != htmlUrl) {
         page = 1;
         searchVideoList = [];
         setState(() {
           _futureBuilderFuture = loadData(htmlUrl);
         });
+        context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
+        _refreshController.loadComplete();
       }
-      context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
-      _refreshController.loadComplete();
     }
   }
 
@@ -107,6 +126,7 @@ class _SearchScreenState extends State<SearchScreen>
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: SmartRefresher(
+            // physics: const ClampingScrollPhysics(),
             enablePullDown: false,
             enablePullUp: true,
             controller: _refreshController,
@@ -143,6 +163,7 @@ class _SearchScreenState extends State<SearchScreen>
                   flexibleSpace: Column(
                     children: [
                       SearchEngineScreen(
+                          currentScreen: widget.currentScreen,
                           loadData: () => _onLoading(context, false)),
                       SearchMenuScreen(
                           currentScreen: widget.currentScreen,
@@ -220,7 +241,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     List<SearchVideo> videoList = snapshot.data;
-    print("1233321");
+
     print(videoList.length);
     return SliverGrid(
       //调整间距

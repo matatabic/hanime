@@ -11,115 +11,124 @@ SearchDate date = SearchDate.fromJson({
   "data": {
     "year": [
       "全部",
-      "2021年",
-      "2020年",
-      "2019年",
-      "2018年",
-      "2017年",
-      "2016年",
-      "2015年",
-      "2014年",
-      "2013年",
-      "2012年",
-      "2011年",
-      "2010年",
-      "2009年",
-      "2008年",
-      "2007年",
-      "2006年",
-      "2005年",
-      "2004年",
-      "2003年",
-      "2002年",
-      "2001年",
-      "2000年",
-      "1999年",
-      "1998年",
-      "1997年",
-      "1996年",
-      "1995年",
-      "1994年",
-      "1993年",
-      "1992年",
-      "1991年",
-      "1990年",
+      "2021",
+      "2020",
+      "2019",
+      "2018",
+      "2017",
+      "2016",
+      "2015",
+      "2014",
+      "2013",
+      "2012",
+      "2011",
+      "2010",
+      "2009",
+      "2008",
+      "2007",
+      "2006",
+      "2005",
+      "2004",
+      "2003",
+      "2002",
+      "2001",
+      "2000",
+      "1999",
+      "1998",
+      "1997",
+      "1996",
+      "1995",
+      "1994",
+      "1993",
+      "1992",
+      "1991",
+      "1990",
     ],
     "month": [
       "全部",
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
     ],
   }
 });
 
 class DateMenu extends StatelessWidget {
-  DateMenu({Key? key}) : super(key: key);
-
-  String? selectedValue;
+  final int currentScreen;
+  final VoidCallback loadData;
+  const DateMenu(
+      {Key? key, required this.currentScreen, required this.loadData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: new AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.orange,
-          leading: IconButton(
-            icon: Icon(Icons.close_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+    Search search = context.watch<SearchState>().searchList[currentScreen];
+    return WillPopScope(
+      onWillPop: () async {
+        loadData();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: new AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.orange,
+            leading: IconButton(
+              icon: Icon(Icons.close_rounded),
+              onPressed: () {
+                loadData();
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(date.label),
           ),
-          title: Text(date.label),
-        ),
-        body: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: Adapt.px(80), horizontal: Adapt.px(70)),
-          child: Flex(
-            direction: Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Text(context.watch<SearchState>().year),
-              CustomDropdownButton2(
-                hint: '请选择年份',
-                dropdownItems: date.data.year,
-                value: context.watch<SearchState>().year,
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: Colors.orangeAccent,
+          body: Container(
+            padding: EdgeInsets.symmetric(
+                vertical: Adapt.px(80), horizontal: Adapt.px(70)),
+            child: Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomDropdownButton2(
+                  hint: '请选择年份',
+                  dropdownItems: date.data.year,
+                  value: search.year,
+                  buttonDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Colors.orangeAccent,
+                    ),
                   ),
+                  onChanged: (value) {
+                    context.read<SearchState>().setYear(currentScreen, value!);
+                  },
                 ),
-                onChanged: (value) {
-                  context.read<SearchState>().setYear(value!);
-                },
-              ),
-              CustomDropdownButton2(
-                hint: '请选择月份',
-                dropdownItems: date.data.month,
-                value: context.watch<SearchState>().month,
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: Colors.orangeAccent,
+                CustomDropdownButton2(
+                  hint: '请选择月份',
+                  dropdownItems: date.data.month,
+                  value: search.month,
+                  buttonDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Colors.orangeAccent,
+                    ),
                   ),
-                ),
-                onChanged: (value) {
-                  context.read<SearchState>().setMonth(value!);
-                },
-              )
-            ],
-          ),
-        ));
+                  onChanged: (value) {
+                    context.read<SearchState>().setMonth(currentScreen, value!);
+                  },
+                )
+              ],
+            ),
+          )),
+    );
   }
 }

@@ -47,12 +47,12 @@ class DetailScreen extends StatelessWidget {
                 children: _buildTagWidget(
                     watchEntity.tag,
                     () => {
+                          // print(Navigator.of(context))
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => SearchScreen(
-                                      currentScreen: 1,
-                                    )),
+                                builder: (context) =>
+                                    SearchScreen(currentScreen: 0)),
                           )
                         }),
                 spacing: Adapt.px(20),
