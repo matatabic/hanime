@@ -37,6 +37,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   bool _broad = false;
   List<String> _tagList = [];
   List<String> _brandList = [];
+  int _currentScreen = 0;
 
   String get htmlUrl => _htmlUrl;
   String get query => _query;
@@ -49,6 +50,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   List get tagList => _tagList;
   List get brandList => _brandList;
   List get searchList => _searchList;
+  int get currentScreen => _currentScreen;
 
   List<Search> _searchList = [
     Search("", 0, 0, 0, null, null, false, [], [],
@@ -130,11 +132,13 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   void addSearchList() {
     _searchList.add(Search("", 0, 0, 0, null, null, false, [], [],
         "https://hanime1.me/search?query="));
+    _currentScreen = _currentScreen + 1;
     notifyListeners();
   }
 
   void removeSearchList() {
     _searchList.removeLast();
+    _currentScreen = _currentScreen - 1;
     notifyListeners();
   }
 

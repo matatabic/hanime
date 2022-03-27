@@ -1,3 +1,4 @@
+import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
@@ -22,6 +23,7 @@ class WatchScreen extends StatefulWidget {
 
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
+  final FijkPlayer player = FijkPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +90,12 @@ class _WatchScreenState extends State<WatchScreen> {
             children: [
               VideoScreen(
                 watchEntity: watchEntity,
+                player: player,
               ),
-              DetailScreen(watchEntity: watchEntity),
+              DetailScreen(
+                watchEntity: watchEntity,
+                player: player,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Adapt.px(30), horizontal: Adapt.px(10)),

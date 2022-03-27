@@ -1,16 +1,20 @@
 import 'package:expandable_text/expandable_text.dart';
+import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
+import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/providers/watch_state.dart';
 import 'package:provider/src/provider.dart';
 
 class DetailScreen extends StatelessWidget {
   final WatchEntity watchEntity;
+  final FijkPlayer player;
 
-  const DetailScreen({Key? key, required this.watchEntity}) : super(key: key);
+  DetailScreen({Key? key, required this.watchEntity, required this.player})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +51,20 @@ class DetailScreen extends StatelessWidget {
                 children: _buildTagWidget(
                     watchEntity.tag,
                     () => {
-                          // print(Navigator.of(context))
+                          player.pause(),
+                          context.read<SearchState>().addSearchList(),
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) =>
-                                    SearchScreen(currentScreen: 0)),
+                                builder: (context) => SearchScreen(
+                                    currentScreen: context
+                                        .watch<SearchState>()
+                                        .currentScreen)),
                           )
                         }),
                 spacing: Adapt.px(20),
                 runSpacing: Adapt.px(20),
-              )),
+              ))
         ],
       ),
     );

@@ -35,9 +35,11 @@ class PlayerShowConfig implements ShowConfigAbs {
 }
 
 class VideoScreen extends StatefulWidget {
-  WatchEntity watchEntity;
+  final WatchEntity watchEntity;
+  final FijkPlayer player;
 
-  VideoScreen({Key? key, required this.watchEntity}) : super(key: key);
+  VideoScreen({Key? key, required this.watchEntity, required this.player})
+      : super(key: key);
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -45,7 +47,7 @@ class VideoScreen extends StatefulWidget {
 
 class _VideoScreenState extends State<VideoScreen>
     with TickerProviderStateMixin {
-  final FijkPlayer player = FijkPlayer();
+  // final FijkPlayer player = FijkPlayer();
 
   VideoSourceFormat? _videoSource;
 
@@ -60,7 +62,7 @@ class _VideoScreenState extends State<VideoScreen>
   void dispose() {
     super.dispose();
     // player.dispose();
-    player.release();
+    widget.player.release();
   }
 
   @override
@@ -74,12 +76,12 @@ class _VideoScreenState extends State<VideoScreen>
   }
 
   playerChange(String url) async {
-    if (player.value.state == FijkState.completed) {
-      await player.stop();
+    if (widget.player.value.state == FijkState.completed) {
+      await widget.player.stop();
     }
 
-    await player.reset().then((_) async {
-      player.setDataSource(url, autoPlay: true);
+    await widget.player.reset().then((_) async {
+      widget.player.setDataSource(url, autoPlay: true);
     });
   }
 
@@ -91,7 +93,7 @@ class _VideoScreenState extends State<VideoScreen>
           height: Adapt.px(520),
           color: Colors.black,
           fit: FijkFit.cover,
-          player: player,
+          player: widget.player,
           panelBuilder: (
             FijkPlayer player,
             FijkData data,
