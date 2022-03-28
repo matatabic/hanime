@@ -10,7 +10,9 @@ import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
-import 'detail _screen.dart';
+import 'brief_screen.dart';
+import 'episode_screen.dart';
+import 'info_screen.dart';
 
 class WatchScreen extends StatefulWidget {
   final String htmlUrl;
@@ -24,6 +26,7 @@ class WatchScreen extends StatefulWidget {
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,17 @@ class _WatchScreenState extends State<WatchScreen> {
     }
   }
 
+  playerChange(String url) async {
+    print("playerChangeplayerChangeplayerChangeplayerChange");
+    if (player.value.state == FijkState.completed) {
+      await player.stop();
+    }
+
+    await player.reset().then((_) async {
+      player.setDataSource(url, autoPlay: true);
+    });
+  }
+
   initState() {
     super.initState();
     _futureBuilderFuture = loadData();
@@ -83,46 +97,120 @@ class _WatchScreenState extends State<WatchScreen> {
     });
 
     return SafeArea(
-      child: SizedBox.expand(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              VideoScreen(
-                watchEntity: watchEntity,
-                player: player,
-              ),
-              DetailScreen(
-                watchEntity: watchEntity,
-                player: player,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Adapt.px(30), horizontal: Adapt.px(10)),
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: watchEntity.commend.length,
-                    //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        //横轴元素个数
-                        crossAxisCount: watchEntity.commendCount,
-                        //纵轴间距
-                        mainAxisSpacing: Adapt.px(10),
-                        //横轴间距
-                        crossAxisSpacing: Adapt.px(10),
-                        //子组件宽高长度比例
-                        childAspectRatio:
-                            watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
-                    itemBuilder: (BuildContext context, int index) {
-                      return getItemContainer(watchEntity.commend[index]);
-                    }),
-              )
-            ],
-          ),
-        ),
+        child: SizedBox.expand(
+            child: CustomScrollView(slivers: <Widget>[
+      SliverAppBar(
+          automaticallyImplyLeading: false,
+          pinned: true,
+          collapsedHeight: Adapt.px(520),
+          floating: true,
+          stretch: false,
+          // snap: true,
+          expandedHeight: Adapt.px(520),
+          flexibleSpace: VideoScreen(
+            watchEntity: watchEntity,
+            player: player,
+            playerChange: (String url) => playerChange,
+          )),
+      SliverToBoxAdapter(
+          child: BriefScreen(
+        watchEntity: watchEntity,
+        playerChange: (String url) => playerChange,
+      )),
+      SliverToBoxAdapter(
+          child: InfoScreen(
+        player: player,
+        watchEntity: watchEntity,
+      )),
+      SliverToBoxAdapter(
+        child: EpisodeScreen(
+            watchEntity: watchEntity,
+            containerHeight: 300,
+            itemWidth: 320,
+            itemHeight: 200,
+            direction: true,
+            onTap: (index) async {
+              if (index == context.read<WatchState>().videoIndex ||
+                  context.read<WatchState>().loading) {
+                return;
+              }
+              context.read<WatchState>().setLoading(true);
+              context.read<WatchState>().setVideoIndex(index);
+              // setState(() {
+              //   _loading = true;
+              //   _videoIndex = index;
+              // });
+              WatchEntity data =
+                  await getEpisodeData(watchEntity.episode[index].htmlUrl);
+              playerChange(data.videoData.video[0].list[0].url);
+              context.read<WatchState>().setTitle(data.info.shareTitle);
+              context.read<WatchState>().setLoading(false);
+              // setState(() {
+              //   _loading = false;
+              // });
+            }),
       ),
-    );
+      SliverPadding(
+        padding: EdgeInsets.only(top: Adapt.px(20)),
+      ),
+      SliverGrid(
+        //调整间距
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //横轴元素个数
+            crossAxisCount: watchEntity.commendCount,
+            //纵轴间距
+            mainAxisSpacing: Adapt.px(10),
+            //横轴间距
+            crossAxisSpacing: Adapt.px(10),
+            //子组件宽高长度比例
+            childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
+        //加载内容
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return getItemContainer(watchEntity.commend[index]);
+          },
+          childCount: watchEntity.commend.length, //设置个数
+        ),
+      )
+    ])
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.vertical,
+            //   child: Column(
+            //     children: [
+            //       VideoScreen(
+            //         watchEntity: watchEntity,
+            //         player: player,
+            //       ),
+            //       DetailScreen(
+            //         watchEntity: watchEntity,
+            //         player: player,
+            //       ),
+            //       Padding(
+            //         padding: EdgeInsets.symmetric(
+            //             vertical: Adapt.px(30), horizontal: Adapt.px(10)),
+            //         child: GridView.builder(
+            //             shrinkWrap: true,
+            //             physics: NeverScrollableScrollPhysics(),
+            //             itemCount: watchEntity.commend.length,
+            //             //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
+            //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //                 //横轴元素个数
+            //                 crossAxisCount: watchEntity.commendCount,
+            //                 //纵轴间距
+            //                 mainAxisSpacing: Adapt.px(10),
+            //                 //横轴间距
+            //                 crossAxisSpacing: Adapt.px(10),
+            //                 //子组件宽高长度比例
+            //                 childAspectRatio:
+            //                     watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
+            //             itemBuilder: (BuildContext context, int index) {
+            //               return getItemContainer(watchEntity.commend[index]);
+            //             }),
+            //       )
+            //     ],
+            //   ),
+            // ),
+            ));
   }
 
   Widget getItemContainer(WatchCommend item) {

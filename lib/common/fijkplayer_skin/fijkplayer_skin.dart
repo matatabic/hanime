@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:wakelock/wakelock.dart';
 
 import './schema.dart' show VideoSourceFormat;
@@ -305,7 +306,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               position: _animation!,
               child: Container(
                 height: window.physicalSize.height,
-                width: 320,
+                width: Adapt.px(650),
                 child: _buildPlayDrawer(),
               ),
             ),
@@ -320,14 +321,16 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     return Scaffold(
       backgroundColor: Color.fromRGBO(0, 0, 0, 0.4),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0), // here the desired height
+        preferredSize:
+            Size.fromHeight(Adapt.px(100)), // here the desired height
         child: AppBar(
+          centerTitle: false,
           automaticallyImplyLeading: false,
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
           elevation: 0.1,
           title: Container(
-            width: 60,
-            height: 45,
+            width: Adapt.px(120),
+            height: Adapt.px(90),
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Colors.orange,
@@ -362,11 +365,10 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       //     controller: _tabController,
       //   ),
       // ),
-      body:
-          // Container(
-          //   color: Color.fromRGBO(0, 0, 0, 0.5),
-          //   child:
-          widget.createConList,
+      body: widget.createConList,
+      // Container(
+      //   color: Color.fromRGBO(0, 0, 0, 0.5),
+      //   child:
       // Container(
       //     color: Color.fromRGBO(0, 0, 0, 0.5),
       // child: TabBarView(

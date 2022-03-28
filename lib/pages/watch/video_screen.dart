@@ -9,7 +9,6 @@ import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
-import 'brief_screen.dart';
 import 'episode_screen.dart';
 
 // 定制UI配置项
@@ -37,8 +36,13 @@ class PlayerShowConfig implements ShowConfigAbs {
 class VideoScreen extends StatefulWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
+  final Function(String url) playerChange;
 
-  VideoScreen({Key? key, required this.watchEntity, required this.player})
+  VideoScreen(
+      {Key? key,
+      required this.watchEntity,
+      required this.player,
+      required this.playerChange})
       : super(key: key);
 
   @override
@@ -51,10 +55,10 @@ class _VideoScreenState extends State<VideoScreen>
 
   VideoSourceFormat? _videoSource;
 
-  int _curTabIdx = 0;
-  int _curActiveIdx = 0;
-  var _videoIndex;
-  bool _loading = false;
+  // int _curTabIdx = 0;
+  // int _curActiveIdx = 0;
+  // var _videoIndex;
+  // bool _loading = false;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -62,7 +66,14 @@ class _VideoScreenState extends State<VideoScreen>
   void dispose() {
     super.dispose();
     // player.dispose();
+    widget.player.removeListener(_playerValueListener);
     widget.player.release();
+  }
+
+  void _playerValueListener() {
+    FijkValue value = widget.player.value;
+    print("bofangbofang");
+    print(value);
   }
 
   @override
@@ -73,17 +84,18 @@ class _VideoScreenState extends State<VideoScreen>
         VideoSourceFormat.fromJson(widget.watchEntity.videoData.toJson());
     // 这句不能省，必须有
     speed = 1.0;
+    widget.player.addListener(_playerValueListener);
   }
 
-  playerChange(String url) async {
-    if (widget.player.value.state == FijkState.completed) {
-      await widget.player.stop();
-    }
-
-    await widget.player.reset().then((_) async {
-      widget.player.setDataSource(url, autoPlay: true);
-    });
-  }
+  // playerChange(String url) async {
+  //   if (widget.player.value.state == FijkState.completed) {
+  //     await widget.player.stop();
+  //   }
+  //
+  //   await widget.player.reset().then((_) async {
+  //     widget.player.setDataSource(url, autoPlay: true);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +123,9 @@ class _VideoScreenState extends State<VideoScreen>
                 // 标题 当前页面顶部的标题部分
                 playerTitle: widget.watchEntity.info.title,
                 // 当前视频源tabIndex
-                curTabIdx: _curTabIdx,
+                curTabIdx: 0,
                 // 当前视频源activeIndex
-                curActiveIdx: _curActiveIdx,
+                curActiveIdx: 0,
                 // 显示的配置
                 showConfig: vCfg,
                 // json格式化后的视频数据
@@ -121,55 +133,57 @@ class _VideoScreenState extends State<VideoScreen>
                 // createConList: _createTabConList(widget.watchEntity.episode)
                 createConList: EpisodeScreen(
                     watchEntity: widget.watchEntity,
-                    videoIndex: _videoIndex,
-                    loading: _loading,
                     // containerHeight: 1000,
                     itemWidth: 320,
                     itemHeight: 220,
                     direction: false,
                     onTap: (index) async {
-                      if (index == _videoIndex || _loading) {
+                      if (index == context.read<WatchState>().videoIndex ||
+                          context.read<WatchState>().loading) {
                         return;
                       }
-                      setState(() {
-                        _loading = true;
-                        _videoIndex = index;
-                      });
+                      context.read<WatchState>().setLoading(true);
+                      context.read<WatchState>().setVideoIndex(index);
+                      // setState(() {
+                      //   _loading = true;
+                      //   _videoIndex = index;
+                      // });
                       WatchEntity data = await getEpisodeData(
                           widget.watchEntity.episode[index].htmlUrl);
-                      playerChange(data.videoData.video[0].list[0].url);
+                      widget.playerChange(data.videoData.video[0].list[0].url);
                       context.read<WatchState>().setTitle(data.info.shareTitle);
-                      setState(() {
-                        _loading = false;
-                      });
+                      context.read<WatchState>().setLoading(false);
+                      // setState(() {
+                      //   _loading = false;
+                      // });
                     }));
           },
         ),
-        BriefScreen(watchEntity: widget.watchEntity),
-        EpisodeScreen(
-            watchEntity: widget.watchEntity,
-            videoIndex: _videoIndex,
-            loading: _loading,
-            containerHeight: 250,
-            itemWidth: 320,
-            itemHeight: 165,
-            direction: true,
-            onTap: (index) async {
-              if (index == _videoIndex || _loading) {
-                return;
-              }
-              setState(() {
-                _loading = true;
-                _videoIndex = index;
-              });
-              WatchEntity data = await getEpisodeData(
-                  widget.watchEntity.episode[index].htmlUrl);
-              playerChange(data.videoData.video[0].list[0].url);
-              context.read<WatchState>().setTitle(data.info.shareTitle);
-              setState(() {
-                _loading = false;
-              });
-            }),
+        // BriefScreen(watchEntity: widget.watchEntity),
+        // EpisodeScreen(
+        //     watchEntity: widget.watchEntity,
+        //     videoIndex: _videoIndex,
+        //     loading: _loading,
+        //     containerHeight: 250,
+        //     itemWidth: 320,
+        //     itemHeight: 165,
+        //     direction: true,
+        //     onTap: (index) async {
+        //       if (index == _videoIndex || _loading) {
+        //         return;
+        //       }
+        //       setState(() {
+        //         _loading = true;
+        //         _videoIndex = index;
+        //       });
+        //       WatchEntity data = await getEpisodeData(
+        //           widget.watchEntity.episode[index].htmlUrl);
+        //       playerChange(data.videoData.video[0].list[0].url);
+        //       context.read<WatchState>().setTitle(data.info.shareTitle);
+        //       setState(() {
+        //         _loading = false;
+        //       });
+        //     }),
       ],
     );
   }

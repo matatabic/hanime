@@ -9,11 +9,11 @@ import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/providers/watch_state.dart';
 import 'package:provider/src/provider.dart';
 
-class DetailScreen extends StatelessWidget {
+class InfoScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
 
-  DetailScreen({Key? key, required this.watchEntity, required this.player})
+  InfoScreen({Key? key, required this.watchEntity, required this.player})
       : super(key: key);
 
   @override

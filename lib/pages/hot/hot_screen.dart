@@ -12,10 +12,13 @@ class _MinePageState extends State<MinePage> {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
-          pinned: false,
+          automaticallyImplyLeading: true,
+          pinned: true,
+          // collapsedHeight: 200,
           floating: true,
-          stretch: true,
-          expandedHeight: 200.0,
+          stretch: false,
+          // snap: true,
+          expandedHeight: 200,
           flexibleSpace: FlexibleSpaceBar(
             title: Text('开学季'),
             background: Image.network(

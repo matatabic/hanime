@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
+import 'package:hanime/pages/watch/selected_cover.dart';
+import 'package:hanime/providers/watch_state.dart';
+import 'package:provider/src/provider.dart';
 
 import 'loading_cover.dart';
 
@@ -12,8 +15,6 @@ const double LIST_SPACE = 20;
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
-  final dynamic videoIndex;
-  final bool loading;
   final bool direction;
   final double? containerHeight;
   final double itemWidth;
@@ -24,8 +25,6 @@ class EpisodeScreen extends StatelessWidget {
   const EpisodeScreen({
     Key? key,
     required this.watchEntity,
-    required this.videoIndex,
-    required this.loading,
     required this.onTap,
     required this.direction,
     this.containerHeight,
@@ -70,10 +69,9 @@ class EpisodeScreen extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Episode(
               videoList: watchEntity.episode[index],
-              selector: videoIndex == null
+              selector: context.watch<WatchState>().videoIndex == null
                   ? watchEntity.info.videoIndex == index
-                  : videoIndex == index,
-              loading: loading,
+                  : context.watch<WatchState>().videoIndex == index,
               itemWidth: Adapt.px(itemWidth),
               itemHeight: Adapt.px(itemHeight),
               direction: direction,
@@ -88,7 +86,6 @@ class Episode extends StatelessWidget {
   final WatchEpisode videoList;
   final VoidCallback onTap;
   final bool selector;
-  final bool loading;
   final bool direction;
   final double itemWidth;
   final double itemHeight;
@@ -98,7 +95,6 @@ class Episode extends StatelessWidget {
       required this.videoList,
       required this.onTap,
       required this.selector,
-      required this.loading,
       required this.direction,
       required this.itemWidth,
       required this.itemHeight})
@@ -120,8 +116,13 @@ class Episode extends StatelessWidget {
                 imgUrl: videoList.imgUrl,
                 selector: selector,
               ),
-              if (loading && selector)
+              if (context.watch<WatchState>().loading && selector)
                 LoadingCover(
+                  width: itemWidth,
+                  height: itemHeight,
+                ),
+              if (!context.watch<WatchState>().loading && selector)
+                SelectedCover(
                   width: itemWidth,
                   height: itemHeight,
                 )
