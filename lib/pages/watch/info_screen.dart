@@ -6,14 +6,18 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/search_state.dart';
-import 'package:hanime/providers/watch_state.dart';
 import 'package:provider/src/provider.dart';
 
 class InfoScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
+  final String shareTitle;
 
-  InfoScreen({Key? key, required this.watchEntity, required this.player})
+  InfoScreen(
+      {Key? key,
+      required this.watchEntity,
+      required this.player,
+      required this.shareTitle})
       : super(key: key);
 
   @override
@@ -24,7 +28,7 @@ class InfoScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.watch<WatchState>().title,
+            shareTitle.length > 0 ? shareTitle : watchEntity.info.shareTitle,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: Adapt.px(36),

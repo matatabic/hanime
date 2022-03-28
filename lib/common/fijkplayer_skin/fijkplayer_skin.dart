@@ -60,7 +60,7 @@ class CustomFijkPanel extends StatefulWidget {
   final int curActiveIdx;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
-  Widget createConList;
+  Widget episodeScreen;
 
   CustomFijkPanel(
       {required this.player,
@@ -73,7 +73,7 @@ class CustomFijkPanel extends StatefulWidget {
       required this.videoFormat,
       required this.curTabIdx,
       required this.curActiveIdx,
-      required this.createConList});
+      required this.episodeScreen});
 
   @override
   _CustomFijkPanelState createState() => _CustomFijkPanelState();
@@ -365,7 +365,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       //     controller: _tabController,
       //   ),
       // ),
-      body: widget.createConList,
+      body: widget.episodeScreen,
       // Container(
       //   color: Color.fromRGBO(0, 0, 0, 0.5),
       //   child:
@@ -643,7 +643,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               videoFormat: widget.videoFormat,
               changeDrawerState: changeDrawerState,
               changeLockState: changeLockState,
-              createConList: widget.createConList),
+              episodeScreen: widget.episodeScreen),
         );
       }
     }
@@ -679,7 +679,7 @@ class _buildGestureDetector extends StatefulWidget {
   final Function changeLockState;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
-  Widget createConList;
+  Widget episodeScreen;
 
   _buildGestureDetector(
       {Key? key,
@@ -695,7 +695,7 @@ class _buildGestureDetector extends StatefulWidget {
       required this.videoFormat,
       required this.changeDrawerState,
       required this.changeLockState,
-      required this.createConList})
+      required this.episodeScreen})
       : super(key: key);
 
   @override

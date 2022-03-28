@@ -6,9 +6,7 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
-import 'package:hanime/providers/watch_state.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:provider/src/provider.dart';
 
 import 'brief_screen.dart';
 import 'episode_screen.dart';
@@ -26,7 +24,9 @@ class WatchScreen extends StatefulWidget {
 class _WatchScreenState extends State<WatchScreen> {
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
+  var _videoIndex;
   bool _loading = false;
+  String _shareTitle = "";
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,6 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 
   playerChange(String url) async {
-    print("playerChangeplayerChangeplayerChangeplayerChange");
     if (player.value.state == FijkState.completed) {
       await player.stop();
     }
@@ -92,9 +91,6 @@ class _WatchScreenState extends State<WatchScreen> {
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     WatchEntity watchEntity = snapshot.data;
-    Future.delayed(Duration(milliseconds: 200)).then((e) {
-      context.read<WatchState>().setTitle(watchEntity.info.shareTitle);
-    });
 
     return SafeArea(
         child: SizedBox.expand(
@@ -105,12 +101,35 @@ class _WatchScreenState extends State<WatchScreen> {
           collapsedHeight: Adapt.px(520),
           floating: true,
           stretch: false,
-          // snap: true,
           expandedHeight: Adapt.px(520),
           flexibleSpace: VideoScreen(
             watchEntity: watchEntity,
             player: player,
             playerChange: (String url) => playerChange,
+            episodeScreen: EpisodeScreen(
+                watchEntity: watchEntity,
+                itemWidth: 320,
+                itemHeight: 220,
+                direction: false,
+                videoIndex: _videoIndex,
+                loading: _loading,
+                onTap: (index) async {
+                  if (_videoIndex || _loading) {
+                    return;
+                  }
+                  setState(() {
+                    _loading = true;
+                    _videoIndex = index;
+                  });
+                  WatchEntity data =
+                      await getEpisodeData(watchEntity.episode[index].htmlUrl);
+                  playerChange(data.videoData.video[0].list[0].url);
+
+                  setState(() {
+                    _shareTitle = data.info.shareTitle;
+                    _loading = false;
+                  });
+                }),
           )),
       SliverToBoxAdapter(
           child: BriefScreen(
@@ -119,6 +138,7 @@ class _WatchScreenState extends State<WatchScreen> {
       )),
       SliverToBoxAdapter(
           child: InfoScreen(
+        shareTitle: _shareTitle,
         player: player,
         watchEntity: watchEntity,
       )),
@@ -128,26 +148,25 @@ class _WatchScreenState extends State<WatchScreen> {
             containerHeight: 300,
             itemWidth: 320,
             itemHeight: 200,
+            videoIndex: _videoIndex,
+            loading: _loading,
             direction: true,
             onTap: (index) async {
-              if (index == context.read<WatchState>().videoIndex ||
-                  context.read<WatchState>().loading) {
+              if (index == _videoIndex || _loading) {
                 return;
               }
-              context.read<WatchState>().setLoading(true);
-              context.read<WatchState>().setVideoIndex(index);
-              // setState(() {
-              //   _loading = true;
-              //   _videoIndex = index;
-              // });
+              setState(() {
+                _loading = true;
+                _videoIndex = index;
+              });
               WatchEntity data =
                   await getEpisodeData(watchEntity.episode[index].htmlUrl);
               playerChange(data.videoData.video[0].list[0].url);
-              context.read<WatchState>().setTitle(data.info.shareTitle);
-              context.read<WatchState>().setLoading(false);
-              // setState(() {
-              //   _loading = false;
-              // });
+
+              setState(() {
+                _shareTitle = data.info.shareTitle;
+                _loading = false;
+              });
             }),
       ),
       SliverPadding(
@@ -172,45 +191,7 @@ class _WatchScreenState extends State<WatchScreen> {
           childCount: watchEntity.commend.length, //设置个数
         ),
       )
-    ])
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.vertical,
-            //   child: Column(
-            //     children: [
-            //       VideoScreen(
-            //         watchEntity: watchEntity,
-            //         player: player,
-            //       ),
-            //       DetailScreen(
-            //         watchEntity: watchEntity,
-            //         player: player,
-            //       ),
-            //       Padding(
-            //         padding: EdgeInsets.symmetric(
-            //             vertical: Adapt.px(30), horizontal: Adapt.px(10)),
-            //         child: GridView.builder(
-            //             shrinkWrap: true,
-            //             physics: NeverScrollableScrollPhysics(),
-            //             itemCount: watchEntity.commend.length,
-            //             //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
-            //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //                 //横轴元素个数
-            //                 crossAxisCount: watchEntity.commendCount,
-            //                 //纵轴间距
-            //                 mainAxisSpacing: Adapt.px(10),
-            //                 //横轴间距
-            //                 crossAxisSpacing: Adapt.px(10),
-            //                 //子组件宽高长度比例
-            //                 childAspectRatio:
-            //                     watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
-            //             itemBuilder: (BuildContext context, int index) {
-            //               return getItemContainer(watchEntity.commend[index]);
-            //             }),
-            //       )
-            //     ],
-            //   ),
-            // ),
-            ));
+    ])));
   }
 
   Widget getItemContainer(WatchCommend item) {
