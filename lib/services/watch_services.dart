@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
@@ -127,4 +128,27 @@ Future getWatchData(url) async {
     "commendCount": commendCount,
     "commend": commendList
   };
+}
+
+Future translate(String prefixText, String expandableText) async {
+  Response response1 = await Dio().get(
+      'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$prefixText');
+  // var res = json.decode(response1.data);
+  String _prefixText = "";
+  String _expandableText = "";
+  List res1 = response1.data['translateResult'];
+
+  for (var item in res1) {
+    _prefixText = _prefixText + item[0]['tgt'];
+  }
+
+  Response response2 = await Dio().get(
+      'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$expandableText');
+  List res2 = response2.data['translateResult'];
+
+  for (var item in res2) {
+    _expandableText = _expandableText + item[0]['tgt'];
+  }
+  LogUtil.d(_prefixText);
+  LogUtil.d(_expandableText);
 }

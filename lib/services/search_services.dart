@@ -349,4 +349,4 @@ Future getSearchData(_htmlUrl) async {
   return {"video": videoList, "page": page};
 }
 
-// https://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i=
+// https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=

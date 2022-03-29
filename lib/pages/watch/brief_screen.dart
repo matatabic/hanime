@@ -5,8 +5,9 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/services/watch_services.dart';
+
+import 'like_screen.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -60,7 +61,7 @@ class BriefScreen extends StatelessWidget {
                           Text(
                             watchEntity.info.countTitle,
                           ),
-                          MyScreen()
+                          LikeScreen()
                           // LikeButton(
                           //   isLiked: true,
                           //   size: Adapt.px(60),

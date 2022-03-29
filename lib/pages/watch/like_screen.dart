@@ -4,12 +4,12 @@ import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
 import 'package:like_button/like_button.dart';
 
-class MyScreen extends StatefulWidget {
+class LikeScreen extends StatefulWidget {
   @override
-  _MyScreenState createState() => _MyScreenState();
+  _LikeScreenState createState() => _LikeScreenState();
 }
 
-class _MyScreenState extends State<MyScreen> {
+class _LikeScreenState extends State<LikeScreen> {
   ///给获取详细信息的widget设置一个key
   GlobalKey iconKey = new GlobalKey();
 

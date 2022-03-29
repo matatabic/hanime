@@ -6,6 +6,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/services/watch_services.dart';
 import 'package:provider/src/provider.dart';
 
 class InfoScreen extends StatelessWidget {
@@ -35,18 +36,23 @@ class InfoScreen extends StatelessWidget {
             ),
           ),
           Container(
-            child: ExpandableText(
-              watchEntity.info.description,
-              animation: true,
-              prefixText: watchEntity.info.title,
-              prefixStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Adapt.px(45),
-                  color: Colors.orange),
-              expandText: '顯示完整資訊',
-              collapseText: '只顯示部分資訊',
-              maxLines: 3,
-              linkColor: Colors.cyan,
+            child: InkWell(
+              onLongPress: () {
+                translate(watchEntity.info.title, watchEntity.info.description);
+              },
+              child: ExpandableText(
+                watchEntity.info.description,
+                animation: true,
+                prefixText: watchEntity.info.title,
+                prefixStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adapt.px(45),
+                    color: Colors.orange),
+                expandText: '顯示完整資訊',
+                collapseText: '只顯示部分資訊',
+                maxLines: 3,
+                linkColor: Colors.cyan,
+              ),
             ),
           ),
           Padding(
