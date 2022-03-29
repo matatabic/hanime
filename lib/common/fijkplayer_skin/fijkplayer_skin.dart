@@ -60,7 +60,7 @@ class CustomFijkPanel extends StatefulWidget {
   final int curActiveIdx;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
-  Widget episodeScreen;
+  final Widget episodeScreen;
 
   CustomFijkPanel(
       {required this.player,
@@ -679,7 +679,7 @@ class _buildGestureDetector extends StatefulWidget {
   final Function changeLockState;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
-  Widget episodeScreen;
+  final Widget episodeScreen;
 
   _buildGestureDetector(
       {Key? key,

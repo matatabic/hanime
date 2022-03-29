@@ -2,23 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
+import 'package:hanime/common/hero_photo.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/providers/watch_state.dart';
+import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:like_button/like_button.dart';
-import 'package:provider/src/provider.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final Function(String url) playerChange;
 
-  const BriefScreen(
-      {Key? key, required this.watchEntity, required this.playerChange})
+  BriefScreen({Key? key, required this.watchEntity, required this.playerChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    WatchState watchState = context.read<WatchState>();
     return Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         color: Color.fromRGBO(58, 60, 63, 1),
@@ -26,14 +24,25 @@ class BriefScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
-            ClipOval(
-              child: Container(
-                width: Adapt.px(140),
-                height: Adapt.px(140),
-                child: CommonImages(
-                  imgUrl: watchEntity.info.imgUrl,
-                ),
-              ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(NoAnimRouter(
+                  HeroPhotoViewRouteWrapper(
+                    imageProvider: NetworkImage(watchEntity.info.imgUrl),
+                  ),
+                ));
+              },
+              child: Hero(
+                  tag: "heroTag",
+                  child: ClipOval(
+                    child: Container(
+                      width: Adapt.px(140),
+                      height: Adapt.px(140),
+                      child: CommonImages(
+                        imgUrl: watchEntity.info.imgUrl,
+                      ),
+                    ),
+                  )),
             ),
             Expanded(
               child: Padding(
@@ -51,10 +60,11 @@ class BriefScreen extends StatelessWidget {
                           Text(
                             watchEntity.info.countTitle,
                           ),
-                          LikeButton(
-                            isLiked: true,
-                            size: Adapt.px(60),
-                          ),
+                          MyScreen()
+                          // LikeButton(
+                          //   isLiked: true,
+                          //   size: Adapt.px(60),
+                          // ),
                         ],
                       ),
                     )

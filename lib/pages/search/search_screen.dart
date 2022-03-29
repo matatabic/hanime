@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -267,8 +266,10 @@ class _SearchScreenState extends State<SearchScreen>
   Widget getItemContainer(SearchVideo item) {
     return InkWell(
         onTap: () {
-          Navigator.push(context,
-              Right2LeftRouter(child: WatchScreen(htmlUrl: item.htmlUrl)));
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => WatchScreen(htmlUrl: item.htmlUrl)));
         },
         child: Flex(
           direction: Axis.vertical,

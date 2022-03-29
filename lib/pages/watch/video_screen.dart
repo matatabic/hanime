@@ -22,7 +22,7 @@ class PlayerShowConfig implements ShowConfigAbs {
   @override
   bool autoNext = false;
   @override
-  bool bottomPro = true;
+  bool bottomPro = false;
   @override
   bool stateAuto = true;
   @override
@@ -32,7 +32,7 @@ class PlayerShowConfig implements ShowConfigAbs {
 class VideoScreen extends StatefulWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
-  Widget episodeScreen;
+  final Widget episodeScreen;
   final Function(String url) playerChange;
 
   VideoScreen(
@@ -51,11 +51,6 @@ class _VideoScreenState extends State<VideoScreen>
     with TickerProviderStateMixin {
   VideoSourceFormat? _videoSource;
 
-  // int _curTabIdx = 0;
-  // int _curActiveIdx = 0;
-  // var _videoIndex;
-  // bool _loading = false;
-
   ShowConfigAbs vCfg = PlayerShowConfig();
 
   @override
@@ -68,7 +63,6 @@ class _VideoScreenState extends State<VideoScreen>
 
   void _playerValueListener() {
     FijkValue value = widget.player.value;
-    print("bofangbofang");
     print(value);
   }
 
@@ -119,32 +113,7 @@ class _VideoScreenState extends State<VideoScreen>
                 // createConList: _createTabConList(widget.watchEntity.episode)
                 episodeScreen: widget.episodeScreen);
           },
-        ),
-        // BriefScreen(watchEntity: widget.watchEntity),
-        // EpisodeScreen(
-        //     watchEntity: widget.watchEntity,
-        //     videoIndex: _videoIndex,
-        //     loading: _loading,
-        //     containerHeight: 250,
-        //     itemWidth: 320,
-        //     itemHeight: 165,
-        //     direction: true,
-        //     onTap: (index) async {
-        //       if (index == _videoIndex || _loading) {
-        //         return;
-        //       }
-        //       setState(() {
-        //         _loading = true;
-        //         _videoIndex = index;
-        //       });
-        //       WatchEntity data = await getEpisodeData(
-        //           widget.watchEntity.episode[index].htmlUrl);
-        //       playerChange(data.videoData.video[0].list[0].url);
-        //       context.read<WatchState>().setTitle(data.info.shareTitle);
-        //       setState(() {
-        //         _loading = false;
-        //       });
-        //     }),
+        )
       ],
     );
   }

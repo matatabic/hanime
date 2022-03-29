@@ -44,7 +44,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           index: currentIndex,
           items: <Widget>[
             Icon(Icons.home, size: Adapt.px(60)),
-            Icon(Icons.fiber_new, size: Adapt.px(60)),
+            Icon(Icons.search, size: Adapt.px(60)),
             Icon(Icons.person, size: Adapt.px(60)),
             Icon(Icons.repeat, size: Adapt.px(60)),
           ],

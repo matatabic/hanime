@@ -6,13 +6,14 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 
 class HomeHeaderScreen extends StatelessWidget {
   final List<HomeSwiper> swiperList;
-  final String current_swiper_image;
+  final String currentSwiperImage;
 
   const HomeHeaderScreen(
-      {Key? key, required this.swiperList, required this.current_swiper_image})
+      {Key? key, required this.swiperList, required this.currentSwiperImage})
       : super(key: key);
 
   @override
@@ -47,7 +48,15 @@ class HomeHeaderScreen extends StatelessWidget {
           ]),
         ),
         Container(
-          child: SwiperScreen(swiperList: swiperList),
+          child: SwiperScreen(
+              swiperList: swiperList,
+              onTap: (HomeSwiper swiper) => {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                WatchScreen(htmlUrl: swiper.url)))
+                  }),
           alignment: AlignmentDirectional.bottomStart,
         )
       ]),

@@ -1,15 +1,15 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_state.dart';
 import 'package:hanime/services/home_services.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'home_body_screen.dart';
+import 'cover_photo.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen>
                 SliverToBoxAdapter(
                     child: HomeHeaderScreen(
                   swiperList: homeEntity.swiper,
-                  current_swiper_image: homeEntity
+                  currentSwiperImage: homeEntity
                       .swiper[context.watch<HomeState>().swiperIndex].imgUrl,
                 )),
                 // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
@@ -112,6 +112,47 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ],
         ));
+  }
+
+  Widget getGroupContainer(HomeVideo item) {
+    return Column(children: <Widget>[
+      Container(
+        height: Adapt.px(70),
+        alignment: Alignment.topCenter,
+        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Row(children: <Widget>[
+          Text(
+            item.label,
+            style: TextStyle(fontSize: Adapt.px(38)),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            size: Adapt.px(36),
+          )
+        ]),
+        width: double.infinity,
+      ),
+      Container(
+          height: Adapt.px(380),
+          child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: item.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CoverPhoto(
+                  data: item.data[index],
+                  width: Adapt.px(260),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              WatchScreen(htmlUrl: item.data[index].url)),
+                    );
+                  },
+                );
+              }))
+    ]);
   }
 
   void _onRefresh() async {

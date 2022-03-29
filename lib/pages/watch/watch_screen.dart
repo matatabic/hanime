@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
@@ -198,7 +197,9 @@ class _WatchScreenState extends State<WatchScreen> {
     return InkWell(
         onTap: () {
           Navigator.push(
-              context, Right2LeftRouter(child: WatchScreen(htmlUrl: item.url)));
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => WatchScreen(htmlUrl: item.url)));
         },
         child: Stack(
           alignment: Alignment(-1, 1),

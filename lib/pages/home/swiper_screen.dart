@@ -8,7 +8,9 @@ import 'package:provider/src/provider.dart';
 
 class SwiperScreen extends StatelessWidget {
   final List<HomeSwiper> swiperList;
-  const SwiperScreen({Key? key, required this.swiperList}) : super(key: key);
+  final Function(HomeSwiper swiper) onTap;
+  const SwiperScreen({Key? key, required this.swiperList, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,9 @@ class SwiperScreen extends StatelessWidget {
       height: Adapt.px(400),
       child: Swiper(
         autoplay: false,
+        onTap: (int index) {
+          onTap(swiperList[index]);
+        },
         itemBuilder: (BuildContext context, int index) {
           return CommonImages(
               imgUrl:
