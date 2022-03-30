@@ -4,11 +4,11 @@ import 'package:html/parser.dart';
 
 SearchGenre genre = SearchGenre.fromJson({
   "label": "影片類型",
-  "data": ["全部", "裏番", "泡麵番", "3D動畫", "同人作品", "Cosplay"]
+  "data": ["全部", "H動漫", "3D動畫", "同人作品", "Cosplay"]
 });
 
-SearchTag searchTag = SearchTag.fromJson({
-  "label": "内容標籤",
+var tag = {
+  "label": "標籤",
   "data": [
     {
       "label": "影片屬性：",
@@ -166,9 +166,9 @@ SearchTag searchTag = SearchTag.fromJson({
       ]
     },
   ]
-});
+};
 
-SearchBrand brand = SearchBrand.fromJson({
+var brand = {
   "label": "製作公司",
   "data": [
     "妄想実現めでぃあ",
@@ -235,18 +235,17 @@ SearchBrand brand = SearchBrand.fromJson({
     "トップマーシャル",
     "サークルトリビュート"
   ]
-});
+};
 
 SearchSort sort = SearchSort.fromJson({
   "label": "排序方式",
   "data": ["无", "本日排行", "最新內容", "最新上傳", "觀看次數"]
 });
 
-SearchDate date = SearchDate.fromJson({
+var date = {
   "label": "發佈日期",
   "data": {
     "year": [
-      "全部",
       "2021",
       "2020",
       "2019",
@@ -281,7 +280,6 @@ SearchDate date = SearchDate.fromJson({
       "1990",
     ],
     "month": [
-      "全部",
       "1",
       "2",
       "3",
@@ -296,7 +294,7 @@ SearchDate date = SearchDate.fromJson({
       "12",
     ],
   }
-});
+};
 
 SearchDuration duration = SearchDuration.fromJson({
   "label": "片長",
@@ -308,7 +306,7 @@ SearchDuration duration = SearchDuration.fromJson({
   ]
 });
 
-Future getSearchData(_htmlUrl) async {
+Future getSearchDataTmp(_htmlUrl) async {
   Response response = await Dio().get(_htmlUrl);
 
   final resHtml = response.data;
@@ -322,15 +320,17 @@ Future getSearchData(_htmlUrl) async {
     page = int.parse(match.group(0)!);
   }
 
-  var videoElements = document.querySelectorAll(".card-mobile-panel");
+  var videoElements = document.querySelectorAll(".video-card");
   if (videoElements.length > 0) {
     for (var videoElement in videoElements) {
       videoList.add({
-        "title": videoElement.querySelector(".card-mobile-title")!.text,
-        "imgUrl": videoElement.querySelector("img:nth-child(3)"),
+        "title": videoElement.querySelector("a")!.attributes['title'],
+        "imgUrl": videoElement.attributes['data-poster'],
         "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
-        "duration": videoElement.querySelector(".card-mobile-duration")!.text,
-        "author": videoElement.querySelector(".card-mobile-user")!.text
+        "duration": videoElement.querySelector(".preview-wrapper div")!.text,
+        "author": videoElement
+            .querySelector(".card-info-wrapper div:nth-child(3)")!
+            .text
       });
     }
   } else {
@@ -346,6 +346,7 @@ Future getSearchData(_htmlUrl) async {
       });
     }
   }
-
   return {"video": videoList, "page": page};
 }
+
+// https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=

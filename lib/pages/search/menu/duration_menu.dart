@@ -2,19 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/menu_row.dart';
-import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
-
-SearchDuration duration = SearchDuration.fromJson({
-  "label": "片長",
-  "data": [
-    "全部",
-    "短片（4 分鐘內）",
-    "中長片（4 至 20 分鐘）",
-    "長片（20 分鐘以上）",
-  ]
-});
 
 class DurationMenu extends StatelessWidget {
   final int currentScreen;

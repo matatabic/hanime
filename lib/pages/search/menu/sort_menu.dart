@@ -2,14 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/menu_row.dart';
-import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
-
-SearchSort sort = SearchSort.fromJson({
-  "label": "排序方式",
-  "data": ["无", "本日排行", "最新內容", "最新上傳", "觀看次數"]
-});
 
 class SortMenu extends StatelessWidget {
   final int currentScreen;

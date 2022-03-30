@@ -2,14 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/menu_row.dart';
-import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
-
-SearchGenre genre = SearchGenre.fromJson({
-  "label": "影片類型",
-  "data": ["全部", "H動漫", "3D動畫", "同人作品", "Cosplay"]
-});
 
 class GenreMenu extends StatelessWidget {
   final int currentScreen;
