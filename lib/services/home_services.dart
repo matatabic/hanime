@@ -8,6 +8,7 @@ Future getHomeData() async {
   List dataList = [];
   List videoList = [];
   List groupList = [];
+  List temp = [];
 
   List videoElements = document.querySelectorAll(".owl-home-top-row a");
 
@@ -18,12 +19,26 @@ Future getHomeData() async {
       "htmlUrl": videoElement.attributes['href']
     });
   }
-
+//+.owl-home-row
   List groupElements =
-      document.querySelectorAll(".hidden-ms.home-rows-margin-top");
+      document.querySelectorAll(".content-padding-new:not(.hidden-sm)");
+  // print(groupElements);
+  // for (var groupElement in groupElements) {
+  //   List aa = groupElement.querySelectorAll("a");
+  //   for (var groupElement1 in aa) {
+  //     print(groupElement1.attributes['href']);
+  //   }
+  // }
   for (var groupElement in groupElements) {
     groupList.add({"label": groupElement.querySelector("h3")!.text});
+    List contentElements = groupElement.querySelectorAll(".card-mobile-panel");
+
+    if (contentElements.length > 0) {
+      for (var contentElement in contentElements) {
+        // print(contentElement.querySelector("a").attributes['href']);
+      }
+    } else if (groupElement.querySelector("+.owl-home-row") > 0) {}
   }
-  print(groupList);
+  // print(groupList);
   // return {"swiper": swiperList, "video": dataList};
 }

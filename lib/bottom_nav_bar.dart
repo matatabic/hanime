@@ -67,7 +67,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             children: <Widget>[
               HomeScreen(),
               SearchScreen(),
-              MinePage(),
+              Example508(),
               AttachedToast(),
             ],
           ),
