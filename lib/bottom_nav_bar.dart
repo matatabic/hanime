@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/frosted_glass_demo.dart';
 import 'package:hanime/pages/home/home_screen.dart';
-import 'package:hanime/pages/hot/hot_screen.dart';
+import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 
 import 'common/adapt.dart';
@@ -67,7 +67,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             children: <Widget>[
               HomeScreen(),
               SearchScreen(),
-              Example508(),
+              Complex(),
               AttachedToast(),
             ],
           ),

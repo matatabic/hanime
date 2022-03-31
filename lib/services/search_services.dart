@@ -323,13 +323,16 @@ Future getSearchData(_htmlUrl) async {
   }
 
   var videoElements = document.querySelectorAll(".card-mobile-panel");
+  print(videoElements.length);
   if (videoElements.length > 0) {
     for (var videoElement in videoElements) {
+      var durationElement = videoElement.querySelector(".card-mobile-duration");
+      String duration = durationElement != null ? durationElement.text : "";
       videoList.add({
         "title": videoElement.querySelector(".card-mobile-title")!.text,
         "imgUrl": videoElement.querySelector("img:nth-child(3)"),
         "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
-        "duration": videoElement.querySelector(".card-mobile-duration")!.text,
+        "duration": duration,
         "author": videoElement.querySelector(".card-mobile-user")!.text
       });
     }
@@ -346,6 +349,6 @@ Future getSearchData(_htmlUrl) async {
       });
     }
   }
-
+  // LogUtil.d(videoList);
   return {"video": videoList, "page": page};
 }
