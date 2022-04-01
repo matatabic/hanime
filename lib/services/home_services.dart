@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
@@ -179,6 +182,6 @@ Future getHomeData() async {
     "hot": hot,
     "watch": watch
   };
-
+  LogUtil.d(json.encode(homeData));
   return homeData;
 }

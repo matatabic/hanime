@@ -87,7 +87,7 @@ class HomeTopVideo {
 class HomeLatest {
   late String label;
   late String labelHtml;
-  late List<List> video;
+  late List<List<HomeLatestVideoHomeLatestVideo>> video;
 
   HomeLatest();
 
@@ -167,7 +167,7 @@ class HomeFireVideo {
 class HomeTag {
   late String label;
   late String labelHtml;
-  late List<List> video;
+  late List<List<HomeTagVideoHomeTagVideo>> video;
 
   HomeTag();
 
@@ -242,7 +242,7 @@ class HomeHotVideo {
 class HomeWatch {
   late String label;
   late String labelHtml;
-  late List<List> video;
+  late List<List<HomeWatchVideoHomeWatchVideo>> video;
 
   HomeWatch();
 

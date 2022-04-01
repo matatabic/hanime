@@ -138,7 +138,8 @@ HomeLatest $HomeLatestFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeLatest.labelHtml = labelHtml;
   }
-  final List<List>? video = jsonConvert.convertListNotNull<List>(json['video']);
+  final List<List<HomeLatestVideoHomeLatestVideo>>? video = jsonConvert
+      .convertListNotNull<List<HomeLatestVideoHomeLatestVideo>>(json['video']);
   if (video != null) {
     homeLatest.video = video;
   }
@@ -149,7 +150,8 @@ Map<String, dynamic> $HomeLatestToJson(HomeLatest entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['labelHtml'] = entity.labelHtml;
-  data['video'] = entity.video;
+  data['video'] =
+      entity.video.map((v) => v.map((val) => val.toJson())).toList();
   return data;
 }
 
@@ -262,7 +264,8 @@ HomeTag $HomeTagFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeTag.labelHtml = labelHtml;
   }
-  final List<List>? video = jsonConvert.convertListNotNull<List>(json['video']);
+  final List<List<HomeTagVideoHomeTagVideo>>? video = jsonConvert
+      .convertListNotNull<List<HomeTagVideoHomeTagVideo>>(json['video']);
   if (video != null) {
     homeTag.video = video;
   }
@@ -273,7 +276,8 @@ Map<String, dynamic> $HomeTagToJson(HomeTag entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['labelHtml'] = entity.labelHtml;
-  data['video'] = entity.video;
+  data['video'] =
+      entity.video.map((v) => v.map((val) => val.toJson())).toList();
   return data;
 }
 
@@ -371,7 +375,8 @@ HomeWatch $HomeWatchFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeWatch.labelHtml = labelHtml;
   }
-  final List<List>? video = jsonConvert.convertListNotNull<List>(json['video']);
+  final List<List<HomeWatchVideoHomeWatchVideo>>? video = jsonConvert
+      .convertListNotNull<List<HomeWatchVideoHomeWatchVideo>>(json['video']);
   if (video != null) {
     homeWatch.video = video;
   }
@@ -382,7 +387,8 @@ Map<String, dynamic> $HomeWatchToJson(HomeWatch entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['labelHtml'] = entity.labelHtml;
-  data['video'] = entity.video;
+  data['video'] =
+      entity.video.map((v) => v.map((val) => val.toJson())).toList();
   return data;
 }
 

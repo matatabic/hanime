@@ -1,12 +1,11 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
+import 'package:hanime/pages/home/card_photo.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
-import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_state.dart';
 import 'package:hanime/services/home_services.dart';
@@ -134,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
       Container(
           height: Adapt.px(70),
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          margin: EdgeInsets.only(left: Adapt.px(5)),
           child: Row(children: <Widget>[
             Text(
               data.label,
@@ -146,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen>
             )
           ]),
           width: double.infinity),
-      Container(
-          height: Adapt.px(380),
+      SizedBox(
+          height: Adapt.px(400),
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -157,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen>
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
                   latest: data.video[index].latest,
-                  width: Adapt.px(260),
+                  width: Adapt.px(270),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -172,12 +171,11 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget latestWidget(HomeLatest data) {
-    print(data.video[0][1]);
     return Column(children: <Widget>[
       Container(
           height: Adapt.px(70),
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          margin: EdgeInsets.only(left: Adapt.px(5)),
           child: Row(children: <Widget>[
             Text(
               data.label,
@@ -190,20 +188,22 @@ class _HomeScreenState extends State<HomeScreen>
           ]),
           width: double.infinity),
       SizedBox(
-        height: 300,
+        height: Adapt.px(780),
         child: InfiniteCarousel.builder(
-          itemCount: kDemoImages.length,
-          itemExtent: 180,
+          itemCount: data.video.length,
+          itemExtent: Adapt.screenW() / 2,
           center: false,
           anchor: 1,
           velocityFactor: 1,
           itemBuilder: (context, itemIndex, realIndex) {
             return Padding(
               padding: EdgeInsets.all(2.0),
-              child: Container(
-                  child: Text(itemIndex.toString()),
-                  color: Color.fromRGBO(Random().nextInt(256),
-                      Random().nextInt(256), Random().nextInt(256), 1)),
+              child: Column(
+                children: [
+                  CardPhoto(data: data.video[itemIndex][0]),
+                  CardPhoto(data: data.video[itemIndex][1])
+                ],
+              ),
             );
           },
         ),
@@ -211,16 +211,92 @@ class _HomeScreenState extends State<HomeScreen>
     ]);
   }
 
-  Widget fireWidget(HomeFire homeFire) {
-    return Container();
+  Widget fireWidget(HomeFire data) {
+    return Column(children: <Widget>[
+      Container(
+          height: Adapt.px(70),
+          alignment: Alignment.topCenter,
+          margin: EdgeInsets.only(left: Adapt.px(5)),
+          child: Row(children: <Widget>[
+            Text(
+              data.label,
+              style: TextStyle(fontSize: Adapt.px(38)),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: Adapt.px(36),
+            )
+          ]),
+          width: double.infinity),
+      SizedBox(
+          height: Adapt.px(400),
+          child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: data.video.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CoverPhoto(
+                  title: data.video[index].title,
+                  imgUrl: data.video[index].imgUrl,
+                  // latest: data.video[index].latest,
+                  width: Adapt.px(270),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
+                    );
+                  },
+                );
+              }))
+    ]);
   }
 
   Widget tagWidget(HomeTag homeTag) {
     return Container();
   }
 
-  Widget hotWidget(HomeHot homeHot) {
-    return Container();
+  Widget hotWidget(HomeHot data) {
+    return Column(children: <Widget>[
+      Container(
+          height: Adapt.px(70),
+          alignment: Alignment.topCenter,
+          margin: EdgeInsets.only(left: Adapt.px(5)),
+          child: Row(children: <Widget>[
+            Text(
+              data.label,
+              style: TextStyle(fontSize: Adapt.px(38)),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: Adapt.px(36),
+            )
+          ]),
+          width: double.infinity),
+      SizedBox(
+          height: Adapt.px(400),
+          child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: data.video.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CoverPhoto(
+                  title: data.video[index].title,
+                  imgUrl: data.video[index].imgUrl,
+                  // latest: data.video[index].latest,
+                  width: Adapt.px(270),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
+                    );
+                  },
+                );
+              }))
+    ]);
   }
 
   Widget watchWidget(HomeWatch homeWatch) {
@@ -233,47 +309,6 @@ class _HomeScreenState extends State<HomeScreen>
       color: Colors.yellow,
     );
   }
-
-  // Widget getGroupContainer(dynamic item) {
-  //   return Column(children: <Widget>[
-  //     Container(
-  //       height: Adapt.px(70),
-  //       alignment: Alignment.topCenter,
-  //       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-  //       child: Row(children: <Widget>[
-  //         Text(
-  //           item.label,
-  //           style: TextStyle(fontSize: Adapt.px(38)),
-  //         ),
-  //         Icon(
-  //           Icons.arrow_forward_ios,
-  //           size: Adapt.px(36),
-  //         )
-  //       ]),
-  //       width: double.infinity,
-  //     ),
-  //     Container(
-  //         height: Adapt.px(380),
-  //         child: ListView.builder(
-  //             shrinkWrap: true,
-  //             scrollDirection: Axis.horizontal,
-  //             itemCount: item.data.length,
-  //             itemBuilder: (BuildContext context, int index) {
-  //               return CoverPhoto(
-  //                 data: item.data[index],
-  //                 width: Adapt.px(260),
-  //                 onTap: () {
-  //                   Navigator.push(
-  //                     context,
-  //                     CupertinoPageRoute(
-  //                         builder: (context) =>
-  //                             WatchScreen(htmlUrl: item.data[index].url)),
-  //                   );
-  //                 },
-  //               );
-  //             }))
-  //   ]);
-  // }
 
   void _onRefresh() async {
     setState(() {
