@@ -28,7 +28,7 @@ class HomeHeaderScreen extends StatelessWidget {
                 child: CommonImages(
               imgUrl:
                   'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-              // current_swiper_image,
+              // currentSwiperImage,
             )),
             Container(
               child: new ClipRect(
@@ -55,7 +55,7 @@ class HomeHeaderScreen extends StatelessWidget {
                         context,
                         CupertinoPageRoute(
                             builder: (context) =>
-                                WatchScreen(htmlUrl: swiper.url)))
+                                WatchScreen(htmlUrl: swiper.htmlUrl)))
                   }),
           alignment: AlignmentDirectional.bottomStart,
         )

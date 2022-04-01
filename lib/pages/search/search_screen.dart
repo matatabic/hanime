@@ -241,7 +241,6 @@ class _SearchScreenState extends State<SearchScreen>
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     List<SearchVideo> videoList = snapshot.data;
 
-    print(videoList.length);
     return SliverGrid(
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

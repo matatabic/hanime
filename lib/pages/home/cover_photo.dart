@@ -1,53 +1,87 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/common_image.dart';
-import 'package:hanime/entity/home_entity.dart';
 
 class CoverPhoto extends StatelessWidget {
-  final HomeVideoData data;
+  final String title;
+  final String imgUrl;
+  final bool latest;
   final VoidCallback onTap;
   final double width;
 
   CoverPhoto(
-      {Key? key, required this.data, required this.onTap, required this.width})
+      {Key? key,
+      required this.title,
+      required this.imgUrl,
+      this.latest = false,
+      required this.onTap,
+      required this.width})
       : super(key: key);
 
   Widget build(BuildContext context) {
+    double h = 25, w = 100;
+
+    final span = TextSpan(text: "最新", style: TextStyle(fontSize: 15));
+
+    final tp = TextPainter(text: span, textDirection: TextDirection.ltr)
+      ..layout();
+    h = tp.height;
+    w = tp.width * 2;
+
     return Container(
         width: width,
         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: InkWell(
             onTap: onTap,
-            child: Stack(
-              alignment: Alignment(-1, 1),
-              children: <Widget>[
-                ConstrainedBox(
-                  child: CommonImages(
-                    imgUrl:
-                        // data.imgUrl
-                        'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                  ),
-                  constraints: new BoxConstraints.expand(),
-                ),
-                Container(
-                  child: Text(
-                    data.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: <Shadow>[
-                        Shadow(
-                          offset: Offset(2.5, 2.5),
-                          blurRadius: 3.5,
-                          color: Color.fromARGB(255, 0, 0, 0),
-                        ),
-                      ],
+            child: ClipRect(
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment(-1, 1),
+                children: <Widget>[
+                  ConstrainedBox(
+                      child: CommonImages(
+                        imgUrl:
+                            // data.imgUrl
+                            'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                      ),
+                      constraints: new BoxConstraints.expand()),
+                  latest
+                      ? Positioned(
+                          right: 0,
+                          top: sqrt(w * w / 2 - sqrt2 * w * h + h * h),
+                          child: Transform.rotate(
+                            alignment: Alignment.bottomRight,
+                            angle: pi / 4,
+                            child: Container(
+                              color: Colors.purpleAccent,
+                              width: w,
+                              height: h,
+                              child: Center(child: Text.rich(span)),
+                            ),
+                          ))
+                      : Container(),
+                  Container(
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(2.5, 2.5),
+                            blurRadius: 3.5,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  )
+                ],
+              ),
             )));
   }
 }

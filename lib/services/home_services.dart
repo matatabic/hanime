@@ -1,32 +1,62 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
   Response response = await Dio().get("https://hanime1.me");
   final res = response.data;
   var document = parse(res);
-  List tempList = [];
-  List videoList = [];
-  List groupList = [];
+
   List temp = [];
+
+  List topList = [];
+  List latestList = [];
+  List fireList = [];
+  List tagList = [];
+  List hotList = [];
+  List watchList = [];
+
+  List swiper = [
+    {
+      "title": "[yuukis] 亞絲娜 [刀劍神域]",
+      "imgUrl": "https://i.imgur.com/meKHvP3l.png",
+      "htmlUrl": "https://hanime1.me/watch?v=37460",
+    },
+    {
+      "title": "[JXH33] 早坂愛 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
+      "imgUrl": "https://i.imgur.com/vZWIadjl.png",
+      "htmlUrl": "https://hanime1.me/watch?v=38240",
+    },
+    {
+      "title": "[akinoya] 阿爾托莉雅·潘德拉貢 [Fate/stay night]",
+      "imgUrl": "https://i.imgur.com/AnWHF7xl.png",
+      "htmlUrl": "https://hanime1.me/watch?v=38258",
+    },
+    {
+      "title": "菜月昴君和愛蜜莉雅碳",
+      "imgUrl": "https://i.imgur.com/PzHQqSHl.png",
+      "htmlUrl": "https://hanime1.me/watch?v=211",
+    },
+    {
+      "title": "[Kamuo] 優菈 [原神]",
+      "imgUrl": "https://i.imgur.com/PnmtcyQl.png",
+      "htmlUrl": "https://hanime1.me/watch?v=36679",
+    },
+  ];
 
   var videoElements = document.querySelectorAll(".owl-home-top-row a"); //第一个
   for (var videoElement in videoElements) {
-    print(videoElement.nextElementSibling);
-    tempList.add({
+    topList.add({
       "title": videoElement.querySelector(".owl-home-rows-title")!.text,
       "imgUrl": videoElement.querySelector("img")!.attributes['src'],
       "htmlUrl": videoElement.attributes['href'],
-      'latest ': videoElement.nextElementSibling != null ? true : false
+      'latest': videoElement.nextElementSibling != null ? true : false
     });
   }
-  groupList.add(tempList);
-  groupList
-      .add({"label": null, "labelHtml": null, "video": tempList, "type": 0});
-  tempList = [];
+  var top = {
+    "label": "置頂推薦",
+    "labelHtml": "https://hanime1.me/search",
+    "video": topList,
+  };
 
   var contentElements = document.querySelectorAll(".content-padding-new");
   var videos = contentElements[0].querySelectorAll(".item");
@@ -40,41 +70,39 @@ Future getHomeData() async {
         'genre': card.querySelector('.card-mobile-genre-new')!.text,
         'author': card.querySelector('.card-mobile-user')!.text,
         'created': card.querySelector('.card-mobile-created-text')!.text,
-        'duration': card.querySelector('.card-mobile-duration')!.text.trim()
+        'duration': card.querySelector('.card-mobile-duration') != null
+            ? card.querySelector('.card-mobile-duration')!.text.trim()
+            : ""
       });
     }
-    tempList.add(temp);
+    latestList.add(temp);
     temp = [];
   }
 
-  groupList.add({
+  var latest = {
     "label": contentElements[0].querySelector("h3")!.text,
     "labelHtml": contentElements[0]
         .querySelector(".home-rows-header")!
         .attributes['href'],
-    "video": tempList,
-    "type": 1
-  });
-  tempList = [];
+    "video": latestList,
+  };
 
   videos = contentElements[1].nextElementSibling!.querySelectorAll("a");
   for (var video in videos) {
-    tempList.add({
+    fireList.add({
       'title': video.querySelector('.owl-home-rows-title')!.text,
       "imgUrl": video.querySelector("img")!.attributes['src'],
       'htmlUrl': video.attributes['href'],
     });
   }
 
-  groupList.add({
+  var fire = {
     "label": contentElements[1].querySelector("h3")!.text,
     "labelHtml": contentElements[1]
         .querySelector(".home-rows-header")!
         .attributes['href'],
-    "video": tempList,
-    "type": 0
-  });
-  tempList = [];
+    "video": fireList,
+  };
 
   videos = contentElements[2].querySelectorAll(".item");
   for (var video in videos) {
@@ -87,38 +115,33 @@ Future getHomeData() async {
         'total': card.querySelector('.home-tags-total')!.text,
       });
     }
-    tempList.add(temp);
+    tagList.add(temp);
     temp = [];
   }
-
-  groupList.add({
+  var tag = {
     "label": contentElements[2].querySelector("h3")!.text,
     "labelHtml": contentElements[2]
         .querySelector(".home-rows-header")!
         .attributes['href'],
-    "video": tempList,
-    "type": 1
-  });
-  tempList = [];
+    "video": tagList,
+  };
 
   videos = contentElements[3].nextElementSibling!.querySelectorAll("a");
   for (var video in videos) {
-    tempList.add({
+    hotList.add({
       'title': video.querySelector('.owl-home-rows-title')!.text,
       "imgUrl": video.querySelector("img")!.attributes['src'],
       'htmlUrl': video.attributes['href'],
     });
   }
 
-  groupList.add({
+  var hot = {
     "label": contentElements[3].querySelector("h3")!.text,
     "labelHtml": contentElements[3]
         .querySelector(".home-rows-header")!
         .attributes['href'],
-    "video": tempList,
-    "type": 0
-  });
-  tempList = [];
+    "video": hotList,
+  };
 
   videos = contentElements[4].querySelectorAll(".item");
   for (var video in videos) {
@@ -131,22 +154,31 @@ Future getHomeData() async {
         'genre': card.querySelector('.card-mobile-genre-new')!.text,
         'author': card.querySelector('.card-mobile-user')!.text,
         'created': card.querySelector('.card-mobile-created-text')!.text,
-        'duration': card.querySelector('.card-mobile-duration')!.text.trim()
+        'duration': card.querySelector('.card-mobile-duration') != null
+            ? card.querySelector('.card-mobile-duration')!.text.trim()
+            : ""
       });
     }
-    tempList.add(temp);
+    watchList.add(temp);
     temp = [];
   }
-
-  groupList.add({
+  var watch = {
     "label": contentElements[4].querySelector("h3")!.text,
     "labelHtml": contentElements[4]
         .querySelector(".home-rows-header")!
         .attributes['href'],
-    "video": tempList,
-    "type": 1
-  });
+    "video": watchList,
+  };
 
-  LogUtil.d(json.encode(groupList));
-  // return {"swiper": swiperList, "video": dataList};
+  var homeData = {
+    "swiper": swiper,
+    "top": top,
+    "latest": latest,
+    "fire": fire,
+    "tag": tag,
+    "hot": hot,
+    "watch": watch
+  };
+
+  return homeData;
 }

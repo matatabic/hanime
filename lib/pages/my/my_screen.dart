@@ -69,7 +69,7 @@ class _ComplexState extends State<Complex> {
                     animation: _controller,
                     builder: (context, child) {
                       final diff = (_controller.offset - currentOffset);
-                      final maxPadding = 30.0;
+                      final maxPadding = 10.0;
                       final _carouselRatio = 120 / maxPadding;
 
                       return Padding(

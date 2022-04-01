@@ -1,11 +1,16 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
+import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_state.dart';
 import 'package:hanime/services/home_services.dart';
+import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -79,81 +84,196 @@ class _HomeScreenState extends State<HomeScreen>
     HomeEntity homeEntity = snapshot.data;
     return NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
-        child: Stack(
-          children: [
-            SmartRefresher(
-              enablePullDown: true,
-              header: WaterDropMaterialHeader(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              child: CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
-                SliverToBoxAdapter(
-                    child: HomeHeaderScreen(
-                  swiperList: homeEntity.swiper,
-                  currentSwiperImage: homeEntity
-                      .swiper[context.watch<HomeState>().swiperIndex].imgUrl,
-                )),
-                // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
-                SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return getGroupContainer(homeEntity.video[index]);
-                    }, childCount: homeEntity.video.length),
-                    itemExtent: Adapt.px(450)),
-              ]),
-            ),
-            Container(
-              height: MediaQuery.of(context).padding.top,
-              child: AnimatedBuilder(
-                  animation: _colorAnimationController,
-                  builder: (context, child) => Container(
-                        color: _colorTween.value,
-                      )),
-            ),
-          ],
-        ));
+        child: Stack(children: [
+          SmartRefresher(
+            enablePullDown: true,
+            header: WaterDropMaterialHeader(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            child: CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
+              SliverToBoxAdapter(
+                  child: HomeHeaderScreen(
+                swiperList: homeEntity.swiper,
+                currentSwiperImage: homeEntity
+                    .swiper[context.watch<HomeState>().swiperIndex].imgUrl,
+              )),
+              // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                switch (index) {
+                  case 0:
+                    return topWidget(homeEntity.top);
+                  case 1:
+                    return latestWidget(homeEntity.latest);
+                  case 2:
+                    return fireWidget(homeEntity.fire);
+                  case 3:
+                    return tagWidget(homeEntity.tag);
+                  case 4:
+                    return hotWidget(homeEntity.hot);
+                  case 5:
+                    return watchWidget(homeEntity.watch);
+                }
+              }, childCount: 6)),
+            ]),
+          ),
+          Container(
+            height: MediaQuery.of(context).padding.top,
+            child: AnimatedBuilder(
+                animation: _colorAnimationController,
+                builder: (context, child) => Container(
+                      color: _colorTween.value,
+                    )),
+          )
+        ]));
   }
 
-  Widget getGroupContainer(HomeVideo item) {
+  Widget topWidget(HomeTop data) {
     return Column(children: <Widget>[
       Container(
-        height: Adapt.px(70),
-        alignment: Alignment.topCenter,
-        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: Row(children: <Widget>[
-          Text(
-            item.label,
-            style: TextStyle(fontSize: Adapt.px(38)),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: Adapt.px(36),
-          )
-        ]),
-        width: double.infinity,
-      ),
+          height: Adapt.px(70),
+          alignment: Alignment.topCenter,
+          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Row(children: <Widget>[
+            Text(
+              data.label,
+              style: TextStyle(fontSize: Adapt.px(38)),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: Adapt.px(36),
+            )
+          ]),
+          width: double.infinity),
       Container(
           height: Adapt.px(380),
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: item.data.length,
+              itemCount: data.video.length,
               itemBuilder: (BuildContext context, int index) {
                 return CoverPhoto(
-                  data: item.data[index],
+                  title: data.video[index].title,
+                  imgUrl: data.video[index].imgUrl,
+                  latest: data.video[index].latest,
                   width: Adapt.px(260),
                   onTap: () {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
                           builder: (context) =>
-                              WatchScreen(htmlUrl: item.data[index].url)),
+                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
                   },
                 );
               }))
     ]);
   }
+
+  Widget latestWidget(HomeLatest data) {
+    print(data.video[0][1]);
+    return Column(children: <Widget>[
+      Container(
+          height: Adapt.px(70),
+          alignment: Alignment.topCenter,
+          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Row(children: <Widget>[
+            Text(
+              data.label,
+              style: TextStyle(fontSize: Adapt.px(38)),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: Adapt.px(36),
+            )
+          ]),
+          width: double.infinity),
+      SizedBox(
+        height: 300,
+        child: InfiniteCarousel.builder(
+          itemCount: kDemoImages.length,
+          itemExtent: 180,
+          center: false,
+          anchor: 1,
+          velocityFactor: 1,
+          itemBuilder: (context, itemIndex, realIndex) {
+            return Padding(
+              padding: EdgeInsets.all(2.0),
+              child: Container(
+                  child: Text(itemIndex.toString()),
+                  color: Color.fromRGBO(Random().nextInt(256),
+                      Random().nextInt(256), Random().nextInt(256), 1)),
+            );
+          },
+        ),
+      ),
+    ]);
+  }
+
+  Widget fireWidget(HomeFire homeFire) {
+    return Container();
+  }
+
+  Widget tagWidget(HomeTag homeTag) {
+    return Container();
+  }
+
+  Widget hotWidget(HomeHot homeHot) {
+    return Container();
+  }
+
+  Widget watchWidget(HomeWatch homeWatch) {
+    return Container();
+  }
+
+  Widget getCardContainer() {
+    return Container(
+      height: 300,
+      color: Colors.yellow,
+    );
+  }
+
+  // Widget getGroupContainer(dynamic item) {
+  //   return Column(children: <Widget>[
+  //     Container(
+  //       height: Adapt.px(70),
+  //       alignment: Alignment.topCenter,
+  //       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+  //       child: Row(children: <Widget>[
+  //         Text(
+  //           item.label,
+  //           style: TextStyle(fontSize: Adapt.px(38)),
+  //         ),
+  //         Icon(
+  //           Icons.arrow_forward_ios,
+  //           size: Adapt.px(36),
+  //         )
+  //       ]),
+  //       width: double.infinity,
+  //     ),
+  //     Container(
+  //         height: Adapt.px(380),
+  //         child: ListView.builder(
+  //             shrinkWrap: true,
+  //             scrollDirection: Axis.horizontal,
+  //             itemCount: item.data.length,
+  //             itemBuilder: (BuildContext context, int index) {
+  //               return CoverPhoto(
+  //                 data: item.data[index],
+  //                 width: Adapt.px(260),
+  //                 onTap: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     CupertinoPageRoute(
+  //                         builder: (context) =>
+  //                             WatchScreen(htmlUrl: item.data[index].url)),
+  //                   );
+  //                 },
+  //               );
+  //             }))
+  //   ]);
+  // }
 
   void _onRefresh() async {
     setState(() {
