@@ -181,11 +181,13 @@ class _WatchScreenState extends State<WatchScreen> {
             //横轴间距
             crossAxisSpacing: Adapt.px(10),
             //子组件宽高长度比例
-            childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 4 / 3),
+            childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 1.1),
         //加载内容
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            return getItemContainer(watchEntity.commend[index]);
+            return watchEntity.commendCount == 3
+                ? getItemContainer(watchEntity.commend[index])
+                : getItemContainer1(watchEntity.commend[index]);
           },
           childCount: watchEntity.commend.length, //设置个数
         ),
@@ -215,6 +217,47 @@ class _WatchScreenState extends State<WatchScreen> {
             Container(
               child: Text(
                 item.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(2.5, 2.5),
+                      blurRadius: 3.5,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget getItemContainer1(WatchCommend item) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => WatchScreen(htmlUrl: item.url)));
+        },
+        child: Stack(
+          alignment: Alignment(-1, 1),
+          children: <Widget>[
+            ConstrainedBox(
+              child: CommonImages(
+                imgUrl:
+                    // item.imgUrl
+                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+              ),
+              constraints: new BoxConstraints.expand(),
+            ),
+            Container(
+              child: Text(
+                "123",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

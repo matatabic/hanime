@@ -180,10 +180,6 @@ WatchTag $WatchTagFromJson(Map<String, dynamic> json) {
   if (htmlUrl != null) {
     watchTag.htmlUrl = htmlUrl;
   }
-  final String? htle = jsonConvert.convert<String>(json['htle']);
-  if (htle != null) {
-    watchTag.htle = htle;
-  }
   return watchTag;
 }
 
@@ -191,7 +187,6 @@ Map<String, dynamic> $WatchTagToJson(WatchTag entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['htmlUrl'] = entity.htmlUrl;
-  data['htle'] = entity.htle;
   return data;
 }
 
@@ -209,6 +204,14 @@ WatchCommend $WatchCommendFromJson(Map<String, dynamic> json) {
   if (url != null) {
     watchCommend.url = url;
   }
+  final String? author = jsonConvert.convert<String>(json['author']);
+  if (author != null) {
+    watchCommend.author = author;
+  }
+  final String? duration = jsonConvert.convert<String>(json['duration']);
+  if (duration != null) {
+    watchCommend.duration = duration;
+  }
   return watchCommend;
 }
 
@@ -217,5 +220,7 @@ Map<String, dynamic> $WatchCommendToJson(WatchCommend entity) {
   data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;
   data['url'] = entity.url;
+  data['author'] = entity.author;
+  data['duration'] = entity.duration;
   return data;
 }

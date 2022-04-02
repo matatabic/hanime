@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
-import 'package:hanime/pages/home/card_photo.dart';
+import 'package:hanime/pages/home/home_card.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_state.dart';
@@ -14,6 +14,7 @@ import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'cover_photo.dart';
+import 'home_tag_card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -188,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen>
           ]),
           width: double.infinity),
       SizedBox(
-        height: Adapt.px(780),
+        height: Adapt.px(820),
         child: InfiniteCarousel.builder(
           itemCount: data.video.length,
           itemExtent: Adapt.screenW() / 2,
@@ -197,11 +198,11 @@ class _HomeScreenState extends State<HomeScreen>
           velocityFactor: 1,
           itemBuilder: (context, itemIndex, realIndex) {
             return Padding(
-              padding: EdgeInsets.all(2.0),
+              padding: EdgeInsets.all(3),
               child: Column(
                 children: [
-                  CardPhoto(data: data.video[itemIndex][0]),
-                  CardPhoto(data: data.video[itemIndex][1])
+                  HomeCard(data: data.video[itemIndex][0]),
+                  HomeCard(data: data.video[itemIndex][1])
                 ],
               ),
             );
@@ -253,8 +254,45 @@ class _HomeScreenState extends State<HomeScreen>
     ]);
   }
 
-  Widget tagWidget(HomeTag homeTag) {
-    return Container();
+  Widget tagWidget(HomeTag data) {
+    return Column(children: <Widget>[
+      Container(
+          height: Adapt.px(70),
+          alignment: Alignment.topCenter,
+          margin: EdgeInsets.only(left: Adapt.px(5)),
+          child: Row(children: <Widget>[
+            Text(
+              data.label,
+              style: TextStyle(fontSize: Adapt.px(38)),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: Adapt.px(36),
+            )
+          ]),
+          width: double.infinity),
+      SizedBox(
+        height: Adapt.px(480),
+        child: InfiniteCarousel.builder(
+          itemCount: data.video.length,
+          itemExtent: Adapt.screenW() / 2,
+          center: false,
+          anchor: 1,
+          velocityFactor: 1,
+          itemBuilder: (context, itemIndex, realIndex) {
+            return Padding(
+              padding: EdgeInsets.all(3),
+              child: Column(
+                children: [
+                  HomeTagCard(data: data.video[itemIndex][0], index: 0),
+                  HomeTagCard(data: data.video[itemIndex][1], index: 1)
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    ]);
   }
 
   Widget hotWidget(HomeHot data) {
@@ -284,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen>
                 return CoverPhoto(
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
-                  // latest: data.video[index].latest,
                   width: Adapt.px(270),
                   onTap: () {
                     Navigator.push(
@@ -303,11 +340,8 @@ class _HomeScreenState extends State<HomeScreen>
     return Container();
   }
 
-  Widget getCardContainer() {
-    return Container(
-      height: 300,
-      color: Colors.yellow,
-    );
+  Widget cardWidget(HomeWatch homeWatch) {
+    return Container();
   }
 
   void _onRefresh() async {

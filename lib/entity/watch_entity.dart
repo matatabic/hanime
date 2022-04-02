@@ -123,7 +123,6 @@ class WatchEpisode {
 class WatchTag {
   late String title;
   late String htmlUrl;
-  late String htle;
 
   WatchTag();
 
@@ -143,6 +142,8 @@ class WatchCommend {
   late String imgUrl;
   late String title;
   late String url;
+  late String author;
+  late String duration;
 
   WatchCommend();
 

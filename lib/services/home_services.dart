@@ -182,6 +182,6 @@ Future getHomeData() async {
     "hot": hot,
     "watch": watch
   };
-  LogUtil.d(json.encode(homeData));
+  // LogUtil.d(json.encode(homeData));
   return homeData;
 }

@@ -3,6 +3,7 @@ import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
+  print(url);
   Response response = await Dio().get(url);
   final resHtml = response.data;
   var document = parse(resHtml);
@@ -68,18 +69,24 @@ Future getWatchData(url) async {
     commendCount = 2;
     commendElements = document.querySelectorAll(
         "#related-tabcontent .related-video-width-horizontal");
-    print(commendElements.length);
     for (var commendElement in commendElements) {
       commendList.add({
         "imgUrl": commendElement
             .querySelector(".video-card")!
             .attributes["data-poster"],
         "title": commendElement.querySelector("a")!.attributes['title'],
-        "url": commendElement.querySelector("a")!.attributes['href']
+        "url": commendElement.querySelector("a")!.attributes['href'],
+        "author": commendElement
+            .querySelector(".card-info-wrapper div:nth-child(3)")!
+            .text,
+        "duration": commendElement
+            .querySelector("a .preview-wrapper div:nth-child(3)")!
+            .text
+            .trim()
       });
     }
   }
-
+  LogUtil.d(commendList);
   var videoElements = document.querySelectorAll(
       ".hidden-md #video-playlist-wrapper #playlist-scroll .related-watch-wrap");
   // var currentElement = document.querySelector(
