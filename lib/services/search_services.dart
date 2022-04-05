@@ -323,17 +323,24 @@ Future getSearchData(_htmlUrl) async {
   }
 
   var videoElements = document.querySelectorAll(".card-mobile-panel");
-  print(videoElements.length);
+
+  var commendCount = 3;
+
   if (videoElements.length > 0) {
+    commendCount = 2;
     for (var videoElement in videoElements) {
-      var durationElement = videoElement.querySelector(".card-mobile-duration");
-      String duration = durationElement != null ? durationElement.text : "";
       videoList.add({
         "title": videoElement.querySelector(".card-mobile-title")!.text,
-        "imgUrl": videoElement.querySelector("img:nth-child(3)"),
+        "imgUrl":
+            videoElement.querySelector("img:nth-child(3)")!.attributes['src'],
         "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
-        "duration": duration,
-        "author": videoElement.querySelector(".card-mobile-user")!.text
+        'duration': videoElement.querySelector('.card-mobile-duration') != null
+            ? videoElement.querySelector('.card-mobile-duration')!.text.trim()
+            : "",
+        "author": videoElement.querySelector(".card-mobile-user")!.text,
+        "genre": videoElement.querySelector('.card-mobile-genre-new')!.text,
+        "created":
+            videoElement.querySelector('.card-mobile-created-text')!.text,
       });
     }
   } else {
@@ -345,10 +352,13 @@ Future getSearchData(_htmlUrl) async {
         "imgUrl": videoElement.querySelector("img")!.attributes['src'],
         "htmlUrl": videoElement.attributes['href'],
         "duration": "",
-        "author": ""
+        "author": "",
+        "genre": "",
+        "created": ""
       });
     }
   }
-  // LogUtil.d(videoList);
-  return {"video": videoList, "page": page};
+  print("2314421");
+  print(commendCount);
+  return {"video": videoList, "commendCount": commendCount, "page": page};
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class HeroPhotoViewRouteWrapper extends StatelessWidget {
   const HeroPhotoViewRouteWrapper({
     required this.imageProvider,
+    required this.randomNum,
     this.backgroundDecoration,
     this.minScale,
     this.maxScale,
@@ -13,6 +15,7 @@ class HeroPhotoViewRouteWrapper extends StatelessWidget {
   final BoxDecoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
+  final int randomNum;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +23,15 @@ class HeroPhotoViewRouteWrapper extends StatelessWidget {
       constraints: BoxConstraints.expand(
         height: MediaQuery.of(context).size.height,
       ),
+      color: Colors.black12,
       child: PhotoView(
         imageProvider: imageProvider,
-        backgroundDecoration: backgroundDecoration,
+        backgroundDecoration: BoxDecoration(color: Colors.black87),
         minScale: minScale,
         maxScale: maxScale,
-        heroAttributes: const PhotoViewHeroAttributes(tag: "heroTag"),
+        enablePanAlways: true,
+        heroAttributes:
+            PhotoViewHeroAttributes(tag: "heroTag${randomNum.toString()}"),
       ),
     );
   }

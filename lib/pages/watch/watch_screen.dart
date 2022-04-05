@@ -198,6 +198,7 @@ class _WatchScreenState extends State<WatchScreen> {
   Widget getItemContainer(WatchCommend item) {
     return InkWell(
         onTap: () {
+          player.pause();
           Navigator.push(
               context,
               CupertinoPageRoute(
@@ -239,6 +240,7 @@ class _WatchScreenState extends State<WatchScreen> {
   Widget getItemContainer1(WatchCommend item) {
     return InkWell(
         onTap: () {
+          player.pause();
           Navigator.push(
               context,
               CupertinoPageRoute(
@@ -257,7 +259,7 @@ class _WatchScreenState extends State<WatchScreen> {
             ),
             Container(
               child: Text(
-                "123",
+                item.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

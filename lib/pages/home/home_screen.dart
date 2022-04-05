@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen>
           ]),
           width: double.infinity),
       SizedBox(
-        height: Adapt.px(820),
+        height: Adapt.px(760),
         child: InfiniteCarousel.builder(
           itemCount: data.video.length,
           itemExtent: Adapt.screenW() / 2,
@@ -201,8 +201,38 @@ class _HomeScreenState extends State<HomeScreen>
               padding: EdgeInsets.all(3),
               child: Column(
                 children: [
-                  HomeCard(data: data.video[itemIndex][0]),
-                  HomeCard(data: data.video[itemIndex][1])
+                  HomeCard(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => WatchScreen(
+                                  htmlUrl: data.video[itemIndex][0].htmlUrl)));
+                    },
+                    htmlUrl: data.video[itemIndex][0].htmlUrl,
+                    imgUrl: data.video[itemIndex][0].imgUrl,
+                    duration: data.video[itemIndex][0].duration,
+                    title: data.video[itemIndex][0].title,
+                    author: data.video[itemIndex][0].author,
+                    genre: data.video[itemIndex][0].genre,
+                    created: data.video[itemIndex][0].created,
+                  ),
+                  HomeCard(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => WatchScreen(
+                                  htmlUrl: data.video[itemIndex][1].htmlUrl)));
+                    },
+                    htmlUrl: data.video[itemIndex][1].htmlUrl,
+                    imgUrl: data.video[itemIndex][1].imgUrl,
+                    duration: data.video[itemIndex][1].duration,
+                    title: data.video[itemIndex][1].title,
+                    author: data.video[itemIndex][1].author,
+                    genre: data.video[itemIndex][1].genre,
+                    created: data.video[itemIndex][1].created,
+                  ),
                 ],
               ),
             );

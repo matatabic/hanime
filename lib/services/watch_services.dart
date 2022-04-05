@@ -86,7 +86,7 @@ Future getWatchData(url) async {
       });
     }
   }
-  LogUtil.d(commendList);
+  // LogUtil.d(commendList);
   var videoElements = document.querySelectorAll(
       ".hidden-md #video-playlist-wrapper #playlist-scroll .related-watch-wrap");
   // var currentElement = document.querySelector(

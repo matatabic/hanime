@@ -29,6 +29,9 @@ class BriefScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoViewRouteWrapper(
+                    randomNum: 123,
+                    minScale: 0.8,
+                    maxScale: 1.8,
                     imageProvider: NetworkImage(watchEntity.info.imgUrl),
                   ),
                 ));

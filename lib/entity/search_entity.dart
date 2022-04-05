@@ -13,6 +13,7 @@ class SearchEntity {
   late SearchDuration duration;
   late List<SearchVideo> video;
   late int page;
+  late int commendCount;
 
   SearchEntity();
 
@@ -178,6 +179,8 @@ class SearchVideo {
   late String duration;
   late String htmlUrl;
   late String author;
+  late String genre;
+  late String created;
 
   SearchVideo();
 

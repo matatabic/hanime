@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/common_image.dart';
+import 'package:hanime/common/common_card.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/services/search_services.dart';
+import 'package:hanime/utils/logUtil.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -31,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen>
   var _futureBuilderFuture;
   int page = 1;
   late int totalPage;
+  late int commendCount;
   List<SearchVideo> searchVideoList = [];
 
   RefreshController _refreshController =
@@ -82,9 +84,7 @@ class _SearchScreenState extends State<SearchScreen>
         htmlUrl = "$htmlUrl&brands[]=$brand";
       }
     }
-    // if (loadMore) {
-    //   htmlUrl = "$htmlUrl&page=${page + 1}";
-    // }
+
     print(search.htmlUrl);
     print(htmlUrl);
 
@@ -245,92 +245,36 @@ class _SearchScreenState extends State<SearchScreen>
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           //横轴元素个数
-          crossAxisCount: 2,
+          crossAxisCount: commendCount,
           //纵轴间距
           mainAxisSpacing: 5.0,
           //横轴间距
           crossAxisSpacing: 5.0,
           //子组件宽高长度比例
-          childAspectRatio: 1.1),
+          childAspectRatio: commendCount == 3 ? 2 / 3 : 1.1),
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return getItemContainer(videoList[index]);
+          return CommonCard(
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) =>
+                          WatchScreen(htmlUrl: videoList[index].htmlUrl)))
+            },
+            htmlUrl: videoList[index].htmlUrl,
+            title: videoList[index].title,
+            imgUrl: videoList[index].imgUrl,
+            duration: videoList[index].duration,
+            genre: videoList[index].genre,
+            author: videoList[index].author,
+            created: videoList[index].created,
+          );
         },
         childCount: videoList.length, //设置个数
       ),
     );
-  }
-
-  Widget getItemContainer(SearchVideo item) {
-    return InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => WatchScreen(htmlUrl: item.htmlUrl)));
-        },
-        child: Flex(
-          direction: Axis.vertical,
-          children: [
-            Expanded(
-              flex: 5,
-              child: Stack(
-                alignment: Alignment(0.9, 0.9),
-                children: <Widget>[
-                  ConstrainedBox(
-                    child: CommonImages(
-                      imgUrl:
-                          // item.imgUrl
-                          'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                    ),
-                    constraints: new BoxConstraints.expand(),
-                  ),
-                  Container(
-                    child: Text(
-                      item.duration,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(1.5, 1.5),
-                            blurRadius: 3.5,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-                flex: 2,
-                child: Center(
-                  child: Container(
-                    child: Text(
-                      item.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(2.5, 2.5),
-                            blurRadius: 3.5,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ))
-          ],
-        ));
   }
 
   initState() {
@@ -340,8 +284,11 @@ class _SearchScreenState extends State<SearchScreen>
 
   Future loadData(url) async {
     var data = await getSearchData(url);
+    // LogUtil.d(data);
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-
+    LogUtil.d(searchEntity.commendCount);
+    print("1212");
+    commendCount = searchEntity.commendCount;
     totalPage = searchEntity.page;
     searchVideoList.addAll(searchEntity.video);
 

@@ -37,6 +37,10 @@ SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
   if (page != null) {
     searchEntity.page = page;
   }
+  final int? commendCount = jsonConvert.convert<int>(json['commendCount']);
+  if (commendCount != null) {
+    searchEntity.commendCount = commendCount;
+  }
   return searchEntity;
 }
 
@@ -50,6 +54,7 @@ Map<String, dynamic> $SearchEntityToJson(SearchEntity entity) {
   data['duration'] = entity.duration.toJson();
   data['video'] = entity.video.map((v) => v.toJson()).toList();
   data['page'] = entity.page;
+  data['commendCount'] = entity.commendCount;
   return data;
 }
 
@@ -244,6 +249,14 @@ SearchVideo $SearchVideoFromJson(Map<String, dynamic> json) {
   if (author != null) {
     searchVideo.author = author;
   }
+  final String? genre = jsonConvert.convert<String>(json['genre']);
+  if (genre != null) {
+    searchVideo.genre = genre;
+  }
+  final String? created = jsonConvert.convert<String>(json['created']);
+  if (created != null) {
+    searchVideo.created = created;
+  }
   return searchVideo;
 }
 
@@ -254,5 +267,7 @@ Map<String, dynamic> $SearchVideoToJson(SearchVideo entity) {
   data['duration'] = entity.duration;
   data['htmlUrl'] = entity.htmlUrl;
   data['author'] = entity.author;
+  data['genre'] = entity.genre;
+  data['created'] = entity.created;
   return data;
 }
