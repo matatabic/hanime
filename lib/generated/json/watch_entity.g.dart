@@ -192,35 +192,45 @@ Map<String, dynamic> $WatchTagToJson(WatchTag entity) {
 
 WatchCommend $WatchCommendFromJson(Map<String, dynamic> json) {
   final WatchCommend watchCommend = WatchCommend();
-  final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
-  if (imgUrl != null) {
-    watchCommend.imgUrl = imgUrl;
-  }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
     watchCommend.title = title;
   }
-  final String? url = jsonConvert.convert<String>(json['url']);
-  if (url != null) {
-    watchCommend.url = url;
+  final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
+  if (imgUrl != null) {
+    watchCommend.imgUrl = imgUrl;
+  }
+  final String? duration = jsonConvert.convert<String>(json['duration']);
+  if (duration != null) {
+    watchCommend.duration = duration;
+  }
+  final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
+  if (htmlUrl != null) {
+    watchCommend.htmlUrl = htmlUrl;
   }
   final String? author = jsonConvert.convert<String>(json['author']);
   if (author != null) {
     watchCommend.author = author;
   }
-  final String? duration = jsonConvert.convert<String>(json['duration']);
-  if (duration != null) {
-    watchCommend.duration = duration;
+  final String? genre = jsonConvert.convert<String>(json['genre']);
+  if (genre != null) {
+    watchCommend.genre = genre;
+  }
+  final String? created = jsonConvert.convert<String>(json['created']);
+  if (created != null) {
+    watchCommend.created = created;
   }
   return watchCommend;
 }
 
 Map<String, dynamic> $WatchCommendToJson(WatchCommend entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['imgUrl'] = entity.imgUrl;
   data['title'] = entity.title;
-  data['url'] = entity.url;
-  data['author'] = entity.author;
+  data['imgUrl'] = entity.imgUrl;
   data['duration'] = entity.duration;
+  data['htmlUrl'] = entity.htmlUrl;
+  data['author'] = entity.author;
+  data['genre'] = entity.genre;
+  data['created'] = entity.created;
   return data;
 }

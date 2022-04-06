@@ -2,7 +2,8 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/common_image.dart';
+import 'package:hanime/component/anime_2card.dart';
+import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/services/watch_services.dart';
@@ -186,96 +187,38 @@ class _WatchScreenState extends State<WatchScreen> {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             return watchEntity.commendCount == 3
-                ? getItemContainer(watchEntity.commend[index])
-                : getItemContainer1(watchEntity.commend[index]);
+                ? Anime3Card(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => WatchScreen(
+                                  htmlUrl:
+                                      watchEntity.commend[index].htmlUrl)));
+                    },
+                    title: watchEntity.commend[index].title,
+                    imgUrl: watchEntity.commend[index].imgUrl)
+                : Anime2Card(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => WatchScreen(
+                                  htmlUrl:
+                                      watchEntity.commend[index].htmlUrl)));
+                    },
+                    htmlUrl: watchEntity.commend[index].htmlUrl,
+                    title: watchEntity.commend[index].title,
+                    imgUrl: watchEntity.commend[index].imgUrl,
+                    duration: watchEntity.commend[index].duration,
+                    genre: watchEntity.commend[index].genre,
+                    author: watchEntity.commend[index].author,
+                    created: watchEntity.commend[index].created,
+                  );
           },
           childCount: watchEntity.commend.length, //设置个数
         ),
       )
     ])));
-  }
-
-  Widget getItemContainer(WatchCommend item) {
-    return InkWell(
-        onTap: () {
-          player.pause();
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => WatchScreen(htmlUrl: item.url)));
-        },
-        child: Stack(
-          alignment: Alignment(-1, 1),
-          children: <Widget>[
-            ConstrainedBox(
-              child: CommonImages(
-                imgUrl:
-                    // item.imgUrl
-                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-              ),
-              constraints: new BoxConstraints.expand(),
-            ),
-            Container(
-              child: Text(
-                item.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(2.5, 2.5),
-                      blurRadius: 3.5,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ));
-  }
-
-  Widget getItemContainer1(WatchCommend item) {
-    return InkWell(
-        onTap: () {
-          player.pause();
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (context) => WatchScreen(htmlUrl: item.url)));
-        },
-        child: Stack(
-          alignment: Alignment(-1, 1),
-          children: <Widget>[
-            ConstrainedBox(
-              child: CommonImages(
-                imgUrl:
-                    // item.imgUrl
-                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-              ),
-              constraints: new BoxConstraints.expand(),
-            ),
-            Container(
-              child: Text(
-                item.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(2.5, 2.5),
-                      blurRadius: 3.5,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ));
   }
 }

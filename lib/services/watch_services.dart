@@ -61,7 +61,11 @@ Future getWatchData(url) async {
     commendList.add({
       "imgUrl": commendElement.querySelector("img")!.attributes["src"],
       "title": commendElement.querySelector(".home-rows-videos-title")!.text,
-      "url": commendElement.querySelector("a")!.attributes['href']
+      "htmlUrl": commendElement.querySelector("a")!.attributes['href'],
+      "duration": "",
+      "author": "",
+      "genre": "",
+      "created": ""
     });
   }
 
@@ -70,19 +74,26 @@ Future getWatchData(url) async {
     commendElements = document.querySelectorAll(
         "#related-tabcontent .related-video-width-horizontal");
     for (var commendElement in commendElements) {
+      String createdString = commendElement
+          .querySelector('.card-info-wrapper div:nth-child(5)')!
+          .text;
+      String created = createdString.split("•")[1].trim();
+
       commendList.add({
         "imgUrl": commendElement
             .querySelector(".video-card")!
             .attributes["data-poster"],
         "title": commendElement.querySelector("a")!.attributes['title'],
-        "url": commendElement.querySelector("a")!.attributes['href'],
+        "htmlUrl": commendElement.querySelector("a")!.attributes['href'],
         "author": commendElement
             .querySelector(".card-info-wrapper div:nth-child(3)")!
             .text,
         "duration": commendElement
             .querySelector("a .preview-wrapper div:nth-child(3)")!
             .text
-            .trim()
+            .trim(),
+        "genre": "",
+        "created": created,
       });
     }
   }

@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/common_card.dart';
+import 'package:hanime/component/anime_2card.dart';
+import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -255,22 +256,33 @@ class _SearchScreenState extends State<SearchScreen>
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return CommonCard(
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) =>
-                          WatchScreen(htmlUrl: videoList[index].htmlUrl)))
-            },
-            htmlUrl: videoList[index].htmlUrl,
-            title: videoList[index].title,
-            imgUrl: videoList[index].imgUrl,
-            duration: videoList[index].duration,
-            genre: videoList[index].genre,
-            author: videoList[index].author,
-            created: videoList[index].created,
-          );
+          return commendCount == 3
+              ? Anime3Card(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => WatchScreen(
+                                htmlUrl: videoList[index].htmlUrl)));
+                  },
+                  title: videoList[index].title,
+                  imgUrl: videoList[index].imgUrl)
+              : Anime2Card(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => WatchScreen(
+                                htmlUrl: videoList[index].htmlUrl)));
+                  },
+                  htmlUrl: videoList[index].htmlUrl,
+                  title: videoList[index].title,
+                  imgUrl: videoList[index].imgUrl,
+                  duration: videoList[index].duration,
+                  genre: videoList[index].genre,
+                  author: videoList[index].author,
+                  created: videoList[index].created,
+                );
         },
         childCount: videoList.length, //设置个数
       ),

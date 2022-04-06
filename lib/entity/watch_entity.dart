@@ -139,11 +139,13 @@ class WatchTag {
 
 @JsonSerializable()
 class WatchCommend {
-  late String imgUrl;
   late String title;
-  late String url;
-  late String author;
+  late String imgUrl;
   late String duration;
+  late String htmlUrl;
+  late String author;
+  late String genre;
+  late String created;
 
   WatchCommend();
 
