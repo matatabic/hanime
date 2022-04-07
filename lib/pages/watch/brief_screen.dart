@@ -6,12 +6,14 @@ import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:hanime/utils/index.dart';
 
 import 'like_screen.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final Function(String url) playerChange;
+  final String randomTag = '${randomNumber(1, 100)}${randomNumber(1, 100)}';
 
   BriefScreen({Key? key, required this.watchEntity, required this.playerChange})
       : super(key: key);
@@ -29,7 +31,7 @@ class BriefScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoViewRouteWrapper(
-                    randomNum: 123,
+                    randomNum: randomTag,
                     minScale: 0.8,
                     maxScale: 1.8,
                     imageProvider: NetworkImage(watchEntity.info.imgUrl),
@@ -37,7 +39,7 @@ class BriefScreen extends StatelessWidget {
                 ));
               },
               child: Hero(
-                  tag: "heroTag",
+                  tag: "heroTag$randomTag",
                   child: ClipOval(
                     child: Container(
                       width: Adapt.px(140),

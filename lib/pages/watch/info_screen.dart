@@ -47,7 +47,7 @@ class InfoScreen extends StatelessWidget {
                 prefixStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Adapt.px(45),
-                    color: Colors.orange),
+                    color: Theme.of(context).primaryColor),
                 expandText: '顯示完整資訊',
                 collapseText: '只顯示部分資訊',
                 maxLines: 3,
@@ -60,13 +60,16 @@ class InfoScreen extends StatelessWidget {
               child: Wrap(
                 children: _buildTagWidget(
                     watchEntity.tag,
-                    () => {
+                    (String tag) => {
                           player.pause(),
-                          context.read<SearchState>().addSearchList(),
+                          context.read<SearchState>().addSearchList(tag,
+                              "https://hanime1.me/search?query=&tags[]=$tag"),
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
                                 builder: (context) => SearchScreen(
+                                    htmlUrl:
+                                        "https://hanime1.me/search?query=&tags[]=$tag",
                                     currentScreen: context
                                         .watch<SearchState>()
                                         .currentScreen)),
@@ -85,7 +88,7 @@ List<Widget> _buildTagWidget(List<WatchTag> tagList, onTap) {
   List<Widget> tagWidgetList = [];
   for (var item in tagList) {
     tagWidgetList.add(InkWell(
-      onTap: onTap,
+      onTap: () => onTap(item.title),
       child: Container(
         padding: EdgeInsets.all(3.5),
         decoration: BoxDecoration(

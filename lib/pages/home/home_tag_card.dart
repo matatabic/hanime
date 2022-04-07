@@ -5,7 +5,7 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 
 class HomeTagCard extends StatelessWidget {
-  final HomeTagVideoHomeTagVideo data;
+  final HomeTagVideo data;
   final int index;
   const HomeTagCard({Key? key, required this.data, required this.index})
       : super(key: key);

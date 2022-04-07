@@ -51,7 +51,7 @@ class Anime2Card extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Icon(Icons.access_alarm_outlined,
-                                size: Adapt.px(40)),
+                                size: Adapt.px(30)),
                             Text(created)
                           ]),
                       Text(duration),

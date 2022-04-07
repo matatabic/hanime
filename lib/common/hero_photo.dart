@@ -15,7 +15,7 @@ class HeroPhotoViewRouteWrapper extends StatelessWidget {
   final BoxDecoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
-  final int randomNum;
+  final String randomNum;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,7 @@ class HeroPhotoViewRouteWrapper extends StatelessWidget {
         minScale: minScale,
         maxScale: maxScale,
         enablePanAlways: true,
-        heroAttributes:
-            PhotoViewHeroAttributes(tag: "heroTag${randomNum.toString()}"),
+        heroAttributes: PhotoViewHeroAttributes(tag: "heroTag$randomNum"),
       ),
     );
   }

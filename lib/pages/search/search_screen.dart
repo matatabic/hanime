@@ -17,8 +17,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
+  final String htmlUrl;
   final int currentScreen;
-  SearchScreen({Key? key, this.currentScreen = 0}) : super(key: key);
+  SearchScreen(
+      {Key? key,
+      this.htmlUrl = "https://hanime1.me/search?query=",
+      this.currentScreen = 0})
+      : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -39,7 +44,6 @@ class _SearchScreenState extends State<SearchScreen>
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  String baseUrl = "https://hanime1.me/search?query=";
   double topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
@@ -291,7 +295,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   initState() {
     super.initState();
-    _futureBuilderFuture = loadData(baseUrl);
+    _futureBuilderFuture = loadData(widget.htmlUrl);
   }
 
   Future loadData(url) async {

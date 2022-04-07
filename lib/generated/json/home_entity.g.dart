@@ -4,7 +4,7 @@ import 'package:hanime/generated/json/base/json_convert_content.dart';
 HomeEntity $HomeEntityFromJson(Map<String, dynamic> json) {
   final HomeEntity homeEntity = HomeEntity();
   final List<HomeSwiper>? swiper =
-  jsonConvert.convertListNotNull<HomeSwiper>(json['swiper']);
+      jsonConvert.convertListNotNull<HomeSwiper>(json['swiper']);
   if (swiper != null) {
     homeEntity.swiper = swiper;
   }
@@ -83,7 +83,7 @@ HomeTop $HomeTopFromJson(Map<String, dynamic> json) {
     homeTop.labelHtml = labelHtml;
   }
   final List<HomeTopVideo>? video =
-  jsonConvert.convertListNotNull<HomeTopVideo>(json['video']);
+      jsonConvert.convertListNotNull<HomeTopVideo>(json['video']);
   if (video != null) {
     homeTop.video = video;
   }
@@ -138,8 +138,8 @@ HomeLatest $HomeLatestFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeLatest.labelHtml = labelHtml;
   }
-  final List<List<HomeLatestVideoHomeLatestVideo>>? video = jsonConvert
-      .convertListNotNull<List<HomeLatestVideoHomeLatestVideo>>(json['video']);
+  final List<List<HomeLatestVideo>>? video =
+      jsonConvert.convertListNotNull<List<HomeLatestVideo>>(json['video']);
   if (video != null) {
     homeLatest.video = video;
   }
@@ -155,43 +155,40 @@ Map<String, dynamic> $HomeLatestToJson(HomeLatest entity) {
   return data;
 }
 
-HomeLatestVideoHomeLatestVideo $HomeLatestVideoHomeLatestVideoFromJson(
-    Map<String, dynamic> json) {
-  final HomeLatestVideoHomeLatestVideo homeLatestVideoHomeLatestVideo =
-  HomeLatestVideoHomeLatestVideo();
+HomeLatestVideo $HomeLatestVideoFromJson(Map<String, dynamic> json) {
+  final HomeLatestVideo homeLatestVideo = HomeLatestVideo();
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    homeLatestVideoHomeLatestVideo.title = title;
+    homeLatestVideo.title = title;
   }
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    homeLatestVideoHomeLatestVideo.imgUrl = imgUrl;
+    homeLatestVideo.imgUrl = imgUrl;
   }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
-    homeLatestVideoHomeLatestVideo.htmlUrl = htmlUrl;
+    homeLatestVideo.htmlUrl = htmlUrl;
   }
   final String? genre = jsonConvert.convert<String>(json['genre']);
   if (genre != null) {
-    homeLatestVideoHomeLatestVideo.genre = genre;
+    homeLatestVideo.genre = genre;
   }
   final String? author = jsonConvert.convert<String>(json['author']);
   if (author != null) {
-    homeLatestVideoHomeLatestVideo.author = author;
+    homeLatestVideo.author = author;
   }
   final String? created = jsonConvert.convert<String>(json['created']);
   if (created != null) {
-    homeLatestVideoHomeLatestVideo.created = created;
+    homeLatestVideo.created = created;
   }
   final String? duration = jsonConvert.convert<String>(json['duration']);
   if (duration != null) {
-    homeLatestVideoHomeLatestVideo.duration = duration;
+    homeLatestVideo.duration = duration;
   }
-  return homeLatestVideoHomeLatestVideo;
+  return homeLatestVideo;
 }
 
-Map<String, dynamic> $HomeLatestVideoHomeLatestVideoToJson(
-    HomeLatestVideoHomeLatestVideo entity) {
+Map<String, dynamic> $HomeLatestVideoToJson(HomeLatestVideo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['imgUrl'] = entity.imgUrl;
@@ -214,7 +211,7 @@ HomeFire $HomeFireFromJson(Map<String, dynamic> json) {
     homeFire.labelHtml = labelHtml;
   }
   final List<HomeFireVideo>? video =
-  jsonConvert.convertListNotNull<HomeFireVideo>(json['video']);
+      jsonConvert.convertListNotNull<HomeFireVideo>(json['video']);
   if (video != null) {
     homeFire.video = video;
   }
@@ -264,8 +261,8 @@ HomeTag $HomeTagFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeTag.labelHtml = labelHtml;
   }
-  final List<List<HomeTagVideoHomeTagVideo>>? video = jsonConvert
-      .convertListNotNull<List<HomeTagVideoHomeTagVideo>>(json['video']);
+  final List<List<HomeTagVideo>>? video =
+      jsonConvert.convertListNotNull<List<HomeTagVideo>>(json['video']);
   if (video != null) {
     homeTag.video = video;
   }
@@ -281,31 +278,28 @@ Map<String, dynamic> $HomeTagToJson(HomeTag entity) {
   return data;
 }
 
-HomeTagVideoHomeTagVideo $HomeTagVideoHomeTagVideoFromJson(
-    Map<String, dynamic> json) {
-  final HomeTagVideoHomeTagVideo homeTagVideoHomeTagVideo =
-  HomeTagVideoHomeTagVideo();
+HomeTagVideo $HomeTagVideoFromJson(Map<String, dynamic> json) {
+  final HomeTagVideo homeTagVideo = HomeTagVideo();
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    homeTagVideoHomeTagVideo.title = title;
+    homeTagVideo.title = title;
   }
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    homeTagVideoHomeTagVideo.imgUrl = imgUrl;
+    homeTagVideo.imgUrl = imgUrl;
   }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
-    homeTagVideoHomeTagVideo.htmlUrl = htmlUrl;
+    homeTagVideo.htmlUrl = htmlUrl;
   }
   final String? total = jsonConvert.convert<String>(json['total']);
   if (total != null) {
-    homeTagVideoHomeTagVideo.total = total;
+    homeTagVideo.total = total;
   }
-  return homeTagVideoHomeTagVideo;
+  return homeTagVideo;
 }
 
-Map<String, dynamic> $HomeTagVideoHomeTagVideoToJson(
-    HomeTagVideoHomeTagVideo entity) {
+Map<String, dynamic> $HomeTagVideoToJson(HomeTagVideo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['imgUrl'] = entity.imgUrl;
@@ -325,7 +319,7 @@ HomeHot $HomeHotFromJson(Map<String, dynamic> json) {
     homeHot.labelHtml = labelHtml;
   }
   final List<HomeHotVideo>? video =
-  jsonConvert.convertListNotNull<HomeHotVideo>(json['video']);
+      jsonConvert.convertListNotNull<HomeHotVideo>(json['video']);
   if (video != null) {
     homeHot.video = video;
   }
@@ -375,8 +369,8 @@ HomeWatch $HomeWatchFromJson(Map<String, dynamic> json) {
   if (labelHtml != null) {
     homeWatch.labelHtml = labelHtml;
   }
-  final List<List<HomeWatchVideoHomeWatchVideo>>? video = jsonConvert
-      .convertListNotNull<List<HomeWatchVideoHomeWatchVideo>>(json['video']);
+  final List<HomeWatchVideo>? video =
+      jsonConvert.convertListNotNull<HomeWatchVideo>(json['video']);
   if (video != null) {
     homeWatch.video = video;
   }
@@ -387,48 +381,44 @@ Map<String, dynamic> $HomeWatchToJson(HomeWatch entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['label'] = entity.label;
   data['labelHtml'] = entity.labelHtml;
-  data['video'] =
-      entity.video.map((v) => v.map((val) => val.toJson())).toList();
+  data['video'] = entity.video.map((v) => v.toJson()).toList();
   return data;
 }
 
-HomeWatchVideoHomeWatchVideo $HomeWatchVideoHomeWatchVideoFromJson(
-    Map<String, dynamic> json) {
-  final HomeWatchVideoHomeWatchVideo homeWatchVideoHomeWatchVideo =
-  HomeWatchVideoHomeWatchVideo();
+HomeWatchVideo $HomeWatchVideoFromJson(Map<String, dynamic> json) {
+  final HomeWatchVideo homeWatchVideo = HomeWatchVideo();
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
-    homeWatchVideoHomeWatchVideo.title = title;
+    homeWatchVideo.title = title;
   }
   final String? imgUrl = jsonConvert.convert<String>(json['imgUrl']);
   if (imgUrl != null) {
-    homeWatchVideoHomeWatchVideo.imgUrl = imgUrl;
+    homeWatchVideo.imgUrl = imgUrl;
   }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
-    homeWatchVideoHomeWatchVideo.htmlUrl = htmlUrl;
+    homeWatchVideo.htmlUrl = htmlUrl;
   }
   final String? genre = jsonConvert.convert<String>(json['genre']);
   if (genre != null) {
-    homeWatchVideoHomeWatchVideo.genre = genre;
+    homeWatchVideo.genre = genre;
   }
   final String? author = jsonConvert.convert<String>(json['author']);
   if (author != null) {
-    homeWatchVideoHomeWatchVideo.author = author;
+    homeWatchVideo.author = author;
   }
   final String? created = jsonConvert.convert<String>(json['created']);
   if (created != null) {
-    homeWatchVideoHomeWatchVideo.created = created;
+    homeWatchVideo.created = created;
   }
   final String? duration = jsonConvert.convert<String>(json['duration']);
   if (duration != null) {
-    homeWatchVideoHomeWatchVideo.duration = duration;
+    homeWatchVideo.duration = duration;
   }
-  return homeWatchVideoHomeWatchVideo;
+  return homeWatchVideo;
 }
 
-Map<String, dynamic> $HomeWatchVideoHomeWatchVideoToJson(
-    HomeWatchVideoHomeWatchVideo entity) {
+Map<String, dynamic> $HomeWatchVideoToJson(HomeWatchVideo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['imgUrl'] = entity.imgUrl;

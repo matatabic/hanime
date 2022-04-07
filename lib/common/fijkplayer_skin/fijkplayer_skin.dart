@@ -333,7 +333,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             height: Adapt.px(90),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: Colors.orange,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Text("剧集", textAlign: TextAlign.center),
             // borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -356,7 +356,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       //       fontSize: 14,
       //     ),
       //     indicator: BoxDecoration(
-      //       color: Colors.orange,
+      //       color: Theme.of(context).primaryColor,
       //       borderRadius: BorderRadius.all(Radius.circular(10)),
       //     ),
       //     tabs:

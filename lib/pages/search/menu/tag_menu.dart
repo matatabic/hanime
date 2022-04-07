@@ -23,7 +23,7 @@ class TagMenu extends StatelessWidget {
           backgroundColor: Colors.black,
           appBar: new AppBar(
             centerTitle: true,
-            backgroundColor: Colors.orange,
+            backgroundColor: Theme.of(context).primaryColor,
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
@@ -57,7 +57,7 @@ class TagMenu extends StatelessWidget {
                             ),
                             Switch(
                               value: search.broad,
-                              activeColor: Colors.orange,
+                              activeColor: Theme.of(context).primaryColor,
                               onChanged: (value) {
                                 context
                                     .read<SearchState>()
@@ -116,8 +116,9 @@ class TagContainer extends StatelessWidget {
         },
         child: TagDetail(
           title: title,
-          color:
-              search.tagList.indexOf(title) > -1 ? Colors.orange : Colors.black,
+          color: search.tagList.indexOf(title) > -1
+              ? Theme.of(context).primaryColor
+              : Colors.black,
         ),
       ));
     }

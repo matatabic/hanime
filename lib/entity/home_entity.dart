@@ -87,7 +87,7 @@ class HomeTopVideo {
 class HomeLatest {
   late String label;
   late String labelHtml;
-  late List<List<HomeLatestVideoHomeLatestVideo>> video;
+  late List<List<HomeLatestVideo>> video;
 
   HomeLatest();
 
@@ -103,7 +103,7 @@ class HomeLatest {
 }
 
 @JsonSerializable()
-class HomeLatestVideoHomeLatestVideo {
+class HomeLatestVideo {
   late String title;
   late String imgUrl;
   late String htmlUrl;
@@ -112,12 +112,12 @@ class HomeLatestVideoHomeLatestVideo {
   late String created;
   late String duration;
 
-  HomeLatestVideoHomeLatestVideo();
+  HomeLatestVideo();
 
-  factory HomeLatestVideoHomeLatestVideo.fromJson(Map<String, dynamic> json) =>
-      $HomeLatestVideoHomeLatestVideoFromJson(json);
+  factory HomeLatestVideo.fromJson(Map<String, dynamic> json) =>
+      $HomeLatestVideoFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeLatestVideoHomeLatestVideoToJson(this);
+  Map<String, dynamic> toJson() => $HomeLatestVideoToJson(this);
 
   @override
   String toString() {
@@ -167,7 +167,7 @@ class HomeFireVideo {
 class HomeTag {
   late String label;
   late String labelHtml;
-  late List<List<HomeTagVideoHomeTagVideo>> video;
+  late List<List<HomeTagVideo>> video;
 
   HomeTag();
 
@@ -182,18 +182,18 @@ class HomeTag {
 }
 
 @JsonSerializable()
-class HomeTagVideoHomeTagVideo {
+class HomeTagVideo {
   late String title;
   late String imgUrl;
   late String htmlUrl;
   late String total;
 
-  HomeTagVideoHomeTagVideo();
+  HomeTagVideo();
 
-  factory HomeTagVideoHomeTagVideo.fromJson(Map<String, dynamic> json) =>
-      $HomeTagVideoHomeTagVideoFromJson(json);
+  factory HomeTagVideo.fromJson(Map<String, dynamic> json) =>
+      $HomeTagVideoFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeTagVideoHomeTagVideoToJson(this);
+  Map<String, dynamic> toJson() => $HomeTagVideoToJson(this);
 
   @override
   String toString() {
@@ -242,7 +242,7 @@ class HomeHotVideo {
 class HomeWatch {
   late String label;
   late String labelHtml;
-  late List<List<HomeWatchVideoHomeWatchVideo>> video;
+  late List<HomeWatchVideo> video;
 
   HomeWatch();
 
@@ -258,7 +258,7 @@ class HomeWatch {
 }
 
 @JsonSerializable()
-class HomeWatchVideoHomeWatchVideo {
+class HomeWatchVideo {
   late String title;
   late String imgUrl;
   late String htmlUrl;
@@ -267,12 +267,12 @@ class HomeWatchVideoHomeWatchVideo {
   late String created;
   late String duration;
 
-  HomeWatchVideoHomeWatchVideo();
+  HomeWatchVideo();
 
-  factory HomeWatchVideoHomeWatchVideo.fromJson(Map<String, dynamic> json) =>
-      $HomeWatchVideoHomeWatchVideoFromJson(json);
+  factory HomeWatchVideo.fromJson(Map<String, dynamic> json) =>
+      $HomeWatchVideoFromJson(json);
 
-  Map<String, dynamic> toJson() => $HomeWatchVideoHomeWatchVideoToJson(this);
+  Map<String, dynamic> toJson() => $HomeWatchVideoToJson(this);
 
   @override
   String toString() {

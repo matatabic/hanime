@@ -169,8 +169,20 @@ class _WatchScreenState extends State<WatchScreen> {
               });
             }),
       ),
-      SliverPadding(
-        padding: EdgeInsets.only(top: Adapt.px(20)),
+      SliverToBoxAdapter(
+        child: Container(
+          height: Adapt.px(100),
+          child: Center(
+            child: Text(
+              "相關推薦",
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: Adapt.px(45),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ),
       SliverGrid(
         //调整间距

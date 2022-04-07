@@ -24,7 +24,7 @@ class GenreMenu extends StatelessWidget {
         backgroundColor: Colors.black,
         appBar: new AppBar(
           centerTitle: true,
-          backgroundColor: Colors.orange,
+          backgroundColor: Theme.of(context).primaryColor,
           leading: IconButton(
             icon: Icon(Icons.close_rounded),
             onPressed: () {

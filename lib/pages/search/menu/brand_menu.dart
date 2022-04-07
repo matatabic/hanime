@@ -24,7 +24,7 @@ class BrandMenu extends StatelessWidget {
         child: BrandDetail(
             title: title,
             color: search.brandList.indexOf(title) > -1
-                ? Colors.orange
+                ? Theme.of(context).primaryColor
                 : Colors.black),
       ));
     }
@@ -38,7 +38,7 @@ class BrandMenu extends StatelessWidget {
           backgroundColor: Colors.black,
           appBar: new AppBar(
             centerTitle: true,
-            backgroundColor: Colors.orange,
+            backgroundColor: Theme.of(context).primaryColor,
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {

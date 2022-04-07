@@ -21,7 +21,7 @@ class MenuRow extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: Adapt.px(120),
-        color: selected ? Colors.orangeAccent : Colors.black,
+        color: selected ? Theme.of(context).primaryColor : Colors.black,
         child: Center(
             child: Text(
           title,

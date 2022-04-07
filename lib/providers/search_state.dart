@@ -129,9 +129,8 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addSearchList() {
-    _searchList.add(Search("", 0, 0, 0, null, null, false, [], [],
-        "https://hanime1.me/search?query="));
+  void addSearchList(String tag, String htmlUrl) {
+    _searchList.add(Search("", 0, 0, 0, null, null, false, [tag], [], htmlUrl));
     _currentScreen = _currentScreen + 1;
     notifyListeners();
   }
@@ -145,16 +144,6 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    // properties.add(StringProperty('htmlUrl', htmlUrl));
-    // properties.add(StringProperty('query', query));
-    // // properties.add(IntProperty('genreIndex', genreIndex));
-    // properties.add(IntProperty('sortIndex', sortIndex));
-    // properties.add(IntProperty('durationIndex', durationIndex));
-    // properties.add(ObjectFlagProperty('year', year));
-    // properties.add(ObjectFlagProperty('month', month));
-    // properties.add(FlagProperty('broad', value: broad));
-    // properties.add(ObjectFlagProperty('tagList', tagList));
-    // properties.add(ObjectFlagProperty('brandList', brandList));
     properties.add(ObjectFlagProperty('searchList', searchList));
   }
 }

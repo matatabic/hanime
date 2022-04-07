@@ -25,7 +25,7 @@ class DateMenu extends StatelessWidget {
           backgroundColor: Colors.black,
           appBar: new AppBar(
             centerTitle: true,
-            backgroundColor: Colors.orange,
+            backgroundColor: Theme.of(context).primaryColor,
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
@@ -49,7 +49,7 @@ class DateMenu extends StatelessWidget {
                   buttonDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: Colors.orangeAccent,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   onChanged: (value) {

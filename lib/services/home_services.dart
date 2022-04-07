@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
@@ -146,24 +143,24 @@ Future getHomeData() async {
     "video": hotList,
   };
 
-  videos = contentElements[4].querySelectorAll(".item");
+  videos = contentElements[4].querySelectorAll(".item .hover-lighter");
   for (var video in videos) {
-    var cards = video.querySelectorAll(".hover-lighter");
-    for (var card in cards) {
-      temp.add({
-        'title': card.querySelector('.card-mobile-title')!.text,
-        "imgUrl": card.querySelector("img:nth-child(3)")!.attributes['src'],
-        'htmlUrl': card.querySelector('a')!.attributes['href'],
-        'genre': card.querySelector('.card-mobile-genre-new')!.text,
-        'author': card.querySelector('.card-mobile-user')!.text,
-        'created': card.querySelector('.card-mobile-created-text')!.text,
-        'duration': card.querySelector('.card-mobile-duration') != null
-            ? card.querySelector('.card-mobile-duration')!.text.trim()
-            : ""
-      });
-    }
-    watchList.add(temp);
-    temp = [];
+    // var cards = video.querySelectorAll(".hover-lighter");
+    // for (var card in cards) {
+    watchList.add({
+      'title': video.querySelector('.card-mobile-title')!.text,
+      "imgUrl": video.querySelector("img:nth-child(3)")!.attributes['src'],
+      'htmlUrl': video.querySelector('a')!.attributes['href'],
+      'genre': video.querySelector('.card-mobile-genre-new')!.text,
+      'author': video.querySelector('.card-mobile-user')!.text,
+      'created': video.querySelector('.card-mobile-created-text')!.text,
+      'duration': video.querySelector('.card-mobile-duration') != null
+          ? video.querySelector('.card-mobile-duration')!.text.trim()
+          : ""
+    });
+    // }
+    // watchList.add(temp);
+    // temp = [];
   }
   var watch = {
     "label": contentElements[4].querySelector("h3")!.text,
