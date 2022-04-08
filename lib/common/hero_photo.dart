@@ -26,10 +26,16 @@ class HeroPhotoViewRouteWrapper extends StatelessWidget {
       color: Colors.black12,
       child: PhotoView(
         imageProvider: imageProvider,
-        backgroundDecoration: BoxDecoration(color: Colors.black87),
+        backgroundDecoration: BoxDecoration(color: Colors.black),
         minScale: minScale,
         maxScale: maxScale,
         enablePanAlways: true,
+        disableGestures: false,
+        scaleStateChangedCallback: (PhotoViewScaleState photoViewScaleState) {
+          print("3421521");
+          print(photoViewScaleState);
+        },
+        // gestureDetectorBehavior: HitTestBehavior.opaque,
         heroAttributes: PhotoViewHeroAttributes(tag: "heroTag$randomNum"),
       ),
     );

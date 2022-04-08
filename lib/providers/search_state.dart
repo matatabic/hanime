@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:hanime/services/search_services.dart';
 
 class Search {
   late String query;
@@ -9,6 +10,7 @@ class Search {
   late dynamic month;
   late bool broad;
   late List<String> tagList;
+  late String customTag;
   late List<String> brandList;
   late String htmlUrl;
 
@@ -21,6 +23,7 @@ class Search {
       this.month,
       this.broad,
       this.tagList,
+      this.customTag,
       this.brandList,
       this.htmlUrl);
 }
@@ -53,7 +56,7 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   int get currentScreen => _currentScreen;
 
   List<Search> _searchList = [
-    Search("", 0, 0, 0, null, null, false, [], [],
+    Search("", 0, 0, 0, null, null, false, [], "", [],
         "https://hanime1.me/search?query=")
     // {
     //   "query": "",
@@ -130,7 +133,13 @@ class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addSearchList(String tag, String htmlUrl) {
-    _searchList.add(Search("", 0, 0, 0, null, null, false, [tag], [], htmlUrl));
+    List tempList = [];
+    for (var item in searchTag.data) {
+      tempList.addAll(item.data);
+    }
+    bool isCustomTag = tempList.indexOf(tag) > -1;
+    _searchList.add(Search("", 0, 0, 0, null, null, false, [tag],
+        isCustomTag ? "" : tag, [], htmlUrl));
     _currentScreen = _currentScreen + 1;
     notifyListeners();
   }

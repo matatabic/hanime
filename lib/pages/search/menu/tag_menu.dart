@@ -77,6 +77,7 @@ class TagMenu extends StatelessWidget {
                       itemCount: searchTag.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         return TagContainer(
+                            index: index,
                             currentScreen: currentScreen,
                             searchTagData: searchTag.data[index],
                             onTap: (String title) {
@@ -94,12 +95,14 @@ class TagMenu extends StatelessWidget {
 }
 
 class TagContainer extends StatelessWidget {
+  final int index;
   final int currentScreen;
   final SearchTagData searchTagData;
   final Function(String title) onTap;
 
   const TagContainer(
       {Key? key,
+      required this.index,
       required this.currentScreen,
       required this.searchTagData,
       required this.onTap})
@@ -109,6 +112,20 @@ class TagContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Search search = context.watch<SearchState>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
+    if (index == 0) {
+      if (search.customTag.length > 0) {
+        tagWidgetList.add(InkWell(
+          onTap: () {
+            onTap(search.customTag);
+          },
+          child: TagDetail(
+              title: search.customTag,
+              color: search.tagList.indexOf(search.customTag) > -1
+                  ? Theme.of(context).primaryColor
+                  : Colors.black),
+        ));
+      }
+    }
     for (String title in searchTagData.data) {
       tagWidgetList.add(InkWell(
         onTap: () {
