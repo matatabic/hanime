@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
-import 'package:like_button/like_button.dart';
 
 class LikeScreen extends StatefulWidget {
   @override
@@ -21,6 +21,8 @@ class _LikeScreenState extends State<LikeScreen> {
 
   ///接受弹窗类构造成功传递来的关闭参数
   late Function closeModel;
+
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +43,9 @@ class _LikeScreenState extends State<LikeScreen> {
         key: iconKey,
         onTap: (bool aa) async {
           showModel(context);
-          return true;
+          return false;
         },
-        // isLiked: false,
+        isLiked: isLiked,
         size: Adapt.px(60),
       ),
       // IconButton(
@@ -142,8 +144,11 @@ class _LikeScreenState extends State<LikeScreen> {
                           ),
                           onTap: () async {
                             print('这是点击了选项${e.toString()}');
-                            await Future.delayed(Duration(milliseconds: 500))
-                                .then((value) => print('开始'));
+                            // await Future.delayed(Duration(milliseconds: 500))
+                            //     .then((value) => print('开始'));
+                            setState(() {
+                              isLiked = !isLiked;
+                            });
                             // await closeModel();
                             print('结束');
                           },

@@ -21,9 +21,11 @@ class Anime3Card extends StatelessWidget {
           alignment: Alignment(-1, 1),
           children: <Widget>[
             ConstrainedBox(
-              child: CommonImages(imgUrl: imgUrl
-                  // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                  ),
+              child: CommonImages(
+                imgUrl:
+                    // imgUrl
+                    'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+              ),
               constraints: new BoxConstraints.expand(),
             ),
             Container(

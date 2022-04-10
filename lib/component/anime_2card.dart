@@ -37,9 +37,10 @@ class Anime2Card extends StatelessWidget {
               children: [
                 ConstrainedBox(
                     child: CommonImages(
-                        imgUrl:
-                            // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                            imgUrl),
+                      imgUrl:
+                          'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                      // imgUrl
+                    ),
                     constraints: new BoxConstraints.expand()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),

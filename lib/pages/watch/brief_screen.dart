@@ -32,7 +32,7 @@ class BriefScreen extends StatelessWidget {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoViewRouteWrapper(
                     randomNum: randomTag,
-                    minScale: 0.8,
+                    minScale: 1.0,
                     maxScale: 1.8,
                     imageProvider: NetworkImage(watchEntity.info.imgUrl),
                   ),
