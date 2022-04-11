@@ -43,8 +43,13 @@ Future getHomeData() async {
     },
   ];
 
-  var videoElements = document.querySelectorAll(".owl-home-top-row a"); //第一个
-  for (var videoElement in videoElements) {
+  // var videoElements = document.querySelectorAll(".owl-home-row a"); //第一个
+  var contentElements = document.querySelectorAll(".content-padding-new");
+  var videos = contentElements[0]
+      .nextElementSibling!
+      .querySelectorAll(".owl-carousel a");
+
+  for (var videoElement in videos) {
     topList.add({
       "title": videoElement.querySelector(".owl-home-rows-title")!.text,
       "imgUrl": videoElement.querySelector("img")!.attributes['src'],
@@ -58,8 +63,9 @@ Future getHomeData() async {
     "video": topList,
   };
 
-  var contentElements = document.querySelectorAll(".content-padding-new");
-  var videos = contentElements[0].querySelectorAll(".item");
+  contentElements = document.querySelectorAll(".content-padding-new");
+  videos = contentElements[1].querySelectorAll(".item");
+
   for (var video in videos) {
     var cards = video.querySelectorAll(".hover-lighter");
     for (var card in cards) {
@@ -80,14 +86,15 @@ Future getHomeData() async {
   }
 
   var latest = {
-    "label": contentElements[0].querySelector("h3")!.text,
-    "labelHtml": contentElements[0]
+    "label": contentElements[1].querySelector("h3")!.text,
+    "labelHtml": contentElements[1]
         .querySelector(".home-rows-header")!
         .attributes['href'],
     "video": latestList,
   };
 
-  videos = contentElements[1].nextElementSibling!.querySelectorAll("a");
+  videos = contentElements[2].nextElementSibling!.querySelectorAll("a");
+
   for (var video in videos) {
     fireList.add({
       'title': video.querySelector('.owl-home-rows-title')!.text,
@@ -97,14 +104,14 @@ Future getHomeData() async {
   }
 
   var fire = {
-    "label": contentElements[1].querySelector("h3")!.text,
-    "labelHtml": contentElements[1]
+    "label": contentElements[2].querySelector("h3")!.text,
+    "labelHtml": contentElements[2]
         .querySelector(".home-rows-header")!
         .attributes['href'],
     "video": fireList,
   };
 
-  videos = contentElements[2].querySelectorAll(".item");
+  videos = contentElements[3].querySelectorAll(".item");
   for (var video in videos) {
     var cards = video.querySelectorAll(".hover-lighter");
     for (var card in cards) {
@@ -119,14 +126,14 @@ Future getHomeData() async {
     temp = [];
   }
   var tag = {
-    "label": contentElements[2].querySelector("h3")!.text,
-    "labelHtml": contentElements[2]
+    "label": contentElements[3].querySelector("h3")!.text,
+    "labelHtml": contentElements[3]
         .querySelector(".home-rows-header")!
         .attributes['href'],
     "video": tagList,
   };
 
-  videos = contentElements[3].nextElementSibling!.querySelectorAll("a");
+  videos = contentElements[4].nextElementSibling!.querySelectorAll("a");
   for (var video in videos) {
     hotList.add({
       'title': video.querySelector('.owl-home-rows-title')!.text,
@@ -136,14 +143,14 @@ Future getHomeData() async {
   }
 
   var hot = {
-    "label": contentElements[3].querySelector("h3")!.text,
-    "labelHtml": contentElements[3]
+    "label": contentElements[4].querySelector("h3")!.text,
+    "labelHtml": contentElements[4]
         .querySelector(".home-rows-header")!
         .attributes['href'],
     "video": hotList,
   };
 
-  videos = contentElements[4].querySelectorAll(".item .hover-lighter");
+  videos = contentElements[5].querySelectorAll(".item .hover-lighter");
   for (var video in videos) {
     // var cards = video.querySelectorAll(".hover-lighter");
     // for (var card in cards) {
@@ -163,8 +170,8 @@ Future getHomeData() async {
     // temp = [];
   }
   var watch = {
-    "label": contentElements[4].querySelector("h3")!.text,
-    "labelHtml": contentElements[4]
+    "label": contentElements[5].querySelector("h3")!.text,
+    "labelHtml": contentElements[5]
         .querySelector(".home-rows-header")!
         .attributes['href'],
     "video": watchList,

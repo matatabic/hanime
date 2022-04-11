@@ -166,8 +166,6 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("isLikedisLikedisLikedisLiked");
-    print(widget.isLiked);
     if (widget.isLiked == true) {
       _controller!.reset();
       _controller!.forward();

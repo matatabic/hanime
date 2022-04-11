@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/providers/favourite_state.dart';
 import 'package:hanime/providers/home_state.dart';
 import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/providers/watch_state.dart';
@@ -14,6 +15,7 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => HomeState()),
           ChangeNotifierProvider(create: (_) => WatchState()),
           ChangeNotifierProvider(create: (_) => SearchState()),
+          ChangeNotifierProvider(create: (_) => FavouriteState()),
         ],
         child: MyApp(),
       ),

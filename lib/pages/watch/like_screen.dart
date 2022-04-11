@@ -3,6 +3,8 @@ import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
+import 'package:hanime/providers/favourite_state.dart';
+import 'package:provider/src/provider.dart';
 
 class LikeScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class LikeScreen extends StatefulWidget {
 class _LikeScreenState extends State<LikeScreen> {
   ///给获取详细信息的widget设置一个key
   GlobalKey iconKey = new GlobalKey();
+  List _list = ["默认收藏夹", "默认收藏夹", "默认收藏夹", "默认收藏夹", "默认收藏夹"];
 
   ///获取位置，给后续弹窗设置位置
   late Offset iconOffset;
@@ -39,33 +42,29 @@ class _LikeScreenState extends State<LikeScreen> {
     });
 
     return Container(
-      child: LikeButton(
-        key: iconKey,
-        onTap: (bool aa) async {
+        child: LikeButton(
+      key: iconKey,
+      onTap: (bool isLike) async {
+        if (isLike) {
+          setState(() {
+            isLiked = false;
+          });
+        } else {
           showModel(context);
-          return false;
-        },
-        isLiked: isLiked,
-        size: Adapt.px(60),
-      ),
-      // IconButton(
-      //   key: iconkey,
-      //   icon: Icon(
-      //     Icons.favorite,
-      //     color: Colors.red,
-      //   ),
-      //   onPressed: () {
-      //     showModel(context);
-      //   },
-      // ),
-    );
+        }
+        return null;
+      },
+      isLiked: isLiked,
+      size: Adapt.px(60),
+    ));
   }
 
   ///播放动画
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
-    double _width = 130;
-    double _height = 230;
+    print(Provider.of<FavouriteState>(context, listen: false).favList);
+    double _width = Adapt.px(260);
+    double _height = Adapt.px(60 + _list.length * 110);
 
     Navigator.push(
       context,
@@ -75,9 +74,10 @@ class _LikeScreenState extends State<LikeScreen> {
           top: iconOffset.dy + iconSize.height / 3,
           offset: Offset(_width / 2, -_height / 2),
           child: Container(
+            // color: Colors.red,
             width: _width,
             height: _height,
-            child: buildMenu(),
+            child: buildMenu(_list, _list.length * 110),
           ),
           fun: (close) {
             closeModel = close;
@@ -88,25 +88,21 @@ class _LikeScreenState extends State<LikeScreen> {
   }
 
   ///构造传入的widget
-  Widget buildMenu() {
-    ///构造List
-    List _list = [1, 2, 3, 4, 5];
-
+  Widget buildMenu(favList, addHeight) {
+    print(addHeight);
     return Container(
-      height: 160,
-      width: 230,
       child: Stack(
         children: [
           Positioned(
-            right: 4,
-            top: 17,
+            right: Adapt.px(10),
+            top: Adapt.px(30),
             child: Container(
-              width: 20,
-              height: 20,
+              width: Adapt.px(40),
+              height: Adapt.px(40),
               transform: Matrix4.rotationZ(45 * 3.14 / 180),
               decoration: BoxDecoration(
                 color: Color.fromRGBO(46, 53, 61, 1),
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(Adapt.px(10)),
               ),
             ),
           ),
@@ -115,43 +111,42 @@ class _LikeScreenState extends State<LikeScreen> {
           Positioned(
             bottom: 0,
             child: Container(
-              padding: EdgeInsets.only(
-                top: 20,
-                bottom: 20,
-                left: 10,
-                right: 10,
-              ),
-              width: 130,
-              height: 200,
+              // color: Colors.,
+              // padding: EdgeInsets.only(left: 10),
+              width: Adapt.px(260),
+              height: Adapt.px(addHeight),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(Adapt.px(20)),
                 color: Color.fromRGBO(46, 53, 61, 1),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _list
-                    .map<Widget>((e) => InkWell(
-                          child: Container(
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '这应该是选项${e.toString()}',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: favList
+                    .map<Widget>((e) => Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            child: Container(
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              child: Text(
+                                '这应该是选项',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: Adapt.px(28),
+                                ),
                               ),
                             ),
+                            onTap: () async {
+                              print('这是点击了选项${e.toString()}');
+                              // await Future.delayed(Duration(milliseconds: 500))
+                              //     .then((value) => print('开始'));
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                              // await closeModel();
+                              print('结束');
+                            },
                           ),
-                          onTap: () async {
-                            print('这是点击了选项${e.toString()}');
-                            // await Future.delayed(Duration(milliseconds: 500))
-                            //     .then((value) => print('开始'));
-                            setState(() {
-                              isLiked = !isLiked;
-                            });
-                            // await closeModel();
-                            print('结束');
-                          },
                         ))
                     .toList(),
               ),
