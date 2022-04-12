@@ -14,7 +14,6 @@ class LikeScreen extends StatefulWidget {
 class _LikeScreenState extends State<LikeScreen> {
   ///给获取详细信息的widget设置一个key
   GlobalKey iconKey = new GlobalKey();
-  List _list = ["默认收藏夹", "默认收藏夹", "默认收藏夹", "默认收藏夹", "默认收藏夹"];
 
   ///获取位置，给后续弹窗设置位置
   late Offset iconOffset;
@@ -62,9 +61,10 @@ class _LikeScreenState extends State<LikeScreen> {
   ///播放动画
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
-    print(Provider.of<FavouriteState>(context, listen: false).favList);
+    List favList = Provider.of<FavouriteState>(context, listen: false).favList;
+
     double _width = Adapt.px(260);
-    double _height = Adapt.px(60 + _list.length * 110);
+    double _height = Adapt.px(60 + favList.length * 110);
 
     Navigator.push(
       context,
@@ -74,10 +74,9 @@ class _LikeScreenState extends State<LikeScreen> {
           top: iconOffset.dy + iconSize.height / 3,
           offset: Offset(_width / 2, -_height / 2),
           child: Container(
-            // color: Colors.red,
             width: _width,
             height: _height,
-            child: buildMenu(_list, _list.length * 110),
+            child: buildMenu(favList, favList.length * 110),
           ),
           fun: (close) {
             closeModel = close;
@@ -88,8 +87,7 @@ class _LikeScreenState extends State<LikeScreen> {
   }
 
   ///构造传入的widget
-  Widget buildMenu(favList, addHeight) {
-    print(addHeight);
+  Widget buildMenu(favList, itemHeight) {
     return Container(
       child: Stack(
         children: [
@@ -114,7 +112,7 @@ class _LikeScreenState extends State<LikeScreen> {
               // color: Colors.,
               // padding: EdgeInsets.only(left: 10),
               width: Adapt.px(260),
-              height: Adapt.px(addHeight),
+              height: Adapt.px(itemHeight),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Adapt.px(20)),
                 color: Color.fromRGBO(46, 53, 61, 1),
@@ -129,7 +127,7 @@ class _LikeScreenState extends State<LikeScreen> {
                               width: double.infinity,
                               alignment: Alignment.center,
                               child: Text(
-                                '这应该是选项',
+                                e,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: Adapt.px(28),

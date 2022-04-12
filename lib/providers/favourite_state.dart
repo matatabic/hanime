@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
-  List _favList = ["默认收藏夹f", "默认收藏夹a", "默认收藏夹w", "默认收藏夹s", "默认收藏夹c"];
+  List _favList = ["默认收藏夹f", "默认收藏夹a", "默认收藏夹w"];
 
   List get favList => _favList;
 
