@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/pages/home/frosted_glass_demo.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
@@ -25,7 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   void initState() {
     // TODO: implement initState
     super.initState();
-    tabController = TabController(vsync: this, length: 4)
+    tabController = TabController(vsync: this, length: 3)
       ..addListener(() {
         setState(() {
           currentIndex = tabController.index;
@@ -45,7 +44,6 @@ class _BottomNavBarState extends State<BottomNavBar>
           items: <Widget>[
             Icon(Icons.home, size: Adapt.px(60)),
             Icon(Icons.search, size: Adapt.px(60)),
-            Icon(Icons.person, size: Adapt.px(60)),
             Icon(Icons.repeat, size: Adapt.px(60)),
           ],
           onTap: (index) {
@@ -67,8 +65,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             children: <Widget>[
               HomeScreen(),
               SearchScreen(),
-              Complex(),
-              AttachedToast(),
+              MyScreen(),
             ],
           ),
         ));
