@@ -1,42 +1,12 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-//
-// class FavouriteScreen extends StatefulWidget {
-//   const FavouriteScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   _FavouriteScreenState createState() => _FavouriteScreenState();
-// }
-//
-// class _FavouriteScreenState extends State<FavouriteScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: DefaultTabController(
-//           length: 2,
-//           child: Scaffold(
-//             appBar: TabBar(
-//                 indicatorSize: TabBarIndicatorSize.label,
-//                 indicatorColor: Colors.red,
-//                 indicatorWeight: 3,
-//                 tabs: [
-//                   Tab(text: "测试1"),
-//                   Tab(text: "测试2"),
-//                 ]),
-//             body: TabBarView(children: [
-//               Icon(Icons.explore),
-//               Icon(Icons.search),
-//             ]),
-//           )),
-//     );
-//   }
-// }
-
 import 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hanime/providers/favourite_state.dart';
+import 'package:hanime/utils/logUtil.dart';
+import 'package:provider/provider.dart';
 
 class ExpansionTileExample extends StatefulWidget {
   ExpansionTileExample({Key? key}) : super(key: key);
@@ -53,9 +23,15 @@ class InnerList {
 
 class _ListTileExample extends State<ExpansionTileExample> {
   late List<InnerList> _lists;
-
+  List<Favourite> _favList = [];
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      List<Favourite> favList =
+          Provider.of<FavouriteState>(context, listen: false).favList;
+      _favList = favList;
+    });
+
     super.initState();
 
     _lists = List.generate(10, (outerIndex) {
@@ -69,7 +45,10 @@ class _ListTileExample extends State<ExpansionTileExample> {
   @override
   Widget build(BuildContext context) {
     return DragAndDropLists(
-      children: List.generate(_lists.length, (index) => _buildList(index)),
+      children: _favList
+          .map((v) => _buildList(v) as DragAndDropListInterface)
+          .toList(),
+      // children: [_favList.map((v) => _buildList(1)).toList()],
       onItemReorder: _onItemReorder,
       onListReorder: _onListReorder,
       // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
@@ -89,22 +68,26 @@ class _ListTileExample extends State<ExpansionTileExample> {
     );
   }
 
-  _buildList(int outerIndex) {
-    var innerList = _lists[outerIndex];
+  _buildList(Favourite fav) {
+    LogUtil.d(12421412312);
+    // var innerList = _favList[0];
+
     return DragAndDropListExpansion(
-      title: Text('List ${innerList.name}'),
+      title: Text('List ${fav.name}'),
       // subtitle: Text('Subtitle ${innerList.name}'),
       leading: Icon(Icons.ac_unit),
-      children: List.generate(innerList.children.length,
-          (index) => _buildItem(innerList.children[index])),
-      listKey: ObjectKey(innerList),
+      // children: List.generate(innerList.children.length,
+      //     (index) => _buildItem(innerList.children[index])),
+      children:
+          fav.children.map((v) => _buildItem(v) as DragAndDropItem).toList(),
+      listKey: ObjectKey(fav),
     );
   }
 
-  _buildItem(String item) {
+  _buildItem(Anime anime) {
     return DragAndDropItem(
       child: ListTile(
-        title: Text(item),
+        title: Text(anime.title),
       ),
     );
   }
@@ -113,16 +96,16 @@ class _ListTileExample extends State<ExpansionTileExample> {
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     print("_onItemReorder");
     setState(() {
-      var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
-      _lists[newListIndex].children.insert(newItemIndex, movedItem);
+      // var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
+      // _lists[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     print('oldListIndex: $oldListIndex, newListIndex: $newListIndex');
     setState(() {
-      var movedList = _lists.removeAt(oldListIndex);
-      _lists.insert(newListIndex, movedList);
+      // var movedList = _lists.removeAt(oldListIndex);
+      // _lists.insert(newListIndex, movedList);
     });
   }
 }

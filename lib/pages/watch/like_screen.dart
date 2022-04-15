@@ -4,7 +4,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
 import 'package:hanime/providers/favourite_state.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 class LikeScreen extends StatefulWidget {
   @override
@@ -61,7 +61,8 @@ class _LikeScreenState extends State<LikeScreen> {
   ///播放动画
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
-    List favList = Provider.of<FavouriteState>(context, listen: false).favList;
+    List<Favourite> favList =
+        Provider.of<FavouriteState>(context, listen: false).favList;
 
     double _width = Adapt.px(260);
     double _height = Adapt.px(60 + favList.length * 110);
@@ -87,7 +88,7 @@ class _LikeScreenState extends State<LikeScreen> {
   }
 
   ///构造传入的widget
-  Widget buildMenu(favList, itemHeight) {
+  Widget buildMenu(List<Favourite> favList, itemHeight) {
     return Container(
       child: Stack(
         children: [
@@ -120,14 +121,14 @@ class _LikeScreenState extends State<LikeScreen> {
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: favList
-                    .map<Widget>((e) => Expanded(
+                    .map<Widget>((v) => Expanded(
                           flex: 1,
                           child: InkWell(
                             child: Container(
                               width: double.infinity,
                               alignment: Alignment.center,
                               child: Text(
-                                e,
+                                v.name,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: Adapt.px(28),
@@ -135,7 +136,7 @@ class _LikeScreenState extends State<LikeScreen> {
                               ),
                             ),
                             onTap: () async {
-                              print('这是点击了选项${e.toString()}');
+                              print('这是点击了选项${v.name.toString()}');
                               // await Future.delayed(Duration(milliseconds: 500))
                               //     .then((value) => print('开始'));
                               setState(() {
