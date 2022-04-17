@@ -66,11 +66,7 @@ class BriefScreen extends StatelessWidget {
                           Text(
                             watchEntity.info.countTitle,
                           ),
-                          LikeScreen()
-                          // LikeButton(
-                          //   isLiked: true,
-                          //   size: Adapt.px(60),
-                          // ),
+                          LikeScreen(info: watchEntity.info)
                         ],
                       ),
                     )

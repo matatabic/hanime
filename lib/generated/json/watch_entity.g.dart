@@ -55,6 +55,10 @@ WatchInfo $WatchInfoFromJson(Map<String, dynamic> json) {
   if (imgUrl != null) {
     watchInfo.imgUrl = imgUrl;
   }
+  final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
+  if (htmlUrl != null) {
+    watchInfo.htmlUrl = htmlUrl;
+  }
   final int? videoIndex = jsonConvert.convert<int>(json['videoIndex']);
   if (videoIndex != null) {
     watchInfo.videoIndex = videoIndex;
@@ -78,6 +82,7 @@ Map<String, dynamic> $WatchInfoToJson(WatchInfo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
   data['imgUrl'] = entity.imgUrl;
+  data['htmlUrl'] = entity.htmlUrl;
   data['videoIndex'] = entity.videoIndex;
   data['shareTitle'] = entity.shareTitle;
   data['countTitle'] = entity.countTitle;

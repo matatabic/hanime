@@ -4,7 +4,7 @@ import 'package:hanime/generated/json/base/json_convert_content.dart';
 HomeEntity $HomeEntityFromJson(Map<String, dynamic> json) {
   final HomeEntity homeEntity = HomeEntity();
   final List<HomeSwiper>? swiper =
-      jsonConvert.convertListNotNull<HomeSwiper>(json['swiper']);
+  jsonConvert.convertListNotNull<HomeSwiper>(json['swiper']);
   if (swiper != null) {
     homeEntity.swiper = swiper;
   }
@@ -83,7 +83,7 @@ HomeTop $HomeTopFromJson(Map<String, dynamic> json) {
     homeTop.labelHtml = labelHtml;
   }
   final List<HomeTopVideo>? video =
-      jsonConvert.convertListNotNull<HomeTopVideo>(json['video']);
+  jsonConvert.convertListNotNull<HomeTopVideo>(json['video']);
   if (video != null) {
     homeTop.video = video;
   }
@@ -139,7 +139,7 @@ HomeLatest $HomeLatestFromJson(Map<String, dynamic> json) {
     homeLatest.labelHtml = labelHtml;
   }
   final List<List<HomeLatestVideo>>? video =
-      jsonConvert.convertListNotNull<List<HomeLatestVideo>>(json['video']);
+  jsonConvert.convertListNotNull<List<HomeLatestVideo>>(json['video']);
   if (video != null) {
     homeLatest.video = video;
   }
@@ -211,7 +211,7 @@ HomeFire $HomeFireFromJson(Map<String, dynamic> json) {
     homeFire.labelHtml = labelHtml;
   }
   final List<HomeFireVideo>? video =
-      jsonConvert.convertListNotNull<HomeFireVideo>(json['video']);
+  jsonConvert.convertListNotNull<HomeFireVideo>(json['video']);
   if (video != null) {
     homeFire.video = video;
   }
@@ -262,7 +262,7 @@ HomeTag $HomeTagFromJson(Map<String, dynamic> json) {
     homeTag.labelHtml = labelHtml;
   }
   final List<List<HomeTagVideo>>? video =
-      jsonConvert.convertListNotNull<List<HomeTagVideo>>(json['video']);
+  jsonConvert.convertListNotNull<List<HomeTagVideo>>(json['video']);
   if (video != null) {
     homeTag.video = video;
   }
@@ -319,7 +319,7 @@ HomeHot $HomeHotFromJson(Map<String, dynamic> json) {
     homeHot.labelHtml = labelHtml;
   }
   final List<HomeHotVideo>? video =
-      jsonConvert.convertListNotNull<HomeHotVideo>(json['video']);
+  jsonConvert.convertListNotNull<HomeHotVideo>(json['video']);
   if (video != null) {
     homeHot.video = video;
   }
@@ -370,7 +370,7 @@ HomeWatch $HomeWatchFromJson(Map<String, dynamic> json) {
     homeWatch.labelHtml = labelHtml;
   }
   final List<HomeWatchVideo>? video =
-      jsonConvert.convertListNotNull<HomeWatchVideo>(json['video']);
+  jsonConvert.convertListNotNull<HomeWatchVideo>(json['video']);
   if (video != null) {
     homeWatch.video = video;
   }

@@ -3,10 +3,15 @@ import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
+import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
 
 class LikeScreen extends StatefulWidget {
+  final WatchInfo info;
+
+  LikeScreen({Key? key, required this.info}) : super(key: key);
+
   @override
   _LikeScreenState createState() => _LikeScreenState();
 }
@@ -121,14 +126,14 @@ class _LikeScreenState extends State<LikeScreen> {
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: favList
-                    .map<Widget>((v) => Expanded(
+                    .map<Widget>((item) => Expanded(
                           flex: 1,
                           child: InkWell(
                             child: Container(
                               width: double.infinity,
                               alignment: Alignment.center,
                               child: Text(
-                                v.name,
+                                item.name,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: Adapt.px(28),
@@ -136,9 +141,14 @@ class _LikeScreenState extends State<LikeScreen> {
                               ),
                             ),
                             onTap: () async {
-                              print('这是点击了选项${v.name.toString()}');
-                              // await Future.delayed(Duration(milliseconds: 500))
-                              //     .then((value) => print('开始'));
+                              print(widget.info.htmlUrl);
+                              print('这是点击了选项${item.name}');
+                              context.read<FavouriteState>().saveAnime(
+                                  Anime(
+                                      image: widget.info.imgUrl,
+                                      htmlUrl: widget.info.htmlUrl,
+                                      title: widget.info.title),
+                                  item);
                               setState(() {
                                 isLiked = !isLiked;
                               });

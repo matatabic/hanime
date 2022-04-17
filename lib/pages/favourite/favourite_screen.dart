@@ -4,8 +4,9 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hanime/common/adapt.dart';
 import 'package:hanime/providers/favourite_state.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:provider/provider.dart';
 
 class ExpansionTileExample extends StatefulWidget {
@@ -44,24 +45,48 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   @override
   Widget build(BuildContext context) {
-    return DragAndDropLists(
-      children: _favList
-          .map((v) => _buildList(v) as DragAndDropListInterface)
-          .toList(),
-      // children: [_favList.map((v) => _buildList(1)).toList()],
-      onItemReorder: _onItemReorder,
-      onListReorder: _onListReorder,
-      // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
-      listGhost: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30.0),
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(7.0),
+    return Scaffold(
+      floatingActionButton: SpeedDial(child: Icon(Icons.add), children: [
+        SpeedDialChild(
+            child: Icon(Icons.accessibility),
+            backgroundColor: Colors.red,
+            label: '第一个按钮',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => print('FIRST CHILD')),
+        SpeedDialChild(
+          child: Icon(Icons.brush),
+          backgroundColor: Colors.orange,
+          label: '第二个按钮',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => print('SECOND CHILD'),
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.keyboard_voice),
+          backgroundColor: Colors.green,
+          label: '第三个按钮',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => print('THIRD CHILD'),
+        ),
+      ]),
+      body: DragAndDropLists(
+        children: _favList
+            .map((v) => _buildList(v) as DragAndDropListInterface)
+            .toList(),
+        // children: [_favList.map((v) => _buildList(1)).toList()],
+        onItemReorder: _onItemReorder,
+        onListReorder: _onListReorder,
+        // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
+        listGhost: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+              child: Icon(Icons.add_box),
             ),
-            child: Icon(Icons.add_box),
           ),
         ),
       ),
@@ -69,9 +94,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   _buildList(Favourite fav) {
-    LogUtil.d(12421412312);
-    // var innerList = _favList[0];
-
     return DragAndDropListExpansion(
       title: Text('List ${fav.name}'),
       // subtitle: Text('Subtitle ${innerList.name}'),
@@ -86,8 +108,9 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _buildItem(Anime anime) {
     return DragAndDropItem(
-      child: ListTile(
-        title: Text(anime.title),
+      child: Container(
+        color: Colors.red,
+        height: Adapt.px(300),
       ),
     );
   }
@@ -98,6 +121,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
     setState(() {
       // var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
       // _lists[newListIndex].children.insert(newItemIndex, movedItem);
+      var movedItem = _favList[oldListIndex].children.removeAt(oldItemIndex);
+      _favList[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 
@@ -106,6 +131,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
     setState(() {
       // var movedList = _lists.removeAt(oldListIndex);
       // _lists.insert(newListIndex, movedList);
+      var movedList = _favList.removeAt(oldListIndex);
+      _favList.insert(newListIndex, movedList);
     });
   }
 }

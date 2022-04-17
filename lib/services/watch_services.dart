@@ -131,6 +131,7 @@ Future getWatchData(url) async {
     "info": {
       "title": watchTitle,
       "imgUrl": watchImg,
+      "htmlUrl": url,
       "videoIndex": videoIndex,
       "shareTitle": shareTitle,
       "countTitle": watchCountTitle,
