@@ -4,17 +4,13 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/providers/favourite_state.dart';
 
-import 'like_screen.dart';
-
-class BriefScreen extends StatelessWidget {
-  final WatchEntity watchEntity;
-  final Function(String url) playerChange;
+class FavouriteItem extends StatelessWidget {
+  final Anime anime;
   final String randomTag = UniqueKey().toString();
 
-  BriefScreen({Key? key, required this.watchEntity, required this.playerChange})
-      : super(key: key);
+  FavouriteItem({Key? key, required this.anime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +28,7 @@ class BriefScreen extends StatelessWidget {
                     randomNum: randomTag,
                     minScale: 1.0,
                     maxScale: 1.8,
-                    imageProvider: NetworkImage(watchEntity.info.imgUrl),
+                    imageProvider: NetworkImage(anime.image),
                   ),
                 ));
               },
@@ -43,34 +39,19 @@ class BriefScreen extends StatelessWidget {
                       width: Adapt.px(140),
                       height: Adapt.px(140),
                       child: CommonImages(
-                        imgUrl: watchEntity.info.imgUrl,
+                        imgUrl: anime.image,
                       ),
                     ),
                   )),
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: Adapt.px(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(watchEntity.info.title,
-                        maxLines: 2, overflow: TextOverflow.ellipsis),
-                    Padding(
-                      padding: EdgeInsets.only(top: Adapt.px(5)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            watchEntity.info.countTitle,
-                          ),
-                          LikeScreen(info: watchEntity.info)
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  padding: EdgeInsets.only(left: Adapt.px(20)),
+                  child: Text(anime.title,
+                      style: TextStyle(
+                          fontSize: Adapt.px(30),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white))),
             ),
           ],
         ));

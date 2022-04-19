@@ -21,31 +21,16 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
       name: '默认收藏夹',
       children: [
         Anime(
-          title: '我的收藏夹title1',
-          image: '我的收藏夹image1',
-          htmlUrl: '我的收藏夹htmlUrl1',
-        ),
-        Anime(
-          title: '我的收藏夹title2',
-          image: '我的收藏夹image2',
-          htmlUrl: '我的收藏夹htmlUrl2',
+          title: '兔耳冒險譚 4',
+          image:
+              'https://cdn.jsdelivr.net/gh/tatakanuta/tatakanuta@v1.0.0/asset/cover/W1XDwTL.jpg',
+          htmlUrl: 'https://hanime1.me/watch?v=38388',
         )
       ],
     ),
     Favourite(
       name: '我的收藏夹',
-      children: [
-        // Anime(
-        //   title: '我的收藏夹title3',
-        //   image: '我的收藏夹image3',
-        //   htmlUrl: '我的收藏夹htmlUrl3',
-        // ),
-        // Anime(
-        //   title: '我的收藏夹title4',
-        //   image: '我的收藏夹image4',
-        //   htmlUrl: '我的收藏夹htmlUrl4',
-        // )
-      ],
+      children: [],
     )
   ];
 
