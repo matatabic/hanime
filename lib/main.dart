@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           platform: TargetPlatform.iOS,
           brightness: Brightness.dark,
           primaryColor: Colors.orange[800],
-          accentColor: Colors.cyan[600],
+          accentColor: Colors.orange[300],
           scaffoldBackgroundColor: Colors.black26,
         ),
         home: new BottomNavBar());

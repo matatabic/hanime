@@ -16,7 +16,7 @@ class Favourite {
 }
 
 class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
-  List<Favourite> _favList = [
+  List<Favourite> _favouriteList = [
     Favourite(
       name: '默认收藏夹',
       children: [
@@ -34,18 +34,32 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     )
   ];
 
-  List<Favourite> get favList => _favList;
+  List<Favourite> get favouriteList => _favouriteList;
 
   void saveAnime(Anime anime, Favourite favourite) {
-    int index = _favList.indexOf(favourite);
-    _favList[index].children.insert(0, anime);
+    int index = _favouriteList.indexOf(favourite);
+    _favouriteList[index].children.insert(0, anime);
 
+    notifyListeners();
+  }
+
+  void removeList(Favourite favourite) {
+    int index = _favouriteList.indexOf(favourite);
+    _favouriteList.removeAt(index);
+
+    notifyListeners();
+  }
+
+  void removeItem(Anime anime) {
+    int index = _favouriteList
+        .indexWhere((favourite) => favourite.children.contains(anime));
+    _favouriteList[index].children.remove(anime);
     notifyListeners();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ObjectFlagProperty('favList', favList));
+    properties.add(ObjectFlagProperty('favouriteList', _favouriteList));
   }
 }

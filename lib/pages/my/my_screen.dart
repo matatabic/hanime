@@ -9,7 +9,12 @@ class MyScreen extends StatefulWidget {
   _MyScreenState createState() => _MyScreenState();
 }
 
-class _MyScreenState extends State<MyScreen> {
+class _MyScreenState extends State<MyScreen>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,8 +26,8 @@ class _MyScreenState extends State<MyScreen> {
                 indicatorColor: Colors.red,
                 indicatorWeight: 3,
                 tabs: [
-                  Tab(text: "测试1"),
-                  Tab(text: "测试2"),
+                  Tab(text: "收藏"),
+                  Tab(text: "下载"),
                 ]),
             body: TabBarView(children: [
               ExpansionTileExample(),

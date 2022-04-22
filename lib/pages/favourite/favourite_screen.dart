@@ -1,14 +1,16 @@
-import 'package:drag_and_drop_lists/drag_and_drop_list_expansion.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/drag_and_drop_lists/drag_and_drop_list_interface.dart';
+import 'package:hanime/common/drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:hanime/pages/favourite/favourite_item.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
+import 'package:shake_animation_widget/shake_animation_widget.dart';
 
 class ExpansionTileExample extends StatefulWidget {
   ExpansionTileExample({Key? key}) : super(key: key);
@@ -23,58 +25,62 @@ class InnerList {
   InnerList({required this.name, required this.children});
 }
 
-class _ListTileExample extends State<ExpansionTileExample> {
-  late List<InnerList> _lists;
-  List<Favourite> _favList = [];
+class _ListTileExample extends State<ExpansionTileExample>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  List<Favourite> _favouriteList = [];
+  bool _deleteMode = false;
+
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      List<Favourite> favList =
-          Provider.of<FavouriteState>(context, listen: false).favList;
-      _favList = favList;
+      List<Favourite> favouriteList =
+          Provider.of<FavouriteState>(context, listen: false).favouriteList;
+      _favouriteList = favouriteList;
     });
 
     super.initState();
-
-    _lists = List.generate(10, (outerIndex) {
-      return InnerList(
-        name: outerIndex.toString(),
-        children: List.generate(6, (innerIndex) => '$outerIndex.$innerIndex'),
-      );
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: SpeedDial(child: Icon(Icons.add), children: [
-        SpeedDialChild(
-            child: Icon(Icons.accessibility),
-            backgroundColor: Colors.red,
-            label: '第一个按钮',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('FIRST CHILD')),
-        SpeedDialChild(
-          child: Icon(Icons.brush),
-          backgroundColor: Colors.orange,
-          label: '第二个按钮',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('SECOND CHILD'),
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.keyboard_voice),
-          backgroundColor: Colors.green,
-          label: '第三个按钮',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('THIRD CHILD'),
-        ),
-      ]),
+      floatingActionButton: _deleteMode
+          ? SpeedDial(
+              onPress: () {
+                setState(() {
+                  _deleteMode = false;
+                });
+              },
+              child: Icon(Icons.clear),
+              backgroundColor: Colors.red,
+            )
+          : SpeedDial(child: Icon(Icons.add), children: [
+              SpeedDialChild(
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.red,
+                  label: '新建收藏夹',
+                  labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () => _chooseDialog(context, '新建收藏夹')),
+              SpeedDialChild(
+                child: Icon(Icons.brush),
+                backgroundColor: Colors.orange,
+                label: '删除收藏夹',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () => {
+                  setState(() {
+                    _deleteMode = true;
+                  })
+                },
+              )
+            ]),
       body: DragAndDropLists(
-        children: _favList
+        children: _favouriteList
             .map((v) => _buildList(v) as DragAndDropListInterface)
             .toList(),
-        itemDraggingWidth: 100,
-        // children: [_favList.map((v) => _buildList(1)).toList()],
+        // itemDraggingWidth: 100,
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
         // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
@@ -97,11 +103,35 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _buildList(Favourite fav) {
     return DragAndDropListExpansion(
-      title: Text('List ${fav.name}'),
-      // subtitle: Text('Subtitle ${innerList.name}'),
-      // leading: Icon(Icons.ac_unit),
-      // children: List.generate(innerList.children.length,
-      //     (index) => _buildItem(innerList.children[index])),
+      // canDrag: false,
+      title: Text(fav.name),
+      contentsWhenEmpty: Center(
+        child: Text('暂无收藏'),
+      ),
+      // subtitle: Text('Subtitle '),
+      leading: InkWell(
+          onTap: () {
+            print("213421");
+          },
+          child: _deleteMode
+              ? InkWell(
+                  onTap: () {
+                    Provider.of<FavouriteState>(context, listen: false)
+                        .removeList(fav);
+                    setState(() {
+                      _favouriteList.remove(fav);
+                    });
+                  },
+                  child: ShakeAnimationWidget(
+                      isForward: true,
+                      shakeRange: 0.3,
+                      child: Icon(Icons.delete,
+                          size: Adapt.px(64), color: Colors.red)),
+                )
+              : Icon(
+                  Icons.folder,
+                  size: Adapt.px(64),
+                )), // Icon(Icons.folder),
       children:
           fav.children.map((v) => _buildItem(v) as DragAndDropItem).toList(),
       listKey: ObjectKey(fav),
@@ -110,13 +140,28 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _buildItem(Anime anime) {
     return DragAndDropItem(
+      // canDrag: false,
+      feedbackWidget: Container(
+        child: FavouriteItem(anime: anime, showBg: false),
+      ),
       child: Slidable(
         key: const ValueKey(1),
-        startActionPane: const ActionPane(
+        startActionPane: ActionPane(
           motion: ScrollMotion(),
           children: [
             SlidableAction(
-              onPressed: doNothing,
+              onPressed: (BuildContext context) {
+                Provider.of<FavouriteState>(context, listen: false)
+                    .removeItem(anime);
+                // context.read()<Favourite>().removeItem(anime);
+                setState(() {
+                  _favouriteList.forEach((fav) {
+                    if (fav.children.contains(anime)) {
+                      fav.children.remove(anime);
+                    }
+                  });
+                });
+              },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
               icon: Icons.delete,
@@ -133,24 +178,51 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    print("_onItemReorder");
     setState(() {
-      // var movedItem = _lists[oldListIndex].children.removeAt(oldItemIndex);
-      // _lists[newListIndex].children.insert(newItemIndex, movedItem);
-      var movedItem = _favList[oldListIndex].children.removeAt(oldItemIndex);
-      _favList[newListIndex].children.insert(newItemIndex, movedItem);
+      var movedItem =
+          _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
+      _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
-    print('oldListIndex: $oldListIndex, newListIndex: $newListIndex');
     setState(() {
-      // var movedList = _lists.removeAt(oldListIndex);
-      // _lists.insert(newListIndex, movedList);
-      var movedList = _favList.removeAt(oldListIndex);
-      _favList.insert(newListIndex, movedList);
+      var movedList = _favouriteList.removeAt(oldListIndex);
+      _favouriteList.insert(newListIndex, movedList);
     });
   }
 }
 
-void doNothing(BuildContext context) {}
+Future<void> _chooseDialog(context, text) async {
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(text),
+          content: Card(
+            elevation: 0.0,
+            child: Column(
+              children: <Widget>[
+                CupertinoTextField(
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('取消'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('确定'),
+            ),
+          ],
+        );
+      });
+}

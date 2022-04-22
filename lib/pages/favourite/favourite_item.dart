@@ -8,15 +8,17 @@ import 'package:hanime/providers/favourite_state.dart';
 
 class FavouriteItem extends StatelessWidget {
   final Anime anime;
+  final bool showBg;
   final String randomTag = UniqueKey().toString();
 
-  FavouriteItem({Key? key, required this.anime}) : super(key: key);
+  FavouriteItem({Key? key, required this.anime, this.showBg = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        color: Color.fromRGBO(58, 60, 63, 1),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        color: showBg ? Color.fromRGBO(58, 60, 63, 1) : Colors.transparent,
         height: Adapt.px(220),
         width: MediaQuery.of(context).size.width,
         child: Row(

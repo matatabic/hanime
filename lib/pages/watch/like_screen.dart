@@ -67,7 +67,7 @@ class _LikeScreenState extends State<LikeScreen> {
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
     List<Favourite> favList =
-        Provider.of<FavouriteState>(context, listen: false).favList;
+        Provider.of<FavouriteState>(context, listen: false).favouriteList;
 
     double _width = Adapt.px(260);
     double _height = Adapt.px(60 + favList.length * 110);
