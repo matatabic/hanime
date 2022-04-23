@@ -63,7 +63,7 @@ class _ListTileExample extends State<ExpansionTileExample>
                   backgroundColor: Colors.red,
                   label: '新建收藏夹',
                   labelStyle: TextStyle(fontSize: 18.0),
-                  onTap: () => _chooseDialog(context, '新建收藏夹')),
+                  onTap: () => _chooseTextDialog(context)),
               SpeedDialChild(
                 child: Icon(Icons.brush),
                 backgroundColor: Colors.orange,
@@ -119,7 +119,7 @@ class _ListTileExample extends State<ExpansionTileExample>
                     Provider.of<FavouriteState>(context, listen: false)
                         .removeList(fav);
                     setState(() {
-                      _favouriteList.remove(fav);
+                      // _favouriteList.remove(fav);
                     });
                   },
                   child: ShakeAnimationWidget(
@@ -178,32 +178,35 @@ class _ListTileExample extends State<ExpansionTileExample>
 
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    var movedItem =
+        _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
     setState(() {
-      var movedItem =
-          _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
       _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
+    var movedList = _favouriteList.removeAt(oldListIndex);
     setState(() {
-      var movedList = _favouriteList.removeAt(oldListIndex);
       _favouriteList.insert(newListIndex, movedList);
     });
   }
 }
 
-Future<void> _chooseDialog(context, text) async {
+Future<void> _chooseTextDialog(context) async {
+  String name = "";
   showCupertinoDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text(text),
+          title: Text("新建收藏夹"),
           content: Card(
             elevation: 0.0,
             child: Column(
               children: <Widget>[
                 CupertinoTextField(
+                  onChanged: (String text) => {name = text},
+                  maxLength: 10,
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -218,6 +221,11 @@ Future<void> _chooseDialog(context, text) async {
             ),
             CupertinoDialogAction(
               onPressed: () {
+                if (name.length > 0) {
+                  Provider.of<FavouriteState>(context, listen: false)
+                      .addList(name);
+                }
+
                 Navigator.pop(context);
               },
               child: Text('确定'),

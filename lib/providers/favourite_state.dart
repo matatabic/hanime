@@ -36,6 +36,20 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<Favourite> get favouriteList => _favouriteList;
 
+  void orderItem(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
+
+  void orderList(int oldListIndex, int newListIndex) {}
+
+  void addList(String name) {
+    _favouriteList.add(Favourite(
+      name: name,
+      children: [],
+    ));
+
+    notifyListeners();
+  }
+
   void saveAnime(Anime anime, Favourite favourite) {
     int index = _favouriteList.indexOf(favourite);
     _favouriteList[index].children.insert(0, anime);
@@ -54,7 +68,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     int index = _favouriteList
         .indexWhere((favourite) => favourite.children.contains(anime));
     _favouriteList[index].children.remove(anime);
-    notifyListeners();
+    // notifyListeners();
   }
 
   @override
