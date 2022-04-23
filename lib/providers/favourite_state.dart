@@ -37,9 +37,18 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
   List<Favourite> get favouriteList => _favouriteList;
 
   void orderItem(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    var movedItem =
+        _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
+    _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
+    notifyListeners();
+  }
 
-  void orderList(int oldListIndex, int newListIndex) {}
+  void orderList(int oldListIndex, int newListIndex) {
+    var movedList = _favouriteList.removeAt(oldListIndex);
+    _favouriteList.insert(newListIndex, movedList);
+    notifyListeners();
+  }
 
   void addList(String name) {
     _favouriteList.add(Favourite(

@@ -30,6 +30,18 @@ class _LikeScreenState extends State<LikeScreen> {
   late Function closeModel;
 
   bool isLiked = false;
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // List<Favourite> favouriteList =
+      //     Provider.of<FavouriteState>(context, listen: false).favouriteList;
+      // setState(() {
+      //   isLiked = true;
+      // });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +55,15 @@ class _LikeScreenState extends State<LikeScreen> {
 
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
+      // setState(() {
+      //   isLiked = true;
+      // });
     });
 
     return Container(
         child: LikeButton(
       key: iconKey,
+      isPanel: true,
       onTap: (bool isLike) async {
         if (isLike) {
           setState(() {
@@ -152,7 +168,7 @@ class _LikeScreenState extends State<LikeScreen> {
                               setState(() {
                                 isLiked = !isLiked;
                               });
-                              // await closeModel();
+                              await closeModel();
                               print('结束');
                             },
                           ),

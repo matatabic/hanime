@@ -103,35 +103,29 @@ class _ListTileExample extends State<ExpansionTileExample>
 
   _buildList(Favourite fav) {
     return DragAndDropListExpansion(
-      // canDrag: false,
+      canDrag: !_deleteMode,
       title: Text(fav.name),
       contentsWhenEmpty: Center(
         child: Text('暂无收藏'),
       ),
       // subtitle: Text('Subtitle '),
-      leading: InkWell(
-          onTap: () {
-            print("213421");
-          },
-          child: _deleteMode
-              ? InkWell(
-                  onTap: () {
-                    Provider.of<FavouriteState>(context, listen: false)
-                        .removeList(fav);
-                    setState(() {
-                      // _favouriteList.remove(fav);
-                    });
-                  },
-                  child: ShakeAnimationWidget(
-                      isForward: true,
-                      shakeRange: 0.3,
-                      child: Icon(Icons.delete,
-                          size: Adapt.px(64), color: Colors.red)),
-                )
-              : Icon(
-                  Icons.folder,
-                  size: Adapt.px(64),
-                )), // Icon(Icons.folder),
+      leading: _deleteMode
+          ? InkWell(
+              onTap: () {
+                Provider.of<FavouriteState>(context, listen: false)
+                    .removeList(fav);
+                setState(() {});
+              },
+              child: ShakeAnimationWidget(
+                  isForward: true,
+                  shakeRange: 0.3,
+                  child: Icon(Icons.delete,
+                      size: Adapt.px(64), color: Colors.red)),
+            )
+          : Icon(
+              Icons.folder,
+              size: Adapt.px(64),
+            ), // Icon(Icons.folder),
       children:
           fav.children.map((v) => _buildItem(v) as DragAndDropItem).toList(),
       listKey: ObjectKey(fav),
@@ -140,7 +134,7 @@ class _ListTileExample extends State<ExpansionTileExample>
 
   _buildItem(Anime anime) {
     return DragAndDropItem(
-      // canDrag: false,
+      canDrag: !_deleteMode,
       feedbackWidget: Container(
         child: FavouriteItem(anime: anime, showBg: false),
       ),
@@ -154,13 +148,7 @@ class _ListTileExample extends State<ExpansionTileExample>
                 Provider.of<FavouriteState>(context, listen: false)
                     .removeItem(anime);
                 // context.read()<Favourite>().removeItem(anime);
-                setState(() {
-                  _favouriteList.forEach((fav) {
-                    if (fav.children.contains(anime)) {
-                      fav.children.remove(anime);
-                    }
-                  });
-                });
+                setState(() {});
               },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
@@ -178,18 +166,24 @@ class _ListTileExample extends State<ExpansionTileExample>
 
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    var movedItem =
-        _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
-    setState(() {
-      _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
-    });
+    Provider.of<FavouriteState>(context, listen: false)
+        .orderItem(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
+    setState(() {});
+    // var movedItem =
+    //     _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
+    // setState(() {
+    //   _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
+    // });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
-    var movedList = _favouriteList.removeAt(oldListIndex);
-    setState(() {
-      _favouriteList.insert(newListIndex, movedList);
-    });
+    Provider.of<FavouriteState>(context, listen: false)
+        .orderList(oldListIndex, newListIndex);
+    setState(() {});
+    // var movedList = _favouriteList.removeAt(oldListIndex);
+    // setState(() {
+    //   _favouriteList.insert(newListIndex, movedList);
+    // });
   }
 }
 
