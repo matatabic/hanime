@@ -30,14 +30,20 @@ class _LikeScreenState extends State<LikeScreen> {
   late Function closeModel;
 
   bool isLiked = false;
+
+  bool isPanel = false;
+
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      // List<Favourite> favouriteList =
-      //     Provider.of<FavouriteState>(context, listen: false).favouriteList;
-      // setState(() {
-      //   isLiked = true;
-      // });
+    WidgetsBinding.instance!.addPostFrameCallback((duration) {
+      ///通过key获取到widget的位置
+      print("通过key获取到widget的位置");
+      List<Favourite> favouriteList =
+          Provider.of<FavouriteState>(context, listen: false).favouriteList;
+      setState(() {
+        isLiked = favouriteList.any((element) => element.children
+            .any((element) => element.htmlUrl == widget.info.htmlUrl));
+      });
     });
 
     super.initState();
@@ -46,26 +52,26 @@ class _LikeScreenState extends State<LikeScreen> {
   @override
   Widget build(BuildContext context) {
     ///等待widget初始化完成
+    print('like_screen build');
     WidgetsBinding.instance!.addPostFrameCallback((duration) {
       ///通过key获取到widget的位置
       RenderBox box = iconKey.currentContext!.findRenderObject() as RenderBox;
+      print('like_screen build box');
 
       ///获取widget的高宽
       iconSize = box.size;
 
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
-      // setState(() {
-      //   isLiked = true;
-      // });
     });
 
     return Container(
         child: LikeButton(
       key: iconKey,
-      isPanel: true,
+      isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
+          // context.read()<FavouriteState>().addFavourite(widget.info);
           setState(() {
             isLiked = false;
           });
@@ -165,6 +171,7 @@ class _LikeScreenState extends State<LikeScreen> {
                                       htmlUrl: widget.info.htmlUrl,
                                       title: widget.info.title),
                                   item);
+                              isPanel = true;
                               setState(() {
                                 isLiked = !isLiked;
                               });

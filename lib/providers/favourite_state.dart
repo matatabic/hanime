@@ -47,6 +47,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
   void orderList(int oldListIndex, int newListIndex) {
     var movedList = _favouriteList.removeAt(oldListIndex);
     _favouriteList.insert(newListIndex, movedList);
+
     notifyListeners();
   }
 
@@ -77,7 +78,8 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     int index = _favouriteList
         .indexWhere((favourite) => favourite.children.contains(anime));
     _favouriteList[index].children.remove(anime);
-    // notifyListeners();
+
+    notifyListeners();
   }
 
   @override
