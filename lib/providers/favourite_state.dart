@@ -20,6 +20,17 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     Favourite(
       name: '默认收藏夹',
       children: [
+        // Anime(
+        //   title: '兔耳冒險譚 4',
+        //   image:
+        //       'https://cdn.jsdelivr.net/gh/tatakanuta/tatakanuta@v1.0.0/asset/cover/W1XDwTL.jpg',
+        //   htmlUrl: 'https://hanime1.me/watch?v=38388',
+        // )
+      ],
+    ),
+    Favourite(
+      name: '我的收藏夹',
+      children: [
         Anime(
           title: '兔耳冒險譚 4',
           image:
@@ -27,10 +38,6 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
           htmlUrl: 'https://hanime1.me/watch?v=38388',
         )
       ],
-    ),
-    Favourite(
-      name: '我的收藏夹',
-      children: [],
     )
   ];
 
@@ -78,6 +85,13 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     int index = _favouriteList
         .indexWhere((favourite) => favourite.children.contains(anime));
     _favouriteList[index].children.remove(anime);
+    notifyListeners();
+  }
+
+  void removeItemByHtmlUrl(String htmlUrl) {
+    _favouriteList.forEach((element) {
+      element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
+    });
 
     notifyListeners();
   }

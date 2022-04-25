@@ -71,7 +71,16 @@ class _LikeScreenState extends State<LikeScreen> {
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          // context.read()<FavouriteState>().addFavourite(widget.info);
+          // context.read()<FavouriteState>().removeItem(Anime(
+          //     title: widget.info.title,
+          //     htmlUrl: widget.info.htmlUrl,
+          //     image: widget.info.imgUrl));
+          // context.read<FavouriteState>().removeItem(Anime(
+          //     image: widget.info.imgUrl,
+          //     htmlUrl: widget.info.htmlUrl,
+          //     title: widget.info.title));
+          Provider.of<FavouriteState>(context, listen: false)
+              .removeItemByHtmlUrl(widget.info.htmlUrl);
           setState(() {
             isLiked = false;
           });

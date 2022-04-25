@@ -50,6 +50,9 @@ dependencies:
   flutter_speed_dial: ^5.1.0
   flutter_slidable: ^1.2.0
   shake_animation_widget: ^3.0.3
+  open_file: ^3.2.1
+  path_provider: ^2.0.9
+  permission_handler: ^8.1.4+2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
