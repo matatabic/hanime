@@ -7,16 +7,16 @@ import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
 
-class LikeScreen extends StatefulWidget {
+class LikeIcon extends StatefulWidget {
   final WatchInfo info;
 
-  LikeScreen({Key? key, required this.info}) : super(key: key);
+  LikeIcon({Key? key, required this.info}) : super(key: key);
 
   @override
-  _LikeScreenState createState() => _LikeScreenState();
+  _LikeIconState createState() => _LikeIconState();
 }
 
-class _LikeScreenState extends State<LikeScreen> {
+class _LikeIconState extends State<LikeIcon> {
   ///给获取详细信息的widget设置一个key
   GlobalKey iconKey = new GlobalKey();
 
@@ -52,11 +52,9 @@ class _LikeScreenState extends State<LikeScreen> {
   @override
   Widget build(BuildContext context) {
     ///等待widget初始化完成
-    print('like_screen build');
     WidgetsBinding.instance!.addPostFrameCallback((duration) {
       ///通过key获取到widget的位置
       RenderBox box = iconKey.currentContext!.findRenderObject() as RenderBox;
-      print('like_screen build box');
 
       ///获取widget的高宽
       iconSize = box.size;
@@ -65,20 +63,11 @@ class _LikeScreenState extends State<LikeScreen> {
       iconOffset = box.localToGlobal(Offset.zero);
     });
 
-    return Container(
-        child: LikeButton(
+    return LikeButton(
       key: iconKey,
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          // context.read()<FavouriteState>().removeItem(Anime(
-          //     title: widget.info.title,
-          //     htmlUrl: widget.info.htmlUrl,
-          //     image: widget.info.imgUrl));
-          // context.read<FavouriteState>().removeItem(Anime(
-          //     image: widget.info.imgUrl,
-          //     htmlUrl: widget.info.htmlUrl,
-          //     title: widget.info.title));
           Provider.of<FavouriteState>(context, listen: false)
               .removeItemByHtmlUrl(widget.info.htmlUrl);
           setState(() {
@@ -91,7 +80,7 @@ class _LikeScreenState extends State<LikeScreen> {
       },
       isLiked: isLiked,
       size: Adapt.px(60),
-    ));
+    );
   }
 
   ///播放动画

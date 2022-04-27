@@ -1,3 +1,5 @@
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,8 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/drag_and_drop_lists/drag_and_drop_list_interface.dart';
-import 'package:hanime/common/drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:hanime/pages/favourite/favourite_item.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +63,7 @@ class _ListTileExample extends State<ExpansionTileExample>
                   backgroundColor: Colors.red,
                   label: '新建收藏夹',
                   labelStyle: TextStyle(fontSize: 18.0),
-                  onTap: () => _chooseTextDialog(context)),
+                  onTap: () => _showTextDialog(context)),
               SpeedDialChild(
                 child: Icon(Icons.brush),
                 backgroundColor: Colors.orange,
@@ -106,9 +106,8 @@ class _ListTileExample extends State<ExpansionTileExample>
       canDrag: !_deleteMode,
       title: Text(fav.name),
       contentsWhenEmpty: Center(
-        child: Text('暂无收藏'),
+        child: Text('暂无影片'),
       ),
-      // subtitle: Text('Subtitle '),
       leading: _deleteMode
           ? InkWell(
               onTap: () {
@@ -145,10 +144,39 @@ class _ListTileExample extends State<ExpansionTileExample>
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                Provider.of<FavouriteState>(context, listen: false)
-                    .removeItem(anime);
-                // context.read()<Favourite>().removeItem(anime);
-                setState(() {});
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text("确认删除该影片？"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('取消'),
+                          ),
+                          CupertinoDialogAction(
+                            onPressed: () {
+                              Provider.of<FavouriteState>(context,
+                                      listen: false)
+                                  .removeItem(anime);
+                              setState(() {});
+                              Navigator.pop(context);
+                            },
+                            child: Text('确定'),
+                          ),
+                        ],
+                      );
+                    });
+                // showTextDialog(
+                //     context,
+                //     "确认删除该影片？",
+                //     () => {
+                //           Provider.of<FavouriteState>(context, listen: false)
+                //               .removeItem(anime),
+                //           setState(() {})
+                //         });
               },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
@@ -187,7 +215,7 @@ class _ListTileExample extends State<ExpansionTileExample>
   }
 }
 
-Future<void> _chooseTextDialog(context) async {
+Future<void> _showTextDialog(context) async {
   String name = "";
   showCupertinoDialog(
       context: context,

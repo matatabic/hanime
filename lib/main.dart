@@ -10,16 +10,16 @@ import 'bottom_nav_bar.dart';
 
 // void main() => runApp(new MyApp());
 void main() => runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => HomeState()),
-          ChangeNotifierProvider(create: (_) => WatchState()),
-          ChangeNotifierProvider(create: (_) => SearchState()),
-          ChangeNotifierProvider(create: (_) => FavouriteState()),
-        ],
-        child: MyApp(),
-      ),
-    );
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => HomeState()),
+      ChangeNotifierProvider(create: (_) => WatchState()),
+      ChangeNotifierProvider(create: (_) => SearchState()),
+      ChangeNotifierProvider(create: (_) => FavouriteState()),
+    ],
+    child: MyApp(),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   @override
