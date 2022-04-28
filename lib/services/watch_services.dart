@@ -44,7 +44,7 @@ Future getWatchData(url) async {
   var currentVideo = [
     {"name": title, 'url': currentPlayer}
   ];
-
+  // /storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/62e3a5dec64032873a7466a6cf2d8f08/local.m3u8
   var tags = document
       .querySelectorAll(".video-show-panel-width .single-video-tag a[href]");
   for (var tag in tags) {
