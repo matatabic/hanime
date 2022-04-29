@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
@@ -160,12 +162,29 @@ class _HomeScreenState extends State<HomeScreen>
                   latest: data.video[index].latest,
                   width: Adapt.px(270),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
-                    );
+                    print("21521412");
+                    FFmpegKit.execute(
+                            '-i https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8 -c:v mpeg4 /storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/62e3a5dec64032873a7466a6cf2d8f08/222.mp4')
+                        .then((session) async {
+                      final returnCode = await session.getReturnCode();
+
+                      if (ReturnCode.isSuccess(returnCode)) {
+                        // SUCCESS
+                        print("SUCCESS");
+                      } else if (ReturnCode.isCancel(returnCode)) {
+                        // CANCEL
+                        print("CANCEL");
+                      } else {
+                        // ERROR
+                        print("ERROR");
+                      }
+                    });
+                    // Navigator.push(
+                    //   context,
+                    //   CupertinoPageRoute(
+                    //       builder: (context) =>
+                    //           WatchScreen(htmlUrl: data.video[index].htmlUrl)),
+                    // );
                   },
                 );
               }))
