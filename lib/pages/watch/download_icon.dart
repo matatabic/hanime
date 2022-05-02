@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/DioDownDataClass.dart';
 import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
@@ -130,29 +131,31 @@ class _DownloadIconState extends State<DownloadIcon> {
                   ),
                   CupertinoDialogAction(
                     onPressed: () {
-                      if (_downloadingUrl == url1) {
-                        // 暂停
-                        setState(() {
-                          _downloadingUrl = null;
-                        });
-                        M3u8Downloader.pause(url1);
-                        return;
-                      }
+                      // if (_downloadingUrl == url1) {
+                      //   // 暂停
+                      //   setState(() {
+                      //     _downloadingUrl = null;
+                      //   });
+                      //   M3u8Downloader.pause(url1);
+                      //   return;
+                      // }
                       // 下载
                       _checkPermission().then((hasGranted) async {
                         if (hasGranted) {
-                          await M3u8Downloader.config(
-                            convertMp4: false,
-                          );
-                          setState(() {
-                            _downloadingUrl = url1;
-                          });
-                          M3u8Downloader.download(
-                              url: url1,
-                              name: "下载未加密m3u8",
-                              progressCallback: progressCallback,
-                              successCallback: successCallback,
-                              errorCallback: errorCallback);
+                          // await M3u8Downloader.config(
+                          //   convertMp4: false,
+                          // );
+                          // setState(() {
+                          //   _downloadingUrl = url1;
+                          // });
+
+                          downLoadM3u8(url1);
+                          // M3u8Downloader.download(
+                          //     url: url1,
+                          //     name: "下载未加密m3u8",
+                          //     progressCallback: progressCallback,
+                          //     successCallback: successCallback,
+                          //     errorCallback: errorCallback);
                         }
                       });
                       setState(() {
@@ -168,5 +171,51 @@ class _DownloadIconState extends State<DownloadIcon> {
       },
       isLiked: isLiked,
     );
+  }
+
+  downLoadM3u8(url1) {
+    M3u8Downloader.download(
+        url: url1,
+        name: "下载未加密m3u8",
+        progressCallback: progressCallback,
+        successCallback: successCallback,
+        errorCallback: errorCallback);
+  }
+
+  downLoadMp4() async {
+    print("start");
+    bool isStarted = false;
+    var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    var savePath =
+        "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/8899/111.mp4";
+    // CancelToken cancelToken = CancelToken();
+    var res = await RangeDownload.downloadWithChunks(url, savePath,
+        //isRangeDownload: false,//Support normal download
+        // maxChunk: 6,
+        // dio: Dio(),//Optional parameters "dio".Convenient to customize request settings.
+        // cancelToken: cancelToken,
+        onReceiveProgress: (received, total) {
+      if (!isStarted) {
+        // startTime = DateTime.now();
+        isStarted = true;
+      }
+      if (total != -1) {
+        print("${(received / total * 100).floor()}%");
+        // if (received / total * 100.floor() > 50) {
+        //   cancelToken.cancel();
+        // }
+      }
+      if ((received / total * 100).floor() >= 100) {
+        // var duration = (DateTime.now().millisecondsSinceEpoch -
+        //         startTime.millisecondsSinceEpoch) /
+        //     1000;
+        // print(duration.toString() + "s");
+        // print(
+        //     (duration ~/ 60).toString() + "m" + (duration % 60).toString() + "s");
+      }
+    });
+    print(res.statusCode);
+    // print(res.statusMessage);
+    // print(res.data);
   }
 }
