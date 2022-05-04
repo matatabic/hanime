@@ -12,7 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadIcon extends StatefulWidget {
-  const DownloadIcon({Key? key}) : super(key: key);
+  final String videoUrl;
+
+  DownloadIcon({Key? key, required this.videoUrl}) : super(key: key);
 
   @override
   _DownloadIconState createState() => _DownloadIconState();
@@ -148,8 +150,13 @@ class _DownloadIconState extends State<DownloadIcon> {
                           // setState(() {
                           //   _downloadingUrl = url1;
                           // });
-
-                          downLoadM3u8(url1);
+                          print(widget.videoUrl);
+                          if (widget.videoUrl.indexOf("m3u8") > -1) {
+                            downLoadM3u8(widget.videoUrl);
+                          } else {
+                            downLoadMp4(widget.videoUrl);
+                          }
+                          // downLoadM3u8(url1);
                           // M3u8Downloader.download(
                           //     url: url1,
                           //     name: "下载未加密m3u8",
@@ -173,25 +180,25 @@ class _DownloadIconState extends State<DownloadIcon> {
     );
   }
 
-  downLoadM3u8(url1) {
+  downLoadM3u8(url) {
     M3u8Downloader.download(
-        url: url1,
+        url: url,
         name: "下载未加密m3u8",
         progressCallback: progressCallback,
         successCallback: successCallback,
         errorCallback: errorCallback);
   }
 
-  downLoadMp4() async {
+  downLoadMp4(url) {
     print("start");
     bool isStarted = false;
-    var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    // var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     var savePath =
-        "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/8899/111.mp4";
+        "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/123.mp4";
     // CancelToken cancelToken = CancelToken();
-    var res = await RangeDownload.downloadWithChunks(url, savePath,
+    RangeDownload.downloadWithChunks(url, savePath,
         //isRangeDownload: false,//Support normal download
-        // maxChunk: 6,
+        maxChunk: 32,
         // dio: Dio(),//Optional parameters "dio".Convenient to customize request settings.
         // cancelToken: cancelToken,
         onReceiveProgress: (received, total) {
@@ -214,7 +221,7 @@ class _DownloadIconState extends State<DownloadIcon> {
         //     (duration ~/ 60).toString() + "m" + (duration % 60).toString() + "s");
       }
     });
-    print(res.statusCode);
+    // print(res.statusCode);
     // print(res.statusMessage);
     // print(res.data);
   }

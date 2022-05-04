@@ -41,16 +41,16 @@ Future getWatchData(url) async {
   String? aa = document.querySelector("#caption")!.firstChild!.text;
   description = description!.replaceFirst(aa!, "");
 
-  // var currentVideo = [
-  //   {"name": title, 'url': currentPlayer}
-  // ];
   var currentVideo = [
-    {
-      "name": title,
-      'url':
-          "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/62e3a5dec64032873a7466a6cf2d8f08/111.mp4"
-    }
+    {"name": title, 'url': currentPlayer}
   ];
+  // var currentVideo = [
+  //   {
+  //     "name": title,
+  //     'url':
+  //         "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/62e3a5dec64032873a7466a6cf2d8f08/111.mp4"
+  //   }
+  // ];
   // /storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/62e3a5dec64032873a7466a6cf2d8f08/local.m3u8
   var tags = document
       .querySelectorAll(".video-show-panel-width .single-video-tag a[href]");

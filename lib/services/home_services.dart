@@ -3,7 +3,9 @@ import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
   Response response = await Dio().get("https://hanime1.me");
+  // print(response);
   final res = response.data;
+  // print(res);
   var document = parse(res);
 
   List temp = [];
