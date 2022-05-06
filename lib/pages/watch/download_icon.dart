@@ -27,8 +27,9 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   bool isPanel = false;
 
-  ReceivePort _port = ReceivePort();
   String? _downloadingUrl;
+
+  ReceivePort _port = ReceivePort();
 
   String url1 =
       "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8";
@@ -55,6 +56,13 @@ class _DownloadIconState extends State<DownloadIcon> {
       print(data);
     });
   }
+
+  // @override
+  // void dispose() {
+  //   // 移除监听订阅
+  //   IsolateNameServer.removePortNameMapping('downloader_send_port');
+  //   super.dispose();
+  // }
 
   Future<bool> _checkPermission() async {
     var status = await Permission.storage.status;
@@ -133,36 +141,36 @@ class _DownloadIconState extends State<DownloadIcon> {
                   ),
                   CupertinoDialogAction(
                     onPressed: () {
-                      // if (_downloadingUrl == url1) {
-                      //   // 暂停
-                      //   setState(() {
-                      //     _downloadingUrl = null;
-                      //   });
-                      //   M3u8Downloader.pause(url1);
-                      //   return;
-                      // }
+                      if (_downloadingUrl == url1) {
+                        // 暂停
+                        setState(() {
+                          _downloadingUrl = null;
+                        });
+                        M3u8Downloader.pause(url1);
+                        return;
+                      }
                       // 下载
                       _checkPermission().then((hasGranted) async {
                         if (hasGranted) {
                           // await M3u8Downloader.config(
                           //   convertMp4: false,
                           // );
-                          // setState(() {
-                          //   _downloadingUrl = url1;
-                          // });
-                          print(widget.videoUrl);
-                          if (widget.videoUrl.indexOf("m3u8") > -1) {
-                            downLoadM3u8(widget.videoUrl);
+                          setState(() {
+                            _downloadingUrl = url1;
+                          });
+                          // print(url1);
+                          if (url1.indexOf("m3u8") > -1) {
+                            M3u8Downloader.download(
+                                url: url1,
+                                name: "下载未加密m3u8",
+                                progressCallback: progressCallback,
+                                successCallback: successCallback,
+                                errorCallback: errorCallback);
                           } else {
                             downLoadMp4(widget.videoUrl);
                           }
                           // downLoadM3u8(url1);
-                          // M3u8Downloader.download(
-                          //     url: url1,
-                          //     name: "下载未加密m3u8",
-                          //     progressCallback: progressCallback,
-                          //     successCallback: successCallback,
-                          //     errorCallback: errorCallback);
+
                         }
                       });
                       setState(() {
@@ -180,15 +188,6 @@ class _DownloadIconState extends State<DownloadIcon> {
     );
   }
 
-  downLoadM3u8(url) {
-    M3u8Downloader.download(
-        url: url,
-        name: "下载未加密m3u8",
-        progressCallback: progressCallback,
-        successCallback: successCallback,
-        errorCallback: errorCallback);
-  }
-
   downLoadMp4(url) {
     print("start");
     bool isStarted = false;
@@ -197,10 +196,12 @@ class _DownloadIconState extends State<DownloadIcon> {
         "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/123.mp4";
     // CancelToken cancelToken = CancelToken();
     RangeDownload.downloadWithChunks(url, savePath,
-        //isRangeDownload: false,//Support normal download
-        maxChunk: 32,
-        // dio: Dio(),//Optional parameters "dio".Convenient to customize request settings.
-        // cancelToken: cancelToken,
+        // isRangeDownload: false, //Support normal download
+        // maxChunkdio:
+        //            : 32,
+        // dio:
+        //     Dio(), //Optional parameters "dio".Convenient to customize request settings.
+        // cancelToken: widget.cancelToken,
         onReceiveProgress: (received, total) {
       if (!isStarted) {
         // startTime = DateTime.now();
@@ -209,7 +210,7 @@ class _DownloadIconState extends State<DownloadIcon> {
       if (total != -1) {
         print("${(received / total * 100).floor()}%");
         // if (received / total * 100.floor() > 50) {
-        //   cancelToken.cancel();
+        // widget.cancelToken.cancel('cancelled');
         // }
       }
       if ((received / total * 100).floor() >= 100) {

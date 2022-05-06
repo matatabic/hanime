@@ -37,7 +37,7 @@ class _LikeIconState extends State<LikeIcon> {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((duration) {
       ///通过key获取到widget的位置
-      print("通过key获取到widget的位置");
+      // print("通过key获取到widget的位置");
       List<Favourite> favouriteList =
           Provider.of<FavouriteState>(context, listen: false).favouriteList;
       setState(() {

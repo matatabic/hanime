@@ -24,18 +24,6 @@ class RangeDownload {
     var progress = <int>[];
     var progressInit = <int>[];
 
-    Future mergeTempFiles(chunk) async {
-      File f = File(savePath + "temp0");
-      IOSink ioSink = f.openWrite(mode: FileMode.writeOnlyAppend);
-      for (int i = 1; i < chunk; ++i) {
-        File _f = File(savePath + "temp$i");
-        await ioSink.addStream(_f.openRead());
-        await _f.delete();
-      }
-      await ioSink.close();
-      await f.rename(savePath);
-    }
-
     Future mergeFiles(file1, file2, targetFile) async {
       File f1 = File(file1);
       File f2 = File(file2);
@@ -46,16 +34,27 @@ class RangeDownload {
       await f1.rename(targetFile);
     }
 
+    Future mergeTempFiles(chunk) async {
+      File f = File(savePath + "temp0");
+      IOSink ioSink = f.openWrite(mode: FileMode.writeOnlyAppend);
+      for (int i = 1; i < chunk; ++i) {
+        var path = savePath + "temp$i";
+        var oldPath = savePath + "temp${i}_pre";
+        File oldFile = File(oldPath);
+        if (oldFile.existsSync()) {
+          await mergeFiles(oldPath, path, path);
+        }
+        File _f = File(savePath + "temp$i");
+        // portSendBuildingNotification(savePath, "combining file $i");
+        await ioSink.addStream(_f.openRead());
+        await _f.delete();
+      }
+      await ioSink.close();
+      await f.rename(savePath);
+    }
+
     createCallback(no) {
       return (int received, rangeTotal) async {
-        if (received >= rangeTotal) {
-          var path = savePath + "temp${no}";
-          var oldPath = savePath + "temp${no}_pre";
-          File oldFile = File(oldPath);
-          if (oldFile.existsSync()) {
-            await mergeFiles(oldPath, path, path);
-          }
-        }
         progress[no] = progressInit[no] + received;
         if (onReceiveProgress != null && total != 0) {
           onReceiveProgress(progress.reduce((a, b) => a + b), total);
@@ -141,23 +140,40 @@ class RangeDownload {
       } else if (response.statusCode == 200) {
         print(
             "The protocol does not support resumable downloads, and regular downloads will be used.");
-        return dio.download(
+        return dio
+            .download(
           url,
           savePath,
           onReceiveProgress: onReceiveProgress,
           cancelToken: cancelToken,
-        );
+        )
+            .catchError((DioError err) {
+          if (CancelToken.isCancel(err)) {
+            print('Request canceledAAAAA! ' + err.message);
+          } else {
+            // handle error.
+          }
+        });
       } else {
         print("The request encountered a problem, please handle it yourself");
         return response;
       }
     } else {
-      return dio.download(
+      return dio
+          .download(
         url,
         savePath,
         onReceiveProgress: onReceiveProgress,
         cancelToken: cancelToken,
-      );
+      )
+          .catchError((DioError err) {
+        if (CancelToken.isCancel(err)) {
+          print('Request canceledAQAAAABBBBBBB! ' + err.message);
+        } else {
+          // handle error.
+        }
+      });
+      ;
     }
   }
 }
