@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/adapt.dart';
 
@@ -24,6 +25,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadCache();
     tabController = TabController(vsync: this, length: 3)
       ..addListener(() {
         setState(() {
@@ -69,5 +71,10 @@ class _BottomNavBarState extends State<BottomNavBar>
             ],
           ),
         ));
+  }
+
+  void loadCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getString("favouriteList");
   }
 }

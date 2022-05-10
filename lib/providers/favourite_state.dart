@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Anime {
   final String title;
@@ -48,13 +51,14 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     var movedItem =
         _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
     _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
+    saveData(_favouriteList);
     notifyListeners();
   }
 
   void orderList(int oldListIndex, int newListIndex) {
     var movedList = _favouriteList.removeAt(oldListIndex);
     _favouriteList.insert(newListIndex, movedList);
-
+    saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -63,21 +67,21 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
       name: name,
       children: [],
     ));
-
+    saveData(_favouriteList);
     notifyListeners();
   }
 
   void saveAnime(Anime anime, Favourite favourite) {
     int index = _favouriteList.indexOf(favourite);
     _favouriteList[index].children.insert(0, anime);
-
+    saveData(_favouriteList);
     notifyListeners();
   }
 
   void removeList(Favourite favourite) {
     int index = _favouriteList.indexOf(favourite);
     _favouriteList.removeAt(index);
-
+    saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -85,6 +89,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     int index = _favouriteList
         .indexWhere((favourite) => favourite.children.contains(anime));
     _favouriteList[index].children.remove(anime);
+    saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -92,8 +97,13 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     _favouriteList.forEach((element) {
       element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
     });
-
+    saveData(_favouriteList);
     notifyListeners();
+  }
+
+  saveData(List<Favourite> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("favouriteList", json.encode(data.toList()));
   }
 
   @override

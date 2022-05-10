@@ -80,6 +80,8 @@ class _LikeIconState extends State<LikeIcon> {
       },
       isLiked: isLiked,
       size: Adapt.px(60),
+      // width: Adapt.px(60),
+      // height: Adapt.px(60),
     );
   }
 

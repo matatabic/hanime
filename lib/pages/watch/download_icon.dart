@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/DioDownDataClass.dart';
-import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -117,75 +116,70 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return LikeButton(
-      key: iconKey,
-      likeBuilder: (bool isLiked) {
-        return Icon(
-          Icons.file_download,
-          color: isLiked ? Colors.red : Colors.grey,
-          size: Adapt.px(70),
-        );
-      },
-      onTap: (bool isLike) async {
-        showCupertinoDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text("是否下载该影片?"),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('取消'),
-                  ),
-                  CupertinoDialogAction(
-                    onPressed: () {
-                      if (_downloadingUrl == url1) {
-                        // 暂停
-                        setState(() {
-                          _downloadingUrl = null;
-                        });
-                        M3u8Downloader.pause(url1);
-                        return;
-                      }
-                      // 下载
-                      _checkPermission().then((hasGranted) async {
-                        if (hasGranted) {
-                          // await M3u8Downloader.config(
-                          //   convertMp4: false,
-                          // );
+    return InkWell(
+        onTap: () async {
+          showCupertinoDialog(
+              context: context,
+              builder: (context) {
+                return CupertinoAlertDialog(
+                  title: Text("是否下载该影片?"),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('取消'),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () {
+                        if (_downloadingUrl == url1) {
+                          // 暂停
                           setState(() {
-                            _downloadingUrl = url1;
+                            _downloadingUrl = null;
                           });
-                          // print(url1);
-                          if (url1.indexOf("m3u8") > -1) {
-                            M3u8Downloader.download(
-                                url: url1,
-                                name: "下载未加密m3u8",
-                                progressCallback: progressCallback,
-                                successCallback: successCallback,
-                                errorCallback: errorCallback);
-                          } else {
-                            downLoadMp4(widget.videoUrl);
-                          }
-                          // downLoadM3u8(url1);
-
+                          // M3u8Downloader.pause(url1);
+                          return;
                         }
-                      });
-                      setState(() {
-                        isLiked = !isLike;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Text('确定'),
-                  ),
-                ],
-              );
-            });
-      },
-      isLiked: isLiked,
-    );
+                        // 下载
+                        _checkPermission().then((hasGranted) async {
+                          if (hasGranted) {
+                            // await M3u8Downloader.config(
+                            //   convertMp4: false,
+                            // );
+                            // setState(() {
+                            //   _downloadingUrl = url1;
+                            // });
+                            // print(url1);
+                            if (widget.videoUrl.indexOf("m3u8") > -1) {
+                              M3u8Downloader.download(
+                                  url: widget.videoUrl,
+                                  name: "下载未加密m3u8",
+                                  progressCallback: progressCallback,
+                                  successCallback: successCallback,
+                                  errorCallback: errorCallback);
+                            } else {
+                              downLoadMp4(widget.videoUrl);
+                            }
+                          }
+                        });
+
+                        Navigator.pop(context);
+                      },
+                      child: Text('确定'),
+                    ),
+                  ],
+                );
+              });
+        },
+        child: Container(
+            width: Adapt.px(60),
+            height: Adapt.px(60),
+            alignment: Alignment.center,
+            child: SizedBox(
+                width: Adapt.px(60),
+                height: Adapt.px(60),
+                child: Icon(Icons.downloading,
+                    size: Adapt.px(60), color: Colors.grey))));
   }
 
   downLoadMp4(url) {
