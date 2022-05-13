@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/entity/favourite.dart';
 import 'package:hanime/pages/favourite/favourite_item.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';

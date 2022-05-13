@@ -1,48 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:hanime/entity/favourite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Anime {
-  final String title;
-  final String image;
-  final String htmlUrl;
-
-  Anime({required this.title, required this.image, required this.htmlUrl});
-}
-
-class Favourite {
-  final String name;
-  final List<Anime> children;
-
-  Favourite({required this.name, required this.children});
-}
-
 class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
-  List<Favourite> _favouriteList = [
-    Favourite(
-      name: '默认收藏夹',
-      children: [
-        // Anime(
-        //   title: '兔耳冒險譚 4',
-        //   image:
-        //       'https://cdn.jsdelivr.net/gh/tatakanuta/tatakanuta@v1.0.0/asset/cover/W1XDwTL.jpg',
-        //   htmlUrl: 'https://hanime1.me/watch?v=38388',
-        // )
-      ],
-    ),
-    Favourite(
-      name: '我的收藏夹',
-      children: [
-        Anime(
-          title: '兔耳冒險譚 4',
-          image:
-              'https://cdn.jsdelivr.net/gh/tatakanuta/tatakanuta@v1.0.0/asset/cover/W1XDwTL.jpg',
-          htmlUrl: 'https://hanime1.me/watch?v=38388',
-        )
-      ],
-    )
-  ];
+  List<Favourite> _favouriteList = [];
 
   List<Favourite> get favouriteList => _favouriteList;
 
@@ -63,10 +26,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addList(String name) {
-    _favouriteList.add(Favourite(
-      name: name,
-      children: [],
-    ));
+    _favouriteList.add(Favourite(name: name, children: []));
     saveData(_favouriteList);
     notifyListeners();
   }

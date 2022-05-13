@@ -3,6 +3,7 @@ import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
+import 'package:hanime/entity/favourite.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';

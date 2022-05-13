@@ -4,7 +4,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/providers/favourite_state.dart';
+import 'package:hanime/entity/favourite.dart';
 
 class FavouriteItem extends StatelessWidget {
   final Anime anime;
