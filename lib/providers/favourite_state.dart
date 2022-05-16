@@ -20,6 +20,17 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<FavouriteEntity> get favouriteList => _favouriteList;
 
+  void getCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var json = prefs.getString("favouriteList");
+    if (json != null) {
+      _favouriteList = jsonDecode(json)
+          .map<FavouriteEntity>((json) => FavouriteEntity.fromJson(json))
+          .toList();
+    }
+    notifyListeners();
+  }
+
   void orderItem(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     var movedItem =
@@ -76,7 +87,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
   saveData(List<FavouriteEntity> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(
-        "favouriteList", json.encode(data.map((v) => v.toJson()).toList()));
+        "favouriteList", jsonEncode(data.map((v) => v.toJson()).toList()));
   }
 
   @override
