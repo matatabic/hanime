@@ -76,5 +76,6 @@ class _BottomNavBarState extends State<BottomNavBar>
   void loadCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var data = prefs.getString("favouriteList");
+    print(data);
   }
 }

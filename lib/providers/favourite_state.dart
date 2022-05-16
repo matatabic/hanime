@@ -1,13 +1,24 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:hanime/entity/favourite.dart';
+import 'package:hanime/entity/favourite_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
-  List<Favourite> _favouriteList = [];
+  List<FavouriteEntity> _favouriteList = [
+    FavouriteEntity.fromJson({
+      "name": "我的收藏夹",
+      "children": [
+        {
+          "title": "パパ喝ッ！ ～イキ場に漏れる背徳の小水～ [中文字幕]",
+          "image": "https://i.imgur.com/QHezhRL.jpg",
+          "htmlUrl": "https://hanime1.me/watch?v=38456"
+        }
+      ]
+    })
+  ];
 
-  List<Favourite> get favouriteList => _favouriteList;
+  List<FavouriteEntity> get favouriteList => _favouriteList;
 
   void orderItem(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
@@ -26,26 +37,27 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addList(String name) {
-    _favouriteList.add(Favourite(name: name, children: []));
+    _favouriteList
+        .add(FavouriteEntity.fromJson({"name": "$name", "children": []}));
     saveData(_favouriteList);
     notifyListeners();
   }
 
-  void saveAnime(Anime anime, Favourite favourite) {
+  void saveAnime(FavouriteChildren anime, FavouriteEntity favourite) {
     int index = _favouriteList.indexOf(favourite);
     _favouriteList[index].children.insert(0, anime);
     saveData(_favouriteList);
     notifyListeners();
   }
 
-  void removeList(Favourite favourite) {
+  void removeList(FavouriteEntity favourite) {
     int index = _favouriteList.indexOf(favourite);
     _favouriteList.removeAt(index);
     saveData(_favouriteList);
     notifyListeners();
   }
 
-  void removeItem(Anime anime) {
+  void removeItem(FavouriteChildren anime) {
     int index = _favouriteList
         .indexWhere((favourite) => favourite.children.contains(anime));
     _favouriteList[index].children.remove(anime);
@@ -61,9 +73,10 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  saveData(List<Favourite> data) async {
+  saveData(List<FavouriteEntity> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("favouriteList", json.encode(data.toList()));
+    prefs.setString(
+        "favouriteList", json.encode(data.map((v) => v.toJson()).toList()));
   }
 
   @override

@@ -4,10 +4,10 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/entity/favourite.dart';
+import 'package:hanime/entity/favourite_entity.dart';
 
 class FavouriteItem extends StatelessWidget {
-  final Anime anime;
+  final FavouriteChildren anime;
   final bool showBg;
   final String randomTag = UniqueKey().toString();
 

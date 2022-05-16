@@ -7,7 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/entity/favourite.dart';
+import 'package:hanime/common/custom_dialog.dart';
+import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/pages/favourite/favourite_item.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
@@ -31,13 +32,13 @@ class _ListTileExample extends State<ExpansionTileExample>
   @override
   bool get wantKeepAlive => true;
 
-  List<Favourite> _favouriteList = [];
+  List<FavouriteEntity> _favouriteList = [];
   bool _deleteMode = false;
 
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      List<Favourite> favouriteList =
+      List<FavouriteEntity> favouriteList =
           Provider.of<FavouriteState>(context, listen: false).favouriteList;
       _favouriteList = favouriteList;
     });
@@ -63,13 +64,24 @@ class _ListTileExample extends State<ExpansionTileExample>
                   child: Icon(Icons.add),
                   backgroundColor: Colors.red,
                   label: '新建收藏夹',
-                  labelStyle: TextStyle(fontSize: 18.0),
-                  onTap: () => _showTextDialog(context)),
+                  labelStyle: TextStyle(fontSize: Adapt.px(38)),
+                  onTap: () => CustomDialog.showTextDialog(
+                      context,
+                      "新建收藏夹",
+                      (String content) => {
+                            if (content.length > 0)
+                              {
+                                Provider.of<FavouriteState>(context,
+                                        listen: false)
+                                    .addList(content)
+                              },
+                            Navigator.pop(context)
+                          })),
               SpeedDialChild(
                 child: Icon(Icons.brush),
                 backgroundColor: Colors.orange,
                 label: '删除收藏夹',
-                labelStyle: TextStyle(fontSize: 18.0),
+                labelStyle: TextStyle(fontSize: Adapt.px(38)),
                 onTap: () => {
                   setState(() {
                     _deleteMode = true;
@@ -84,6 +96,9 @@ class _ListTileExample extends State<ExpansionTileExample>
         // itemDraggingWidth: 100,
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
+        contentsWhenEmpty: Center(
+          child: Text('暂无影片'),
+        ),
         // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
         listGhost: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30.0),
@@ -102,19 +117,25 @@ class _ListTileExample extends State<ExpansionTileExample>
     );
   }
 
-  _buildList(Favourite fav) {
+  _buildList(FavouriteEntity favourite) {
     return DragAndDropListExpansion(
       canDrag: !_deleteMode,
-      title: Text(fav.name),
+      title: Text(favourite.name),
       contentsWhenEmpty: Center(
         child: Text('暂无影片'),
       ),
       leading: _deleteMode
           ? InkWell(
               onTap: () {
-                Provider.of<FavouriteState>(context, listen: false)
-                    .removeList(fav);
-                setState(() {});
+                CustomDialog.showDialog(
+                    context,
+                    "确认删除该收藏夹?",
+                    () => {
+                          Provider.of<FavouriteState>(context, listen: false)
+                              .removeList(favourite),
+                          setState(() {}),
+                          Navigator.pop(context)
+                        });
               },
               child: ShakeAnimationWidget(
                   isForward: true,
@@ -126,13 +147,14 @@ class _ListTileExample extends State<ExpansionTileExample>
               Icons.folder,
               size: Adapt.px(64),
             ), // Icon(Icons.folder),
-      children:
-          fav.children.map((v) => _buildItem(v) as DragAndDropItem).toList(),
-      listKey: ObjectKey(fav),
+      children: favourite.children
+          .map((v) => _buildItem(v) as DragAndDropItem)
+          .toList(),
+      listKey: ObjectKey(favourite),
     );
   }
 
-  _buildItem(Anime anime) {
+  _buildItem(FavouriteChildren anime) {
     return DragAndDropItem(
       canDrag: !_deleteMode,
       feedbackWidget: Container(
@@ -145,39 +167,15 @@ class _ListTileExample extends State<ExpansionTileExample>
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: Text("确认删除该影片？"),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('取消'),
-                          ),
-                          CupertinoDialogAction(
-                            onPressed: () {
-                              Provider.of<FavouriteState>(context,
-                                      listen: false)
-                                  .removeItem(anime);
-                              setState(() {});
-                              Navigator.pop(context);
-                            },
-                            child: Text('确定'),
-                          ),
-                        ],
-                      );
-                    });
-                // showTextDialog(
-                //     context,
-                //     "确认删除该影片？",
-                //     () => {
-                //           Provider.of<FavouriteState>(context, listen: false)
-                //               .removeItem(anime),
-                //           setState(() {})
-                //         });
+                CustomDialog.showDialog(
+                    context,
+                    "确认删除该影片?",
+                    (context) => {
+                          Provider.of<FavouriteState>(context, listen: false)
+                              .removeItem(anime),
+                          setState(() {}),
+                          Navigator.pop(context)
+                        });
               },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
@@ -214,46 +212,4 @@ class _ListTileExample extends State<ExpansionTileExample>
     //   _favouriteList.insert(newListIndex, movedList);
     // });
   }
-}
-
-Future<void> _showTextDialog(context) async {
-  String name = "";
-  showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text("新建收藏夹"),
-          content: Card(
-            elevation: 0.0,
-            child: Column(
-              children: <Widget>[
-                CupertinoTextField(
-                  onChanged: (String text) => {name = text},
-                  maxLength: 10,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('取消'),
-            ),
-            CupertinoDialogAction(
-              onPressed: () {
-                if (name.length > 0) {
-                  Provider.of<FavouriteState>(context, listen: false)
-                      .addList(name);
-                }
-
-                Navigator.pop(context);
-              },
-              child: Text('确定'),
-            ),
-          ],
-        );
-      });
 }

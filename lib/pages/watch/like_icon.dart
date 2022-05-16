@@ -3,7 +3,7 @@ import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
-import 'package:hanime/entity/favourite.dart';
+import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,7 @@ class _LikeIconState extends State<LikeIcon> {
     WidgetsBinding.instance!.addPostFrameCallback((duration) {
       ///通过key获取到widget的位置
       // print("通过key获取到widget的位置");
-      List<Favourite> favouriteList =
+      List<FavouriteEntity> favouriteList =
           Provider.of<FavouriteState>(context, listen: false).favouriteList;
       setState(() {
         isLiked = favouriteList.any((element) => element.children
@@ -89,7 +89,7 @@ class _LikeIconState extends State<LikeIcon> {
   ///播放动画
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
-    List<Favourite> favList =
+    List<FavouriteEntity> favList =
         Provider.of<FavouriteState>(context, listen: false).favouriteList;
 
     double _width = Adapt.px(260);
@@ -116,7 +116,7 @@ class _LikeIconState extends State<LikeIcon> {
   }
 
   ///构造传入的widget
-  Widget buildMenu(List<Favourite> favList, itemHeight) {
+  Widget buildMenu(List<FavouriteEntity> favList, itemHeight) {
     return Container(
       child: Stack(
         children: [
@@ -167,10 +167,15 @@ class _LikeIconState extends State<LikeIcon> {
                               print(widget.info.htmlUrl);
                               print('这是点击了选项${item.name}');
                               context.read<FavouriteState>().saveAnime(
-                                  Anime(
-                                      image: widget.info.imgUrl,
-                                      htmlUrl: widget.info.htmlUrl,
-                                      title: widget.info.title),
+                                  // Anime(
+                                  //     image: widget.info.imgUrl,
+                                  //     htmlUrl: widget.info.htmlUrl,
+                                  //     title: widget.info.title),
+                                  FavouriteChildren.fromJson({
+                                    "image": widget.info.imgUrl,
+                                    "htmlUrl": widget.info.htmlUrl,
+                                    "title": widget.info.title
+                                  }),
                                   item);
                               isPanel = true;
                               setState(() {
