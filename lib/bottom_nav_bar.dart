@@ -46,8 +46,8 @@ class _BottomNavBarState extends State<BottomNavBar>
           index: currentIndex,
           items: <Widget>[
             Icon(Icons.home, size: Adapt.px(60)),
-            Icon(Icons.search, size: Adapt.px(60)),
-            Icon(Icons.repeat, size: Adapt.px(60)),
+            Icon(Icons.cloud_circle, size: Adapt.px(60)),
+            Icon(Icons.collections, size: Adapt.px(60)),
           ],
           onTap: (index) {
             //Handle button tap

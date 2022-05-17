@@ -2,25 +2,28 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/DioDownDataClass.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/utils/index.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadIcon extends StatefulWidget {
+  final String htmlUrl;
   final String videoUrl;
 
-  DownloadIcon({Key? key, required this.videoUrl}) : super(key: key);
+  DownloadIcon({Key? key, required this.htmlUrl, required this.videoUrl})
+      : super(key: key);
 
   @override
   _DownloadIconState createState() => _DownloadIconState();
 }
 
 class _DownloadIconState extends State<DownloadIcon> {
-  GlobalKey iconKey = new GlobalKey();
+  // GlobalKey iconKey = new GlobalKey();
 
   bool isLiked = false;
 
@@ -29,6 +32,12 @@ class _DownloadIconState extends State<DownloadIcon> {
   String? _downloadingUrl;
 
   ReceivePort _port = ReceivePort();
+
+  String? saveDir;
+
+  String? videoId;
+
+  double currentProgress = 0.0;
 
   String url1 =
       "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8";
@@ -40,7 +49,8 @@ class _DownloadIconState extends State<DownloadIcon> {
   }
 
   void initAsync() async {
-    String saveDir = await _findSavePath();
+    videoId = getVideoId(widget.htmlUrl);
+    saveDir = await _findSavePath();
     M3u8Downloader.initialize(onSelect: () async {
       print('下载成功点击');
       return null;
@@ -75,7 +85,7 @@ class _DownloadIconState extends State<DownloadIcon> {
     final directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    String saveDir = directory!.path + '/vPlayDownload';
+    String saveDir = directory!.path + '/vPlayDownload/' + videoId!;
     Directory root = Directory(saveDir);
     if (!root.existsSync()) {
       await root.create();
@@ -132,7 +142,7 @@ class _DownloadIconState extends State<DownloadIcon> {
                     ),
                     CupertinoDialogAction(
                       onPressed: () {
-                        if (_downloadingUrl == url1) {
+                        if (_downloadingUrl == widget.videoUrl) {
                           // 暂停
                           setState(() {
                             _downloadingUrl = null;
@@ -182,42 +192,62 @@ class _DownloadIconState extends State<DownloadIcon> {
                     size: Adapt.px(60), color: Colors.grey))));
   }
 
-  downLoadMp4(url) {
+  downLoadMp4(url) async {
     print("start");
-    bool isStarted = false;
-    // var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    var savePath =
-        "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/123.mp4";
-    // CancelToken cancelToken = CancelToken();
-    RangeDownload.downloadWithChunks(url, savePath,
-        // isRangeDownload: false, //Support normal download
-        // maxChunkdio:
-        //            : 32,
-        // dio:
-        //     Dio(), //Optional parameters "dio".Convenient to customize request settings.
-        // cancelToken: widget.cancelToken,
-        onReceiveProgress: (received, total) {
-      if (!isStarted) {
-        // startTime = DateTime.now();
-        isStarted = true;
-      }
+
+    ///创建DIO
+    Dio dio = new Dio();
+    var savePath = '$saveDir/$videoId.mp4';
+
+    ///参数一 文件的网络储存URL
+    ///参数二 下载的本地目录文件
+    ///参数三 下载监听
+    Response response =
+        await dio.download(url, savePath, onReceiveProgress: (received, total) {
       if (total != -1) {
-        print("${(received / total * 100).floor()}%");
-        // if (received / total * 100.floor() > 50) {
-        // widget.cancelToken.cancel('cancelled');
-        // }
-      }
-      if ((received / total * 100).floor() >= 100) {
-        // var duration = (DateTime.now().millisecondsSinceEpoch -
-        //         startTime.millisecondsSinceEpoch) /
-        //     1000;
-        // print(duration.toString() + "s");
-        // print(
-        //     (duration ~/ 60).toString() + "m" + (duration % 60).toString() + "s");
+        ///当前下载的百分比例
+        print((received / total * 100).toStringAsFixed(1) + "%");
+        // CircularProgressIndicator(value: currentProgress,) 进度 0-1
+        currentProgress = received / total;
+        // setState(() {});
       }
     });
-    // print(res.statusCode);
-    // print(res.statusMessage);
-    // print(res.data);
+
+    //   bool isStarted = false;
+    //   // var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    //   // var savePath =
+    //   //     "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/123.mp4";
+    //   var savePath = '$saveDir/$videoId.mp4';
+    //   // CancelToken cancelToken = CancelToken();
+    //   RangeDownload.downloadWithChunks(url, savePath,
+    //       // isRangeDownload: false, //Support normal download
+    //       // maxChunkdio:
+    //       //            : 32,
+    //       // dio:
+    //       //     Dio(), //Optional parameters "dio".Convenient to customize request settings.
+    //       // cancelToken: widget.cancelToken,
+    //       onReceiveProgress: (received, total) {
+    //     if (!isStarted) {
+    //       // startTime = DateTime.now();
+    //       isStarted = true;
+    //     }
+    //     if (total != -1) {
+    //       print("${(received / total * 100).floor()}%");
+    //       // if (received / total * 100.floor() > 50) {
+    //       // widget.cancelToken.cancel('cancelled');
+    //       // }
+    //     }
+    //     if ((received / total * 100).floor() >= 100) {
+    //       // var duration = (DateTime.now().millisecondsSinceEpoch -
+    //       //         startTime.millisecondsSinceEpoch) /
+    //       //     1000;
+    //       // print(duration.toString() + "s");
+    //       // print(
+    //       //     (duration ~/ 60).toString() + "m" + (duration % 60).toString() + "s");
+    //     }
+    //   });
+    //   // print(res.statusCode);
+    //   // print(res.statusMessage);
+    //   // print(res.data);
   }
 }

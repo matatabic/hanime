@@ -38,14 +38,7 @@ class RangeDownload {
       File f = File(savePath + "temp0");
       IOSink ioSink = f.openWrite(mode: FileMode.writeOnlyAppend);
       for (int i = 1; i < chunk; ++i) {
-        var path = savePath + "temp$i";
-        var oldPath = savePath + "temp${i}_pre";
-        File oldFile = File(oldPath);
-        if (oldFile.existsSync()) {
-          await mergeFiles(oldPath, path, path);
-        }
         File _f = File(savePath + "temp$i");
-        // portSendBuildingNotification(savePath, "combining file $i");
         await ioSink.addStream(_f.openRead());
         await _f.delete();
       }
@@ -55,6 +48,14 @@ class RangeDownload {
 
     createCallback(no) {
       return (int received, rangeTotal) async {
+        if (received >= rangeTotal) {
+          var path = savePath + "temp${no}";
+          var oldPath = savePath + "temp${no}_pre";
+          File oldFile = File(oldPath);
+          if (oldFile.existsSync()) {
+            await mergeFiles(oldPath, path, path);
+          }
+        }
         progress[no] = progressInit[no] + received;
         if (onReceiveProgress != null && total != 0) {
           onReceiveProgress(progress.reduce((a, b) => a + b), total);
