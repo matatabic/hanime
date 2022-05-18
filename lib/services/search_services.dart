@@ -331,8 +331,9 @@ Future getSearchData(_htmlUrl) async {
     for (var videoElement in videoElements) {
       videoList.add({
         "title": videoElement.querySelector(".card-mobile-title")!.text,
-        "imgUrl":
-            videoElement.querySelector("img:nth-child(3)")!.attributes['src'],
+        "imgUrl": videoElement.querySelector("img:nth-child(3)") != null
+            ? videoElement.querySelector("img:nth-child(3)")!.attributes['src']
+            : "",
         "htmlUrl": videoElement.querySelector("a")!.attributes['href'],
         'duration': videoElement.querySelector('.card-mobile-duration') != null
             ? videoElement.querySelector('.card-mobile-duration')!.text.trim()
@@ -358,7 +359,6 @@ Future getSearchData(_htmlUrl) async {
       });
     }
   }
-  print("2314421");
-  print(commendCount);
+
   return {"video": videoList, "commendCount": commendCount, "page": page};
 }

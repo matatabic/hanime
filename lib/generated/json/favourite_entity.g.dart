@@ -28,9 +28,9 @@ FavouriteChildren $FavouriteChildrenFromJson(Map<String, dynamic> json) {
   if (title != null) {
     favouriteChildren.title = title;
   }
-  final String? image = jsonConvert.convert<String>(json['image']);
-  if (image != null) {
-    favouriteChildren.image = image;
+  final String? imageUrl = jsonConvert.convert<String>(json['imageUrl']);
+  if (imageUrl != null) {
+    favouriteChildren.imageUrl = imageUrl;
   }
   final String? htmlUrl = jsonConvert.convert<String>(json['htmlUrl']);
   if (htmlUrl != null) {
@@ -42,7 +42,7 @@ FavouriteChildren $FavouriteChildrenFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $FavouriteChildrenToJson(FavouriteChildren entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['title'] = entity.title;
-  data['image'] = entity.image;
+  data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
   return data;
 }

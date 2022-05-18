@@ -24,7 +24,7 @@ class FavouriteEntity {
 @JsonSerializable()
 class FavouriteChildren {
   late String title;
-  late String image;
+  late String imageUrl;
   late String htmlUrl;
 
   FavouriteChildren();

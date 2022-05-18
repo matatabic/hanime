@@ -106,6 +106,8 @@ class _DownloadIconState extends State<DownloadIcon> {
   }
 
   static progressCallback(dynamic args) {
+    print('progressCallback');
+    print(args['progress']);
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     if (send != null) {
@@ -174,8 +176,9 @@ class _DownloadIconState extends State<DownloadIcon> {
                             //   _downloadingUrl = url1;
                             // });
                             // print(widget.videoUrl);
-                            if (widget.htmlUrl.indexOf("m3u8") > -1) {
-                              String m3u8Url = await getM3u8Url(widget.htmlUrl);
+                            if (widget.videoUrl.indexOf("m3u8") > -1) {
+                              String m3u8Url =
+                                  await getM3u8Url(widget.videoUrl);
                               M3u8Downloader.download(
                                   url: m3u8Url,
                                   name: widget.htmlUrl,

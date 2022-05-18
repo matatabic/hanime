@@ -10,7 +10,6 @@ import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/search_state.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -300,10 +299,9 @@ class _SearchScreenState extends State<SearchScreen>
 
   Future loadData(url) async {
     var data = await getSearchData(url);
-    // LogUtil.d(data);
+
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-    LogUtil.d(searchEntity.commendCount);
-    print("1212");
+
     commendCount = searchEntity.commendCount;
     totalPage = searchEntity.page;
     searchVideoList.addAll(searchEntity.video);

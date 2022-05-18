@@ -30,7 +30,7 @@ class FavouriteItem extends StatelessWidget {
                     randomNum: randomTag,
                     minScale: 1.0,
                     maxScale: 1.8,
-                    imageProvider: NetworkImage(anime.image),
+                    imageProvider: NetworkImage(anime.imageUrl),
                   ),
                 ));
               },
@@ -41,7 +41,7 @@ class FavouriteItem extends StatelessWidget {
                       width: Adapt.px(140),
                       height: Adapt.px(140),
                       child: CommonImages(
-                        imgUrl: anime.image,
+                        imgUrl: anime.imageUrl,
                       ),
                     ),
                   )),
