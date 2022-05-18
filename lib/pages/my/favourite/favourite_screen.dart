@@ -9,25 +9,20 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/favourite_entity.dart';
-import 'package:hanime/pages/favourite/favourite_item.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
 import 'package:shake_animation_widget/shake_animation_widget.dart';
 
-class ExpansionTileExample extends StatefulWidget {
-  ExpansionTileExample({Key? key}) : super(key: key);
+import 'favourite_item.dart';
+
+class FavouriteScreen extends StatefulWidget {
+  FavouriteScreen({Key? key}) : super(key: key);
 
   @override
-  _ListTileExample createState() => _ListTileExample();
+  _FavouriteScreen createState() => _FavouriteScreen();
 }
 
-class InnerList {
-  final String name;
-  List<String> children;
-  InnerList({required this.name, required this.children});
-}
-
-class _ListTileExample extends State<ExpansionTileExample>
+class _FavouriteScreen extends State<FavouriteScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -130,7 +125,7 @@ class _ListTileExample extends State<ExpansionTileExample>
                 CustomDialog.showDialog(
                     context,
                     "确认删除该收藏夹?",
-                    () => {
+                    (context) => {
                           Provider.of<FavouriteState>(context, listen: false)
                               .removeList(favourite),
                           setState(() {}),

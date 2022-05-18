@@ -41,6 +41,8 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   String url1 =
       "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8";
+  String testUrl =
+      "https://abre-videos.cdn1122.com/_hls/videos/e/4/0/3/d/e403d71acf21b29fc87837be40b1c0c31616499361-1920-1080-1992-h264.mp4/master.m3u8?validfrom=1652760178&validto=1652932978&rate=382464&hdl=-1&hash=EJi8kx8ieaF4Md2TW8Zs18sLYKc%3D";
 
   @override
   void initState() {
@@ -49,14 +51,14 @@ class _DownloadIconState extends State<DownloadIcon> {
   }
 
   void initAsync() async {
-    videoId = getVideoId(widget.htmlUrl);
-    saveDir = await _findSavePath();
+    // videoId = getVideoId(widget.htmlUrl);
+    // saveDir = await _findSavePath();
     M3u8Downloader.initialize(onSelect: () async {
       print('下载成功点击');
       return null;
     });
-    M3u8Downloader.config(
-        saveDir: saveDir, threadCount: 5, convertMp4: true, debugMode: true);
+    // M3u8Downloader.config(
+    //     saveDir: saveDir, threadCount: 5, convertMp4: true, debugMode: true);
     // 注册监听器
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -85,13 +87,22 @@ class _DownloadIconState extends State<DownloadIcon> {
     final directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    String saveDir = directory!.path + '/vPlayDownload/' + videoId!;
-    Directory root = Directory(saveDir);
+
+    String baseDir = directory!.path + '/vPlayDownload/';
+    videoId = getVideoId(widget.htmlUrl);
+
+    Directory root = Directory(baseDir);
     if (!root.existsSync()) {
       await root.create();
     }
-    print(saveDir);
-    return saveDir;
+    baseDir = baseDir + videoId!;
+
+    root = Directory(baseDir);
+    if (!root.existsSync()) {
+      await root.create();
+    }
+
+    return baseDir;
   }
 
   static progressCallback(dynamic args) {
@@ -153,22 +164,26 @@ class _DownloadIconState extends State<DownloadIcon> {
                         // 下载
                         _checkPermission().then((hasGranted) async {
                           if (hasGranted) {
-                            // await M3u8Downloader.config(
-                            //   convertMp4: false,
-                            // );
+                            String saveDir = await _findSavePath();
+                            await M3u8Downloader.config(
+                                saveDir: saveDir,
+                                convertMp4: true,
+                                threadCount: 5,
+                                debugMode: true);
                             // setState(() {
                             //   _downloadingUrl = url1;
                             // });
-                            // print(url1);
-                            if (widget.videoUrl.indexOf("m3u8") > -1) {
+                            // print(widget.videoUrl);
+                            if (widget.htmlUrl.indexOf("m3u8") > -1) {
+                              String m3u8Url = await getM3u8Url(widget.htmlUrl);
                               M3u8Downloader.download(
-                                  url: widget.videoUrl,
-                                  name: "下载未加密m3u8",
+                                  url: m3u8Url,
+                                  name: widget.htmlUrl,
                                   progressCallback: progressCallback,
                                   successCallback: successCallback,
                                   errorCallback: errorCallback);
                             } else {
-                              downLoadMp4(widget.videoUrl);
+                              downLoadMp4(saveDir, widget.videoUrl);
                             }
                           }
                         });
@@ -192,12 +207,13 @@ class _DownloadIconState extends State<DownloadIcon> {
                     size: Adapt.px(60), color: Colors.grey))));
   }
 
-  downLoadMp4(url) async {
+  downLoadMp4(saveDir, url) async {
     print("start");
 
     ///创建DIO
     Dio dio = new Dio();
     var savePath = '$saveDir/$videoId.mp4';
+    print(savePath);
 
     ///参数一 文件的网络储存URL
     ///参数二 下载的本地目录文件

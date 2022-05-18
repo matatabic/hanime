@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/pages/favourite/favourite_screen.dart';
+
+import 'favourite/favourite_screen.dart';
 
 class MyScreen extends StatefulWidget {
   const MyScreen({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _MyScreenState extends State<MyScreen>
                   Tab(text: "下载"),
                 ]),
             body: TabBarView(children: [
-              ExpansionTileExample(),
+              FavouriteScreen(),
               Icon(Icons.search),
             ]),
           )),
