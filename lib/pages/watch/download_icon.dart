@@ -2,20 +2,21 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/providers/download_state.dart';
 import 'package:hanime/utils/index.dart';
-import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/src/provider.dart';
 
 class DownloadIcon extends StatefulWidget {
-  final String htmlUrl;
+  final WatchInfo info;
   final String videoUrl;
 
-  DownloadIcon({Key? key, required this.htmlUrl, required this.videoUrl})
+  DownloadIcon({Key? key, required this.info, required this.videoUrl})
       : super(key: key);
 
   @override
@@ -23,19 +24,9 @@ class DownloadIcon extends StatefulWidget {
 }
 
 class _DownloadIconState extends State<DownloadIcon> {
-  // GlobalKey iconKey = new GlobalKey();
-
-  bool isLiked = false;
-
-  bool isPanel = false;
-
   String? _downloadingUrl;
 
-  ReceivePort _port = ReceivePort();
-
   String? saveDir;
-
-  String? videoId;
 
   double currentProgress = 0.0;
 
@@ -47,33 +38,7 @@ class _DownloadIconState extends State<DownloadIcon> {
   @override
   void initState() {
     super.initState();
-    initAsync();
   }
-
-  void initAsync() async {
-    // videoId = getVideoId(widget.htmlUrl);
-    // saveDir = await _findSavePath();
-    M3u8Downloader.initialize(onSelect: () async {
-      print('下载成功点击');
-      return null;
-    });
-    // M3u8Downloader.config(
-    //     saveDir: saveDir, threadCount: 5, convertMp4: true, debugMode: true);
-    // 注册监听器
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      // 监听数据请求
-      print(data);
-    });
-  }
-
-  // @override
-  // void dispose() {
-  //   // 移除监听订阅
-  //   IsolateNameServer.removePortNameMapping('downloader_send_port');
-  //   super.dispose();
-  // }
 
   Future<bool> _checkPermission() async {
     var status = await Permission.storage.status;
@@ -89,13 +54,12 @@ class _DownloadIconState extends State<DownloadIcon> {
         : await getApplicationDocumentsDirectory();
 
     String baseDir = directory!.path + '/vPlayDownload/';
-    videoId = getVideoId(widget.htmlUrl);
 
     Directory root = Directory(baseDir);
     if (!root.existsSync()) {
       await root.create();
     }
-    baseDir = baseDir + videoId!;
+    baseDir = baseDir + getVideoId(widget.info.htmlUrl);
 
     root = Directory(baseDir);
     if (!root.existsSync()) {
@@ -155,39 +119,39 @@ class _DownloadIconState extends State<DownloadIcon> {
                     ),
                     CupertinoDialogAction(
                       onPressed: () {
-                        if (_downloadingUrl == widget.videoUrl) {
-                          // 暂停
-                          setState(() {
-                            _downloadingUrl = null;
-                          });
-                          // M3u8Downloader.pause(url1);
-                          return;
-                        }
+                        // if (_downloadingUrl == widget.videoUrl) {
+                        //   // 暂停
+                        //   setState(() {
+                        //     _downloadingUrl = null;
+                        //   });
+                        //   // M3u8Downloader.pause(url1);
+                        //   return;
+                        // }
                         // 下载
                         _checkPermission().then((hasGranted) async {
                           if (hasGranted) {
                             String saveDir = await _findSavePath();
-                            await M3u8Downloader.config(
-                                saveDir: saveDir,
-                                convertMp4: true,
-                                threadCount: 5,
-                                debugMode: true);
-                            // setState(() {
-                            //   _downloadingUrl = url1;
-                            // });
-                            // print(widget.videoUrl);
-                            if (widget.videoUrl.indexOf("m3u8") > -1) {
-                              String m3u8Url =
-                                  await getM3u8Url(widget.videoUrl);
-                              M3u8Downloader.download(
-                                  url: m3u8Url,
-                                  name: widget.htmlUrl,
-                                  progressCallback: progressCallback,
-                                  successCallback: successCallback,
-                                  errorCallback: errorCallback);
-                            } else {
-                              downLoadMp4(saveDir, widget.videoUrl);
-                            }
+                            context.read<DownloadState>().addQueue(
+                                widget.info, saveDir, widget.videoUrl);
+
+                            // await M3u8Downloader.config(
+                            //     saveDir: saveDir,
+                            //     convertMp4: true,
+                            //     threadCount: 5,
+                            //     debugMode: true);
+                            //
+                            // if (widget.videoUrl.indexOf("m3u8") > -1) {
+                            //   String m3u8Url =
+                            //       await getM3u8Url(widget.videoUrl);
+                            //   M3u8Downloader.download(
+                            //       url: m3u8Url,
+                            //       name: widget.id,
+                            //       progressCallback: progressCallback,
+                            //       successCallback: successCallback,
+                            //       errorCallback: errorCallback);
+                            // } else {
+                            //   downLoadMp4(saveDir, widget.videoUrl);
+                            // }
                           }
                         });
 
@@ -210,63 +174,25 @@ class _DownloadIconState extends State<DownloadIcon> {
                     size: Adapt.px(60), color: Colors.grey))));
   }
 
-  downLoadMp4(saveDir, url) async {
-    print("start");
-
-    ///创建DIO
-    Dio dio = new Dio();
-    var savePath = '$saveDir/$videoId.mp4';
-    print(savePath);
-
-    ///参数一 文件的网络储存URL
-    ///参数二 下载的本地目录文件
-    ///参数三 下载监听
-    Response response =
-        await dio.download(url, savePath, onReceiveProgress: (received, total) {
-      if (total != -1) {
-        ///当前下载的百分比例
-        print((received / total * 100).toStringAsFixed(1) + "%");
-        // CircularProgressIndicator(value: currentProgress,) 进度 0-1
-        currentProgress = received / total;
-        // setState(() {});
-      }
-    });
-
-    //   bool isStarted = false;
-    //   // var url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    //   // var savePath =
-    //   //     "/storage/emulated/0/Android/data/com.hanime.hanime/files/vPlayDownload/123.mp4";
-    //   var savePath = '$saveDir/$videoId.mp4';
-    //   // CancelToken cancelToken = CancelToken();
-    //   RangeDownload.downloadWithChunks(url, savePath,
-    //       // isRangeDownload: false, //Support normal download
-    //       // maxChunkdio:
-    //       //            : 32,
-    //       // dio:
-    //       //     Dio(), //Optional parameters "dio".Convenient to customize request settings.
-    //       // cancelToken: widget.cancelToken,
-    //       onReceiveProgress: (received, total) {
-    //     if (!isStarted) {
-    //       // startTime = DateTime.now();
-    //       isStarted = true;
-    //     }
-    //     if (total != -1) {
-    //       print("${(received / total * 100).floor()}%");
-    //       // if (received / total * 100.floor() > 50) {
-    //       // widget.cancelToken.cancel('cancelled');
-    //       // }
-    //     }
-    //     if ((received / total * 100).floor() >= 100) {
-    //       // var duration = (DateTime.now().millisecondsSinceEpoch -
-    //       //         startTime.millisecondsSinceEpoch) /
-    //       //     1000;
-    //       // print(duration.toString() + "s");
-    //       // print(
-    //       //     (duration ~/ 60).toString() + "m" + (duration % 60).toString() + "s");
-    //     }
-    //   });
-    //   // print(res.statusCode);
-    //   // print(res.statusMessage);
-    //   // print(res.data);
-  }
+  // downLoadMp4(saveDir, url) async {
+  //   print("start");
+  //
+  //   ///创建DIO
+  //   Dio dio = new Dio();
+  //   var savePath = '$saveDir/${widget.id}.mp4';
+  //   print(savePath);
+  //
+  //   ///参数一 文件的网络储存URL
+  //   ///参数二 下载的本地目录文件
+  //   ///参数三 下载监听
+  //   Response response =
+  //       await dio.download(url, savePath, onReceiveProgress: (received, total) {
+  //     if (total != -1) {
+  //       ///当前下载的百分比例
+  //       print((received / total * 100).toStringAsFixed(1) + "%");
+  //       // CircularProgressIndicator(value: currentProgress,) 进度 0-1
+  //       currentProgress = received / total;
+  //     }
+  //   });
+  // }
 }

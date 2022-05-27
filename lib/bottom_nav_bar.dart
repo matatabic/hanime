@@ -1,10 +1,16 @@
+import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
+import 'package:hanime/providers/download_state.dart';
 import 'package:hanime/providers/favourite_state.dart';
+import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:provider/src/provider.dart';
 
 import 'common/adapt.dart';
@@ -22,11 +28,14 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   int currentIndex = 0;
 
+  ReceivePort _port = ReceivePort();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     loadCache();
+    initM3u8Downloader();
     tabController = TabController(vsync: this, length: 3)
       ..addListener(() {
         setState(() {
@@ -76,5 +85,26 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   void loadCache() async {
     context.read<FavouriteState>().getCache();
+  }
+
+  void initM3u8Downloader() async {
+    M3u8Downloader.initialize(onSelect: () async {
+      print('下载成功点击');
+      return null;
+    });
+
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      // 监听数据请求
+      print(data);
+    });
+
+    Timer.periodic(Duration(milliseconds: 5000), (_) {
+      // print('业务逻辑');
+      print(Provider.of<DownloadState>(context, listen: false)
+          .downloadList
+          .length);
+    });
   }
 }

@@ -71,7 +71,7 @@ class BriefScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 DownloadIcon(
-                                    htmlUrl: watchEntity.info.htmlUrl,
+                                    info: watchEntity.info,
                                     videoUrl: watchEntity
                                         .videoData.video[0].list[0].url),
                                 LikeIcon(info: watchEntity.info)
