@@ -14,7 +14,6 @@ String getVideoId(String htmlUrl) {
 
 Future<String> getM3u8Url(String url) async {
   Response response = await Dio().get(url);
-  // print(response);
   final res = response.data;
 
   if (res.contains("EXTINF")) {

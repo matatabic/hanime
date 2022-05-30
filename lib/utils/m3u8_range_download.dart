@@ -12,11 +12,6 @@ class M3u8RangeDownload {
       {Function? onProgressCallback,
       Function? onSuccessCallback,
       Function? onErrorCallback}) async {
-    // print(
-    //     Provider.of<DownloadState>(context, listen: false).downloadList.length);
-    // _checkPermission().then((hasGranted) async {
-    //   if (hasGranted) {
-    //     if (downloadEntity.videoUrl.indexOf("m3u8") > -1) {
     await M3u8Downloader.config(
         saveDir: downloadEntity.baseDir,
         convertMp4: true,
@@ -29,11 +24,6 @@ class M3u8RangeDownload {
         progressCallback: onProgressCallback,
         successCallback: onSuccessCallback,
         errorCallback: onErrorCallback);
-    //     } else {
-    //       downLoadMp4(downloadEntity);
-    //     }
-    //   }
-    // });
   }
 
   Future<bool> _checkPermission() async {

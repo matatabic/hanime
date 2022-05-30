@@ -115,6 +115,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       for (DownloadEntity item in downloadList) {
         if (item.needDownload) {
           print("开始下载");
+          print(item.baseDir);
           if (item.videoUrl.indexOf("m3u8") > -1) {
             M3u8RangeDownload.downloadWithChunks(item,
                 onProgressCallback: onProgressCallback);
@@ -125,13 +126,15 @@ class _BottomNavBarState extends State<BottomNavBar>
                 dio: Dio(),
                 onReceiveProgress: onReceiveProgress);
           }
+          Provider.of<DownloadState>(context, listen: false)
+              .changeDownloadState(item);
         }
       }
     });
   }
 
   onErrorCallback(DioError err) {
-    print("onErrorCallback" + err.message);
+    print("onErrorCallback===================" + err.message);
   }
 
   onProgressCallback(dynamic args) {

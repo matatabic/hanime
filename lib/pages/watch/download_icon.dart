@@ -103,6 +103,7 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final widgetContext = context;
     return InkWell(
         onTap: () async {
           showCupertinoDialog(
@@ -119,42 +120,13 @@ class _DownloadIconState extends State<DownloadIcon> {
                     ),
                     CupertinoDialogAction(
                       onPressed: () {
-                        // if (_downloadingUrl == widget.videoUrl) {
-                        //   // 暂停
-                        //   setState(() {
-                        //     _downloadingUrl = null;
-                        //   });
-                        //   // M3u8Downloader.pause(url1);
-                        //   return;
-                        // }
-                        // 下载
                         _checkPermission().then((hasGranted) async {
                           if (hasGranted) {
                             String saveDir = await _findSavePath();
-                            context.read<DownloadState>().addQueue(
+                            widgetContext.read<DownloadState>().addQueue(
                                 widget.info, saveDir, widget.videoUrl);
-
-                            // await M3u8Downloader.config(
-                            //     saveDir: saveDir,
-                            //     convertMp4: true,
-                            //     threadCount: 5,
-                            //     debugMode: true);
-                            //
-                            // if (widget.videoUrl.indexOf("m3u8") > -1) {
-                            //   String m3u8Url =
-                            //       await getM3u8Url(widget.videoUrl);
-                            //   M3u8Downloader.download(
-                            //       url: m3u8Url,
-                            //       name: widget.id,
-                            //       progressCallback: progressCallback,
-                            //       successCallback: successCallback,
-                            //       errorCallback: errorCallback);
-                            // } else {
-                            //   downLoadMp4(saveDir, widget.videoUrl);
-                            // }
                           }
                         });
-
                         Navigator.pop(context);
                       },
                       child: Text('确定'),
@@ -173,26 +145,4 @@ class _DownloadIconState extends State<DownloadIcon> {
                 child: Icon(Icons.downloading,
                     size: Adapt.px(60), color: Colors.grey))));
   }
-
-  // downLoadMp4(saveDir, url) async {
-  //   print("start");
-  //
-  //   ///创建DIO
-  //   Dio dio = new Dio();
-  //   var savePath = '$saveDir/${widget.id}.mp4';
-  //   print(savePath);
-  //
-  //   ///参数一 文件的网络储存URL
-  //   ///参数二 下载的本地目录文件
-  //   ///参数三 下载监听
-  //   Response response =
-  //       await dio.download(url, savePath, onReceiveProgress: (received, total) {
-  //     if (total != -1) {
-  //       ///当前下载的百分比例
-  //       print((received / total * 100).toStringAsFixed(1) + "%");
-  //       // CircularProgressIndicator(value: currentProgress,) 进度 0-1
-  //       currentProgress = received / total;
-  //     }
-  //   });
-  // }
 }

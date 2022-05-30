@@ -11,7 +11,7 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
       "children": [
         {
           "title": "パパ喝ッ！ ～イキ場に漏れる背徳の小水～ [中文字幕]",
-          "image": "https://i.imgur.com/QHezhRL.jpg",
+          "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
           "htmlUrl": "https://hanime1.me/watch?v=38456"
         }
       ]
