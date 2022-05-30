@@ -24,6 +24,7 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
           "title": info.title,
           "imageUrl": info.imgUrl,
           "htmlUrl": info.htmlUrl,
+          "videoUrl": videoUrl,
           "baseDir": baseDir,
           "progress": 0,
           "success": false,

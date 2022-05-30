@@ -19,6 +19,10 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   if (htmlUrl != null) {
     downloadEntity.htmlUrl = htmlUrl;
   }
+  final String? videoUrl = jsonConvert.convert<String>(json['videoUrl']);
+  if (videoUrl != null) {
+    downloadEntity.videoUrl = videoUrl;
+  }
   final String? baseDir = jsonConvert.convert<String>(json['baseDir']);
   if (baseDir != null) {
     downloadEntity.baseDir = baseDir;
@@ -44,6 +48,7 @@ Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
   data['title'] = entity.title;
   data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
+  data['videoUrl'] = entity.videoUrl;
   data['baseDir'] = entity.baseDir;
   data['progress'] = entity.progress;
   data['success'] = entity.success;

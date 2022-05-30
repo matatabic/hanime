@@ -9,6 +9,7 @@ class DownloadEntity {
   late String title;
   late String imageUrl;
   late String htmlUrl;
+  late String videoUrl;
   late String baseDir;
   late double progress;
   late bool success;

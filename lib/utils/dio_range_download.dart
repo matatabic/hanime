@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-class RangeDownload {
+class DioRangeDownload {
   static Future<Response> downloadWithChunks(
     url,
     savePath, {
@@ -12,6 +12,7 @@ class RangeDownload {
     required ProgressCallback onReceiveProgress,
     int maxChunk = 6,
     Dio? dio,
+    required Function onErrorCallback,
     CancelToken? cancelToken,
   }) async {
     const firstChunkSize = 102;
@@ -34,11 +35,30 @@ class RangeDownload {
       await f1.rename(targetFile);
     }
 
+    // Future mergeTempFiles(chunk) async {
+    //   File f = File(savePath + "temp0");
+    //   IOSink ioSink = f.openWrite(mode: FileMode.writeOnlyAppend);
+    //   for (int i = 1; i < chunk; ++i) {
+    //     File _f = File(savePath + "temp$i");
+    //     await ioSink.addStream(_f.openRead());
+    //     await _f.delete();
+    //   }
+    //   await ioSink.close();
+    //   await f.rename(savePath);
+    // }
+
     Future mergeTempFiles(chunk) async {
       File f = File(savePath + "temp0");
       IOSink ioSink = f.openWrite(mode: FileMode.writeOnlyAppend);
       for (int i = 1; i < chunk; ++i) {
+        var path = savePath + "temp$i";
+        var oldPath = savePath + "temp${i}_pre";
+        File oldFile = File(oldPath);
+        if (oldFile.existsSync()) {
+          await mergeFiles(oldPath, path, path);
+        }
         File _f = File(savePath + "temp$i");
+        // portSendBuildingNotification(savePath,"combining file $i");
         await ioSink.addStream(_f.openRead());
         await _f.delete();
       }
@@ -46,16 +66,25 @@ class RangeDownload {
       await f.rename(savePath);
     }
 
+    // createCallback(no) {
+    //   return (int received, rangeTotal) async {
+    //     if (received >= rangeTotal) {
+    //       var path = savePath + "temp${no}";
+    //       var oldPath = savePath + "temp${no}_pre";
+    //       File oldFile = File(oldPath);
+    //       if (oldFile.existsSync()) {
+    //         await mergeFiles(oldPath, path, path);
+    //       }
+    //     }
+    //     progress[no] = progressInit[no] + received;
+    //     if (onReceiveProgress != null && total != 0) {
+    //       onReceiveProgress(progress.reduce((a, b) => a + b), total);
+    //     }
+    //   };
+    // }
+
     createCallback(no) {
       return (int received, rangeTotal) async {
-        if (received >= rangeTotal) {
-          var path = savePath + "temp${no}";
-          var oldPath = savePath + "temp${no}_pre";
-          File oldFile = File(oldPath);
-          if (oldFile.existsSync()) {
-            await mergeFiles(oldPath, path, path);
-          }
-        }
         progress[no] = progressInit[no] + received;
         if (onReceiveProgress != null && total != 0) {
           onReceiveProgress(progress.reduce((a, b) => a + b), total);
@@ -150,11 +179,19 @@ class RangeDownload {
         )
             .catchError((DioError err) {
           if (CancelToken.isCancel(err)) {
-            print('Request canceledAAAAA! ' + err.message);
+            onErrorCallback(err);
           } else {
             // handle error.
           }
         });
+        //     .catchError((DioError err) {
+        //   if (CancelToken.isCancel(err)) {
+        //     print('Request canceled! ' + err.message);
+        //   } else {
+        //     // handle error.
+        //   }
+        // }
+        // );
       } else {
         print("The request encountered a problem, please handle it yourself");
         return response;
