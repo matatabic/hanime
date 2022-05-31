@@ -3,18 +3,9 @@ import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/utils/index.dart';
 
-class Downloading {
-  String id;
-  String videoUrl;
-  bool ongoing;
-  Downloading(this.id, this.videoUrl, this.ongoing);
-}
-
 class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
-  List<Downloading> _downloadQueueList = [];
   List<DownloadEntity> _downloadList = [];
 
-  List<Downloading> get downloadQueueList => _downloadQueueList;
   List<DownloadEntity> get downloadList => _downloadList;
 
   void addQueue(WatchInfo info, String baseDir, String videoUrl) {

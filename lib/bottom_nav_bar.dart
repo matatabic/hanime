@@ -106,9 +106,9 @@ class _BottomNavBarState extends State<BottomNavBar>
 
     Timer.periodic(Duration(milliseconds: 5000), (_) {
       // print('业务逻辑');
-      print(Provider.of<DownloadState>(context, listen: false)
-          .downloadList
-          .length);
+      // print(Provider.of<DownloadState>(context, listen: false)
+      //     .downloadList
+      //     .length);
       List<DownloadEntity> downloadList =
           Provider.of<DownloadState>(context, listen: false).downloadList;
 
@@ -122,7 +122,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           } else {
             DioRangeDownload.downloadWithChunks(
                 item.videoUrl, '${item.baseDir}/${item.id}.mp4',
-                onErrorCallback: onErrorCallback,
+                onErrorCallback: () => onErrorCallback,
                 dio: Dio(),
                 onReceiveProgress: onReceiveProgress);
           }

@@ -24,12 +24,6 @@ class DownloadIcon extends StatefulWidget {
 }
 
 class _DownloadIconState extends State<DownloadIcon> {
-  String? _downloadingUrl;
-
-  String? saveDir;
-
-  double currentProgress = 0.0;
-
   String url1 =
       "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8";
   String testUrl =
@@ -103,46 +97,58 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
+    bool res = context
+        .read<DownloadState>()
+        .downloadList
+        .any((element) => element.htmlUrl == widget.info.htmlUrl);
+    print(res);
     final widgetContext = context;
-    return InkWell(
-        onTap: () async {
-          showCupertinoDialog(
-              context: context,
-              builder: (context) {
-                return CupertinoAlertDialog(
-                  title: Text("是否下载该影片?"),
-                  actions: <Widget>[
-                    CupertinoDialogAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text('取消'),
-                    ),
-                    CupertinoDialogAction(
-                      onPressed: () {
-                        _checkPermission().then((hasGranted) async {
-                          if (hasGranted) {
-                            String saveDir = await _findSavePath();
-                            widgetContext.read<DownloadState>().addQueue(
-                                widget.info, saveDir, widget.videoUrl);
-                          }
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Text('确定'),
-                    ),
-                  ],
-                );
-              });
-        },
-        child: Container(
+    return Container(
+        width: Adapt.px(60),
+        height: Adapt.px(60),
+        alignment: Alignment.center,
+        child: SizedBox(
             width: Adapt.px(60),
             height: Adapt.px(60),
-            alignment: Alignment.center,
-            child: SizedBox(
-                width: Adapt.px(60),
-                height: Adapt.px(60),
-                child: Icon(Icons.downloading,
-                    size: Adapt.px(60), color: Colors.grey))));
+            child: res
+                ? Container(
+                    child: Icon(Icons.downloading,
+                        size: Adapt.px(60), color: Colors.red))
+                : InkWell(
+                    onTap: () async {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text("是否下载该影片?"),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('取消'),
+                                ),
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    _checkPermission().then((hasGranted) async {
+                                      if (hasGranted) {
+                                        String saveDir = await _findSavePath();
+                                        widgetContext
+                                            .read<DownloadState>()
+                                            .addQueue(widget.info, saveDir,
+                                                widget.videoUrl);
+                                      }
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('确定'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: Icon(Icons.downloading,
+                        size: Adapt.px(60), color: Colors.grey),
+                  )));
   }
 }

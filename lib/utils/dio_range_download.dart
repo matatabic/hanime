@@ -177,21 +177,21 @@ class DioRangeDownload {
           onReceiveProgress: onReceiveProgress,
           cancelToken: cancelToken,
         )
+            //     .catchError((DioError err) {
+            //   if (CancelToken.isCancel(err)) {
+            //     onErrorCallback(err);
+            //   } else {
+            //     // handle error.
+            //   }
+            // });
             .catchError((DioError err) {
+          print("RequestRequestRequestRequest");
           if (CancelToken.isCancel(err)) {
-            onErrorCallback(err);
+            print('Request canceled! ' + err.message);
           } else {
             // handle error.
           }
         });
-        //     .catchError((DioError err) {
-        //   if (CancelToken.isCancel(err)) {
-        //     print('Request canceled! ' + err.message);
-        //   } else {
-        //     // handle error.
-        //   }
-        // }
-        // );
       } else {
         print("The request encountered a problem, please handle it yourself");
         return response;
