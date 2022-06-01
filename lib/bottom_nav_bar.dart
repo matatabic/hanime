@@ -122,7 +122,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           } else {
             DioRangeDownload.downloadWithChunks(
                 item.videoUrl, '${item.baseDir}/${item.id}.mp4',
-                onErrorCallback: () => onErrorCallback,
+                onErrorCallback: onErrorCallback,
                 dio: Dio(),
                 onReceiveProgress: onReceiveProgress);
           }
@@ -133,8 +133,11 @@ class _BottomNavBarState extends State<BottomNavBar>
     });
   }
 
-  onErrorCallback(DioError err) {
-    print("onErrorCallback===================" + err.message);
+  onErrorCallback(error, stackTrace) {
+    print("12412412");
+    return Response(
+      requestOptions: RequestOptions(path: ''),
+    );
   }
 
   onProgressCallback(dynamic args) {

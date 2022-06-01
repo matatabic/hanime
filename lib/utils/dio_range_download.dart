@@ -117,15 +117,25 @@ class DioRangeDownload {
       }
       progress.add(initLength);
       progressInit.add(initLength);
-      return dio!.download(
-        url,
-        path,
-        onReceiveProgress: createCallback(no),
-        options: Options(
-          headers: {"range": "bytes=$start-$end"},
-        ),
-        cancelToken: cancelToken,
-      );
+      return dio!
+          .download(
+            url,
+            path,
+            onReceiveProgress: createCallback(no),
+            options: Options(
+              headers: {"range": "bytes=$start-$end"},
+            ),
+            cancelToken: cancelToken,
+          )
+          .catchError(onErrorCallback);
+      // .catchError((DioError err) async => {
+      //       if (CancelToken.isCancel(err))
+      //         await {print('Request canceled! ' + err.message)}
+      //       else
+      //         {
+      //           // handle error.
+      //         }
+      //     });
     }
 
     if (isRangeDownload) {
@@ -184,10 +194,10 @@ class DioRangeDownload {
             //     // handle error.
             //   }
             // });
-            .catchError((DioError err) {
+            .catchError((err) {
           print("RequestRequestRequestRequest");
           if (CancelToken.isCancel(err)) {
-            print('Request canceled! ' + err.message);
+            print('Request canceled! ');
           } else {
             // handle error.
           }
@@ -204,9 +214,9 @@ class DioRangeDownload {
         onReceiveProgress: onReceiveProgress,
         cancelToken: cancelToken,
       )
-          .catchError((DioError err) {
+          .catchError((err) {
         if (CancelToken.isCancel(err)) {
-          print('Request canceledAQAAAABBBBBBB! ' + err.message);
+          print('Request canceledAQAAAABBBBBBB! ');
         } else {
           // handle error.
         }
