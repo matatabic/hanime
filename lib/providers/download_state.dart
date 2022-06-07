@@ -19,10 +19,12 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
           "videoUrl": videoUrl,
           "baseDir": baseDir,
           "progress": 0,
-          "retest": 0,
           "success": false,
-          "needDownload": true
+          "needDownload": true,
+          "retest": false,
+          "reTime": 0,
         }));
+
     notifyListeners();
   }
 
@@ -35,6 +37,8 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
     _downloadList[index].needDownload = false;
     print("已下载");
   }
+
+  void errorDownload(String errorMessage) {}
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

@@ -137,6 +137,7 @@ class _DownloadIconState extends State<DownloadIcon> {
                                             .read<DownloadState>()
                                             .addQueue(widget.info, saveDir,
                                                 widget.videoUrl);
+                                        setState(() {});
                                       }
                                     });
                                     Navigator.pop(context);

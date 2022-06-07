@@ -134,7 +134,8 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   onErrorCallback(error, stackTrace) {
-    print("12412412");
+    Provider.of<DownloadState>(context, listen: false)
+        .errorDownload(error.message);
     return Response(
       requestOptions: RequestOptions(path: ''),
     );
