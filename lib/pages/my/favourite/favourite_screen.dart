@@ -9,6 +9,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/favourite_entity.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/favourite_state.dart';
 import 'package:provider/provider.dart';
 import 'package:shake_animation_widget/shake_animation_widget.dart';
@@ -179,8 +180,16 @@ class _FavouriteScreen extends State<FavouriteScreen>
             )
           ],
         ),
-        child: FavouriteItem(
-          anime: anime,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (context) => WatchScreen(htmlUrl: anime.htmlUrl)));
+          },
+          child: FavouriteItem(
+            anime: anime,
+          ),
         ),
       ),
     );

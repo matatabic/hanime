@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -11,9 +12,10 @@ import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/download_state.dart';
 import 'package:hanime/providers/favourite_state.dart';
-import 'package:hanime/utils/dio_range_download.dart';
+import 'package:hanime/utils/api.dart';
 import 'package:hanime/utils/m3u8_range_download.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/src/provider.dart';
 
 import 'common/adapt.dart';
@@ -104,11 +106,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       print(data);
     });
 
-    Timer.periodic(Duration(milliseconds: 5000), (_) {
-      // print('业务逻辑');
-      // print(Provider.of<DownloadState>(context, listen: false)
-      //     .downloadList
-      //     .length);
+    Timer.periodic(Duration(milliseconds: 10000), (_) {
       List<DownloadEntity> downloadList =
           Provider.of<DownloadState>(context, listen: false).downloadList;
 
@@ -120,11 +118,13 @@ class _BottomNavBarState extends State<BottomNavBar>
             M3u8RangeDownload.downloadWithChunks(item,
                 onProgressCallback: onProgressCallback);
           } else {
-            DioRangeDownload.downloadWithChunks(
-                item.videoUrl, '${item.baseDir}/${item.id}.mp4',
-                onErrorCallback: onErrorCallback,
-                dio: Dio(),
-                onReceiveProgress: onReceiveProgress);
+            print(item.videoUrl);
+            download(item.videoUrl, item.baseDir);
+            // DioRangeDownload.downloadWithChunks(
+            //     item.videoUrl, '${item.baseDir}/${item.id}.mp4',
+            //     onErrorCallback: onErrorCallback,
+            //     dio: Dio(),
+            //     onReceiveProgress: onReceiveProgress);
           }
           Provider.of<DownloadState>(context, listen: false)
               .changeDownloadState(item);
@@ -138,6 +138,36 @@ class _BottomNavBarState extends State<BottomNavBar>
         .errorDownload(error.message);
     return Response(
       requestOptions: RequestOptions(path: ''),
+    );
+  }
+
+  void download(videoUrl, sDCardDir) async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    // var sDCardDir = dir.path;
+    var savePath = sDCardDir + "/video/1.mp4";
+    File f = File(sDCardDir + "/video");
+    if (!await f.exists()) {
+      new Directory(sDCardDir + "/video").createSync();
+    }
+
+    await DownLoadManage.download(
+      url: videoUrl,
+      savePath: savePath,
+      onReceiveProgress: (received, total) {
+        if (total != -1) {
+          print("下载1已接收：" +
+              received.toString() +
+              "总共：" +
+              total.toString() +
+              "进度：+${(received / total * 100).floor()}%");
+        }
+      },
+      done: () {
+        print("下载1完成");
+      },
+      failed: (e) {
+        print("下载1失败：" + e.toString());
+      },
     );
   }
 

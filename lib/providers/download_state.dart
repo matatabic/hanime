@@ -21,7 +21,7 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
           "progress": 0,
           "success": false,
           "needDownload": true,
-          "retest": false,
+          "reTest": false,
           "reTime": 0,
         }));
 
@@ -38,7 +38,33 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
     print("已下载");
   }
 
-  void errorDownload(String errorMessage) {}
+  void errorDownload(String errorMessage) {
+    for (var i = 0; i < _downloadList.length; i++) {
+      if (errorMessage.indexOf(_downloadList[i].videoUrl) > -1) {
+        // if (_downloadList[i].reTest) {
+        //   print("已经重试一次");
+        // } else {
+        //   print("还没重试");
+        // }
+        // print(DateTime.now().microsecondsSinceEpoch);
+        // print(_downloadList[i].reTime);
+        // if (DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTime >
+        //     50000) {
+        //   print("时间够");
+        // } else {
+        //   print("时间不够");
+        // }
+        if (!_downloadList[i].reTest &&
+            DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTime >
+                50000) {
+          _downloadList[i].needDownload = true;
+          _downloadList[i].reTest = true;
+          _downloadList[i].reTime = DateTime.now().microsecondsSinceEpoch;
+        }
+        break;
+      }
+    }
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

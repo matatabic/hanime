@@ -10,9 +10,14 @@ class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
       "name": "我的收藏夹",
       "children": [
         {
-          "title": "パパ喝ッ！ ～イキ場に漏れる背徳の小水～ [中文字幕]",
+          "title": "[JXH33] 早坂愛 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
           "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
-          "htmlUrl": "https://hanime1.me/watch?v=38456"
+          "htmlUrl": "https://hanime1.me/watch?v=38240"
+        },
+        {
+          "title": "[yuukis] 藤原千花 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
+          "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
+          "htmlUrl": "https://hanime1.me/watch?v=38680"
         }
       ]
     })

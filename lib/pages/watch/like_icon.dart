@@ -168,7 +168,7 @@ class _LikeIconState extends State<LikeIcon> {
                               print('这是点击了选项${item.name}');
                               context.read<FavouriteState>().saveAnime(
                                   FavouriteChildren.fromJson({
-                                    "image": widget.info.imgUrl,
+                                    "imageUrl": widget.info.imgUrl,
                                     "htmlUrl": widget.info.htmlUrl,
                                     "title": widget.info.title
                                   }),
