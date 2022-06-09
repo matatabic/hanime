@@ -4,17 +4,17 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
-class DownLoadManage {
+class DioRangeDownloadManage {
   /// 用于记录正在下载的url，避免重复下载
   static var downloadingUrls = Map<String, CancelToken>();
 
   /// 断点下载大文件
-  static Future<void> download({
+  static Future<void> downloadWithChunks({
     required String url,
     required String savePath,
     ProgressCallback? onReceiveProgress,
     void Function()? done,
-    void Function(DioError)? failed,
+    void Function(String uri)? failed,
   }) async {
     int downloadStart = 0;
     bool fileExists = false;
@@ -64,7 +64,8 @@ class DownLoadManage {
         onError: (e) async {
           await raf.close();
           downloadingUrls.remove(url);
-          failed?.call(e as DioError);
+          print("error1111111111111111111111");
+          failed?.call(e.uri.toString());
         },
         cancelOnError: true,
       );
@@ -73,11 +74,13 @@ class DownLoadManage {
         await raf.close();
       });
     } on DioError catch (error) {
+      print("error222222222222222222222222222");
+
       /// 请求已发出，服务器用状态代码响应它不在200的范围内
       if (CancelToken.isCancel(error)) {
         print("下载取消");
       } else {
-        failed?.call(error);
+        failed?.call(error.message);
       }
       downloadingUrls.remove(url);
     }

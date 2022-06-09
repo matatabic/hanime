@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -7,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_state.dart';
-import 'package:hanime/utils/index.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/src/provider.dart';
 
@@ -40,27 +37,6 @@ class _DownloadIconState extends State<DownloadIcon> {
       status = await Permission.storage.request();
     }
     return status.isGranted;
-  }
-
-  Future<String> _findSavePath() async {
-    final directory = Platform.isAndroid
-        ? await getExternalStorageDirectory()
-        : await getApplicationDocumentsDirectory();
-
-    String baseDir = directory!.path + '/vPlayDownload/';
-
-    Directory root = Directory(baseDir);
-    if (!root.existsSync()) {
-      await root.create();
-    }
-    baseDir = baseDir + getVideoId(widget.info.htmlUrl);
-
-    root = Directory(baseDir);
-    if (!root.existsSync()) {
-      await root.create();
-    }
-
-    return baseDir;
   }
 
   static progressCallback(dynamic args) {
@@ -132,11 +108,10 @@ class _DownloadIconState extends State<DownloadIcon> {
                                   onPressed: () {
                                     _checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
-                                        String saveDir = await _findSavePath();
                                         widgetContext
                                             .read<DownloadState>()
-                                            .addQueue(widget.info, saveDir,
-                                                widget.videoUrl);
+                                            .addQueue(
+                                                widget.info, widget.videoUrl);
                                         setState(() {});
                                       }
                                     });

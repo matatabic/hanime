@@ -12,8 +12,8 @@ import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/download_state.dart';
 import 'package:hanime/providers/favourite_state.dart';
-import 'package:hanime/utils/api.dart';
-import 'package:hanime/utils/m3u8_range_download.dart';
+import 'package:hanime/utils/dio_range_download_manage.dart';
+import 'package:hanime/utils/m3u8_range_download_manage.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/src/provider.dart';
@@ -113,21 +113,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       for (DownloadEntity item in downloadList) {
         if (item.needDownload) {
           print("开始下载");
-          print(item.baseDir);
-          if (item.videoUrl.indexOf("m3u8") > -1) {
-            M3u8RangeDownload.downloadWithChunks(item,
-                onProgressCallback: onProgressCallback);
-          } else {
-            print(item.videoUrl);
-            download(item.videoUrl, item.baseDir);
-            // DioRangeDownload.downloadWithChunks(
-            //     item.videoUrl, '${item.baseDir}/${item.id}.mp4',
-            //     onErrorCallback: onErrorCallback,
-            //     dio: Dio(),
-            //     onReceiveProgress: onReceiveProgress);
-          }
-          Provider.of<DownloadState>(context, listen: false)
-              .changeDownloadState(item);
+          _download(item);
         }
       }
     });
@@ -141,34 +127,54 @@ class _BottomNavBarState extends State<BottomNavBar>
     );
   }
 
-  void download(videoUrl, sDCardDir) async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    // var sDCardDir = dir.path;
-    var savePath = sDCardDir + "/video/1.mp4";
-    File f = File(sDCardDir + "/video");
-    if (!await f.exists()) {
-      new Directory(sDCardDir + "/video").createSync();
+  Future<String> _findBasePath(int id) async {
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+
+    String baseDir = directory!.path + '/video/';
+
+    Directory root = Directory(baseDir);
+    if (!root.existsSync()) {
+      await root.create();
+    }
+    baseDir = baseDir + id.toString();
+
+    root = Directory(baseDir);
+    if (!root.existsSync()) {
+      await root.create();
     }
 
-    await DownLoadManage.download(
-      url: videoUrl,
-      savePath: savePath,
-      onReceiveProgress: (received, total) {
-        if (total != -1) {
-          print("下载1已接收：" +
-              received.toString() +
-              "总共：" +
-              total.toString() +
-              "进度：+${(received / total * 100).floor()}%");
-        }
-      },
-      done: () {
-        print("下载1完成");
-      },
-      failed: (e) {
-        print("下载1失败：" + e.toString());
-      },
-    );
+    return baseDir;
+  }
+
+  void _download(DownloadEntity downloadEntity) async {
+    String baseUrl = await _findBasePath(downloadEntity.id);
+
+    if (downloadEntity.videoUrl.indexOf("m3u8") > -1) {
+      M3u8RangeDownloadManage.downloadWithChunks(downloadEntity, baseUrl,
+          onProgressCallback: onProgressCallback);
+    } else {
+      await DioRangeDownloadManage.downloadWithChunks(
+        url: downloadEntity.videoUrl,
+        savePath: "$baseUrl/${downloadEntity.id}.mp4",
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            print("下载1已接收：" +
+                received.toString() +
+                "总共：" +
+                total.toString() +
+                "进度：+${(received / total * 100).floor()}%");
+          }
+        },
+        done: () {
+          print("下载1完成");
+        },
+        failed: (String uri) {},
+      );
+    }
+    Provider.of<DownloadState>(context, listen: false)
+        .changeDownloadState(downloadEntity);
   }
 
   onProgressCallback(dynamic args) {

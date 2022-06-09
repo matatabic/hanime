@@ -7,16 +7,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'index.dart';
 
-class M3u8RangeDownload {
-  static Future<void> downloadWithChunks(DownloadEntity downloadEntity,
+class M3u8RangeDownloadManage {
+  static Future<void> downloadWithChunks(
+      DownloadEntity downloadEntity, String savePath,
       {Function? onProgressCallback,
       Function? onSuccessCallback,
       Function? onErrorCallback}) async {
     await M3u8Downloader.config(
-        saveDir: downloadEntity.baseDir,
-        convertMp4: true,
-        threadCount: 5,
-        debugMode: true);
+        saveDir: savePath, convertMp4: true, threadCount: 5, debugMode: true);
     String m3u8Url = await getM3u8Url(downloadEntity.videoUrl);
     M3u8Downloader.download(
         url: m3u8Url,

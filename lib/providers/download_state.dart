@@ -8,7 +8,7 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<DownloadEntity> get downloadList => _downloadList;
 
-  void addQueue(WatchInfo info, String baseDir, String videoUrl) {
+  void addQueue(WatchInfo info, String videoUrl) {
     _downloadList.insert(
         0,
         DownloadEntity.fromJson({
@@ -17,7 +17,6 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
           "imageUrl": info.imgUrl,
           "htmlUrl": info.htmlUrl,
           "videoUrl": videoUrl,
-          "baseDir": baseDir,
           "progress": 0,
           "success": false,
           "needDownload": true,
