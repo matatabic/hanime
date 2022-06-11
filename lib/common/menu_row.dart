@@ -5,13 +5,9 @@ import 'adapt.dart';
 
 class MenuRow extends StatelessWidget {
   final String title;
-  final bool selected;
   final VoidCallback onTap;
-  const MenuRow(
-      {Key? key,
-      required this.title,
-      required this.selected,
-      required this.onTap})
+
+  const MenuRow({Key? key, required this.title, required this.onTap})
       : super(key: key);
 
   @override
@@ -21,7 +17,6 @@ class MenuRow extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: Adapt.px(120),
-        color: selected ? Theme.of(context).primaryColor : Colors.black,
         child: Center(
             child: Text(
           title,

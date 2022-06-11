@@ -33,25 +33,27 @@ class SearchMenuScreen extends StatelessWidget {
     List<Widget> dataList = [];
     for (var menu in _menuList) {
       dataList.add(Ink(
-        child: InkWell(
-            onTap: () {
-              showBarModalBottomSheet(
-                  expand: true,
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) =>
-                      menuDetail(menu['id'], currentScreen, () => loadData()));
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: Adapt.px(10), horizontal: Adapt.px(10)),
-              child: ClipOval(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+          child: ClipOval(
+            child: Material(
+              color: getActive(
+                  context.watch<SearchState>().searchList[currentScreen],
+                  menu['id']),
+              child: InkWell(
+                customBorder: StadiumBorder(),
+                onTap: () {
+                  showBarModalBottomSheet(
+                      expand: true,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => menuDetail(
+                          menu['id'], currentScreen, () => loadData()));
+                },
                 child: Container(
                   height: Adapt.px(100),
                   width: Adapt.px(100),
-                  color: getActive(
-                      context.watch<SearchState>().searchList[currentScreen],
-                      menu['id']),
                   child: Center(
                     child: Icon(
                       menu['icon'] as IconData,
@@ -60,7 +62,9 @@ class SearchMenuScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            )),
+            ),
+          ),
+        ),
       ));
     }
     return CupertinoScaffold(

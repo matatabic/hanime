@@ -38,14 +38,18 @@ class SortMenu extends StatelessWidget {
           body: ListView.separated(
             padding: EdgeInsets.only(top: Adapt.px(20)),
             itemBuilder: (BuildContext context, int index) {
-              return MenuRow(
-                title: sort.data[index],
-                selected: index == search.sortIndex,
-                onTap: () {
-                  context
-                      .read<SearchState>()
-                      .setSortIndex(currentScreen, index);
-                },
+              return Material(
+                color: index == search.sortIndex
+                    ? Theme.of(context).primaryColor
+                    : Colors.black,
+                child: MenuRow(
+                  title: sort.data[index],
+                  onTap: () {
+                    context
+                        .read<SearchState>()
+                        .setSortIndex(currentScreen, index);
+                  },
+                ),
               );
             },
             itemCount: sort.data.length,

@@ -38,12 +38,18 @@ class GenreMenu extends StatelessWidget {
           padding: EdgeInsets.only(top: Adapt.px(20)),
           physics: const ClampingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            return MenuRow(
-              title: genre.data[index],
-              selected: index == search.genreIndex,
-              onTap: () {
-                context.read<SearchState>().setGenreIndex(currentScreen, index);
-              },
+            return Material(
+              color: index == search.genreIndex
+                  ? Theme.of(context).primaryColor
+                  : Colors.black,
+              child: MenuRow(
+                title: genre.data[index],
+                onTap: () {
+                  context
+                      .read<SearchState>()
+                      .setGenreIndex(currentScreen, index);
+                },
+              ),
             );
           },
           itemCount: genre.data.length,

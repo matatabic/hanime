@@ -38,14 +38,18 @@ class DurationMenu extends StatelessWidget {
           body: ListView.separated(
             padding: EdgeInsets.only(top: Adapt.px(20)),
             itemBuilder: (BuildContext context, int index) {
-              return MenuRow(
-                title: duration.data[index],
-                selected: index == search.durationIndex,
-                onTap: () {
-                  context
-                      .read<SearchState>()
-                      .setDurationIndex(currentScreen, index);
-                },
+              return Material(
+                color: index == search.durationIndex
+                    ? Theme.of(context).primaryColor
+                    : Colors.black,
+                child: MenuRow(
+                  title: duration.data[index],
+                  onTap: () {
+                    context
+                        .read<SearchState>()
+                        .setDurationIndex(currentScreen, index);
+                  },
+                ),
               );
             },
             itemCount: duration.data.length,

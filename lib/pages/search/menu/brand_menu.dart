@@ -17,15 +17,33 @@ class BrandMenu extends StatelessWidget {
     Search search = context.watch<SearchState>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
-      tagWidgetList.add(InkWell(
-        onTap: () {
-          context.read<SearchState>().selectedBrandHandle(currentScreen, title);
-        },
-        child: BrandDetail(
-            title: title,
-            color: search.brandList.indexOf(title) > -1
-                ? Theme.of(context).primaryColor
-                : Colors.black),
+      tagWidgetList.add(Material(
+        borderRadius: BorderRadius.all(
+          Radius.circular(Adapt.px(15)),
+        ),
+        color: search.brandList.indexOf(title) > -1
+            ? Theme.of(context).primaryColor
+            : Colors.black,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(Adapt.px(15)),
+              ),
+              border: new Border.all(
+                color: Colors.grey, //边框颜色
+                width: Adapt.px(5), //边框粗细
+              )),
+          child: InkWell(
+            onTap: () {
+              context
+                  .read<SearchState>()
+                  .selectedBrandHandle(currentScreen, title);
+            },
+            child: BrandDetail(
+              title: title,
+            ),
+          ),
+        ),
       ));
     }
 
@@ -65,24 +83,12 @@ class BrandMenu extends StatelessWidget {
 
 class BrandDetail extends StatelessWidget {
   final String title;
-  final Color color;
-
-  const BrandDetail({Key? key, required this.title, required this.color})
-      : super(key: key);
+  const BrandDetail({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Adapt.px(10)),
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.all(
-            Radius.circular(Adapt.px(15)),
-          ),
-          border: new Border.all(
-            color: Colors.grey, //边框颜色
-            width: Adapt.px(5), //边框粗细
-          )),
       child: Text(
         title,
         style: TextStyle(fontSize: Adapt.px(34)),
