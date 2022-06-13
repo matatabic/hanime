@@ -57,35 +57,40 @@ class _DownloadScreenState extends State<DownloadScreen>
     );
   }
 
-  List<DragAndDropList> _buildItem(List<DownloadEntity> anime) {
+  List<DragAndDropList> _buildItem(List<DownloadEntity> downloadEntity) {
     return [
-      DragAndDropList(children: [
-        DragAndDropItem(
-          child: Container(
-            height: 200,
-            child: Text('.1'),
-          ),
-        ),
-        DragAndDropItem(
-          child: Container(
-            height: 200,
-            child: Text('.1'),
-          ),
-        ),
-        DragAndDropItem(
-          child: Text('.1'),
-        )
-      ]),
-      DragAndDropList(children: [
-        DragAndDropItem(
-          child: Text('.2'),
-        )
-      ]),
-      DragAndDropList(children: [
-        DragAndDropItem(
-          child: Text('.3'),
-        )
-      ])
+      DragAndDropList(
+          children: downloadEntity
+              .map((item) => DragAndDropItem(child: Text(item.title)))
+              .toList())
+
+      // DragAndDropList(children:
+      //   DragAndDropItem(
+      //     child: Container(
+      //       height: 200,
+      //       child: Text('.1'),
+      //     ),
+      //   ),
+      //   DragAndDropItem(
+      //     child: Container(
+      //       height: 200,
+      //       child: Text('.1'),
+      //     ),
+      //   ),
+      //   DragAndDropItem(
+      //     child: Text('.1'),
+      //   )
+      // ]),
+      // DragAndDropList(children: [
+      //   DragAndDropItem(
+      //     child: Text('.2'),
+      //   )
+      // ]),
+      // DragAndDropList(children: [
+      //   DragAndDropItem(
+      //     child: Text('.3'),
+      //   )
+      // ])
     ];
   }
 
