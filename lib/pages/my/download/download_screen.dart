@@ -1,6 +1,8 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_state.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,7 @@ class _DownloadScreenState extends State<DownloadScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _deleteMode = false;
+
   // late List<DragAndDropList> _contents;
   List<DownloadEntity> _downloadList = [];
 
@@ -25,24 +27,14 @@ class _DownloadScreenState extends State<DownloadScreen>
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       List<DownloadEntity> downloadList =
           Provider.of<DownloadState>(context, listen: false).downloadList;
-      _downloadList = downloadList;
+      print("获取数据");
+      setState(() {
+        _downloadList = downloadList;
+      });
     });
-
+    print("initState");
     super.initState();
   }
-
-  List<DragAndDropList> _contents = List.generate(10, (index) {
-    return DragAndDropList(children: [
-      DragAndDropItem(
-        canDrag: true,
-        child: Text('$index.1'),
-      ),
-      DragAndDropItem(
-        canDrag: true,
-        child: Text('$index.99'),
-      )
-    ]);
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +53,62 @@ class _DownloadScreenState extends State<DownloadScreen>
     return [
       DragAndDropList(
           children: downloadEntity
-              .map((item) => DragAndDropItem(child: Text(item.title)))
+              .map((item) => DragAndDropItem(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+                      color: Color.fromRGBO(58, 60, 63, 1),
+                      height: Adapt.px(220),
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              // Navigator.of(context).push(NoAnimRouter(
+                              //   HeroPhotoViewRouteWrapper(
+                              //     randomNum: randomTag,
+                              //     minScale: 1.0,
+                              //     maxScale: 1.8,
+                              //     imageProvider: NetworkImage(anime.imageUrl),
+                              //   ),
+                              // ));
+                            },
+                            child: ClipOval(
+                              child: Container(
+                                width: Adapt.px(140),
+                                height: Adapt.px(140),
+                                child: CommonImages(
+                                  imgUrl: item.imageUrl,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Expanded(
+                          //   child: Container(
+                          //       height: Adapt.px(200),
+                          //     color: Colors.red,
+                          //     padding: EdgeInsets.only(left: Adapt.px(20)),
+                          //     child: Text(item.title,
+                          //         style: TextStyle(
+                          //             fontSize: Adapt.px(30),
+                          //             fontWeight: FontWeight.bold,
+                          //             color: Colors.white))),
+                          // ),
+                          Expanded(
+                              child: Column(
+                            children: [
+                              Container(
+                                  height: Adapt.px(200),
+                                  color: Colors.red,
+                                  padding: EdgeInsets.only(left: Adapt.px(20)),
+                                  child: Text(item.title,
+                                      style: TextStyle(
+                                          fontSize: Adapt.px(30),
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white))),
+                            ],
+                          ))
+                        ],
+                      ))))
               .toList())
 
       // DragAndDropList(children:
@@ -95,17 +142,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   }
 
   _onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    setState(() {
-      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
-      _contents[newListIndex].children.insert(newItemIndex, movedItem);
-    });
-  }
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
 
-  _onListReorder(int oldListIndex, int newListIndex) {
-    setState(() {
-      var movedList = _contents.removeAt(oldListIndex);
-      _contents.insert(newListIndex, movedList);
-    });
-  }
+  _onListReorder(int oldListIndex, int newListIndex) {}
 }

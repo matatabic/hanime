@@ -20,7 +20,6 @@ class FavouriteItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         color: showBg ? Color.fromRGBO(58, 60, 63, 1) : Colors.transparent,
         height: Adapt.px(220),
-        width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
             InkWell(

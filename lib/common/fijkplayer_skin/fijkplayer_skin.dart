@@ -452,7 +452,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                         showConfig.stateAuto && !widget.player.value.fullScreen
                             ? barFillingHeight
                             : barHeight,
-                    alignment: Alignment.bottomLeft,
+                    // alignment: Alignment.bottomLeft,
+                    alignment: Alignment.topLeft,
                     child: Container(
                       height: barHeight,
                       child: Row(
@@ -614,7 +615,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       ws.add(
         _buildPublicFrameWidget(
           slot: _buildIdleStateSlotWidget(),
-          bgColor: Colors.black,
+          // bgColor: Colors.black, //黑色背景遮盖cover
         ),
       );
     } else {
@@ -1319,7 +1320,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
         height: showConfig.stateAuto && !widget.player.value.fullScreen
             ? barFillingHeight
             : barHeight,
-        alignment: Alignment.bottomLeft,
+        alignment: Alignment.topLeft,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,

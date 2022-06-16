@@ -15,7 +15,7 @@ class _MyScreenState extends State<MyScreen>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   Widget build(BuildContext context) {

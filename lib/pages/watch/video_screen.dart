@@ -84,6 +84,7 @@ class _VideoScreenState extends State<VideoScreen>
         FijkView(
           height: Adapt.px(520),
           color: Colors.black,
+          cover: NetworkImage(widget.watchEntity.info.cover),
           fit: FijkFit.cover,
           player: widget.player,
           panelBuilder: (

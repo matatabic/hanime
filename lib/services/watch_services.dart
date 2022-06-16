@@ -3,7 +3,6 @@ import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
-  print(url);
   Response response = await Dio().get(url);
   final resHtml = response.data;
   var document = parse(resHtml);
@@ -25,6 +24,10 @@ Future getWatchData(url) async {
     currentPlayer = match.group(0)!;
   }
 
+  var videoElement = document.querySelector("#player");
+  var videoCover = videoElement!.attributes['poster'];
+  print("videoCover");
+  print(videoCover);
   var watchImg = document
       .querySelector(".hidden-md #video-playlist-wrapper img")!
       .attributes['src'];
@@ -38,8 +41,8 @@ Future getWatchData(url) async {
       document.querySelector("meta[property='og:description']");
   var description = descriptionElement!.attributes['content'];
 
-  String? aa = document.querySelector("#caption")!.firstChild!.text;
-  description = description!.replaceFirst(aa!, "");
+  description = document.querySelector("#caption")!.firstChild!.text;
+  description = description!.replaceFirst(description, "");
 
   var currentVideo = [
     {"name": title, 'url': currentPlayer}
@@ -132,6 +135,7 @@ Future getWatchData(url) async {
       "title": watchTitle,
       "imgUrl": watchImg,
       "htmlUrl": url,
+      "cover": videoCover,
       "videoIndex": videoIndex,
       "shareTitle": shareTitle,
       "countTitle": watchCountTitle,
