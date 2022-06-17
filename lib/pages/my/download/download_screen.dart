@@ -5,6 +5,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_state.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class DownloadScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   }
 
   List<DragAndDropList> _buildItem(List<DownloadEntity> downloadEntity) {
+    print(downloadEntity[0].progress);
     return [
       DragAndDropList(
           children: downloadEntity
@@ -62,16 +64,7 @@ class _DownloadScreenState extends State<DownloadScreen>
                       child: Row(
                         children: [
                           InkWell(
-                            onTap: () {
-                              // Navigator.of(context).push(NoAnimRouter(
-                              //   HeroPhotoViewRouteWrapper(
-                              //     randomNum: randomTag,
-                              //     minScale: 1.0,
-                              //     maxScale: 1.8,
-                              //     imageProvider: NetworkImage(anime.imageUrl),
-                              //   ),
-                              // ));
-                            },
+                            onTap: () {},
                             child: ClipOval(
                               child: Container(
                                 width: Adapt.px(140),
@@ -82,62 +75,36 @@ class _DownloadScreenState extends State<DownloadScreen>
                               ),
                             ),
                           ),
-                          // Expanded(
-                          //   child: Container(
-                          //       height: Adapt.px(200),
-                          //     color: Colors.red,
-                          //     padding: EdgeInsets.only(left: Adapt.px(20)),
-                          //     child: Text(item.title,
-                          //         style: TextStyle(
-                          //             fontSize: Adapt.px(30),
-                          //             fontWeight: FontWeight.bold,
-                          //             color: Colors.white))),
-                          // ),
                           Expanded(
-                              child: Column(
+                              child: Flex(
+                            direction: Axis.vertical,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                  height: Adapt.px(200),
-                                  color: Colors.red,
                                   padding: EdgeInsets.only(left: Adapt.px(20)),
                                   child: Text(item.title,
                                       style: TextStyle(
                                           fontSize: Adapt.px(30),
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white))),
+                              Padding(
+                                padding: EdgeInsets.only(right: Adapt.px(20)),
+                                child: LinearPercentIndicator(
+                                  // width: 100,
+                                  animation: true,
+                                  lineHeight: Adapt.px(40),
+                                  animationDuration: 1000,
+                                  percent: item.progress / 100,
+                                  center: Text("${item.progress}%"),
+                                  linearStrokeCap: LinearStrokeCap.roundAll,
+                                  progressColor: Colors.green,
+                                ),
+                              ),
                             ],
                           ))
                         ],
                       ))))
               .toList())
-
-      // DragAndDropList(children:
-      //   DragAndDropItem(
-      //     child: Container(
-      //       height: 200,
-      //       child: Text('.1'),
-      //     ),
-      //   ),
-      //   DragAndDropItem(
-      //     child: Container(
-      //       height: 200,
-      //       child: Text('.1'),
-      //     ),
-      //   ),
-      //   DragAndDropItem(
-      //     child: Text('.1'),
-      //   )
-      // ]),
-      // DragAndDropList(children: [
-      //   DragAndDropItem(
-      //     child: Text('.2'),
-      //   )
-      // ]),
-      // DragAndDropList(children: [
-      //   DragAndDropItem(
-      //     child: Text('.3'),
-      //   )
-      // ])
     ];
   }
 

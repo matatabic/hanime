@@ -160,6 +160,10 @@ class _BottomNavBarState extends State<BottomNavBar>
         savePath: "$baseUrl/${downloadEntity.id}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
+            Provider.of<DownloadState>(context, listen: false)
+                .changeDownloadProgress(
+                    downloadEntity.id, (received / total).roundToDouble());
+
             print("下载1已接收：" +
                 received.toString() +
                 "总共：" +

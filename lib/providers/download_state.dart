@@ -12,7 +12,7 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
       "imageUrl": "https://i.imgur.com/XkxRy74.jpg",
       "htmlUrl": "https://hanime1.me/watch?v=38462",
       "videoUrl": "https://hanime1.me/watch?v=38462",
-      "progress": 35,
+      "progress": 0.354,
       "success": false,
       "needDownload": false,
       "reTest": false,
@@ -25,7 +25,7 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
           "https://cdn.jsdelivr.net/gh/ippaiaru/ippaiaru-h@latest/asset/cover/649pU61.jpg",
       "htmlUrl": "https://hanime1.me/watch?v=23177",
       "videoUrl": "https://hanime1.me/watch?v=23177",
-      "progress": 100,
+      "progress": 1,
       "success": true,
       "needDownload": false,
       "reTest": false,
@@ -61,7 +61,15 @@ class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
   void changeDownloadState(DownloadEntity downloadEntity) {
     int index = _downloadList.indexOf(downloadEntity);
     _downloadList[index].needDownload = false;
-    print("已下载");
+    print("needDownload false");
+  }
+
+  void changeDownloadProgress(int id, double progress) {
+    print("12321312");
+    int index = _downloadList.indexWhere((element) => element.id == id);
+
+    _downloadList[index].progress = progress;
+    print("正在下载");
   }
 
   void errorDownload(String errorMessage) {
