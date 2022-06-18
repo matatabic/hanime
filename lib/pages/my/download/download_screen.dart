@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/download_entity.dart';
-import 'package:hanime/providers/download_state.dart';
+import 'package:hanime/providers/download_model.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +27,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       List<DownloadEntity> downloadList =
-          Provider.of<DownloadState>(context, listen: false).downloadList;
+          Provider.of<DownloadModel>(context, listen: false).downloadList;
       print("获取数据");
       setState(() {
         _downloadList = downloadList;
@@ -40,7 +40,11 @@ class _DownloadScreenState extends State<DownloadScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    // List<DownloadEntity> _downloadList =
+    //     Provider.of<DownloadState>(context).downloadList;
+    List<DownloadEntity> currentDynamic =
+        context.select<DownloadModel, List<DownloadEntity>>(
+            (dynamicDetail) => dynamicDetail.downloadList);
     return Scaffold(
       body: DragAndDropLists(
         children: _buildItem(_downloadList),
@@ -94,8 +98,8 @@ class _DownloadScreenState extends State<DownloadScreen>
                                   animation: true,
                                   lineHeight: Adapt.px(40),
                                   animationDuration: 1000,
-                                  percent: item.progress / 100,
-                                  center: Text("${item.progress}%"),
+                                  percent: item.progress,
+                                  center: Text("${item.progress * 100}%"),
                                   linearStrokeCap: LinearStrokeCap.roundAll,
                                   progressColor: Colors.green,
                                 ),

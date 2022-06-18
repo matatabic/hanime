@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/providers/download_state.dart';
+import 'package:hanime/providers/download_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/src/provider.dart';
 
@@ -73,12 +73,6 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
-    bool res = context
-        .read<DownloadState>()
-        .downloadList
-        .any((element) => element.htmlUrl == widget.info.htmlUrl);
-    print(res);
-    final widgetContext = context;
     return Container(
         width: Adapt.px(60),
         height: Adapt.px(60),
@@ -86,7 +80,10 @@ class _DownloadIconState extends State<DownloadIcon> {
         child: SizedBox(
             width: Adapt.px(60),
             height: Adapt.px(60),
-            child: res
+            child: context
+                    .read<DownloadModel>()
+                    .downloadList
+                    .any((element) => element.htmlUrl == widget.info.htmlUrl)
                 ? Container(
                     child: Icon(Icons.downloading,
                         size: Adapt.px(60), color: Colors.red))
@@ -106,10 +103,11 @@ class _DownloadIconState extends State<DownloadIcon> {
                                 ),
                                 CupertinoDialogAction(
                                   onPressed: () {
+                                    final widgetContext = context;
                                     _checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
                                         widgetContext
-                                            .read<DownloadState>()
+                                            .read<DownloadModel>()
                                             .addQueue(
                                                 widget.info, widget.videoUrl);
                                         setState(() {});

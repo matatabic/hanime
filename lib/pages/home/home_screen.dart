@@ -8,7 +8,7 @@ import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_card.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
-import 'package:hanime/providers/home_state.dart';
+import 'package:hanime/providers/home_model.dart';
 import 'package:hanime/services/home_services.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:provider/src/provider.dart';
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
                   child: HomeHeaderScreen(
                 swiperList: homeEntity.swiper,
                 currentSwiperImage: homeEntity
-                    .swiper[context.watch<HomeState>().swiperIndex].imgUrl,
+                    .swiper[context.watch<HomeModel>().swiperIndex].imgUrl,
               )),
               // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
               SliverList(

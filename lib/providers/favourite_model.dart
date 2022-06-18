@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FavouriteState with ChangeNotifier, DiagnosticableTreeMixin {
+class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<FavouriteEntity> _favouriteList = [
     FavouriteEntity.fromJson({
       "name": "我的收藏夹",

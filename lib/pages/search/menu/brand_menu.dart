@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
@@ -14,7 +14,7 @@ class BrandMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
       tagWidgetList.add(Material(
@@ -36,7 +36,7 @@ class BrandMenu extends StatelessWidget {
           child: InkWell(
             onTap: () {
               context
-                  .read<SearchState>()
+                  .read<SearchModel>()
                   .selectedBrandHandle(currentScreen, title);
             },
             child: BrandDetail(

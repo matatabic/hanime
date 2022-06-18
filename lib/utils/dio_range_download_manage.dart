@@ -24,6 +24,7 @@ class DioRangeDownloadManage {
       fileExists = true;
     }
     print("开始：$downloadStart");
+    print("url: $url");
     if (fileExists && downloadingUrls.containsKey(url)) {
       return;
     }
@@ -80,6 +81,8 @@ class DioRangeDownloadManage {
       if (CancelToken.isCancel(error)) {
         print("下载取消");
       } else {
+        print("下载取消2");
+        print(error.message);
         failed?.call(error.message);
       }
       downloadingUrls.remove(url);

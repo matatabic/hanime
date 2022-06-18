@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class HomeState with ChangeNotifier, DiagnosticableTreeMixin {
+class HomeModel with ChangeNotifier, DiagnosticableTreeMixin {
   int _swiperIndex = 0;
 
   int get swiperIndex => _swiperIndex;

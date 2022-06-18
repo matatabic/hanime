@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
-import 'package:hanime/providers/download_state.dart';
-import 'package:hanime/providers/favourite_state.dart';
+import 'package:hanime/providers/download_model.dart';
+import 'package:hanime/providers/favourite_model.dart';
 import 'package:hanime/utils/dio_range_download_manage.dart';
 import 'package:hanime/utils/m3u8_range_download_manage.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
@@ -90,7 +90,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   void loadCache() async {
-    context.read<FavouriteState>().getCache();
+    context.read<FavouriteModel>().getCache();
   }
 
   void initM3u8Downloader() async {
@@ -108,7 +108,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
     Timer.periodic(Duration(milliseconds: 10000), (_) {
       List<DownloadEntity> downloadList =
-          Provider.of<DownloadState>(context, listen: false).downloadList;
+          Provider.of<DownloadModel>(context, listen: false).downloadList;
 
       for (DownloadEntity item in downloadList) {
         if (item.needDownload) {
@@ -120,7 +120,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   onErrorCallback(error, stackTrace) {
-    Provider.of<DownloadState>(context, listen: false)
+    Provider.of<DownloadModel>(context, listen: false)
         .errorDownload(error.message);
     return Response(
       requestOptions: RequestOptions(path: ''),
@@ -160,7 +160,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         savePath: "$baseUrl/${downloadEntity.id}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
-            Provider.of<DownloadState>(context, listen: false)
+            Provider.of<DownloadModel>(context, listen: false)
                 .changeDownloadProgress(
                     downloadEntity.id, (received / total).roundToDouble());
 
@@ -177,7 +177,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         failed: (String uri) {},
       );
     }
-    Provider.of<DownloadState>(context, listen: false)
+    Provider.of<DownloadModel>(context, listen: false)
         .changeDownloadState(downloadEntity);
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class WatchState with ChangeNotifier, DiagnosticableTreeMixin {
+class WatchModel with ChangeNotifier, DiagnosticableTreeMixin {
   String _title = "";
 
   String get title => _title;

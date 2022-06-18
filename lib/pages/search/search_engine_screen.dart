@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:provider/src/provider.dart';
 
 class SearchEngineScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class SearchEngineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
 
     return Container(
       color: Theme.of(context).primaryColor,
@@ -58,7 +58,7 @@ class SearchEngineScreen extends StatelessWidget {
                             maxLength: 10,
                             onChanged: (value) {
                               context
-                                  .read<SearchState>()
+                                  .read<SearchModel>()
                                   .setQuery(currentScreen, value);
                             },
                             onSubmitted: (value) {
@@ -80,7 +80,7 @@ class SearchEngineScreen extends StatelessWidget {
                           iconSize: Adapt.px(40),
                           onPressed: () {
                             context
-                                .read<SearchState>()
+                                .read<SearchModel>()
                                 .setQuery(currentScreen, "");
                             // _controller.clear();
                             // onSearchTextChanged('');

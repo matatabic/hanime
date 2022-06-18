@@ -28,7 +28,7 @@ class Search {
       this.htmlUrl);
 }
 
-class SearchState with ChangeNotifier, DiagnosticableTreeMixin {
+class SearchModel with ChangeNotifier, DiagnosticableTreeMixin {
   String _htmlUrl =
       "https://hanime1.me/search?query=&genre=全部&sort=无&duration=全部";
   String _query = "";

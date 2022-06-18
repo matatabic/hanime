@@ -1,10 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/providers/download_state.dart';
-import 'package:hanime/providers/favourite_state.dart';
-import 'package:hanime/providers/home_state.dart';
-import 'package:hanime/providers/search_state.dart';
-import 'package:hanime/providers/watch_state.dart';
+import 'package:hanime/providers/download_model.dart';
+import 'package:hanime/providers/favourite_model.dart';
+import 'package:hanime/providers/home_model.dart';
+import 'package:hanime/providers/search_model.dart';
+import 'package:hanime/providers/watch_model.dart';
 import 'package:provider/provider.dart';
 
 import 'bottom_nav_bar.dart';
@@ -13,11 +13,11 @@ import 'bottom_nav_bar.dart';
 void main() => runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => HomeState()),
-          ChangeNotifierProvider(create: (_) => WatchState()),
-          ChangeNotifierProvider(create: (_) => SearchState()),
-          ChangeNotifierProvider(create: (_) => FavouriteState()),
-          ChangeNotifierProvider(create: (_) => DownloadState()),
+          ChangeNotifierProvider(create: (_) => HomeModel()),
+          ChangeNotifierProvider(create: (_) => WatchModel()),
+          ChangeNotifierProvider(create: (_) => SearchModel()),
+          ChangeNotifierProvider(create: (_) => FavouriteModel()),
+          ChangeNotifierProvider(create: (_) => DownloadModel()),
         ],
         child: MyApp(),
       ),

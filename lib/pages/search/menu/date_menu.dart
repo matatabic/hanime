@@ -2,7 +2,7 @@ import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
@@ -15,7 +15,7 @@ class DateMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -53,7 +53,7 @@ class DateMenu extends StatelessWidget {
                     ),
                   ),
                   onChanged: (value) {
-                    context.read<SearchState>().setYear(currentScreen, value!);
+                    context.read<SearchModel>().setYear(currentScreen, value!);
                   },
                 ),
                 CustomDropdownButton2(
@@ -67,7 +67,7 @@ class DateMenu extends StatelessWidget {
                     ),
                   ),
                   onChanged: (value) {
-                    context.read<SearchState>().setMonth(currentScreen, value!);
+                    context.read<SearchModel>().setMonth(currentScreen, value!);
                   },
                 )
               ],

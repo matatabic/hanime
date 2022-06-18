@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
@@ -13,7 +13,7 @@ class TagMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -60,7 +60,7 @@ class TagMenu extends StatelessWidget {
                               activeColor: Theme.of(context).primaryColor,
                               onChanged: (value) {
                                 context
-                                    .read<SearchState>()
+                                    .read<SearchModel>()
                                     .setBroadFlag(currentScreen, value);
                               },
                             ),
@@ -82,7 +82,7 @@ class TagMenu extends StatelessWidget {
                             searchTagData: searchTag.data[index],
                             onTap: (String title) {
                               context
-                                  .read<SearchState>()
+                                  .read<SearchModel>()
                                   .selectedTagHandle(currentScreen, title);
                             });
                       }),
@@ -110,7 +110,7 @@ class TagContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     if (index == 0) {
       if (search.customTag.length > 0) {

@@ -3,7 +3,7 @@ import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/utils/index.dart';
 
-class DownloadState with ChangeNotifier, DiagnosticableTreeMixin {
+class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   // List<DownloadEntity> _downloadList = [];
   List<DownloadEntity> _downloadList = [
     DownloadEntity.fromJson({

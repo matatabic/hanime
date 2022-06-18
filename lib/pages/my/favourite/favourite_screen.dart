@@ -10,7 +10,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
-import 'package:hanime/providers/favourite_state.dart';
+import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shake_animation_widget/shake_animation_widget.dart';
 
@@ -35,7 +35,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       List<FavouriteEntity> favouriteList =
-          Provider.of<FavouriteState>(context, listen: false).favouriteList;
+          Provider.of<FavouriteModel>(context, listen: false).favouriteList;
       _favouriteList = favouriteList;
     });
 
@@ -69,7 +69,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                       (String content) => {
                             if (content.length > 0)
                               {
-                                Provider.of<FavouriteState>(context,
+                                Provider.of<FavouriteModel>(context,
                                         listen: false)
                                     .addList(content)
                               },
@@ -129,7 +129,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     context,
                     "确认删除该收藏夹?",
                     (context) => {
-                          Provider.of<FavouriteState>(context, listen: false)
+                          Provider.of<FavouriteModel>(context, listen: false)
                               .removeList(favourite),
                           setState(() {}),
                           Navigator.pop(context)
@@ -169,7 +169,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     context,
                     "确认删除该影片?",
                     (context) => {
-                          Provider.of<FavouriteState>(context, listen: false)
+                          Provider.of<FavouriteModel>(context, listen: false)
                               .removeItem(anime),
                           setState(() {}),
                           Navigator.pop(context)
@@ -199,7 +199,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
 
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    Provider.of<FavouriteState>(context, listen: false)
+    Provider.of<FavouriteModel>(context, listen: false)
         .orderItem(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
     setState(() {});
     // var movedItem =
@@ -210,7 +210,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
-    Provider.of<FavouriteState>(context, listen: false)
+    Provider.of<FavouriteModel>(context, listen: false)
         .orderList(oldListIndex, newListIndex);
     setState(() {});
     // var movedList = _favouriteList.removeAt(oldListIndex);

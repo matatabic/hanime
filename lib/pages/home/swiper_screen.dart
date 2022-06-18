@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
-import 'package:hanime/providers/home_state.dart';
+import 'package:hanime/providers/home_model.dart';
 import 'package:provider/src/provider.dart';
 
 class SwiperScreen extends StatelessWidget {
@@ -28,7 +28,7 @@ class SwiperScreen extends StatelessWidget {
                   'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg');
         },
         onIndexChanged: (int index) {
-          context.read<HomeState>().setIndex(index);
+          context.read<HomeModel>().setIndex(index);
         },
         itemCount: swiperList.length,
         viewportFraction: 0.9,

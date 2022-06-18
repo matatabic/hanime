@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/menu_row.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
@@ -15,7 +15,7 @@ class SortMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchState>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList[currentScreen];
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -46,7 +46,7 @@ class SortMenu extends StatelessWidget {
                   title: sort.data[index],
                   onTap: () {
                     context
-                        .read<SearchState>()
+                        .read<SearchModel>()
                         .setSortIndex(currentScreen, index);
                   },
                 ),

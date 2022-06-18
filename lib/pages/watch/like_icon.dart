@@ -5,7 +5,7 @@ import 'package:hanime/common/widget/Model.dart';
 import 'package:hanime/common/widget/Popup.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/providers/favourite_state.dart';
+import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
 
 class LikeIcon extends StatefulWidget {
@@ -40,7 +40,7 @@ class _LikeIconState extends State<LikeIcon> {
       ///通过key获取到widget的位置
       // print("通过key获取到widget的位置");
       List<FavouriteEntity> favouriteList =
-          Provider.of<FavouriteState>(context, listen: false).favouriteList;
+          Provider.of<FavouriteModel>(context, listen: false).favouriteList;
       setState(() {
         isLiked = favouriteList.any((element) => element.children
             .any((element) => element.htmlUrl == widget.info.htmlUrl));
@@ -69,7 +69,7 @@ class _LikeIconState extends State<LikeIcon> {
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          Provider.of<FavouriteState>(context, listen: false)
+          Provider.of<FavouriteModel>(context, listen: false)
               .removeItemByHtmlUrl(widget.info.htmlUrl);
           setState(() {
             isLiked = false;
@@ -90,7 +90,7 @@ class _LikeIconState extends State<LikeIcon> {
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
     List<FavouriteEntity> favList =
-        Provider.of<FavouriteState>(context, listen: false).favouriteList;
+        Provider.of<FavouriteModel>(context, listen: false).favouriteList;
 
     double _width = Adapt.px(260);
     double _height = Adapt.px(60 + favList.length * 110);
@@ -166,7 +166,7 @@ class _LikeIconState extends State<LikeIcon> {
                             onTap: () async {
                               print(widget.info.htmlUrl);
                               print('这是点击了选项${item.name}');
-                              context.read<FavouriteState>().saveAnime(
+                              context.read<FavouriteModel>().saveAnime(
                                   FavouriteChildren.fromJson({
                                     "imageUrl": widget.info.imgUrl,
                                     "htmlUrl": widget.info.htmlUrl,

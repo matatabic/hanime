@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/src/provider.dart';
 
@@ -39,7 +39,7 @@ class SearchMenuScreen extends StatelessWidget {
           child: ClipOval(
             child: Material(
               color: getActive(
-                  context.watch<SearchState>().searchList[currentScreen],
+                  context.watch<SearchModel>().searchList[currentScreen],
                   menu['id']),
               child: InkWell(
                 customBorder: StadiumBorder(),

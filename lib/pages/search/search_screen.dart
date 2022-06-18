@@ -8,7 +8,7 @@ import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
-import 'package:hanime/providers/search_state.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -50,7 +50,7 @@ class _SearchScreenState extends State<SearchScreen>
     print("_onLoading");
     // await Future.delayed(Duration(milliseconds: 1000));
     Search search =
-        context.read<SearchState>().searchList[widget.currentScreen];
+        context.read<SearchModel>().searchList[widget.currentScreen];
 
     var htmlUrl = "https://hanime1.me/search?query=${search.query}";
 
@@ -97,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen>
         htmlUrl = "$htmlUrl&page=${page + 1}";
         await loadData(htmlUrl);
         page = page + 1;
-        context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
+        context.read<SearchModel>().setHtmlUrl(widget.currentScreen, htmlUrl);
         setState(() {});
         _refreshController.loadComplete();
       } else {
@@ -110,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen>
         setState(() {
           _futureBuilderFuture = loadData(htmlUrl);
         });
-        context.read<SearchState>().setHtmlUrl(widget.currentScreen, htmlUrl);
+        context.read<SearchModel>().setHtmlUrl(widget.currentScreen, htmlUrl);
         _refreshController.loadComplete();
       }
     }
@@ -220,7 +220,7 @@ class _SearchScreenState extends State<SearchScreen>
       case ConnectionState.done:
         print('done');
         if (snapshot.hasError) {
-          String htmlUrl = context.watch<SearchState>().htmlUrl;
+          String htmlUrl = context.watch<SearchModel>().htmlUrl;
           return SliverToBoxAdapter(
             child: Container(
               height: surHeight,
