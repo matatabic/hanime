@@ -75,25 +75,12 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   void errorDownload(String errorMessage) {
     for (var i = 0; i < _downloadList.length; i++) {
       if (errorMessage.indexOf(_downloadList[i].videoUrl) > -1) {
-        // if (_downloadList[i].reTest) {
-        //   print("已经重试一次");
-        // } else {
-        //   print("还没重试");
-        // }
-        // print(DateTime.now().microsecondsSinceEpoch);
-        // print(_downloadList[i].reTime);
-        // if (DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTime >
-        //     50000) {
-        //   print("时间够");
-        // } else {
-        //   print("时间不够");
-        // }
-        if (!_downloadList[i].reTest &&
-            DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTime >
+        if (!_downloadList[i].reTry &&
+            DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTryTime >
                 50000) {
           _downloadList[i].needDownload = true;
-          _downloadList[i].reTest = true;
-          _downloadList[i].reTime = DateTime.now().microsecondsSinceEpoch;
+          _downloadList[i].reTry = true;
+          _downloadList[i].reTryTime = DateTime.now().microsecondsSinceEpoch;
         }
         break;
       }

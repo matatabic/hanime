@@ -10,12 +10,11 @@ class DownloadEntity {
   late String imageUrl;
   late String htmlUrl;
   late String videoUrl;
-  late String baseDir;
   late double progress;
   late bool success;
   late bool needDownload;
-  late bool reTest;
-  late int reTime;
+  late bool reTry;
+  late int reTryTime;
 
   DownloadEntity();
 

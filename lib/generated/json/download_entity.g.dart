@@ -23,10 +23,6 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   if (videoUrl != null) {
     downloadEntity.videoUrl = videoUrl;
   }
-  final String? baseDir = jsonConvert.convert<String>(json['baseDir']);
-  if (baseDir != null) {
-    downloadEntity.baseDir = baseDir;
-  }
   final double? progress = jsonConvert.convert<double>(json['progress']);
   if (progress != null) {
     downloadEntity.progress = progress;
@@ -39,13 +35,13 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   if (needDownload != null) {
     downloadEntity.needDownload = needDownload;
   }
-  final bool? reTest = jsonConvert.convert<bool>(json['reTest']);
-  if (reTest != null) {
-    downloadEntity.reTest = reTest;
+  final bool? reTry = jsonConvert.convert<bool>(json['reTry']);
+  if (reTry != null) {
+    downloadEntity.reTry = reTry;
   }
-  final int? reTime = jsonConvert.convert<int>(json['reTime']);
-  if (reTime != null) {
-    downloadEntity.reTime = reTime;
+  final int? reTryTime = jsonConvert.convert<int>(json['reTryTime']);
+  if (reTryTime != null) {
+    downloadEntity.reTryTime = reTryTime;
   }
   return downloadEntity;
 }
@@ -57,11 +53,10 @@ Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
   data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
   data['videoUrl'] = entity.videoUrl;
-  data['baseDir'] = entity.baseDir;
   data['progress'] = entity.progress;
   data['success'] = entity.success;
   data['needDownload'] = entity.needDownload;
-  data['reTest'] = entity.reTest;
-  data['reTime'] = entity.reTime;
+  data['reTry'] = entity.reTry;
+  data['reTryTime'] = entity.reTryTime;
   return data;
 }
