@@ -108,7 +108,7 @@ class _DownloadIconState extends State<DownloadIcon> {
                                       if (hasGranted) {
                                         widgetContext
                                             .read<DownloadModel>()
-                                            .addQueue(
+                                            .addDownload(
                                                 widget.info, widget.videoUrl);
                                         setState(() {});
                                       }

@@ -112,18 +112,21 @@ class _BottomNavBarState extends State<BottomNavBar>
           Provider.of<DownloadModel>(context, listen: false).downloadList;
 
       for (DownloadEntity item in downloadList) {
-        if (item.needDownload) {
+        if (item.waitDownload) {
           print("开始下载");
           _download(item);
         }
       }
     });
-    double temp = 0;
-    Timer.periodic(Duration(milliseconds: 1000), (_) {
-      Provider.of<DownloadModel>(context, listen: false)
-          .changeDownloadProgress(38462, temp);
-      temp = temp + 0.01;
-    });
+    // double temp = 0;
+    // Timer.periodic(Duration(milliseconds: 1000), (_) {
+    //   if (temp >= 1) {
+    //     return;
+    //   }
+    //   Provider.of<DownloadModel>(context, listen: false)
+    //       .changeDownloadProgress(38462, temp);
+    //   temp = temp + 0.01;
+    // });
   }
 
   onErrorCallback(error, stackTrace) {
@@ -167,9 +170,11 @@ class _BottomNavBarState extends State<BottomNavBar>
         savePath: "$baseUrl/${downloadEntity.id}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
+            String tempProgress = (received / total).toStringAsFixed(3);
+            double progress = double.parse(tempProgress);
+
             Provider.of<DownloadModel>(context, listen: false)
-                .changeDownloadProgress(
-                    downloadEntity.id, (received / total).roundToDouble());
+                .changeDownloadProgress(downloadEntity.id, progress);
 
             print("下载1已接收：" +
                 received.toString() +
@@ -179,6 +184,8 @@ class _BottomNavBarState extends State<BottomNavBar>
           }
         },
         done: () {
+          Provider.of<DownloadModel>(context, listen: false)
+              .downloadSuccess(downloadEntity.id);
           print("下载1完成");
         },
         failed: (String uri) {},

@@ -68,44 +68,51 @@ class _DownloadScreenState extends State<DownloadScreen>
                         children: [
                           SizedBox(
                             width: Adapt.px(300),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  height: Adapt.px(200),
-                                  child: CommonImages(
-                                    imgUrl: item.imageUrl,
+                            child: item.success
+                                ? Container(
+                                    height: Adapt.px(200),
+                                    child: CommonImages(
+                                      imgUrl: item.imageUrl,
+                                    ),
+                                  )
+                                : Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        height: Adapt.px(200),
+                                        child: CommonImages(
+                                          imgUrl: item.imageUrl,
+                                        ),
+                                      ),
+                                      LinearPercentIndicator(
+                                        animation: true,
+                                        animateFromLastPercent: true,
+                                        lineHeight: Adapt.px(200),
+                                        animationDuration: 1000,
+                                        percent: item.progress,
+                                        padding: EdgeInsets.all(0),
+                                        center: Text(
+                                            "${(item.progress * 100).toStringAsFixed(1)}%"),
+                                        linearStrokeCap: LinearStrokeCap.butt,
+                                        backgroundColor: Colors.transparent,
+                                        progressColor: Colors.black87,
+                                      ),
+                                      IconButton(
+                                        iconSize: Adapt.px(100),
+                                        icon: Icon(Icons.cloud_download,
+                                            color: Colors.white70),
+                                        onPressed: () {},
+                                      )
+                                      // Material(
+                                      //   type: MaterialType.transparency,
+                                      //   child: InkWell(
+                                      //     onTap: () {
+                                      //       print("MaterialType");
+                                      //     },
+                                      //   ),
+                                      // )
+                                    ],
                                   ),
-                                ),
-                                LinearPercentIndicator(
-                                  width: Adapt.px(300),
-                                  animation: true,
-                                  animateFromLastPercent: true,
-                                  lineHeight: Adapt.px(200),
-                                  animationDuration: 1000,
-                                  percent: item.progress,
-                                  padding: EdgeInsets.all(0),
-                                  center: Text("${item.progress * 100}%"),
-                                  linearStrokeCap: LinearStrokeCap.butt,
-                                  backgroundColor: Colors.transparent,
-                                  progressColor: Colors.red,
-                                ),
-                                IconButton(
-                                  iconSize: Adapt.px(100),
-                                  icon: Icon(Icons.cloud_download,
-                                      color: Colors.white70),
-                                  onPressed: () {},
-                                )
-                                // Material(
-                                //   type: MaterialType.transparency,
-                                //   child: InkWell(
-                                //     onTap: () {
-                                //       print("MaterialType");
-                                //     },
-                                //   ),
-                                // )
-                              ],
-                            ),
                           ),
                           Expanded(
                             child: Container(
