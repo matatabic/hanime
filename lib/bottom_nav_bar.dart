@@ -91,6 +91,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   void loadCache() async {
     context.read<FavouriteModel>().getCache();
+    context.read<DownloadModel>().getCache();
   }
 
   void initM3u8Downloader() async {
@@ -116,6 +117,12 @@ class _BottomNavBarState extends State<BottomNavBar>
           _download(item);
         }
       }
+    });
+    double temp = 0;
+    Timer.periodic(Duration(milliseconds: 1000), (_) {
+      Provider.of<DownloadModel>(context, listen: false)
+          .changeDownloadProgress(38462, temp);
+      temp = temp + 0.01;
     });
   }
 

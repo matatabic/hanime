@@ -6,31 +6,31 @@ import 'package:hanime/utils/index.dart';
 class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   // List<DownloadEntity> _downloadList = [];
   List<DownloadEntity> _downloadList = [
-    DownloadEntity.fromJson({
-      "id": 38462,
-      "title": "小さな蕾のその奥に…… ～妖しく齧る爛れた蕾……",
-      "imageUrl": "https://i.imgur.com/XkxRy74.jpg",
-      "htmlUrl": "https://hanime1.me/watch?v=38462",
-      "videoUrl": "https://hanime1.me/watch?v=38462",
-      "progress": 0.354,
-      "success": false,
-      "needDownload": false,
-      "reTest": false,
-      "reTime": 0,
-    }),
-    DownloadEntity.fromJson({
-      "id": 23177,
-      "title": "なま LO Re：ふらちもの THE ANIMATION",
-      "imageUrl":
-          "https://cdn.jsdelivr.net/gh/ippaiaru/ippaiaru-h@latest/asset/cover/649pU61.jpg",
-      "htmlUrl": "https://hanime1.me/watch?v=23177",
-      "videoUrl": "https://hanime1.me/watch?v=23177",
-      "progress": 1,
-      "success": true,
-      "needDownload": false,
-      "reTest": false,
-      "reTime": 0,
-    }),
+    // DownloadEntity.fromJson({
+    //   "id": 38462,
+    //   "title": "小さな蕾のその奥に…… ～妖しく齧る爛れた蕾……",
+    //   "imageUrl": "https://i.imgur.com/XkxRy74.jpg",
+    //   "htmlUrl": "https://hanime1.me/watch?v=38462",
+    //   "videoUrl": "https://hanime1.me/watch?v=38462",
+    //   "progress": 0.354,
+    //   "success": false,
+    //   "needDownload": false,
+    //   "reTry": false,
+    //   "reTryTime": 0,
+    // }),
+    // DownloadEntity.fromJson({
+    //   "id": 23177,
+    //   "title": "なま LO Re：ふらちもの THE ANIMATION",
+    //   "imageUrl":
+    //       "https://cdn.jsdelivr.net/gh/ippaiaru/ippaiaru-h@latest/asset/cover/649pU61.jpg",
+    //   "htmlUrl": "https://hanime1.me/watch?v=23177",
+    //   "videoUrl": "https://hanime1.me/watch?v=23177",
+    //   "progress": 1,
+    //   "success": true,
+    //   "needDownload": false,
+    //   "reTry": false,
+    //   "reTryTime": 0,
+    // }),
   ];
 
   List<DownloadEntity> get downloadList => _downloadList;
@@ -47,8 +47,8 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
           "progress": 0,
           "success": false,
           "needDownload": true,
-          "reTest": false,
-          "reTime": 0,
+          "reTry": false,
+          "reTryTime": 0,
         }));
 
     notifyListeners();
@@ -69,6 +69,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     int index = _downloadList.indexWhere((element) => element.id == id);
 
     _downloadList[index].progress = progress;
+    notifyListeners();
     print("正在下载");
   }
 
@@ -85,6 +86,39 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         break;
       }
     }
+  }
+
+  void getCache() {
+    List<DownloadEntity> data = [
+      DownloadEntity.fromJson({
+        "id": 38462,
+        "title": "小さな蕾のその奥に…… ～妖しく齧る爛れた蕾……",
+        "imageUrl":
+            "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
+        "htmlUrl": "https://hanime1.me/watch?v=38462",
+        "videoUrl": "https://hanime1.me/watch?v=38462",
+        "progress": 0.354,
+        "success": false,
+        "needDownload": false,
+        "reTry": false,
+        "reTryTime": 0,
+      }),
+      DownloadEntity.fromJson({
+        "id": 23177,
+        "title": "なま LO Re：ふらちもの THE ANIMATION",
+        "imageUrl":
+            "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
+        "htmlUrl": "https://hanime1.me/watch?v=23177",
+        "videoUrl": "https://hanime1.me/watch?v=23177",
+        "progress": 1,
+        "success": true,
+        "needDownload": false,
+        "reTry": false,
+        "reTryTime": 0,
+      }),
+    ];
+
+    _downloadList = data;
   }
 
   @override
