@@ -26,3 +26,12 @@ Future<String> getM3u8Url(String url) async {
     return baseUrl + tempM3u8;
   }
 }
+
+double doubleRemoveDecimal(double data, int offset) {
+  String tempData = data.toStringAsFixed(offset);
+  return double.parse(tempData);
+}
+
+double progress2showProgress(double data) {
+  return 1 - data;
+}

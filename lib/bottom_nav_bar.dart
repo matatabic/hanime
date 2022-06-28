@@ -13,6 +13,7 @@ import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:hanime/utils/dio_range_download_manage.dart';
+import 'package:hanime/utils/index.dart';
 import 'package:hanime/utils/m3u8_range_download_manage.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -107,20 +108,20 @@ class _BottomNavBarState extends State<BottomNavBar>
       print(data);
     });
 
-    Timer.periodic(Duration(milliseconds: 10000), (_) {
-      List<DownloadEntity> downloadList =
-          Provider.of<DownloadModel>(context, listen: false).downloadList;
-
-      for (DownloadEntity item in downloadList) {
-        if (item.waitDownload) {
-          print("开始下载");
-          _download(item);
-        }
-      }
-    });
+    // Timer.periodic(Duration(milliseconds: 10000), (_) {
+    //   List<DownloadEntity> downloadList =
+    //       Provider.of<DownloadModel>(context, listen: false).downloadList;
+    //
+    //   for (DownloadEntity item in downloadList) {
+    //     if (item.waitDownload) {
+    //       print("开始下载");
+    //       _download(item);
+    //     }
+    //   }
+    // });
     // double temp = 0;
-    // Timer.periodic(Duration(milliseconds: 1000), (_) {
-    //   if (temp >= 1) {
+    // Timer.periodic(Duration(milliseconds: 500), (_) {
+    //   if (temp > 1) {
     //     return;
     //   }
     //   Provider.of<DownloadModel>(context, listen: false)
@@ -170,11 +171,9 @@ class _BottomNavBarState extends State<BottomNavBar>
         savePath: "$baseUrl/${downloadEntity.id}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
-            String tempProgress = (received / total).toStringAsFixed(3);
-            double progress = double.parse(tempProgress);
-
             Provider.of<DownloadModel>(context, listen: false)
-                .changeDownloadProgress(downloadEntity.id, progress);
+                .changeDownloadProgress(downloadEntity.id,
+                    doubleRemoveDecimal(received / total, 3));
 
             print("下载1已接收：" +
                 received.toString() +

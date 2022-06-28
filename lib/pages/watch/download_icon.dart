@@ -73,6 +73,7 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final widgetContext = context;
     return Container(
         width: Adapt.px(60),
         height: Adapt.px(60),
@@ -103,7 +104,6 @@ class _DownloadIconState extends State<DownloadIcon> {
                                 ),
                                 CupertinoDialogAction(
                                   onPressed: () {
-                                    final widgetContext = context;
                                     _checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
                                         widgetContext

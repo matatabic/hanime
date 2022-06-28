@@ -19,6 +19,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
           "videoUrl": videoUrl,
           "progress": 0,
           "success": false,
+          "downloading": false,
           "waitDownload": true,
           "reTry": false,
           "reTryTime": 0,
@@ -34,6 +35,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   void changeDownloadState(DownloadEntity downloadEntity) {
     int index = _downloadList.indexOf(downloadEntity);
     _downloadList[index].waitDownload = false;
+    _downloadList[index].downloading = true;
   }
 
   void changeDownloadProgress(int id, double progress) {
@@ -45,6 +47,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   void downloadSuccess(int id) {
     int index = _downloadList.indexWhere((element) => element.id == id);
     _downloadList[index].success = true;
+    _downloadList[index].downloading = false;
     notifyListeners();
   }
 
@@ -74,6 +77,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         "videoUrl": "https://hanime1.me/watch?v=38462",
         "progress": 0.354,
         "success": false,
+        "downloading": false,
         "waitDownload": false,
         "reTry": false,
         "reTryTime": 0,
@@ -87,6 +91,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         "videoUrl": "https://hanime1.me/watch?v=23177",
         "progress": 1,
         "success": true,
+        "downloading": false,
         "waitDownload": false,
         "reTry": false,
         "reTryTime": 0,

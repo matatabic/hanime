@@ -1,11 +1,11 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/common_image.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hanime/entity/download_entity.dart';
+import 'package:hanime/pages/my/download/download_item.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/download_model.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class DownloadScreen extends StatefulWidget {
@@ -59,100 +59,30 @@ class _DownloadScreenState extends State<DownloadScreen>
       DragAndDropList(
           children: downloadEntity
               .map((item) => DragAndDropItem(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: Adapt.px(10), horizontal: Adapt.px(10)),
-                      color: Color.fromRGBO(58, 60, 63, 1),
-                      height: Adapt.px(220),
-                      child: Row(
+                  child: Slidable(
+                      key: const ValueKey(1),
+                      startActionPane: ActionPane(
+                        motion: ScrollMotion(),
                         children: [
-                          SizedBox(
-                            width: Adapt.px(300),
-                            child: item.success
-                                ? Container(
-                                    height: Adapt.px(200),
-                                    child: CommonImages(
-                                      imgUrl: item.imageUrl,
-                                    ),
-                                  )
-                                : Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Container(
-                                        height: Adapt.px(200),
-                                        child: CommonImages(
-                                          imgUrl: item.imageUrl,
-                                        ),
-                                      ),
-                                      LinearPercentIndicator(
-                                        animation: true,
-                                        animateFromLastPercent: true,
-                                        lineHeight: Adapt.px(200),
-                                        animationDuration: 1000,
-                                        percent: item.progress,
-                                        padding: EdgeInsets.all(0),
-                                        center: Text(
-                                            "${(item.progress * 100).toStringAsFixed(1)}%"),
-                                        linearStrokeCap: LinearStrokeCap.butt,
-                                        backgroundColor: Colors.transparent,
-                                        progressColor: Colors.black87,
-                                      ),
-                                      IconButton(
-                                        iconSize: Adapt.px(100),
-                                        icon: Icon(Icons.cloud_download,
-                                            color: Colors.white70),
-                                        onPressed: () {},
-                                      )
-                                      // Material(
-                                      //   type: MaterialType.transparency,
-                                      //   child: InkWell(
-                                      //     onTap: () {
-                                      //       print("MaterialType");
-                                      //     },
-                                      //   ),
-                                      // )
-                                    ],
-                                  ),
-                          ),
-                          Expanded(
-                            child: Container(
-                                padding: EdgeInsets.only(left: Adapt.px(20)),
-                                child: Text(item.title,
-                                    style: TextStyle(
-                                        fontSize: Adapt.px(30),
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white))),
-                          ),
-                          // Expanded(
-                          //     child: Flex(
-                          //   direction: Axis.vertical,
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Container(
-                          //         padding: EdgeInsets.only(left: Adapt.px(20)),
-                          //         child: Text(item.title,
-                          //             style: TextStyle(
-                          //                 fontSize: Adapt.px(30),
-                          //                 fontWeight: FontWeight.bold,
-                          //                 color: Colors.white))),
-                          //     Padding(
-                          //       padding: EdgeInsets.only(right: Adapt.px(20)),
-                          //       child: LinearPercentIndicator(
-                          //         // width: 100,
-                          //         animation: true,
-                          //         animateFromLastPercent: true,
-                          //         lineHeight: Adapt.px(40),
-                          //         animationDuration: 1000,
-                          //         percent: item.progress,
-                          //         center: Text("${item.progress * 100}%"),
-                          //         linearStrokeCap: LinearStrokeCap.roundAll,
-                          //         progressColor: Colors.green,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ))
+                          SlidableAction(
+                            flex: 1,
+                            onPressed: (BuildContext context) {},
+                            backgroundColor: Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: '删除',
+                          )
                         ],
-                      ))))
+                      ),
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        WatchScreen(htmlUrl: item.htmlUrl)));
+                          },
+                          child: DownloadItem(downloadEntity: item)))))
               .toList())
     ];
   }
@@ -161,4 +91,13 @@ class _DownloadScreenState extends State<DownloadScreen>
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
 
   _onListReorder(int oldListIndex, int newListIndex) {}
+}
+
+class FrontCover extends StatelessWidget {
+  const FrontCover({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }

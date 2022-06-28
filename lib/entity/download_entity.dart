@@ -12,6 +12,7 @@ class DownloadEntity {
   late String videoUrl;
   late double progress;
   late bool success;
+  late bool downloading;
   late bool waitDownload;
   late bool reTry;
   late int reTryTime;

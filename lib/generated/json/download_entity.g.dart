@@ -31,6 +31,10 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   if (success != null) {
     downloadEntity.success = success;
   }
+  final bool? downloading = jsonConvert.convert<bool>(json['downloading']);
+  if (downloading != null) {
+    downloadEntity.downloading = downloading;
+  }
   final bool? waitDownload = jsonConvert.convert<bool>(json['waitDownload']);
   if (waitDownload != null) {
     downloadEntity.waitDownload = waitDownload;
@@ -55,6 +59,7 @@ Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
   data['videoUrl'] = entity.videoUrl;
   data['progress'] = entity.progress;
   data['success'] = entity.success;
+  data['downloading'] = entity.downloading;
   data['waitDownload'] = entity.waitDownload;
   data['reTry'] = entity.reTry;
   data['reTryTime'] = entity.reTryTime;
