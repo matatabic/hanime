@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/download_entity.dart';
+import 'package:hanime/pages/watch/loading_cover.dart';
+import 'package:hanime/utils/index.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class DownloadItem extends StatelessWidget {
   final DownloadEntity downloadEntity;
@@ -23,27 +26,51 @@ class DownloadItem extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  InkWell(
-                    onTap: (){
-                      print("12312312");
-                    },
-                    child: Container(
+                  Container(
+                    height: Adapt.px(200),
+                    child: CommonImages(
+                      imgUrl: downloadEntity.imageUrl,
+                    ),
+                  ),
+                  if (!downloadEntity.success)
+                    Container(
                       height: Adapt.px(200),
                       child: CommonImages(
                         imgUrl: downloadEntity.imageUrl,
                       ),
                     ),
-                  ),
-                  !downloadEntity.success
-                      ? IconButton(
-                          iconSize: Adapt.px(100),
-                          icon:
-                              Icon(Icons.cloud_download, color: Colors.white70),
-                          onPressed: () {
-                            print("cloud_download");
-                          },
-                        )
-                      : Container()
+                  if (downloadEntity.success)
+                    if (downloadEntity.downloading)
+                      LinearPercentIndicator(
+                        animation: true,
+                        isRTL: true,
+                        animateFromLastPercent: true,
+                        lineHeight: Adapt.px(200),
+                        animationDuration: 1000,
+                        percent: progress2showProgress(downloadEntity.progress),
+                        padding: EdgeInsets.all(0),
+                        center: Text(
+                            "${(downloadEntity.progress * 100).toStringAsFixed(1)}%"),
+                        linearStrokeCap: LinearStrokeCap.butt,
+                        backgroundColor: Colors.transparent,
+                        progressColor: Colors.black87,
+                      ),
+                  if (downloadEntity.waitDownload) LoadingCover(),
+                  // InkWell(
+                  //   onTap: () {
+                  //     print("12312312");
+                  //   },
+                  //   child: Container(
+                  //     height: Adapt.px(200),
+                  //     child: CommonImages(
+                  //       imgUrl: downloadEntity.imageUrl,
+                  //     ),
+                  //   ),
+                  // ),
+                  // !downloadEntity.success
+                  //     ? Icon(Icons.cloud_download,
+                  //         size: Adapt.px(100), color: Colors.green)
+                  //     : Container()
                 ],
               ),
             ),
