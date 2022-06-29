@@ -28,23 +28,17 @@ class _FavouriteScreen extends State<FavouriteScreen>
   @override
   bool get wantKeepAlive => true;
 
-  List<FavouriteEntity> _favouriteList = [];
   bool _deleteMode = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      List<FavouriteEntity> favouriteList =
-          Provider.of<FavouriteModel>(context, listen: false).favouriteList;
-      _favouriteList = favouriteList;
-    });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final favouriteList = context.watch<FavouriteModel>().favouriteList;
 
     return Scaffold(
       floatingActionButton: _deleteMode
@@ -68,11 +62,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                       "新建收藏夹",
                       (String content) => {
                             if (content.length > 0)
-                              {
-                                Provider.of<FavouriteModel>(context,
-                                        listen: false)
-                                    .addList(content)
-                              },
+                              context.read<FavouriteModel>().addList(content),
                             Navigator.pop(context)
                           })),
               SpeedDialChild(
@@ -88,7 +78,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
               )
             ]),
       body: DragAndDropLists(
-        children: _favouriteList
+        children: favouriteList
             .map((v) => _buildList(v) as DragAndDropListInterface)
             .toList(),
         // itemDraggingWidth: 100,
@@ -131,7 +121,6 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     (context) => {
                           Provider.of<FavouriteModel>(context, listen: false)
                               .removeList(favourite),
-                          setState(() {}),
                           Navigator.pop(context)
                         });
               },
@@ -169,9 +158,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     context,
                     "确认删除该影片?",
                     (context) => {
-                          Provider.of<FavouriteModel>(context, listen: false)
-                              .removeItem(anime),
-                          setState(() {}),
+                          context.read<FavouriteModel>().removeItem(anime),
                           Navigator.pop(context)
                         });
               },
@@ -199,23 +186,12 @@ class _FavouriteScreen extends State<FavouriteScreen>
 
   _onItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    Provider.of<FavouriteModel>(context, listen: false)
+    context
+        .read<FavouriteModel>()
         .orderItem(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
-    setState(() {});
-    // var movedItem =
-    //     _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
-    // setState(() {
-    //   _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
-    // });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
-    Provider.of<FavouriteModel>(context, listen: false)
-        .orderList(oldListIndex, newListIndex);
-    setState(() {});
-    // var movedList = _favouriteList.removeAt(oldListIndex);
-    // setState(() {
-    //   _favouriteList.insert(newListIndex, movedList);
-    // });
+    context.read<FavouriteModel>().orderList(oldListIndex, newListIndex);
   }
 }

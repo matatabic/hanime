@@ -51,6 +51,11 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  void downloadHandle() {
+    _downloadList[0].waitDownload = true;
+    notifyListeners();
+  }
+
   void errorDownload(String errorMessage) {
     for (var i = 0; i < _downloadList.length; i++) {
       if (errorMessage.indexOf(_downloadList[i].videoUrl) > -1) {

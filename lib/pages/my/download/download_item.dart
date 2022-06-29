@@ -14,6 +14,52 @@ class DownloadItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("BuildContextbuild");
+    List<Widget> ws = [];
+    if (downloadEntity.success || downloadEntity.waitDownload) {
+      ws.add(Container(
+        height: Adapt.px(200),
+        child: CommonImages(
+          imgUrl: downloadEntity.imageUrl,
+        ),
+      ));
+    } else {
+      ws.add(Container(
+        height: Adapt.px(200),
+        child: CommonImages(
+          imgUrl: downloadEntity.imageUrl,
+        ),
+      ));
+      if (!downloadEntity.downloading) {
+        ws.add(Icon(Icons.cloud_download,
+            size: Adapt.px(100), color: Colors.green));
+      }
+    }
+
+    if (downloadEntity.downloading) {
+      ws.add(LinearPercentIndicator(
+        animation: true,
+        isRTL: true,
+        animateFromLastPercent: true,
+        lineHeight: Adapt.px(200),
+        animationDuration: 1000,
+        percent: progress2showProgress(downloadEntity.progress),
+        padding: EdgeInsets.all(0),
+        linearStrokeCap: LinearStrokeCap.butt,
+        backgroundColor: Colors.transparent,
+        progressColor: Colors.black87,
+      ));
+      ws.add(Icon(Icons.pause_circle_filled,
+          size: Adapt.px(100), color: Colors.grey));
+      ws.add(Align(
+          alignment: Alignment.bottomRight,
+          child:
+              Text("${(downloadEntity.progress * 100).toStringAsFixed(1)}%")));
+    }
+
+    if (downloadEntity.waitDownload) {
+      ws.add(LoadingCover());
+    }
     return Container(
         padding: EdgeInsets.symmetric(
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),
@@ -25,53 +71,7 @@ class DownloadItem extends StatelessWidget {
               width: Adapt.px(300),
               child: Stack(
                 alignment: Alignment.center,
-                children: <Widget>[
-                  Container(
-                    height: Adapt.px(200),
-                    child: CommonImages(
-                      imgUrl: downloadEntity.imageUrl,
-                    ),
-                  ),
-                  if (!downloadEntity.success)
-                    Container(
-                      height: Adapt.px(200),
-                      child: CommonImages(
-                        imgUrl: downloadEntity.imageUrl,
-                      ),
-                    ),
-                  if (downloadEntity.success)
-                    if (downloadEntity.downloading)
-                      LinearPercentIndicator(
-                        animation: true,
-                        isRTL: true,
-                        animateFromLastPercent: true,
-                        lineHeight: Adapt.px(200),
-                        animationDuration: 1000,
-                        percent: progress2showProgress(downloadEntity.progress),
-                        padding: EdgeInsets.all(0),
-                        center: Text(
-                            "${(downloadEntity.progress * 100).toStringAsFixed(1)}%"),
-                        linearStrokeCap: LinearStrokeCap.butt,
-                        backgroundColor: Colors.transparent,
-                        progressColor: Colors.black87,
-                      ),
-                  if (downloadEntity.waitDownload) LoadingCover(),
-                  // InkWell(
-                  //   onTap: () {
-                  //     print("12312312");
-                  //   },
-                  //   child: Container(
-                  //     height: Adapt.px(200),
-                  //     child: CommonImages(
-                  //       imgUrl: downloadEntity.imageUrl,
-                  //     ),
-                  //   ),
-                  // ),
-                  // !downloadEntity.success
-                  //     ? Icon(Icons.cloud_download,
-                  //         size: Adapt.px(100), color: Colors.green)
-                  //     : Container()
-                ],
+                children: ws,
               ),
             ),
             Expanded(
@@ -87,64 +87,3 @@ class DownloadItem extends StatelessWidget {
         ));
   }
 }
-
-// child: downloadEntity.waitDownload
-//     ? Stack(alignment: Alignment.center, children: [
-//         Container(
-//           height: Adapt.px(200),
-//           child: CommonImages(
-//             imgUrl: downloadEntity.imageUrl,
-//           ),
-//         ),
-//         LoadingCover(
-//           width: Adapt.px(300),
-//           height: Adapt.px(220),
-//         )
-//       ])
-//     : downloadEntity.success
-//         ? Container(
-//             height: Adapt.px(200),
-//             child: CommonImages(
-//               imgUrl: downloadEntity.imageUrl,
-//             ),
-//           )
-//         : Stack(
-//             alignment: Alignment.center,
-//             children: [
-//               Container(
-//                 height: Adapt.px(200),
-//                 child: CommonImages(
-//                   imgUrl: downloadEntity.imageUrl,
-//                 ),
-//               ),
-//               LinearPercentIndicator(
-//                 animation: true,
-//                 isRTL: true,
-//                 animateFromLastPercent: true,
-//                 lineHeight: Adapt.px(200),
-//                 animationDuration: 1000,
-//                 percent: progress2showProgress(
-//                     downloadEntity.progress),
-//                 padding: EdgeInsets.all(0),
-//                 center: Text(
-//                     "${(downloadEntity.progress * 100).toStringAsFixed(1)}%"),
-//                 linearStrokeCap: LinearStrokeCap.butt,
-//                 backgroundColor: Colors.transparent,
-//                 progressColor: Colors.black87,
-//               ),
-//               IconButton(
-//                 iconSize: Adapt.px(100),
-//                 icon: Icon(Icons.cloud_download,
-//                     color: Colors.white70),
-//                 onPressed: () {},
-//               )
-//               // Material(
-//               //   type: MaterialType.transparency,
-//               //   child: InkWell(
-//               //     onTap: () {
-//               //       print("MaterialType");
-//               //     },
-//               //   ),
-//               // )
-//             ],
-//           ),

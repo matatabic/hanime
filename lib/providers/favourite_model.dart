@@ -33,7 +33,6 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           .map<FavouriteEntity>((json) => FavouriteEntity.fromJson(json))
           .toList();
     }
-    notifyListeners();
   }
 
   void orderItem(
@@ -42,6 +41,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
         _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
     _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
     saveData(_favouriteList);
+    print(_favouriteList);
     notifyListeners();
   }
 

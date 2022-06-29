@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/pages/my/download/download_item.dart';
-import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,6 @@ class _DownloadScreenState extends State<DownloadScreen>
   bool get wantKeepAlive => true;
 
   // late List<DragAndDropList> _contents;
-  List<DownloadEntity> _downloadList = [];
 
   @override
   void initState() {
@@ -40,14 +38,13 @@ class _DownloadScreenState extends State<DownloadScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    List<DownloadEntity> _downloadList =
-        Provider.of<DownloadModel>(context).downloadList;
+    final downloadList = context.watch<DownloadModel>().downloadList;
     // List<DownloadEntity> currentDynamic =
     //     context.select<DownloadModel, List<DownloadEntity>>(
     //         (dynamicDetail) => dynamicDetail.downloadList);
     return Scaffold(
       body: DragAndDropLists(
-        children: _buildItem(_downloadList),
+        children: _buildItem(downloadList),
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
       ),
@@ -76,11 +73,16 @@ class _DownloadScreenState extends State<DownloadScreen>
                       ),
                       child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        WatchScreen(htmlUrl: item.htmlUrl)));
+                            context.read<DownloadModel>().downloadHandle();
+                            // _downloadList[0].waitDownload = true;
+                            // setState(() {
+                            //   _downloadList = _downloadList;
+                            // });
+                            // Navigator.push(
+                            //     context,
+                            //     CupertinoPageRoute(
+                            //         builder: (context) =>
+                            //             WatchScreen(htmlUrl: item.htmlUrl)));
                           },
                           child: DownloadItem(downloadEntity: item)))))
               .toList())
