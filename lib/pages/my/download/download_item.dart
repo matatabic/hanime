@@ -14,7 +14,7 @@ class DownloadItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("BuildContextbuild");
+    print("BuildContextbuild${downloadEntity.title}");
     List<Widget> ws = [];
     if (downloadEntity.success || downloadEntity.waitDownload) {
       ws.add(Container(

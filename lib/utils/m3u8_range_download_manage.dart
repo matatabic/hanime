@@ -5,8 +5,6 @@ import 'package:hanime/entity/download_entity.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'index.dart';
-
 class M3u8RangeDownloadManage {
   static Future<void> downloadWithChunks(
       DownloadEntity downloadEntity, String savePath,
@@ -15,9 +13,9 @@ class M3u8RangeDownloadManage {
       Function? onErrorCallback}) async {
     await M3u8Downloader.config(
         saveDir: savePath, convertMp4: true, threadCount: 5, debugMode: true);
-    String m3u8Url = await getM3u8Url(downloadEntity.videoUrl);
+    // String m3u8Url = await getM3u8Url(downloadEntity.videoUrl);
     M3u8Downloader.download(
-        url: m3u8Url,
+        url: downloadEntity.videoUrl,
         name: downloadEntity.title,
         progressCallback: onProgressCallback,
         successCallback: onSuccessCallback,

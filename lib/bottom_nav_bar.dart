@@ -108,26 +108,17 @@ class _BottomNavBarState extends State<BottomNavBar>
       print(data);
     });
 
-    // Timer.periodic(Duration(milliseconds: 10000), (_) {
-    //   List<DownloadEntity> downloadList =
-    //       Provider.of<DownloadModel>(context, listen: false).downloadList;
-    //
-    //   for (DownloadEntity item in downloadList) {
-    //     if (item.waitDownload) {
-    //       print("开始下载");
-    //       _download(item);
-    //     }
-    //   }
-    // });
-    // double temp = 0;
-    // Timer.periodic(Duration(milliseconds: 500), (_) {
-    //   if (temp > 1) {
-    //     return;
-    //   }
-    //   Provider.of<DownloadModel>(context, listen: false)
-    //       .changeDownloadProgress(38462, temp);
-    //   temp = temp + 0.01;
-    // });
+    Timer.periodic(Duration(milliseconds: 10000), (_) {
+      List<DownloadEntity> downloadList =
+          Provider.of<DownloadModel>(context, listen: false).downloadList;
+
+      for (DownloadEntity item in downloadList) {
+        if (item.waitDownload) {
+          print("开始下载");
+          _download(item);
+        }
+      }
+    });
   }
 
   onErrorCallback(error, stackTrace) {

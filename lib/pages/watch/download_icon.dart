@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
+import 'package:hanime/utils/index.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/src/provider.dart';
 
@@ -82,7 +83,7 @@ class _DownloadIconState extends State<DownloadIcon> {
             width: Adapt.px(60),
             height: Adapt.px(60),
             child: context
-                    .read<DownloadModel>()
+                    .watch<DownloadModel>()
                     .downloadList
                     .any((element) => element.htmlUrl == widget.info.htmlUrl)
                 ? Container(
@@ -106,11 +107,18 @@ class _DownloadIconState extends State<DownloadIcon> {
                                   onPressed: () {
                                     _checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
+                                        String downloadUrl;
+                                        if (widget.videoUrl.indexOf("m3u8") >
+                                            -1) {
+                                          downloadUrl =
+                                              await getM3u8Url(widget.videoUrl);
+                                        } else {
+                                          downloadUrl = widget.videoUrl;
+                                        }
                                         widgetContext
                                             .read<DownloadModel>()
                                             .addDownload(
-                                                widget.info, widget.videoUrl);
-                                        setState(() {});
+                                                widget.info, downloadUrl);
                                       }
                                     });
                                     Navigator.pop(context);

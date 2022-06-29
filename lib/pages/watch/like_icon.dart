@@ -30,22 +30,22 @@ class _LikeIconState extends State<LikeIcon> {
   ///接受弹窗类构造成功传递来的关闭参数
   late Function closeModel;
 
-  bool isLiked = false;
+  // bool isLiked = false;
 
   bool isPanel = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((duration) {
-      ///通过key获取到widget的位置
-      // print("通过key获取到widget的位置");
-      List<FavouriteEntity> favouriteList =
-          Provider.of<FavouriteModel>(context, listen: false).favouriteList;
-      setState(() {
-        isLiked = favouriteList.any((element) => element.children
-            .any((element) => element.htmlUrl == widget.info.htmlUrl));
-      });
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((duration) {
+    //   ///通过key获取到widget的位置
+    //   // print("通过key获取到widget的位置");
+    //   List<FavouriteEntity> favouriteList =
+    //       Provider.of<FavouriteModel>(context, listen: false).favouriteList;
+    //   setState(() {
+    //     isLiked = favouriteList.any((element) => element.children
+    //         .any((element) => element.htmlUrl == widget.info.htmlUrl));
+    //   });
+    // });
 
     super.initState();
   }
@@ -63,7 +63,9 @@ class _LikeIconState extends State<LikeIcon> {
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
     });
-
+    final favouriteList = context.watch<FavouriteModel>().favouriteList;
+    bool isLiked = favouriteList.any((element) => element.children
+        .any((element) => element.htmlUrl == widget.info.htmlUrl));
     return LikeButton(
       key: iconKey,
       isPanel: isPanel,
@@ -71,9 +73,9 @@ class _LikeIconState extends State<LikeIcon> {
         if (isLike) {
           Provider.of<FavouriteModel>(context, listen: false)
               .removeItemByHtmlUrl(widget.info.htmlUrl);
-          setState(() {
-            isLiked = false;
-          });
+          // setState(() {
+          //   isLiked = false;
+          // });
         } else {
           showModel(context);
         }
@@ -89,11 +91,11 @@ class _LikeIconState extends State<LikeIcon> {
   ///播放动画
   void showModel(BuildContext context) {
     /// 设置传入弹窗的高宽
-    List<FavouriteEntity> favList =
+    final favouriteList =
         Provider.of<FavouriteModel>(context, listen: false).favouriteList;
-
+    // final favouriteList = context.watch<FavouriteModel>().favouriteList;
     double _width = Adapt.px(260);
-    double _height = Adapt.px(60 + favList.length * 110);
+    double _height = Adapt.px(60 + favouriteList.length * 110);
 
     Navigator.push(
       context,
@@ -105,7 +107,7 @@ class _LikeIconState extends State<LikeIcon> {
           child: Container(
             width: _width,
             height: _height,
-            child: buildMenu(favList, favList.length * 110),
+            child: buildMenu(favouriteList, favouriteList.length * 110),
           ),
           fun: (close) {
             closeModel = close;
@@ -138,8 +140,6 @@ class _LikeIconState extends State<LikeIcon> {
           Positioned(
             bottom: 0,
             child: Container(
-              // color: Colors.,
-              // padding: EdgeInsets.only(left: 10),
               width: Adapt.px(260),
               height: Adapt.px(itemHeight),
               decoration: BoxDecoration(
@@ -174,9 +174,9 @@ class _LikeIconState extends State<LikeIcon> {
                                   }),
                                   item);
                               isPanel = true;
-                              setState(() {
-                                isLiked = !isLiked;
-                              });
+                              // setState(() {
+                              //   isLiked = !isLiked;
+                              // });
                               await closeModel();
                               print('结束');
                             },

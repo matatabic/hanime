@@ -51,8 +51,15 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void downloadHandle() {
-    _downloadList[0].waitDownload = true;
+  void pause(int id) {
+    int index = _downloadList.indexWhere((element) => element.id == id);
+    _downloadList[index].downloading = false;
+    notifyListeners();
+  }
+
+  void download(int id) {
+    int index = _downloadList.indexWhere((element) => element.id == id);
+    _downloadList[index].waitDownload = true;
     notifyListeners();
   }
 
@@ -79,8 +86,9 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         "imageUrl":
             "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
         "htmlUrl": "https://hanime1.me/watch?v=38462",
-        "videoUrl": "https://hanime1.me/watch?v=38462",
-        "progress": 0.354,
+        "videoUrl":
+            "https://vdownload-34.sb-cd.com/1/1/11668133-1080p.mp4?secure=RuqVXFYER4WC6fkYmpQelg,1656551779&m=34&d=2&_tid=11668133",
+        "progress": 0.0,
         "success": false,
         "downloading": false,
         "waitDownload": false,
@@ -93,7 +101,8 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         "imageUrl":
             "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
         "htmlUrl": "https://hanime1.me/watch?v=23177",
-        "videoUrl": "https://hanime1.me/watch?v=23177",
+        "videoUrl":
+            "https://vdownload-4.sb-cd.com/1/1/11712492-720p.mp4?secure=TK5LOSLX9OUWWeMTQZ7O8Q,1656561320&m=4&d=3&_tid=11712492",
         "progress": 1,
         "success": true,
         "downloading": false,
