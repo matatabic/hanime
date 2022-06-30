@@ -37,6 +37,8 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   ReceivePort _port = ReceivePort();
 
+  late BuildContext context1;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -53,6 +55,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   @override
   Widget build(BuildContext context) {
+    context1 = context;
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           // backgroundColor: colors[currentIndex],
@@ -103,8 +106,26 @@ class _BottomNavBarState extends State<BottomNavBar>
 
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
+    print("registerPortWithName");
     _port.listen((dynamic data) {
       // 监听数据请求
+      switch (data['status']) {
+        case 1: //下载中
+          Provider.of<DownloadModel>(context, listen: false)
+              .changeDownloadProgress(
+                  data['url'], doubleRemoveDecimal(data['progress'], 3));
+          break;
+        case 2: //下载完成
+          Provider.of<DownloadModel>(context, listen: false)
+              .downloadSuccess(data['url']);
+          break;
+        case 3: //下载错误
+          Provider.of<DownloadModel>(context, listen: false)
+              .errorDownload(data['url']);
+          break;
+      }
+      print("监听数据请求");
+      print("12312312");
       print(data);
     });
 
@@ -154,8 +175,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     String baseUrl = await _findBasePath(downloadEntity.id);
 
     if (downloadEntity.videoUrl.indexOf("m3u8") > -1) {
-      M3u8RangeDownloadManage.downloadWithChunks(downloadEntity, baseUrl,
-          onProgressCallback: onProgressCallback);
+      M3u8RangeDownloadManage.downloadWithChunks(downloadEntity, baseUrl);
     } else {
       await DioRangeDownloadManage.downloadWithChunks(
         url: downloadEntity.videoUrl,
@@ -163,7 +183,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         onReceiveProgress: (received, total) {
           if (total != -1) {
             Provider.of<DownloadModel>(context, listen: false)
-                .changeDownloadProgress(downloadEntity.id,
+                .changeDownloadProgress(downloadEntity.videoUrl,
                     doubleRemoveDecimal(received / total, 3));
 
             print("下载1已接收：" +
@@ -175,33 +195,20 @@ class _BottomNavBarState extends State<BottomNavBar>
         },
         done: () {
           Provider.of<DownloadModel>(context, listen: false)
-              .downloadSuccess(downloadEntity.id);
+              .downloadSuccess(downloadEntity.videoUrl);
           print("下载1完成");
         },
-        failed: (String uri) {},
+        failed: (String error) {
+          if (error.contains("410")) {
+            Provider.of<DownloadModel>(context, listen: false)
+                .downloadSuccess(downloadEntity.videoUrl);
+          }
+          Provider.of<DownloadModel>(context, listen: false)
+              .errorDownload(downloadEntity.videoUrl);
+        },
       );
     }
     Provider.of<DownloadModel>(context, listen: false)
         .changeDownloadState(downloadEntity);
-  }
-
-  onProgressCallback(dynamic args) {
-    print('progressCallback');
-    print(args['progress']);
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    if (send != null) {
-      args["status"] = 1;
-      send.send(args);
-    }
-  }
-
-  onReceiveProgress(received, total) {
-    if (total != -1) {
-      print("${(received / total * 100).floor()}%");
-      // if (received / total * 100.floor() > 50) {
-      //   cancelToken.cancel();
-      // }
-    }
   }
 }

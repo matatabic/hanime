@@ -38,14 +38,16 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     _downloadList[index].downloading = true;
   }
 
-  void changeDownloadProgress(int id, double progress) {
-    int index = _downloadList.indexWhere((element) => element.id == id);
+  void changeDownloadProgress(String videoUrl, double progress) {
+    int index =
+        _downloadList.indexWhere((element) => element.videoUrl == videoUrl);
     _downloadList[index].progress = progress;
     notifyListeners();
   }
 
-  void downloadSuccess(int id) {
-    int index = _downloadList.indexWhere((element) => element.id == id);
+  void downloadSuccess(String videoUrl) {
+    int index =
+        _downloadList.indexWhere((element) => element.videoUrl == videoUrl);
     _downloadList[index].success = true;
     _downloadList[index].downloading = false;
     notifyListeners();
@@ -87,7 +89,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
             "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
         "htmlUrl": "https://hanime1.me/watch?v=38462",
         "videoUrl":
-            "https://vdownload-34.sb-cd.com/1/1/11668133-1080p.mp4?secure=RuqVXFYER4WC6fkYmpQelg,1656551779&m=34&d=2&_tid=11668133",
+            "https://vstream.hembed.com/hls/38462.m3u8?token=wzLwJmriR0A53qxMP34rqDq4GEo4y9KYJBW25NYx4BQ&expires=1656601202",
         "progress": 0.0,
         "success": false,
         "downloading": false,

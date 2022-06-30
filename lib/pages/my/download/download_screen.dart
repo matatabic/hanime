@@ -2,6 +2,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/pages/my/download/download_item.dart';
 import 'package:hanime/providers/download_model.dart';
@@ -76,15 +77,32 @@ class _DownloadScreenState extends State<DownloadScreen>
                       child: InkWell(
                           onTap: () async {
                             if (item.downloading) {
-                              context.read<DownloadModel>().pause(item.id);
-                              if (item.videoUrl.contains("m3u8")) {
-                                M3u8Downloader.pause(item.videoUrl);
-                              } else {
-                                DioRangeDownloadManage.cancelDownload(
-                                    item.videoUrl);
-                              }
+                              CustomDialog.showDialog(
+                                  context,
+                                  "确认暂停下载?",
+                                  (dialogContext) => {
+                                        context
+                                            .read<DownloadModel>()
+                                            .pause(item.id),
+                                        if (item.videoUrl.contains("m3u8"))
+                                          {M3u8Downloader.pause(item.videoUrl)}
+                                        else
+                                          {
+                                            DioRangeDownloadManage
+                                                .cancelDownload(item.videoUrl)
+                                          },
+                                        Navigator.pop(dialogContext)
+                                      });
                             } else {
-                              context.read<DownloadModel>().download(item.id);
+                              CustomDialog.showDialog(
+                                  context,
+                                  "确认开始下载?",
+                                  (dialogContext) => {
+                                        context
+                                            .read<DownloadModel>()
+                                            .download(item.id),
+                                        Navigator.pop(dialogContext)
+                                      });
                             }
                             // _downloadList[0].waitDownload = true;
                             // setState(() {

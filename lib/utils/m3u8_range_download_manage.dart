@@ -3,36 +3,22 @@ import 'dart:ui';
 
 import 'package:hanime/entity/download_entity.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class M3u8RangeDownloadManage {
   static Future<void> downloadWithChunks(
-      DownloadEntity downloadEntity, String savePath,
-      {Function? onProgressCallback,
-      Function? onSuccessCallback,
-      Function? onErrorCallback}) async {
+      DownloadEntity downloadEntity, String savePath) async {
     await M3u8Downloader.config(
         saveDir: savePath, convertMp4: true, threadCount: 5, debugMode: true);
     // String m3u8Url = await getM3u8Url(downloadEntity.videoUrl);
     M3u8Downloader.download(
         url: downloadEntity.videoUrl,
         name: downloadEntity.title,
-        progressCallback: onProgressCallback,
-        successCallback: onSuccessCallback,
-        errorCallback: onErrorCallback);
+        progressCallback: progressCallback,
+        successCallback: successCallback,
+        errorCallback: errorCallback);
   }
 
-  Future<bool> _checkPermission() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-    }
-    return status.isGranted;
-  }
-
-  void _progressCallback(dynamic args) {
-    print('progressCallback');
-    print(args['progress']);
+  static progressCallback(dynamic args) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     if (send != null) {
@@ -41,7 +27,7 @@ class M3u8RangeDownloadManage {
     }
   }
 
-  void _successCallback(dynamic args) {
+  static successCallback(dynamic args) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     if (send != null) {
@@ -54,7 +40,7 @@ class M3u8RangeDownloadManage {
     }
   }
 
-  void _errorCallback(dynamic args) {
+  static errorCallback(dynamic args) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     if (send != null) {
