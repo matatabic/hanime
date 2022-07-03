@@ -27,7 +27,7 @@ Future<String> getM3u8Url(String url) async {
   }
 }
 
-double doubleRemoveDecimal(double data, int offset) {
+double doubleRemoveDecimal(dynamic data, int offset) {
   String tempData = data.toStringAsFixed(offset);
   return double.parse(tempData);
 }

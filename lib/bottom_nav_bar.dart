@@ -109,8 +109,11 @@ class _BottomNavBarState extends State<BottomNavBar>
     print("registerPortWithName");
     _port.listen((dynamic data) {
       // 监听数据请求
+      print("listen");
+      print(data);
       switch (data['status']) {
         case 1: //下载中
+          // print(data);
           Provider.of<DownloadModel>(context, listen: false)
               .changeDownloadProgress(
                   data['url'], doubleRemoveDecimal(data['progress'], 3));

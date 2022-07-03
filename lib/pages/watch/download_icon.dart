@@ -1,6 +1,3 @@
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
@@ -22,54 +19,12 @@ class DownloadIcon extends StatefulWidget {
 }
 
 class _DownloadIconState extends State<DownloadIcon> {
-  String url1 =
-      "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni4934e7b/c4d93960-5643-11eb-a16f-5b3e54966275.m3u8";
-  String testUrl =
-      "https://abre-videos.cdn1122.com/_hls/videos/e/4/0/3/d/e403d71acf21b29fc87837be40b1c0c31616499361-1920-1080-1992-h264.mp4/master.m3u8?validfrom=1652760178&validto=1652932978&rate=382464&hdl=-1&hash=EJi8kx8ieaF4Md2TW8Zs18sLYKc%3D";
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<bool> _checkPermission() async {
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       status = await Permission.storage.request();
     }
     return status.isGranted;
-  }
-
-  static progressCallback(dynamic args) {
-    print('progressCallback');
-    print(args['progress']);
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    if (send != null) {
-      args["status"] = 1;
-      send.send(args);
-    }
-  }
-
-  static successCallback(dynamic args) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    if (send != null) {
-      send.send({
-        "status": 2,
-        "url": args["url"],
-        "filePath": args["filePath"],
-        "dir": args["dir"]
-      });
-    }
-  }
-
-  static errorCallback(dynamic args) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
-    if (send != null) {
-      send.send({"status": 3, "url": args["url"]});
-    }
   }
 
   @override
