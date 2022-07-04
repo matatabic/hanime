@@ -7,7 +7,7 @@ import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
 import 'package:hanime/pages/watch/selected_cover.dart';
 
-import 'loading_cover.dart';
+import '../../common/loading_cover.dart';
 
 const double LIST_SPACE = 20;
 

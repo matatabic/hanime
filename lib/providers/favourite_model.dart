@@ -5,35 +5,9 @@ import 'package:hanime/entity/favourite_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
-  List<FavouriteEntity> _favouriteList = [
-    FavouriteEntity.fromJson({
-      "name": "我的收藏夹",
-      "children": [
-        {
-          "title": "[JXH33] 早坂愛 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
-          "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
-          "htmlUrl": "https://hanime1.me/watch?v=38240"
-        },
-        {
-          "title": "[yuukis] 藤原千花 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
-          "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
-          "htmlUrl": "https://hanime1.me/watch?v=38680"
-        }
-      ]
-    })
-  ];
+  List<FavouriteEntity> _favouriteList = [];
 
   List<FavouriteEntity> get favouriteList => _favouriteList;
-
-  void getCache() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var json = prefs.getString("favouriteList");
-    if (json != null) {
-      _favouriteList = jsonDecode(json)
-          .map<FavouriteEntity>((json) => FavouriteEntity.fromJson(json))
-          .toList();
-    }
-  }
 
   void orderItem(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
@@ -87,6 +61,33 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     });
     saveData(_favouriteList);
     notifyListeners();
+  }
+
+  void getCache() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var json = prefs.getString("favouriteList");
+    // if (json != null) {
+    //   _favouriteList = jsonDecode(json)
+    //       .map<FavouriteEntity>((json) => FavouriteEntity.fromJson(json))
+    //       .toList();
+    // }
+    _favouriteList = [
+      FavouriteEntity.fromJson({
+        "name": "我的收藏夹",
+        "children": [
+          {
+            "title": "[JXH33] 早坂愛 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
+            "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
+            "htmlUrl": "https://hanime1.me/watch?v=38240"
+          },
+          {
+            "title": "[yuukis] 藤原千花 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
+            "imageUrl": "https://i.imgur.com/QHezhRL.jpg",
+            "htmlUrl": "https://hanime1.me/watch?v=38680"
+          }
+        ]
+      })
+    ];
   }
 
   saveData(List<FavouriteEntity> data) async {

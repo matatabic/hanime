@@ -10,6 +10,7 @@ class DownloadEntity {
   late String imageUrl;
   late String htmlUrl;
   late String videoUrl;
+  late String localVideoUrl;
   late double progress;
   late bool success;
   late bool downloading;
@@ -23,6 +24,8 @@ class DownloadEntity {
       $DownloadEntityFromJson(json);
 
   Map<String, dynamic> toJson() => $DownloadEntityToJson(this);
+
+  Map<String, dynamic> toCacheJson() => $DownloadEntityToCacheJson(this);
 
   @override
   String toString() {

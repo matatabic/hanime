@@ -62,6 +62,9 @@ class _DownloadIconState extends State<DownloadIcon> {
                                   onPressed: () {
                                     _checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
+                                        String localVideoUrl =
+                                            await findBasePath(getVideoId(
+                                                widget.info.htmlUrl));
                                         String downloadUrl;
                                         if (widget.videoUrl.indexOf("m3u8") >
                                             -1) {
@@ -72,8 +75,8 @@ class _DownloadIconState extends State<DownloadIcon> {
                                         }
                                         widgetContext
                                             .read<DownloadModel>()
-                                            .addDownload(
-                                                widget.info, downloadUrl);
+                                            .addDownload(widget.info,
+                                                downloadUrl, localVideoUrl);
                                       }
                                     });
                                     Navigator.pop(context);

@@ -2,11 +2,14 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
+import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:provider/src/provider.dart';
 
 import 'brief_screen.dart';
 import 'episode_screen.dart';
@@ -104,6 +107,13 @@ class _WatchScreenState extends State<WatchScreen> {
           expandedHeight: Adapt.px(520),
           flexibleSpace: VideoScreen(
             watchEntity: watchEntity,
+            videoSource: context
+                    .read<DownloadModel>()
+                    .isCacheVideo(watchEntity.info.htmlUrl)
+                ? context
+                    .read<DownloadModel>()
+                    .getCacheVideoUrl(watchEntity.info.htmlUrl)
+                : VideoSourceFormat.fromJson(watchEntity.videoData.toJson()),
             player: player,
             playerChange: (String url) => playerChange,
             episodeScreen: EpisodeScreen(

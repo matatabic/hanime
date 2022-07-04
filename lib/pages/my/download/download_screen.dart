@@ -20,22 +20,6 @@ class _DownloadScreenState extends State<DownloadScreen>
   @override
   bool get wantKeepAlive => true;
 
-  // late List<DragAndDropList> _contents;
-
-  @override
-  void initState() {
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //   List<DownloadEntity> downloadList =
-    //       Provider.of<DownloadModel>(context, listen: false).downloadList;
-    //   print("获取数据");
-    //   setState(() {
-    //     _downloadList = downloadList;
-    //   });
-    // });
-    // print("initState");
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -45,7 +29,13 @@ class _DownloadScreenState extends State<DownloadScreen>
     //         (dynamicDetail) => dynamicDetail.downloadList);
     return Scaffold(
       body: DragAndDropLists(
-        children: _buildItem(downloadList),
+        contentsWhenEmpty: Center(
+          child: Text(
+            '暂无下载',
+            textScaleFactor: 1.5,
+          ),
+        ),
+        children: downloadList.length > 0 ? _buildItem(downloadList) : [],
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
       ),

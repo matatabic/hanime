@@ -1,15 +1,38 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 int randomNumber(int min, int max) {
   int res = min + Random().nextInt(max - min + 1);
   return res;
 }
 
-String getVideoId(String htmlUrl) {
-  String url = htmlUrl.substring("https://hanime1.me/watch?v=".length);
-  return url;
+Future<String> findBasePath(int id) async {
+  final directory = Platform.isAndroid
+      ? await getExternalStorageDirectory()
+      : await getApplicationDocumentsDirectory();
+
+  String baseDir = directory!.path + '/video/';
+
+  Directory root = Directory(baseDir);
+  if (!root.existsSync()) {
+    await root.create();
+  }
+  baseDir = baseDir + id.toString();
+
+  root = Directory(baseDir);
+  if (!root.existsSync()) {
+    await root.create();
+  }
+
+  return baseDir;
+}
+
+int getVideoId(String htmlUrl) {
+  String id = htmlUrl.substring("https://hanime1.me/watch?v=".length);
+  return int.parse(id);
 }
 
 Future<String> getM3u8Url(String url) async {

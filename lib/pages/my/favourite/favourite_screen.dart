@@ -85,7 +85,10 @@ class _FavouriteScreen extends State<FavouriteScreen>
         onItemReorder: _onItemReorder,
         onListReorder: _onListReorder,
         contentsWhenEmpty: Center(
-          child: Text('暂无影片'),
+          child: Text(
+            '暂无收藏',
+            textScaleFactor: 1.5,
+          ),
         ),
         // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
         listGhost: Padding(

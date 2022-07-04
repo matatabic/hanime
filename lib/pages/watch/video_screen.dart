@@ -31,6 +31,7 @@ class PlayerShowConfig implements ShowConfigAbs {
 
 class VideoScreen extends StatefulWidget {
   final WatchEntity watchEntity;
+  final VideoSourceFormat videoSource;
   final FijkPlayer player;
   final Widget episodeScreen;
   final Function(String url) playerChange;
@@ -38,6 +39,7 @@ class VideoScreen extends StatefulWidget {
   VideoScreen(
       {Key? key,
       required this.watchEntity,
+      required this.videoSource,
       required this.player,
       required this.episodeScreen,
       required this.playerChange})
@@ -49,14 +51,11 @@ class VideoScreen extends StatefulWidget {
 
 class _VideoScreenState extends State<VideoScreen>
     with TickerProviderStateMixin {
-  VideoSourceFormat? _videoSource;
-
   ShowConfigAbs vCfg = PlayerShowConfig();
 
   @override
   void dispose() {
     super.dispose();
-    // player.dispose();
     widget.player.removeListener(_playerValueListener);
     widget.player.release();
   }
@@ -70,8 +69,8 @@ class _VideoScreenState extends State<VideoScreen>
   void initState() {
     super.initState();
     // 格式化json转对象
-    _videoSource =
-        VideoSourceFormat.fromJson(widget.watchEntity.videoData.toJson());
+    // _videoSource =
+    //     VideoSourceFormat.fromJson(widget.watchEntity.videoData.toJson());
     // 这句不能省，必须有
     speed = 1.0;
     widget.player.addListener(_playerValueListener);
@@ -79,6 +78,8 @@ class _VideoScreenState extends State<VideoScreen>
 
   @override
   Widget build(BuildContext context) {
+    print(widget.videoSource);
+    print("widget.videoSource");
     return Column(
       children: [
         FijkView(
@@ -110,7 +111,7 @@ class _VideoScreenState extends State<VideoScreen>
                 // 显示的配置
                 showConfig: vCfg,
                 // json格式化后的视频数据
-                videoFormat: _videoSource,
+                videoFormat: widget.videoSource,
                 // createConList: _createTabConList(widget.watchEntity.episode)
                 episodeScreen: widget.episodeScreen);
           },

@@ -23,6 +23,11 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   if (videoUrl != null) {
     downloadEntity.videoUrl = videoUrl;
   }
+  final String? localVideoUrl =
+      jsonConvert.convert<String>(json['localVideoUrl']);
+  if (localVideoUrl != null) {
+    downloadEntity.localVideoUrl = localVideoUrl;
+  }
   final double? progress = jsonConvert.convert<double>(json['progress']);
   if (progress != null) {
     downloadEntity.progress = progress;
@@ -57,11 +62,29 @@ Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
   data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
   data['videoUrl'] = entity.videoUrl;
+  data['localVideoUrl'] = entity.localVideoUrl;
   data['progress'] = entity.progress;
   data['success'] = entity.success;
   data['downloading'] = entity.downloading;
   data['waitDownload'] = entity.waitDownload;
   data['reTry'] = entity.reTry;
   data['reTryTime'] = entity.reTryTime;
+  return data;
+}
+
+Map<String, dynamic> $DownloadEntityToCacheJson(DownloadEntity entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['title'] = entity.title;
+  data['imageUrl'] = entity.imageUrl;
+  data['htmlUrl'] = entity.htmlUrl;
+  data['videoUrl'] = entity.videoUrl;
+  data['localVideoUrl'] = entity.localVideoUrl;
+  data['progress'] = entity.progress;
+  data['success'] = entity.success;
+  data['downloading'] = false;
+  data['waitDownload'] = false;
+  data['reTry'] = false;
+  data['reTryTime'] = 0;
   return data;
 }
