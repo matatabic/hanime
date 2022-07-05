@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/dio_manage.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
-  Response response = await Dio().get("https://hanime1.me");
+  Response response = await DioManage.get("https://hanime1.me");
   // print(response);
   final res = response.data;
   // print(res);

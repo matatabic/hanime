@@ -147,14 +147,14 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   void _download(DownloadEntity downloadEntity) async {
-    String baseUrl = await findBasePath(downloadEntity.id);
+    String baseUrl = await findBasePath(downloadEntity.htmlUrl);
 
     if (downloadEntity.videoUrl.indexOf("m3u8") > -1) {
       M3u8RangeDownloadManage.downloadWithChunks(downloadEntity, baseUrl);
     } else {
       await DioRangeDownloadManage.downloadWithChunks(
         url: downloadEntity.videoUrl,
-        savePath: "$baseUrl/${downloadEntity.id}.mp4",
+        savePath: "$baseUrl/${getVideoId(downloadEntity.htmlUrl)}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
             Provider.of<DownloadModel>(context, listen: false)

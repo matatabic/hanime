@@ -5,7 +5,6 @@ import 'package:hanime/generated/json/download_entity.g.dart';
 
 @JsonSerializable()
 class DownloadEntity {
-  late int id;
   late String title;
   late String imageUrl;
   late String htmlUrl;

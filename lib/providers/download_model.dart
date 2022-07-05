@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/utils/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
@@ -13,23 +12,33 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<DownloadEntity> get downloadList => _downloadList;
 
   void addDownload(WatchInfo info, String videoUrl, String localVideoUrl) {
-    _downloadList.insert(
-        0,
-        DownloadEntity.fromJson({
-          "id": getVideoId(info.htmlUrl),
-          "title": info.shareTitle,
-          "imageUrl": info.cover,
-          "htmlUrl": info.htmlUrl,
-          "videoUrl": videoUrl,
-          "localVideoUrl": localVideoUrl,
-          "progress": 0,
-          "success": false,
-          "downloading": false,
-          "waitDownload": true,
-          "reTry": false,
-          "reTryTime": 0,
-        }));
-    saveData(_downloadList);
+    int index = _downloadList.indexWhere(
+        (element) => element.htmlUrl == info.htmlUrl && element.success);
+    if (index > -1) {
+      _downloadList[index].waitDownload = true;
+    } else {
+      _downloadList.insert(
+          0,
+          DownloadEntity.fromJson({
+            "title": info.shareTitle,
+            "imageUrl": info.cover,
+            "htmlUrl": info.htmlUrl,
+            "videoUrl": videoUrl,
+            "localVideoUrl": localVideoUrl,
+            "progress": 0,
+            "success": false,
+            "downloading": false,
+            "waitDownload": true,
+            "reTry": false,
+            "reTryTime": 0,
+          }));
+      saveData(_downloadList);
+    }
+
+    notifyListeners();
+  }
+
+  void removeItem(String htmlUrl) {
     notifyListeners();
   }
 
@@ -76,21 +85,28 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
         _downloadList.indexWhere((element) => element.videoUrl == videoUrl);
     _downloadList[index].success = true;
     _downloadList[index].downloading = false;
-    if (localVideoUrl!.isNotEmpty) {
+    if (localVideoUrl != null) {
       _downloadList[index].localVideoUrl = localVideoUrl;
     }
     saveData(_downloadList);
     notifyListeners();
   }
 
-  void pause(int id) {
-    int index = _downloadList.indexWhere((element) => element.id == id);
-    _downloadList[index].downloading = false;
+  void pause(String htmlUrl) {
+    int index =
+        _downloadList.indexWhere((element) => element.htmlUrl == htmlUrl);
+    if (_downloadList[index].downloading) {
+      _downloadList[index].downloading = false;
+    } else {
+      _downloadList[index].waitDownload = false;
+    }
+
     notifyListeners();
   }
 
-  void download(int id) {
-    int index = _downloadList.indexWhere((element) => element.id == id);
+  void download(String htmlUrl) {
+    int index =
+        _downloadList.indexWhere((element) => element.htmlUrl == htmlUrl);
     _downloadList[index].waitDownload = true;
     _downloadList[index].reTry = false;
     _downloadList[index].reTryTime = 0;

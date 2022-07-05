@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hanime/entity/search_entity.dart';
+import 'package:hanime/utils/dio_manage.dart';
 import 'package:html/parser.dart';
 
 SearchGenre genre = SearchGenre.fromJson({
@@ -309,7 +310,7 @@ SearchDuration duration = SearchDuration.fromJson({
 });
 
 Future getSearchData(_htmlUrl) async {
-  Response response = await Dio().get(_htmlUrl);
+  Response response = await DioManage.get(_htmlUrl);
   print(_htmlUrl);
   final resHtml = response.data;
   var document = parse(resHtml);

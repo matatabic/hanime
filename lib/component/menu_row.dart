@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'adapt.dart';
+import '../common/adapt.dart';
 
 class MenuRow extends StatelessWidget {
   final String title;

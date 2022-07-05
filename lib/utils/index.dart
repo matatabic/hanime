@@ -4,12 +4,14 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'dio_manage.dart';
+
 int randomNumber(int min, int max) {
   int res = min + Random().nextInt(max - min + 1);
   return res;
 }
 
-Future<String> findBasePath(int id) async {
+Future<String> findBasePath(String htmlUrl) async {
   final directory = Platform.isAndroid
       ? await getExternalStorageDirectory()
       : await getApplicationDocumentsDirectory();
@@ -20,7 +22,7 @@ Future<String> findBasePath(int id) async {
   if (!root.existsSync()) {
     await root.create();
   }
-  baseDir = baseDir + id.toString();
+  baseDir = baseDir + getVideoId(htmlUrl).toString();
 
   root = Directory(baseDir);
   if (!root.existsSync()) {
@@ -36,7 +38,7 @@ int getVideoId(String htmlUrl) {
 }
 
 Future<String> getM3u8Url(String url) async {
-  Response response = await Dio().get(url);
+  Response response = await DioManage.get(url);
   final res = response.data;
 
   if (res.contains("EXTINF")) {

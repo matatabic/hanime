@@ -30,25 +30,7 @@ class _LikeIconState extends State<LikeIcon> {
   ///接受弹窗类构造成功传递来的关闭参数
   late Function closeModel;
 
-  // bool isLiked = false;
-
   bool isPanel = false;
-
-  @override
-  void initState() {
-    // WidgetsBinding.instance!.addPostFrameCallback((duration) {
-    //   ///通过key获取到widget的位置
-    //   // print("通过key获取到widget的位置");
-    //   List<FavouriteEntity> favouriteList =
-    //       Provider.of<FavouriteModel>(context, listen: false).favouriteList;
-    //   setState(() {
-    //     isLiked = favouriteList.any((element) => element.children
-    //         .any((element) => element.htmlUrl == widget.info.htmlUrl));
-    //   });
-    // });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +55,18 @@ class _LikeIconState extends State<LikeIcon> {
         if (isLike) {
           Provider.of<FavouriteModel>(context, listen: false)
               .removeItemByHtmlUrl(widget.info.htmlUrl);
-          // setState(() {
-          //   isLiked = false;
-          // });
         } else {
-          showModel(context);
+          showModel();
         }
         return null;
       },
       isLiked: isLiked,
       size: Adapt.px(60),
-      // width: Adapt.px(60),
-      // height: Adapt.px(60),
     );
   }
 
   ///播放动画
-  void showModel(BuildContext context) {
+  void showModel() {
     /// 设置传入弹窗的高宽
     final favouriteList =
         Provider.of<FavouriteModel>(context, listen: false).favouriteList;
@@ -164,8 +141,6 @@ class _LikeIconState extends State<LikeIcon> {
                               ),
                             ),
                             onTap: () async {
-                              print(widget.info.htmlUrl);
-                              print('这是点击了选项${item.name}');
                               context.read<FavouriteModel>().saveAnime(
                                   FavouriteChildren.fromJson({
                                     "imageUrl": widget.info.imgUrl,
@@ -174,11 +149,7 @@ class _LikeIconState extends State<LikeIcon> {
                                   }),
                                   item);
                               isPanel = true;
-                              // setState(() {
-                              //   isLiked = !isLiked;
-                              // });
                               await closeModel();
-                              print('结束');
                             },
                           ),
                         ))

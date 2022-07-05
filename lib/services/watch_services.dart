@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:hanime/utils/dio_manage.dart';
 import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
-  Response response = await Dio().get(url);
+  Response response = await DioManage.get(url);
   final resHtml = response.data;
   var document = parse(resHtml);
 
@@ -154,7 +155,7 @@ Future getWatchData(url) async {
 }
 
 Future translate(String prefixText, String expandableText) async {
-  Response response1 = await Dio().get(
+  Response response1 = await DioManage.get(
       'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$prefixText');
   // var res = json.decode(response1.data);
   String _prefixText = "";
@@ -165,7 +166,7 @@ Future translate(String prefixText, String expandableText) async {
     _prefixText = _prefixText + item[0]['tgt'];
   }
 
-  Response response2 = await Dio().get(
+  Response response2 = await DioManage.get(
       'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$expandableText');
   List res2 = response2.data['translateResult'];
 

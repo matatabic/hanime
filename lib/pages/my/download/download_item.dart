@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/custom_dialog.dart';
-import 'package:hanime/common/loading_cover.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/utils/dio_range_download_manage.dart';
@@ -19,7 +18,6 @@ class DownloadItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("BuildContextbuild${downloadEntity.title}");
     Widget _widget;
     List<Widget> ws = [];
     if (downloadEntity.success || downloadEntity.waitDownload) {
@@ -38,7 +36,9 @@ class DownloadItem extends StatelessWidget {
                   context,
                   "确认暂停下载?",
                   (dialogContext) => {
-                        context.read<DownloadModel>().pause(downloadEntity.id),
+                        context
+                            .read<DownloadModel>()
+                            .pause(downloadEntity.htmlUrl),
                         if (downloadEntity.videoUrl.contains("m3u8"))
                           {M3u8Downloader.pause(downloadEntity.videoUrl)}
                         else
@@ -55,7 +55,7 @@ class DownloadItem extends StatelessWidget {
                   (dialogContext) => {
                         context
                             .read<DownloadModel>()
-                            .download(downloadEntity.id),
+                            .download(downloadEntity.htmlUrl),
                         Navigator.pop(dialogContext)
                       });
             }
@@ -94,9 +94,9 @@ class DownloadItem extends StatelessWidget {
               Text("${(downloadEntity.progress * 100).toStringAsFixed(1)}%")));
     }
 
-    if (downloadEntity.waitDownload) {
-      ws.add(LoadingCover());
-    }
+    // if (downloadEntity.waitDownload) {
+    //   ws.add(LoadingCover());
+    // }
     return Container(
         padding: EdgeInsets.symmetric(
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),

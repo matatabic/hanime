@@ -3,10 +3,6 @@ import 'package:hanime/generated/json/base/json_convert_content.dart';
 
 DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
   final DownloadEntity downloadEntity = DownloadEntity();
-  final int? id = jsonConvert.convert<int>(json['id']);
-  if (id != null) {
-    downloadEntity.id = id;
-  }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
     downloadEntity.title = title;
@@ -57,7 +53,6 @@ DownloadEntity $DownloadEntityFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['id'] = entity.id;
   data['title'] = entity.title;
   data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
@@ -74,7 +69,6 @@ Map<String, dynamic> $DownloadEntityToJson(DownloadEntity entity) {
 
 Map<String, dynamic> $DownloadEntityToCacheJson(DownloadEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['id'] = entity.id;
   data['title'] = entity.title;
   data['imageUrl'] = entity.imageUrl;
   data['htmlUrl'] = entity.htmlUrl;
