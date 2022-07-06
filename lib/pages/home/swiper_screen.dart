@@ -23,9 +23,8 @@ class SwiperScreen extends StatelessWidget {
         },
         itemBuilder: (BuildContext context, int index) {
           return CommonImages(
-              imgUrl:
-                  // swiperList[index].imgUrl,
-                  'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg');
+            imgUrl: swiperList[index].imgUrl,
+          );
         },
         onIndexChanged: (int index) {
           context.read<HomeModel>().setIndex(index);

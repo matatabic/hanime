@@ -7,35 +7,31 @@ import 'package:hanime/entity/home_entity.dart';
 class HomeTagCard extends StatelessWidget {
   final HomeTagVideo data;
   final int index;
-  const HomeTagCard({Key? key, required this.data, required this.index})
+  final VoidCallback onTap;
+  const HomeTagCard(
+      {Key? key, required this.data, required this.index, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Expanded(
-        flex: 1,
-        child: InkWell(
-          onTap: () {
-            print("123");
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: Adapt.px(7)),
-            child: Stack(
-              alignment: Alignment(-1, 1),
-              children: [
-                ConstrainedBox(
-                    child: CommonImages(
-                        imgUrl:
-                            'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg'
-                        // data.imgUrl
-                        ),
-                    constraints: new BoxConstraints.expand()),
-                Container(color: Colors.black26),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),
-                    child: Container(
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: EdgeInsets.only(top: Adapt.px(7)),
+        child: Material(
+          child: Ink(
+            child: InkWell(
+              onTap: onTap,
+              child: Stack(
+                alignment: Alignment(-1, 1),
+                children: [
+                  ConstrainedBox(
+                      child: CommonImages(imgUrl: data.imgUrl),
+                      constraints: new BoxConstraints.expand()),
+                  Container(color: Colors.black26),
+                  Container(
                       height: Adapt.px(100),
+                      padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -50,9 +46,9 @@ class HomeTagCard extends StatelessWidget {
                             style: TextStyle(color: Colors.grey),
                           )
                         ],
-                      ),
-                    ))
-              ],
+                      ))
+                ],
+              ),
             ),
           ),
         ),

@@ -32,33 +32,31 @@ class SearchMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> dataList = [];
     for (var menu in _menuList) {
-      dataList.add(Ink(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: Adapt.px(10), horizontal: Adapt.px(10)),
-          child: ClipOval(
-            child: Material(
-              color: getActive(
-                  context.watch<SearchModel>().searchList[currentScreen],
-                  menu['id']),
-              child: InkWell(
-                customBorder: StadiumBorder(),
-                onTap: () {
-                  showBarModalBottomSheet(
-                      expand: true,
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => menuDetail(
-                          menu['id'], currentScreen, () => loadData()));
-                },
-                child: Container(
-                  height: Adapt.px(100),
-                  width: Adapt.px(100),
-                  child: Center(
-                    child: Icon(
-                      menu['icon'] as IconData,
-                      color: Colors.white70,
-                    ),
+      dataList.add(Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+        child: ClipOval(
+          child: Material(
+            color: getActive(
+                context.watch<SearchModel>().searchList[currentScreen],
+                menu['id']),
+            child: InkWell(
+              customBorder: StadiumBorder(),
+              onTap: () {
+                showBarModalBottomSheet(
+                    expand: true,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => menuDetail(
+                        menu['id'], currentScreen, () => loadData()));
+              },
+              child: Container(
+                height: Adapt.px(100),
+                width: Adapt.px(100),
+                child: Center(
+                  child: Icon(
+                    menu['icon'] as IconData,
+                    color: Colors.white70,
                   ),
                 ),
               ),

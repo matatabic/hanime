@@ -78,8 +78,6 @@ class _VideoScreenState extends State<VideoScreen>
 
   @override
   Widget build(BuildContext context) {
-    print(widget.videoSource);
-    print("widget.videoSource");
     return Column(
       children: [
         FijkView(

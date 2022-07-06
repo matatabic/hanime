@@ -113,8 +113,7 @@ class _HeroPhotoViewRouteWrapperState extends State<HeroPhotoViewRouteWrapper> {
           print("12312");
         },
         // gestureDetectorBehavior: HitTestBehavior.opaque,
-        heroAttributes:
-            PhotoViewHeroAttributes(tag: "heroTag${widget.randomNum}"),
+        heroAttributes: PhotoViewHeroAttributes(tag: widget.randomNum),
       ),
     );
   }

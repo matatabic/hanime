@@ -9,7 +9,9 @@ class CoverPhoto extends StatelessWidget {
   final String imgUrl;
   final bool latest;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
   final double width;
+  final String heroTag;
 
   CoverPhoto(
       {Key? key,
@@ -17,7 +19,9 @@ class CoverPhoto extends StatelessWidget {
       required this.imgUrl,
       this.latest = false,
       required this.onTap,
-      required this.width})
+      required this.onLongPress,
+      required this.width,
+      required this.heroTag})
       : super(key: key);
 
   Widget build(BuildContext context) {
@@ -35,17 +39,16 @@ class CoverPhoto extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: InkWell(
             onTap: onTap,
+            onLongPress: onLongPress,
             child: ClipRect(
               child: Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment(-1, 1),
                 children: <Widget>[
                   ConstrainedBox(
-                      child: CommonImages(
-                        imgUrl:
-                            // data.imgUrl
-                            'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                      ),
+                      child: Hero(
+                          tag: heroTag, child: CommonImages(imgUrl: imgUrl)),
+                      // CommonImages(imgUrl: imgUrl),
                       constraints: new BoxConstraints.expand()),
                   latest
                       ? Positioned(

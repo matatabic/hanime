@@ -26,10 +26,6 @@ class EpisodePhoto extends StatelessWidget {
           color: selector ? Colors.pinkAccent : Colors.grey, //边框颜色
           width: 1.0, //边框粗细
         )),
-        child: CommonImages(
-          imgUrl:
-              // imgUrl,
-              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-        ));
+        child: CommonImages(imgUrl: imgUrl));
   }
 }

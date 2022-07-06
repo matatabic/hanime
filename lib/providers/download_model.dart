@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/utils/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
@@ -24,7 +25,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
             "imageUrl": info.cover,
             "htmlUrl": info.htmlUrl,
             "videoUrl": videoUrl,
-            "localVideoUrl": localVideoUrl,
+            "localVideoUrl": '$localVideoUrl/${getVideoId(info.htmlUrl)}.mp4',
             "progress": 0,
             "success": false,
             "downloading": false,
@@ -39,6 +40,10 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void removeItem(String htmlUrl) {
+    int index = _downloadList
+        .indexWhere((element) => element.htmlUrl == htmlUrl && element.success);
+    _downloadList.removeAt(index);
+    saveData(_downloadList);
     notifyListeners();
   }
 

@@ -54,7 +54,11 @@ class _DownloadScreenState extends State<DownloadScreen>
                         children: [
                           SlidableAction(
                             flex: 1,
-                            onPressed: (BuildContext context) {},
+                            onPressed: (BuildContext context) {
+                              context
+                                  .read<DownloadModel>()
+                                  .removeItem(item.htmlUrl);
+                            },
                             backgroundColor: Color(0xFFFE4A49),
                             foregroundColor: Colors.white,
                             icon: Icons.delete,

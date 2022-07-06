@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_card.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
+import 'package:hanime/pages/home/slide_page.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_model.dart';
 import 'package:hanime/services/home_services.dart';
@@ -158,7 +160,9 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: data.video.length,
               itemBuilder: (BuildContext context, int index) {
+                String heroTag = UniqueKey().toString();
                 return CoverPhoto(
+                  heroTag: heroTag,
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
                   latest: data.video[index].latest,
@@ -170,6 +174,15 @@ class _HomeScreenState extends State<HomeScreen>
                           builder: (context) =>
                               WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
+                  },
+                  onLongPress: () {
+                    Navigator.push(
+                        context,
+                        NoAnimRouter(SlidePage(
+                          heroTag: heroTag,
+                          url:
+                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                        )));
                   },
                 );
               }))
@@ -271,9 +284,11 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: data.video.length,
               itemBuilder: (BuildContext context, int index) {
+                String heroTag = UniqueKey().toString();
                 return CoverPhoto(
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
+                  heroTag: heroTag,
                   // latest: data.video[index].latest,
                   width: Adapt.px(270),
                   onTap: () {
@@ -284,6 +299,7 @@ class _HomeScreenState extends State<HomeScreen>
                               WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
                   },
+                  onLongPress: () {},
                 );
               }))
     ]);
@@ -316,11 +332,17 @@ class _HomeScreenState extends State<HomeScreen>
           velocityFactor: 1,
           itemBuilder: (context, itemIndex, realIndex) {
             return Padding(
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(Adapt.px(6)),
               child: Column(
                 children: [
-                  HomeTagCard(data: data.video[itemIndex][0], index: 0),
-                  HomeTagCard(data: data.video[itemIndex][1], index: 1)
+                  HomeTagCard(
+                      data: data.video[itemIndex][0],
+                      index: 0,
+                      onTap: () => {print(data.video)}),
+                  HomeTagCard(
+                      data: data.video[itemIndex][1],
+                      index: 1,
+                      onTap: () => {print("12321")})
                 ],
               ),
             );
@@ -354,9 +376,11 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.horizontal,
               itemCount: data.video.length,
               itemBuilder: (BuildContext context, int index) {
+                String heroTag = UniqueKey().toString();
                 return CoverPhoto(
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
+                  heroTag: heroTag,
                   width: Adapt.px(270),
                   onTap: () {
                     Navigator.push(
@@ -366,6 +390,7 @@ class _HomeScreenState extends State<HomeScreen>
                               WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
                   },
+                  onLongPress: () {},
                 );
               }))
     ]);

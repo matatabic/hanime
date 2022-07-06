@@ -27,8 +27,6 @@ Future getWatchData(url) async {
 
   var videoElement = document.querySelector("#player");
   var videoCover = videoElement!.attributes['poster'];
-  print("videoCover");
-  print(videoCover);
   var watchImg = document
       .querySelector(".hidden-md #video-playlist-wrapper img")!
       .attributes['src'];
