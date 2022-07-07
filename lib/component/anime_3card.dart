@@ -6,11 +6,16 @@ class Anime3Card extends StatelessWidget {
   final String title;
   final String imgUrl;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
+  final String heroTag;
+
   const Anime3Card(
       {Key? key,
       required this.title,
       required this.imgUrl,
-      required this.onTap})
+      required this.onTap,
+      required this.onLongPress,
+      required this.heroTag})
       : super(key: key);
 
   @override

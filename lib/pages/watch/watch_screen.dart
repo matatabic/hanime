@@ -75,6 +75,10 @@ class _WatchScreenState extends State<WatchScreen> {
     });
   }
 
+  playerStop() async {
+    await player.pause();
+  }
+
   initState() {
     super.initState();
     _futureBuilderFuture = loadData();
@@ -126,9 +130,6 @@ class _WatchScreenState extends State<WatchScreen> {
                 videoIndex: _videoIndex,
                 loading: _loading,
                 onTap: (index) async {
-                  print("21312312312");
-                  print(_videoIndex);
-                  print(_loading);
                   if (_videoIndex == index || _loading) {
                     return;
                   }
@@ -217,6 +218,7 @@ class _WatchScreenState extends State<WatchScreen> {
             return watchEntity.commendCount == 3
                 ? Anime3Card(
                     onTap: () {
+                      playerStop();
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
@@ -224,10 +226,21 @@ class _WatchScreenState extends State<WatchScreen> {
                                   htmlUrl:
                                       watchEntity.commend[index].htmlUrl)));
                     },
+                    onLongPress: () {
+                      Navigator.of(context).push(NoAnimRouter(
+                        HeroPhotoViewRouteWrapper(
+                            heroTag: heroTag,
+                            maxScale: 1.5,
+                            imageProvider: NetworkImage(
+                                watchEntity.commend[index].imgUrl)),
+                      ));
+                    },
+                    heroTag: heroTag,
                     title: watchEntity.commend[index].title,
                     imgUrl: watchEntity.commend[index].imgUrl)
                 : Anime2Card(
                     onTap: () {
+                      playerStop();
                       Navigator.push(
                           context,
                           CupertinoPageRoute(

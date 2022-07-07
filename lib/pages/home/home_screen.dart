@@ -3,12 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/hero_photo.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/common/slide_page.dart';
-import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/entity/home_entity.dart';
-import 'package:hanime/pages/home/home_card.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
 import 'package:hanime/pages/home/widght/fire_widget.dart';
 import 'package:hanime/pages/home/widght/hot_widget.dart';
@@ -16,15 +11,10 @@ import 'package:hanime/pages/home/widght/latest_widget.dart';
 import 'package:hanime/pages/home/widght/tag_widget.dart';
 import 'package:hanime/pages/home/widght/top_widget.dart';
 import 'package:hanime/pages/home/widght/watch_widget.dart';
-import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_model.dart';
 import 'package:hanime/services/home_services.dart';
-import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'cover_photo.dart';
-import 'home_tag_card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -118,22 +108,16 @@ class _HomeScreenState extends State<HomeScreen>
                 switch (index) {
                   case 0:
                     return TopWidget(data: homeEntity.top);
-                  // return topWidget(homeEntity.top);
                   case 1:
                     return LatestWidget(data: homeEntity.latest);
-                  // return latestWidget(homeEntity.latest);
                   case 2:
                     return FireWidget(data: homeEntity.fire);
-                  // return fireWidget(homeEntity.fire);
                   case 3:
                     return TagWidget(data: homeEntity.tag);
-                  // return tagWidget(homeEntity.tag);
                   case 4:
                     return HotWidget(data: homeEntity.hot);
-                  // return hotWidget(homeEntity.hot);
                   case 5:
                     return WatchWidget(data: homeEntity.watch);
-                  // return watchWidget(homeEntity.watch);
                 }
               }, childCount: 6)),
             ]),
@@ -147,372 +131,6 @@ class _HomeScreenState extends State<HomeScreen>
                     )),
           )
         ]));
-  }
-
-  Widget topWidget(HomeTop data) {
-    return Column(children: <Widget>[
-      Container(
-          height: Adapt.px(70),
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
-          child: Row(children: <Widget>[
-            Text(
-              data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: Adapt.px(36),
-            )
-          ]),
-          width: double.infinity),
-      SizedBox(
-          height: Adapt.px(400),
-          child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: data.video.length,
-              itemBuilder: (BuildContext context, int index) {
-                String heroTag = UniqueKey().toString();
-                return CoverPhoto(
-                  heroTag: heroTag,
-                  title: data.video[index].title,
-                  imgUrl: data.video[index].imgUrl,
-                  latest: data.video[index].latest,
-                  width: Adapt.px(270),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
-                    );
-                  },
-                  onLongPress: () {
-                    Navigator.push(
-                        context,
-                        NoAnimRouter(SlidePage(
-                          heroTag: heroTag,
-                          url:
-                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                        )));
-                  },
-                );
-              }))
-    ]);
-  }
-
-  Widget latestWidget(HomeLatest data) {
-    return Column(children: <Widget>[
-      Container(
-          height: Adapt.px(70),
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
-          child: Row(children: <Widget>[
-            Text(
-              data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: Adapt.px(36),
-            )
-          ]),
-          width: double.infinity),
-      SizedBox(
-        height: Adapt.px(760),
-        child: InfiniteCarousel.builder(
-          itemCount: data.video.length,
-          itemExtent: Adapt.screenW() / 2,
-          center: false,
-          anchor: 1,
-          velocityFactor: 1,
-          itemBuilder: (context, itemIndex, realIndex) {
-            String heroTag = UniqueKey().toString();
-            return Padding(
-              padding: EdgeInsets.all(3),
-              child: Column(
-                children: [
-                  HomeCard(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => WatchScreen(
-                                  htmlUrl: data.video[itemIndex][0].htmlUrl)));
-                    },
-                    onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoViewRouteWrapper(
-                          heroTag: 'l$heroTag',
-                          maxScale: 1.5,
-                          imageProvider:
-                              NetworkImage(data.video[itemIndex][0].imgUrl),
-                        ),
-                      ));
-                    },
-                    heroTag: 'l$heroTag',
-                    htmlUrl: data.video[itemIndex][0].htmlUrl,
-                    imgUrl: data.video[itemIndex][0].imgUrl,
-                    duration: data.video[itemIndex][0].duration,
-                    title: data.video[itemIndex][0].title,
-                    author: data.video[itemIndex][0].author,
-                    genre: data.video[itemIndex][0].genre,
-                    created: data.video[itemIndex][0].created,
-                  ),
-                  HomeCard(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => WatchScreen(
-                                  htmlUrl: data.video[itemIndex][1].htmlUrl)));
-                    },
-                    onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoViewRouteWrapper(
-                          heroTag: 'r$heroTag',
-                          maxScale: 1.5,
-                          imageProvider:
-                              NetworkImage(data.video[itemIndex][1].imgUrl),
-                        ),
-                      ));
-                    },
-                    heroTag: 'r$heroTag',
-                    htmlUrl: data.video[itemIndex][1].htmlUrl,
-                    imgUrl: data.video[itemIndex][1].imgUrl,
-                    duration: data.video[itemIndex][1].duration,
-                    title: data.video[itemIndex][1].title,
-                    author: data.video[itemIndex][1].author,
-                    genre: data.video[itemIndex][1].genre,
-                    created: data.video[itemIndex][1].created,
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    ]);
-  }
-
-  Widget fireWidget(HomeFire data) {
-    return Column(children: <Widget>[
-      Container(
-          height: Adapt.px(70),
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
-          child: Row(children: <Widget>[
-            Text(
-              data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: Adapt.px(36),
-            )
-          ]),
-          width: double.infinity),
-      SizedBox(
-          height: Adapt.px(400),
-          child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: data.video.length,
-              itemBuilder: (BuildContext context, int index) {
-                String heroTag = UniqueKey().toString();
-                return CoverPhoto(
-                  title: data.video[index].title,
-                  imgUrl: data.video[index].imgUrl,
-                  heroTag: heroTag,
-                  // latest: data.video[index].latest,
-                  width: Adapt.px(270),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
-                    );
-                  },
-                  onLongPress: () {
-                    Navigator.push(
-                        context,
-                        NoAnimRouter(SlidePage(
-                          heroTag: heroTag,
-                          url:
-                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                        )));
-                  },
-                );
-              }))
-    ]);
-  }
-
-  Widget tagWidget(HomeTag data) {
-    return Column(children: <Widget>[
-      Container(
-          height: Adapt.px(70),
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
-          child: Row(children: <Widget>[
-            Text(
-              data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: Adapt.px(36),
-            )
-          ]),
-          width: double.infinity),
-      SizedBox(
-        height: Adapt.px(480),
-        child: InfiniteCarousel.builder(
-          itemCount: data.video.length,
-          itemExtent: Adapt.screenW() / 2,
-          center: false,
-          anchor: 1,
-          velocityFactor: 1,
-          itemBuilder: (context, itemIndex, realIndex) {
-            return Padding(
-              padding: EdgeInsets.all(Adapt.px(6)),
-              child: Column(
-                children: [
-                  HomeTagCard(
-                      data: data.video[itemIndex][0],
-                      index: 0,
-                      onTap: () => {print(data.video)}),
-                  HomeTagCard(
-                      data: data.video[itemIndex][1],
-                      index: 1,
-                      onTap: () => {print("12321")})
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    ]);
-  }
-
-  Widget hotWidget(HomeHot data) {
-    return Column(children: <Widget>[
-      Container(
-          height: Adapt.px(70),
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
-          child: Row(children: <Widget>[
-            Text(
-              data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: Adapt.px(36),
-            )
-          ]),
-          width: double.infinity),
-      SizedBox(
-          height: Adapt.px(400),
-          child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: data.video.length,
-              itemBuilder: (BuildContext context, int index) {
-                String heroTag = UniqueKey().toString();
-                return CoverPhoto(
-                  title: data.video[index].title,
-                  imgUrl: data.video[index].imgUrl,
-                  heroTag: heroTag,
-                  width: Adapt.px(270),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              WatchScreen(htmlUrl: data.video[index].htmlUrl)),
-                    );
-                  },
-                  onLongPress: () {
-                    Navigator.push(
-                        context,
-                        NoAnimRouter(SlidePage(
-                          heroTag: heroTag,
-                          url:
-                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                        )));
-                  },
-                );
-              }))
-    ]);
-  }
-
-  Widget watchWidget(HomeWatch data) {
-    return Column(
-      children: <Widget>[
-        Container(
-            height: Adapt.px(70),
-            alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(left: Adapt.px(5)),
-            child: Row(children: <Widget>[
-              Text(
-                data.label,
-                style: TextStyle(fontSize: Adapt.px(38)),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: Adapt.px(36),
-              )
-            ]),
-            width: double.infinity),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: new NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(top: 0),
-          itemCount: data.video.length,
-          //调整间距
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //横轴元素个数
-              crossAxisCount: 2,
-              //纵轴间距
-              mainAxisSpacing: Adapt.px(10),
-              //横轴间距
-              crossAxisSpacing: Adapt.px(10),
-              //子组件宽高长度比例
-              childAspectRatio: 1.05),
-          itemBuilder: (BuildContext context, int index) {
-            String heroTag = UniqueKey().toString();
-            return Anime2Card(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) =>
-                            WatchScreen(htmlUrl: data.video[index].htmlUrl)));
-              },
-              onLongPress: () {
-                Navigator.of(context).push(NoAnimRouter(
-                  HeroPhotoViewRouteWrapper(
-                      heroTag: heroTag,
-                      maxScale: 1.5,
-                      imageProvider: NetworkImage(data.video[index].imgUrl)),
-                ));
-              },
-              heroTag: heroTag,
-              htmlUrl: data.video[index].htmlUrl,
-              title: data.video[index].title,
-              imgUrl: data.video[index].imgUrl,
-              duration: data.video[index].duration,
-              genre: data.video[index].genre,
-              author: data.video[index].author,
-              created: data.video[index].created,
-            );
-          },
-          //加载内容
-        ),
-      ],
-    );
   }
 
   void _onRefresh() async {

@@ -273,6 +273,15 @@ class _SearchScreenState extends State<SearchScreen>
                             builder: (context) => WatchScreen(
                                 htmlUrl: videoList[index].htmlUrl)));
                   },
+                  onLongPress: () {
+                    Navigator.of(context).push(NoAnimRouter(
+                      HeroPhotoViewRouteWrapper(
+                          heroTag: heroTag,
+                          maxScale: 1.5,
+                          imageProvider: NetworkImage(videoList[index].imgUrl)),
+                    ));
+                  },
+                  heroTag: heroTag,
                   title: videoList[index].title,
                   imgUrl: videoList[index].imgUrl)
               : Anime2Card(
