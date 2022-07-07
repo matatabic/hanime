@@ -114,6 +114,7 @@ class Episode extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: itemWidth,
+        height: itemHeight,
         child: Flex(
           direction: direction ? Axis.vertical : Axis.horizontal,
           children: [
@@ -124,7 +125,11 @@ class Episode extends StatelessWidget {
                 imgUrl: videoList.imgUrl,
                 selector: selector,
               ),
-              if (loading && selector) LoadingCover(),
+              if (loading && selector)
+                LoadingCover(
+                  width: itemWidth,
+                  height: itemHeight,
+                ),
               if (!loading && selector)
                 SelectedCover(
                   width: itemWidth,

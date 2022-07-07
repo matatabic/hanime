@@ -2,64 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-// class HeroPhotoViewRouteWrapper extends StatelessWidget {
-//   const HeroPhotoViewRouteWrapper({
-//     required this.imageProvider,
-//     required this.randomNum,
-//     this.backgroundDecoration,
-//     this.minScale,
-//     this.maxScale,
-//   });
-//
-//   final ImageProvider imageProvider;
-//   final BoxDecoration? backgroundDecoration;
-//   final dynamic minScale;
-//   final dynamic maxScale;
-//   final String randomNum;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       constraints: BoxConstraints.expand(
-//         height: MediaQuery.of(context).size.height,
-//       ),
-//       color: Colors.black12,
-//       child: PhotoView(
-//         imageProvider: imageProvider,
-//         backgroundDecoration: BoxDecoration(color: Colors.black),
-//         minScale: minScale,
-//         maxScale: maxScale,
-//         enablePanAlways: true,
-//         disableGestures: false,
-//         onScaleEnd: (BuildContext context, ScaleEndDetails scaleEndDetails,
-//             PhotoViewControllerValue photoViewControllerValue) {
-//           print("1234214");
-//           print(photoViewControllerValue.position);
-//         },
-//         scaleStateChangedCallback: (PhotoViewScaleState photoViewScaleState) {
-//           print("12312");
-//         },
-//         // gestureDetectorBehavior: HitTestBehavior.opaque,
-//         heroAttributes: PhotoViewHeroAttributes(tag: "heroTag$randomNum"),
-//       ),
-//     );
-//   }
-// }
-
 class HeroPhotoViewRouteWrapper extends StatefulWidget {
-  const HeroPhotoViewRouteWrapper({
-    required this.imageProvider,
-    required this.randomNum,
-    this.backgroundDecoration,
-    this.minScale,
-    this.maxScale,
-  });
-
   final ImageProvider imageProvider;
   final BoxDecoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
-  final String randomNum;
+  final String heroTag;
+
+  const HeroPhotoViewRouteWrapper({
+    required this.imageProvider,
+    required this.heroTag,
+    this.backgroundDecoration,
+    this.minScale,
+    this.maxScale,
+  });
 
   @override
   _HeroPhotoViewRouteWrapperState createState() =>
@@ -72,12 +28,10 @@ class _HeroPhotoViewRouteWrapperState extends State<HeroPhotoViewRouteWrapper> {
   @override
   void initState() {
     super.initState();
-    controller = PhotoViewController()..outputStateStream.listen(listener);
   }
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 
@@ -95,25 +49,19 @@ class _HeroPhotoViewRouteWrapperState extends State<HeroPhotoViewRouteWrapper> {
       ),
       color: Colors.black12,
       child: PhotoView(
-        // controller: controller,
         imageProvider: widget.imageProvider,
-        backgroundDecoration: BoxDecoration(color: Colors.black),
+        backgroundDecoration:
+            BoxDecoration(color: Theme.of(context).dialogBackgroundColor),
         minScale: widget.minScale,
         maxScale: widget.maxScale,
         enablePanAlways: true,
         disableGestures: false,
         tightMode: true,
         onScaleEnd: (BuildContext context, ScaleEndDetails scaleEndDetails,
-            PhotoViewControllerValue photoViewControllerValue) {
-          print("1234214");
-          print(photoViewControllerValue);
-          print(photoViewControllerValue.position);
-        },
-        scaleStateChangedCallback: (PhotoViewScaleState photoViewScaleState) {
-          print("12312");
-        },
+            PhotoViewControllerValue photoViewControllerValue) {},
+        scaleStateChangedCallback: (PhotoViewScaleState photoViewScaleState) {},
         // gestureDetectorBehavior: HitTestBehavior.opaque,
-        heroAttributes: PhotoViewHeroAttributes(tag: widget.randomNum),
+        heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
       ),
     );
   }

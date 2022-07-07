@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/hero_photo.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
@@ -261,6 +263,7 @@ class _SearchScreenState extends State<SearchScreen>
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {
+          String heroTag = UniqueKey().toString();
           return commendCount == 3
               ? Anime3Card(
                   onTap: () {
@@ -280,6 +283,15 @@ class _SearchScreenState extends State<SearchScreen>
                             builder: (context) => WatchScreen(
                                 htmlUrl: videoList[index].htmlUrl)));
                   },
+                  onLongPress: () {
+                    Navigator.of(context).push(NoAnimRouter(
+                      HeroPhotoViewRouteWrapper(
+                          heroTag: heroTag,
+                          maxScale: 1.0,
+                          imageProvider: NetworkImage(videoList[index].imgUrl)),
+                    ));
+                  },
+                  heroTag: heroTag,
                   htmlUrl: videoList[index].htmlUrl,
                   title: videoList[index].title,
                   imgUrl: videoList[index].imgUrl,

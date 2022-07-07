@@ -11,7 +11,9 @@ class Anime2Card extends StatelessWidget {
   final String genre;
   final String author;
   final String duration;
+  final String heroTag;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const Anime2Card(
       {Key? key,
@@ -22,13 +24,16 @@ class Anime2Card extends StatelessWidget {
       required this.genre,
       required this.author,
       required this.created,
-      required this.onTap})
+      required this.heroTag,
+      required this.onTap,
+      required this.onLongPress})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Flex(direction: Axis.vertical, children: [
         Expanded(
             flex: 3,
@@ -36,10 +41,8 @@ class Anime2Card extends StatelessWidget {
               alignment: Alignment(-1, 1),
               children: [
                 ConstrainedBox(
-                    child: CommonImages(
-                      imgUrl:
-                      imgUrl
-                    ),
+                    child:
+                        Hero(tag: heroTag, child: CommonImages(imgUrl: imgUrl)),
                     constraints: new BoxConstraints.expand()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),

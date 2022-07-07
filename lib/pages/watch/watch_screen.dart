@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
+import 'package:hanime/common/hero_photo.dart';
+import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
@@ -124,7 +126,10 @@ class _WatchScreenState extends State<WatchScreen> {
                 videoIndex: _videoIndex,
                 loading: _loading,
                 onTap: (index) async {
-                  if (_videoIndex || _loading) {
+                  print("21312312312");
+                  print(_videoIndex);
+                  print(_loading);
+                  if (_videoIndex == index || _loading) {
                     return;
                   }
                   setState(() {
@@ -208,6 +213,7 @@ class _WatchScreenState extends State<WatchScreen> {
         //加载内容
         delegate: SliverChildBuilderDelegate(
           (context, index) {
+            String heroTag = UniqueKey().toString();
             return watchEntity.commendCount == 3
                 ? Anime3Card(
                     onTap: () {
@@ -229,6 +235,16 @@ class _WatchScreenState extends State<WatchScreen> {
                                   htmlUrl:
                                       watchEntity.commend[index].htmlUrl)));
                     },
+                    onLongPress: () {
+                      Navigator.of(context).push(NoAnimRouter(
+                        HeroPhotoViewRouteWrapper(
+                            heroTag: heroTag,
+                            maxScale: 1.5,
+                            imageProvider: NetworkImage(
+                                watchEntity.commend[index].imgUrl)),
+                      ));
+                    },
+                    heroTag: heroTag,
                     htmlUrl: watchEntity.commend[index].htmlUrl,
                     title: watchEntity.commend[index].title,
                     imgUrl: watchEntity.commend[index].imgUrl,

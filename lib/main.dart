@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           platform: TargetPlatform.iOS,
           brightness: Brightness.dark,
+          dialogBackgroundColor: Colors.black,
           primaryColor: Colors.orange[800],
           accentColor: Colors.orange[300],
           scaffoldBackgroundColor: Colors.black26,

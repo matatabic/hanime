@@ -12,7 +12,7 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> {
-  GlobalKey<ExtendedImageSlidePageState> slidePagekey =
+  GlobalKey<ExtendedImageSlidePageState> slidePageKey =
       GlobalKey<ExtendedImageSlidePageState>();
 
   @override
@@ -20,7 +20,7 @@ class _SlidePageState extends State<SlidePage> {
     return Material(
       color: Colors.transparent,
       child: ExtendedImageSlidePage(
-        key: slidePagekey,
+        key: slidePageKey,
         child: GestureDetector(
           child: HeroWidget(
             child: ExtendedImage.network(
@@ -30,10 +30,10 @@ class _SlidePageState extends State<SlidePage> {
             ),
             tag: widget.heroTag,
             slideType: SlideType.onlyImage,
-            slidePagekey: slidePagekey,
+            slidePagekey: slidePageKey,
           ),
           onTap: () {
-            slidePagekey.currentState!.popPage();
+            slidePageKey.currentState!.popPage();
             Navigator.pop(context);
           },
         ),

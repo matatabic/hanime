@@ -12,7 +12,7 @@ import 'like_icon.dart';
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final Function(String url) playerChange;
-  final String randomTag = UniqueKey().toString();
+  final String heroTag = UniqueKey().toString();
 
   BriefScreen({Key? key, required this.watchEntity, required this.playerChange})
       : super(key: key);
@@ -30,15 +30,14 @@ class BriefScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoViewRouteWrapper(
-                    randomNum: randomTag,
-                    minScale: 1.0,
-                    maxScale: 1.8,
+                    heroTag: heroTag,
+                    maxScale: 1.5,
                     imageProvider: NetworkImage(watchEntity.info.imgUrl),
                   ),
                 ));
               },
               child: Hero(
-                  tag: "heroTag$randomTag",
+                  tag: heroTag,
                   child: ClipOval(
                     child: Container(
                       width: Adapt.px(140),

@@ -58,19 +58,7 @@ class SearchModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<Search> _searchList = [
     Search("", 0, 0, 0, null, null, false, [], "", [],
         "https://hanime1.me/search?query=")
-    // {
-    //   "query": "",
-    //   "genreIndex": 0,
-    //   "sortIndex": 0,
-    //   "durationIndex": 0,
-    //   "year": null,
-    //   "month": null,
-    //   "broad": false,
-    //   "tagList": [],
-    //   "brandList": []
-    // }
   ];
-  // .map((e) => Search("", 0, 0, 0, null, null, false, [], [], "")).toList();
 
   void setHtmlUrl(int currentScreen, String data) {
     _searchList[currentScreen].htmlUrl = data;

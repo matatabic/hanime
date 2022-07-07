@@ -48,7 +48,6 @@ class CoverPhoto extends StatelessWidget {
                   ConstrainedBox(
                       child: Hero(
                           tag: heroTag, child: CommonImages(imgUrl: imgUrl)),
-                      // CommonImages(imgUrl: imgUrl),
                       constraints: new BoxConstraints.expand()),
                   latest
                       ? Positioned(

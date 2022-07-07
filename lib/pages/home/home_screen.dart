@@ -3,12 +3,19 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_card.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
-import 'package:hanime/pages/home/slide_page.dart';
+import 'package:hanime/pages/home/widght/fire_widget.dart';
+import 'package:hanime/pages/home/widght/hot_widget.dart';
+import 'package:hanime/pages/home/widght/latest_widget.dart';
+import 'package:hanime/pages/home/widght/tag_widget.dart';
+import 'package:hanime/pages/home/widght/top_widget.dart';
+import 'package:hanime/pages/home/widght/watch_widget.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/home_model.dart';
 import 'package:hanime/services/home_services.dart';
@@ -110,17 +117,23 @@ class _HomeScreenState extends State<HomeScreen>
                       (BuildContext context, int index) {
                 switch (index) {
                   case 0:
-                    return topWidget(homeEntity.top);
+                    return TopWidget(data: homeEntity.top);
+                  // return topWidget(homeEntity.top);
                   case 1:
-                    return latestWidget(homeEntity.latest);
+                    return LatestWidget(data: homeEntity.latest);
+                  // return latestWidget(homeEntity.latest);
                   case 2:
-                    return fireWidget(homeEntity.fire);
+                    return FireWidget(data: homeEntity.fire);
+                  // return fireWidget(homeEntity.fire);
                   case 3:
-                    return tagWidget(homeEntity.tag);
+                    return TagWidget(data: homeEntity.tag);
+                  // return tagWidget(homeEntity.tag);
                   case 4:
-                    return hotWidget(homeEntity.hot);
+                    return HotWidget(data: homeEntity.hot);
+                  // return hotWidget(homeEntity.hot);
                   case 5:
-                    return watchWidget(homeEntity.watch);
+                    return WatchWidget(data: homeEntity.watch);
+                  // return watchWidget(homeEntity.watch);
                 }
               }, childCount: 6)),
             ]),
@@ -215,6 +228,7 @@ class _HomeScreenState extends State<HomeScreen>
           anchor: 1,
           velocityFactor: 1,
           itemBuilder: (context, itemIndex, realIndex) {
+            String heroTag = UniqueKey().toString();
             return Padding(
               padding: EdgeInsets.all(3),
               child: Column(
@@ -227,6 +241,17 @@ class _HomeScreenState extends State<HomeScreen>
                               builder: (context) => WatchScreen(
                                   htmlUrl: data.video[itemIndex][0].htmlUrl)));
                     },
+                    onLongPress: () {
+                      Navigator.of(context).push(NoAnimRouter(
+                        HeroPhotoViewRouteWrapper(
+                          heroTag: 'l$heroTag',
+                          maxScale: 1.5,
+                          imageProvider:
+                              NetworkImage(data.video[itemIndex][0].imgUrl),
+                        ),
+                      ));
+                    },
+                    heroTag: 'l$heroTag',
                     htmlUrl: data.video[itemIndex][0].htmlUrl,
                     imgUrl: data.video[itemIndex][0].imgUrl,
                     duration: data.video[itemIndex][0].duration,
@@ -243,6 +268,17 @@ class _HomeScreenState extends State<HomeScreen>
                               builder: (context) => WatchScreen(
                                   htmlUrl: data.video[itemIndex][1].htmlUrl)));
                     },
+                    onLongPress: () {
+                      Navigator.of(context).push(NoAnimRouter(
+                        HeroPhotoViewRouteWrapper(
+                          heroTag: 'r$heroTag',
+                          maxScale: 1.5,
+                          imageProvider:
+                              NetworkImage(data.video[itemIndex][1].imgUrl),
+                        ),
+                      ));
+                    },
+                    heroTag: 'r$heroTag',
                     htmlUrl: data.video[itemIndex][1].htmlUrl,
                     imgUrl: data.video[itemIndex][1].imgUrl,
                     duration: data.video[itemIndex][1].duration,
@@ -299,7 +335,15 @@ class _HomeScreenState extends State<HomeScreen>
                               WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
                   },
-                  onLongPress: () {},
+                  onLongPress: () {
+                    Navigator.push(
+                        context,
+                        NoAnimRouter(SlidePage(
+                          heroTag: heroTag,
+                          url:
+                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                        )));
+                  },
                 );
               }))
     ]);
@@ -390,7 +434,15 @@ class _HomeScreenState extends State<HomeScreen>
                               WatchScreen(htmlUrl: data.video[index].htmlUrl)),
                     );
                   },
-                  onLongPress: () {},
+                  onLongPress: () {
+                    Navigator.push(
+                        context,
+                        NoAnimRouter(SlidePage(
+                          heroTag: heroTag,
+                          url:
+                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                        )));
+                  },
                 );
               }))
     ]);
@@ -428,8 +480,9 @@ class _HomeScreenState extends State<HomeScreen>
               //横轴间距
               crossAxisSpacing: Adapt.px(10),
               //子组件宽高长度比例
-              childAspectRatio: 1.1),
+              childAspectRatio: 1.05),
           itemBuilder: (BuildContext context, int index) {
+            String heroTag = UniqueKey().toString();
             return Anime2Card(
               onTap: () {
                 Navigator.push(
@@ -438,6 +491,15 @@ class _HomeScreenState extends State<HomeScreen>
                         builder: (context) =>
                             WatchScreen(htmlUrl: data.video[index].htmlUrl)));
               },
+              onLongPress: () {
+                Navigator.of(context).push(NoAnimRouter(
+                  HeroPhotoViewRouteWrapper(
+                      heroTag: heroTag,
+                      maxScale: 1.5,
+                      imageProvider: NetworkImage(data.video[index].imgUrl)),
+                ));
+              },
+              heroTag: heroTag,
               htmlUrl: data.video[index].htmlUrl,
               title: data.video[index].title,
               imgUrl: data.video[index].imgUrl,

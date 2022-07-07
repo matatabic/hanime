@@ -9,7 +9,7 @@ import 'package:hanime/entity/favourite_entity.dart';
 class FavouriteItem extends StatelessWidget {
   final FavouriteChildren anime;
   final bool showBg;
-  final String randomTag = UniqueKey().toString();
+  final String heroTag = UniqueKey().toString();
 
   FavouriteItem({Key? key, required this.anime, this.showBg = true})
       : super(key: key);
@@ -26,15 +26,14 @@ class FavouriteItem extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoViewRouteWrapper(
-                    randomNum: randomTag,
-                    minScale: 1.0,
-                    maxScale: 1.8,
+                    heroTag: heroTag,
+                    maxScale: 1.5,
                     imageProvider: NetworkImage(anime.imageUrl),
                   ),
                 ));
               },
               child: Hero(
-                  tag: "heroTag$randomTag",
+                  tag: heroTag,
                   child: ClipOval(
                     child: Container(
                       width: Adapt.px(140),
