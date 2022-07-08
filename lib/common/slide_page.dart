@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:hanime/common/hero_widget.dart';
 
 class SlidePage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SlidePageState extends State<SlidePage> {
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 10.0;
     return Material(
       color: Colors.transparent,
       child: ExtendedImageSlidePage(

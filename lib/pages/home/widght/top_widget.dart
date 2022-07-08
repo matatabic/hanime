@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/common/slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -12,6 +11,8 @@ class TopWidget extends StatelessWidget {
   final HomeTop data;
 
   TopWidget({Key? key, required this.data}) : super(key: key);
+
+  static const opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +55,56 @@ class TopWidget extends StatelessWidget {
                     );
                   },
                   onLongPress: () {
-                    Navigator.push(
-                        context,
-                        NoAnimRouter(SlidePage(
-                          heroTag: heroTag,
-                          url:
-                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                        )));
+                    // Navigator.of(context).push(PageRouteBuilder<void>(
+                    //     pageBuilder: (BuildContext context,
+                    //         Animation<double> animation,
+                    //         Animation<double> secondaryAnimation) {
+                    //   // 创建一个 RoutePageBuilder
+                    //   return AnimatedBuilder(
+                    //       animation: animation,
+                    //       builder: (context, child) {
+                    //         /// 设置透明度组件
+                    //         return Opacity(
+                    //           /// 当前的透明度值 , 取值 0.0 ~ 1.0
+                    //           opacity: opacityCurve.transform(animation.value),
+                    //           // 主要显示的使用透明度控制的组件
+                    //           // 页面 2 组件
+                    //           child: SlidePage(
+                    //             heroTag: heroTag,
+                    //             url:
+                    //                 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                    //           ),
+                    //         );
+                    //       });
+                    // }));
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: SlidePage(
+                                  heroTag: heroTag,
+                                  url:
+                                      'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                ),
+                              );
+                            },
+                          );
+                        }));
+
+                    // Navigator.push(
+                    //     context,
+                    //     FadeRouter(
+                    //       child: SlidePage(
+                    //         heroTag: heroTag,
+                    //         url:
+                    //             'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                    //       ),
+                    //     ));
                   },
                 );
               }))
