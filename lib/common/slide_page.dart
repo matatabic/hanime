@@ -18,7 +18,7 @@ class _SlidePageState extends State<SlidePage> {
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 10.0;
+    timeDilation = 1.0;
     return Material(
       color: Colors.transparent,
       child: ExtendedImageSlidePage(

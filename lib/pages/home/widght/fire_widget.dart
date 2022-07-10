@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/common/slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -10,8 +9,10 @@ import '../cover_photo.dart';
 
 class FireWidget extends StatelessWidget {
   final HomeFire data;
+  final Interval opacityCurve;
 
-  FireWidget({Key? key, required this.data}) : super(key: key);
+  FireWidget({Key? key, required this.data, required this.opacityCurve})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +55,24 @@ class FireWidget extends StatelessWidget {
                     );
                   },
                   onLongPress: () {
-                    Navigator.push(
-                        context,
-                        NoAnimRouter(SlidePage(
-                          heroTag: heroTag,
-                          url:
-                              'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                        )));
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: SlidePage(
+                                  heroTag: heroTag,
+                                  url:
+                                      'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                ),
+                              );
+                            },
+                          );
+                        }));
                   },
                 );
               }))

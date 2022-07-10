@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_photo.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
@@ -11,7 +12,10 @@ import '../home_card.dart';
 
 class LatestWidget extends StatelessWidget {
   final HomeLatest data;
-  LatestWidget({Key? key, required this.data}) : super(key: key);
+  final Interval opacityCurve;
+
+  LatestWidget({Key? key, required this.data, required this.opacityCurve})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +58,25 @@ class LatestWidget extends StatelessWidget {
                                   htmlUrl: data.video[itemIndex][0].htmlUrl)));
                     },
                     onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoViewRouteWrapper(
-                          heroTag: 'l$heroTag',
-                          maxScale: 1.5,
-                          imageProvider:
-                              NetworkImage(data.video[itemIndex][0].imgUrl),
-                        ),
-                      ));
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity:
+                                      opacityCurve.transform(animation.value),
+                                  child: SlidePage(
+                                    heroTag: 'l$heroTag',
+                                    url:
+                                        'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                  ),
+                                );
+                              },
+                            );
+                          }));
                     },
                     heroTag: 'l$heroTag',
                     htmlUrl: data.video[itemIndex][0].htmlUrl,
@@ -81,14 +96,25 @@ class LatestWidget extends StatelessWidget {
                                   htmlUrl: data.video[itemIndex][1].htmlUrl)));
                     },
                     onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoViewRouteWrapper(
-                          heroTag: 'r$heroTag',
-                          maxScale: 1.5,
-                          imageProvider:
-                              NetworkImage(data.video[itemIndex][1].imgUrl),
-                        ),
-                      ));
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity:
+                                      opacityCurve.transform(animation.value),
+                                  child: SlidePage(
+                                    heroTag: 'r$heroTag',
+                                    url:
+                                        'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                  ),
+                                );
+                              },
+                            );
+                          }));
                     },
                     heroTag: 'r$heroTag',
                     htmlUrl: data.video[itemIndex][1].htmlUrl,

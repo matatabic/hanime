@@ -9,7 +9,6 @@ class CommonImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg
     return ExtendedImage(
       fit: BoxFit.cover,
       image: ExtendedResizeImage(
@@ -22,6 +21,7 @@ class CommonImages extends StatelessWidget {
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
+            return null;
             return Image.asset(
               "assets/images/error.png",
               fit: BoxFit.fill,

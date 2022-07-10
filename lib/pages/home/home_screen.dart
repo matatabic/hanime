@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
 
-  late DateTime startTime;
+  Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -107,17 +107,23 @@ class _HomeScreenState extends State<HomeScreen>
                       (BuildContext context, int index) {
                 switch (index) {
                   case 0:
-                    return TopWidget(data: homeEntity.top);
+                    return TopWidget(
+                        data: homeEntity.top, opacityCurve: opacityCurve);
                   case 1:
-                    return LatestWidget(data: homeEntity.latest);
+                    return LatestWidget(
+                        data: homeEntity.latest, opacityCurve: opacityCurve);
                   case 2:
-                    return FireWidget(data: homeEntity.fire);
+                    return FireWidget(
+                        data: homeEntity.fire, opacityCurve: opacityCurve);
                   case 3:
-                    return TagWidget(data: homeEntity.tag);
+                    return TagWidget(
+                        data: homeEntity.tag, opacityCurve: opacityCurve);
                   case 4:
-                    return HotWidget(data: homeEntity.hot);
+                    return HotWidget(
+                        data: homeEntity.hot, opacityCurve: opacityCurve);
                   case 5:
-                    return WatchWidget(data: homeEntity.watch);
+                    return WatchWidget(
+                        data: homeEntity.watch, opacityCurve: opacityCurve);
                 }
               }, childCount: 6)),
             ]),

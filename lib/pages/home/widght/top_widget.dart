@@ -9,10 +9,10 @@ import '../cover_photo.dart';
 
 class TopWidget extends StatelessWidget {
   final HomeTop data;
+  final Interval opacityCurve;
 
-  TopWidget({Key? key, required this.data}) : super(key: key);
-
-  static const opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
+  TopWidget({Key? key, required this.data, required this.opacityCurve})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,28 +55,6 @@ class TopWidget extends StatelessWidget {
                     );
                   },
                   onLongPress: () {
-                    // Navigator.of(context).push(PageRouteBuilder<void>(
-                    //     pageBuilder: (BuildContext context,
-                    //         Animation<double> animation,
-                    //         Animation<double> secondaryAnimation) {
-                    //   // 创建一个 RoutePageBuilder
-                    //   return AnimatedBuilder(
-                    //       animation: animation,
-                    //       builder: (context, child) {
-                    //         /// 设置透明度组件
-                    //         return Opacity(
-                    //           /// 当前的透明度值 , 取值 0.0 ~ 1.0
-                    //           opacity: opacityCurve.transform(animation.value),
-                    //           // 主要显示的使用透明度控制的组件
-                    //           // 页面 2 组件
-                    //           child: SlidePage(
-                    //             heroTag: heroTag,
-                    //             url:
-                    //                 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                    //           ),
-                    //         );
-                    //       });
-                    // }));
                     Navigator.of(context).push(PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (context, animation, secondaryAnimation) {
@@ -95,16 +73,6 @@ class TopWidget extends StatelessWidget {
                             },
                           );
                         }));
-
-                    // Navigator.push(
-                    //     context,
-                    //     FadeRouter(
-                    //       child: SlidePage(
-                    //         heroTag: heroTag,
-                    //         url:
-                    //             'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
-                    //       ),
-                    //     ));
                   },
                 );
               }))

@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/hero_photo.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 
 class WatchWidget extends StatelessWidget {
   final HomeWatch data;
+  final Interval opacityCurve;
 
-  WatchWidget({Key? key, required this.data}) : super(key: key);
+  WatchWidget({Key? key, required this.data, required this.opacityCurve})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +58,23 @@ class WatchWidget extends StatelessWidget {
                             WatchScreen(htmlUrl: data.video[index].htmlUrl)));
               },
               onLongPress: () {
-                Navigator.of(context).push(NoAnimRouter(
-                  HeroPhotoViewRouteWrapper(
-                      heroTag: heroTag,
-                      maxScale: 1.5,
-                      imageProvider: NetworkImage(data.video[index].imgUrl)),
-                ));
+                Navigator.of(context).push(PageRouteBuilder(
+                    opaque: false,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) {
+                          return Opacity(
+                            opacity: opacityCurve.transform(animation.value),
+                            child: SlidePage(
+                              heroTag: heroTag,
+                              url:
+                                  'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                            ),
+                          );
+                        },
+                      );
+                    }));
               },
               heroTag: heroTag,
               htmlUrl: data.video[index].htmlUrl,

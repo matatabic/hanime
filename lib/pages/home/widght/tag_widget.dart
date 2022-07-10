@@ -8,8 +8,10 @@ import '../home_tag_card.dart';
 
 class TagWidget extends StatelessWidget {
   final HomeTag data;
+  final Interval opacityCurve;
 
-  TagWidget({Key? key, required this.data}) : super(key: key);
+  TagWidget({Key? key, required this.data, required this.opacityCurve})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
