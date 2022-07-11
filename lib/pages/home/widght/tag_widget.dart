@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 
@@ -40,18 +41,65 @@ class TagWidget extends StatelessWidget {
           anchor: 1,
           velocityFactor: 1,
           itemBuilder: (context, itemIndex, realIndex) {
+            String heroTag = UniqueKey().toString();
             return Padding(
               padding: EdgeInsets.all(Adapt.px(6)),
               child: Column(
                 children: [
                   HomeTagCard(
+                      heroTag: 't$heroTag',
                       data: data.video[itemIndex][0],
-                      index: 0,
-                      onTap: () => {print(data.video)}),
+                      onTap: () {
+                        print(data.video[itemIndex]);
+                      },
+                      onLongPress: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return AnimatedBuilder(
+                                animation: animation,
+                                builder: (context, child) {
+                                  return Opacity(
+                                    opacity:
+                                        opacityCurve.transform(animation.value),
+                                    child: HeroSlidePage(
+                                      heroTag: 't$heroTag',
+                                      url:
+                                          'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                    ),
+                                  );
+                                },
+                              );
+                            }));
+                      }),
                   HomeTagCard(
+                      heroTag: 'b$heroTag',
                       data: data.video[itemIndex][1],
-                      index: 1,
-                      onTap: () => {print("12321")})
+                      onTap: () {
+                        print("12321");
+                      },
+                      onLongPress: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return AnimatedBuilder(
+                                animation: animation,
+                                builder: (context, child) {
+                                  return Opacity(
+                                    opacity:
+                                        opacityCurve.transform(animation.value),
+                                    child: HeroSlidePage(
+                                      heroTag: 'b$heroTag',
+                                      url:
+                                          'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                    ),
+                                  );
+                                },
+                              );
+                            }));
+                      })
                 ],
               ),
             );

@@ -6,10 +6,16 @@ import 'package:hanime/entity/home_entity.dart';
 
 class HomeTagCard extends StatelessWidget {
   final HomeTagVideo data;
-  final int index;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
+  final String heroTag;
+
   const HomeTagCard(
-      {Key? key, required this.data, required this.index, required this.onTap})
+      {Key? key,
+      required this.data,
+      required this.onTap,
+      required this.onLongPress,
+      required this.heroTag})
       : super(key: key);
 
   @override
@@ -20,11 +26,13 @@ class HomeTagCard extends StatelessWidget {
         padding: EdgeInsets.only(top: Adapt.px(7)),
         child: InkWell(
           onTap: onTap,
+          onLongPress: onLongPress,
           child: Stack(
             alignment: Alignment(-1, 1),
             children: [
               ConstrainedBox(
-                  child: CommonImages(imgUrl: data.imgUrl),
+                  child: Hero(
+                      tag: heroTag, child: CommonImages(imgUrl: data.imgUrl)),
                   constraints: new BoxConstraints.expand()),
               Container(color: Colors.black26),
               Container(
