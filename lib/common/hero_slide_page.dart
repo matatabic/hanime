@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:hanime/common/hero_widget.dart';
 
-class SlidePage extends StatefulWidget {
-  const SlidePage({required this.url, required this.heroTag});
+class HeroSlidePage extends StatefulWidget {
+  const HeroSlidePage({required this.url, required this.heroTag});
   final String url;
   final String heroTag;
   @override
-  _SlidePageState createState() => _SlidePageState();
+  _HeroSlidePageState createState() => _HeroSlidePageState();
 }
 
-class _SlidePageState extends State<SlidePage> {
+class _HeroSlidePageState extends State<HeroSlidePage> {
   GlobalKey<ExtendedImageSlidePageState> slidePageKey =
       GlobalKey<ExtendedImageSlidePageState>();
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 1.0;
+    // timeDilation = 0.5;
     return Material(
       color: Colors.transparent,
       child: ExtendedImageSlidePage(

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/hero_photo.dart';
+import 'package:hanime/common/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
@@ -275,7 +275,7 @@ class _SearchScreenState extends State<SearchScreen>
                   },
                   onLongPress: () {
                     Navigator.of(context).push(NoAnimRouter(
-                      HeroPhotoViewRouteWrapper(
+                      HeroPhotoView(
                           heroTag: heroTag,
                           maxScale: 1.5,
                           imageProvider: NetworkImage(videoList[index].imgUrl)),
@@ -294,7 +294,7 @@ class _SearchScreenState extends State<SearchScreen>
                   },
                   onLongPress: () {
                     Navigator.of(context).push(NoAnimRouter(
-                      HeroPhotoViewRouteWrapper(
+                      HeroPhotoView(
                           heroTag: heroTag,
                           maxScale: 1.0,
                           imageProvider: NetworkImage(videoList[index].imgUrl)),

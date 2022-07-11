@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
+import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/utils/dio_range_download_manage.dart';
 import 'package:hanime/utils/index.dart';
@@ -16,7 +17,6 @@ import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:provider/src/provider.dart';
 
 import 'common/adapt.dart';
-import 'common/demo.dart';
 import 'entity/download_entity.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -83,7 +83,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             controller: tabController,
             children: <Widget>[
               HomeScreen(),
-              RadialHeroAnimation(),
+              SearchScreen(),
               MyScreen(),
             ],
           ),

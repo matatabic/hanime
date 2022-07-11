@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-class HeroPhotoViewRouteWrapper extends StatefulWidget {
+class HeroPhotoView extends StatefulWidget {
   final ImageProvider imageProvider;
   final BoxDecoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
   final String heroTag;
 
-  const HeroPhotoViewRouteWrapper({
+  const HeroPhotoView({
     required this.imageProvider,
     required this.heroTag,
     this.backgroundDecoration,
@@ -18,11 +18,10 @@ class HeroPhotoViewRouteWrapper extends StatefulWidget {
   });
 
   @override
-  _HeroPhotoViewRouteWrapperState createState() =>
-      _HeroPhotoViewRouteWrapperState();
+  _HeroPhotoViewState createState() => _HeroPhotoViewState();
 }
 
-class _HeroPhotoViewRouteWrapperState extends State<HeroPhotoViewRouteWrapper> {
+class _HeroPhotoViewState extends State<HeroPhotoView> {
   late PhotoViewController controller;
 
   @override

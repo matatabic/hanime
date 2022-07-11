@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/hero_photo.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
-import 'package:hanime/common/slide_page.dart';
+import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
@@ -68,7 +66,7 @@ class LatestWidget extends StatelessWidget {
                                 return Opacity(
                                   opacity:
                                       opacityCurve.transform(animation.value),
-                                  child: SlidePage(
+                                  child: HeroSlidePage(
                                     heroTag: 'l$heroTag',
                                     url:
                                         'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
@@ -106,7 +104,7 @@ class LatestWidget extends StatelessWidget {
                                 return Opacity(
                                   opacity:
                                       opacityCurve.transform(animation.value),
-                                  child: SlidePage(
+                                  child: HeroSlidePage(
                                     heroTag: 'r$heroTag',
                                     url:
                                         'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
