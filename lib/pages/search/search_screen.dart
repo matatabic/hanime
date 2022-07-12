@@ -121,78 +121,86 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    return Scaffold(
-        backgroundColor: Colors.black,
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          onPanDown: (_) {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: SmartRefresher(
-            // physics: const ClampingScrollPhysics(),
-            enablePullDown: false,
-            enablePullUp: true,
-            controller: _refreshController,
-            onLoading: () => _onLoading(context, true),
-            footer: CustomFooter(
-              builder: (BuildContext context, LoadStatus? mode) {
-                Widget body;
-                if (mode == LoadStatus.loading) {
-                  body = CupertinoActivityIndicator();
-                } else if (mode == LoadStatus.failed) {
-                  body = Text("加载失败！点击重试！");
-                } else if (mode == LoadStatus.canLoading) {
-                  body = Text("松手,加载更多!");
-                } else if (mode == LoadStatus.noMore) {
-                  body = Text("没有更多数据了!");
-                } else {
-                  body = Text("没有更多数据了!");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child: body),
-                );
-              },
-            ),
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  pinned: false,
-                  floating: true,
-                  stretch: true,
-                  automaticallyImplyLeading: false,
-                  toolbarHeight: topHeight,
-                  expandedHeight: topHeight,
-                  flexibleSpace: Column(
-                    children: [
-                      SearchEngineScreen(
-                          currentScreen: widget.currentScreen,
-                          loadData: () => _onLoading(context, false)),
-                      SearchMenuScreen(
-                          currentScreen: widget.currentScreen,
-                          loadData: () => _onLoading(context, false))
-                    ],
+    print("fgwasrfwqfwqqw");
+    print(widget.currentScreen);
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<SearchModel>().removeSearchList();
+        print("12312321");
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          body: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            onPanDown: (_) {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: SmartRefresher(
+              // physics: const ClampingScrollPhysics(),
+              enablePullDown: false,
+              enablePullUp: true,
+              controller: _refreshController,
+              onLoading: () => _onLoading(context, true),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus? mode) {
+                  Widget body;
+                  if (mode == LoadStatus.loading) {
+                    body = CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = Text("加载失败！点击重试！");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = Text("松手,加载更多!");
+                  } else if (mode == LoadStatus.noMore) {
+                    body = Text("没有更多数据了!");
+                  } else {
+                    body = Text("没有更多数据了!");
+                  }
+                  return Container(
+                    height: 55.0,
+                    child: Center(child: body),
+                  );
+                },
+              ),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: false,
+                    floating: true,
+                    stretch: true,
+                    automaticallyImplyLeading: false,
+                    toolbarHeight: topHeight,
+                    expandedHeight: topHeight,
+                    flexibleSpace: Column(
+                      children: [
+                        SearchEngineScreen(
+                            currentScreen: widget.currentScreen,
+                            loadData: () => _onLoading(context, false)),
+                        SearchMenuScreen(
+                            currentScreen: widget.currentScreen,
+                            loadData: () => _onLoading(context, false))
+                      ],
+                    ),
                   ),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                FutureBuilder(
-                  builder: _buildFuture,
-                  future:
-                      _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-              ],
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  FutureBuilder(
+                    builder: _buildFuture,
+                    future:
+                        _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 10),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
@@ -315,9 +323,18 @@ class _SearchScreenState extends State<SearchScreen>
     );
   }
 
-  initState() {
+  @override
+  void initState() {
     super.initState();
     _futureBuilderFuture = loadData(widget.htmlUrl);
+  }
+
+  @override
+  void dispose() async {
+    print("Sfgvdafsa");
+    // context.read<SearchModel>().removeSearchList();
+    super.dispose();
+    // Provider.of<SearchModel>(context, listen: false).removeSearchList();
   }
 
   Future loadData(url) async {

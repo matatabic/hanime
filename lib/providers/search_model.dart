@@ -129,13 +129,12 @@ class SearchModel with ChangeNotifier, DiagnosticableTreeMixin {
     _searchList.add(Search("", 0, 0, 0, null, null, false, [tag],
         isCustomTag ? "" : tag, [], htmlUrl));
     _currentScreen = _currentScreen + 1;
-    notifyListeners();
   }
 
   void removeSearchList() {
+    // _searchList.removeAt(_searchList.length - 1);
     _searchList.removeLast();
     _currentScreen = _currentScreen - 1;
-    notifyListeners();
   }
 
   @override

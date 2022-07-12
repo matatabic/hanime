@@ -60,3 +60,25 @@ double doubleRemoveDecimal(dynamic data, int offset) {
 double progress2showProgress(double data) {
   return 1 - data;
 }
+
+List<String> getUrlParamsByName(String url, String name) {
+  List<String> res = [];
+  if (url.contains("?")) {
+    String temp = url.substring(url.indexOf("?") + 1);
+    List<String> tempList = temp.split("&");
+    for (String item in tempList) {
+      if (item.contains(name)) {
+        res.add(item.substring(item.indexOf("=") + 1));
+      }
+    }
+  }
+  return res;
+}
+
+String urlAddAllTagParams(String url, List<String> tagList) {
+  String res = url;
+  for (String tag in tagList) {
+    res = res + "&tags[]=" + tag;
+  }
+  return res;
+}
