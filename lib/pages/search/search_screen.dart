@@ -56,6 +56,10 @@ class _SearchScreenState extends State<SearchScreen>
 
     var htmlUrl = "https://hanime1.me/search?query=${search.query}";
 
+    if (search.broad) {
+      htmlUrl = "$htmlUrl&broad=on";
+    }
+
     if (search.genreIndex > 0) {
       htmlUrl = "$htmlUrl&genre=${genre.data[search.genreIndex]}";
     }
@@ -66,10 +70,6 @@ class _SearchScreenState extends State<SearchScreen>
 
     if (search.durationIndex > 0) {
       htmlUrl = "$htmlUrl&duration=${genre.data[search.durationIndex]}";
-    }
-
-    if (search.broad) {
-      htmlUrl = "$htmlUrl&broad=on";
     }
 
     if (search.year != null && search.year != "全部") {

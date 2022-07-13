@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
+import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/utils/index.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:provider/src/provider.dart';
 
 import '../home_tag_card.dart';
 
@@ -54,6 +56,11 @@ class TagWidget extends StatelessWidget {
                         print(data.video[itemIndex][0].htmlUrl);
                         print(getUrlParamsByName(
                             data.video[itemIndex][0].htmlUrl, 'tag'));
+                        List<String> tags = getUrlParamsByName(
+                            data.video[itemIndex][0].htmlUrl, 'tag');
+                        String url = urlAddAllTagParams(
+                            "https://hanime1.me/search?query=&broad=on", tags);
+                        print(url);
                       },
                       onLongPress: () {
                         Navigator.of(context).push(PageRouteBuilder(
@@ -80,14 +87,22 @@ class TagWidget extends StatelessWidget {
                       heroTag: 'b$heroTag',
                       data: data.video[itemIndex][1],
                       onTap: () {
-                        print(data.video[itemIndex][1].htmlUrl);
-                        print(getUrlParamsByName(
-                            data.video[itemIndex][1].htmlUrl, 'tag'));
+                        // print(data.video[itemIndex][1].htmlUrl);
+                        // print(getUrlParamsByName(
+                        //     data.video[itemIndex][1].htmlUrl, 'tag'));
                         List<String> tags = getUrlParamsByName(
                             data.video[itemIndex][1].htmlUrl, 'tag');
                         String url = urlAddAllTagParams(
                             "https://hanime1.me/search?query=&broad=on", tags);
-                        print(url);
+                        // print(url);
+                        context.read<SearchModel>().addSearchList(tags, url);
+                        // Navigator.push(
+                        //   context,
+                        //   CupertinoPageRoute(
+                        //       builder: (context) => SearchScreen(
+                        //           htmlUrl:url,
+                        //           currentScreen: currentScreen)),
+                        // )
                       },
                       onLongPress: () {
                         Navigator.of(context).push(PageRouteBuilder(

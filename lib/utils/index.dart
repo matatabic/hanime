@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'dio_manage.dart';
+import '../request/dio_manage.dart';
 
 int randomNumber(int min, int max) {
   int res = min + Random().nextInt(max - min + 1);

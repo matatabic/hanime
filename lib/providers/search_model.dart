@@ -10,7 +10,7 @@ class Search {
   late dynamic month;
   late bool broad;
   late List<String> tagList;
-  late String customTag;
+  late List<String> customTagList;
   late List<String> brandList;
   late String htmlUrl;
 
@@ -23,7 +23,7 @@ class Search {
       this.month,
       this.broad,
       this.tagList,
-      this.customTag,
+      this.customTagList,
       this.brandList,
       this.htmlUrl);
 }
@@ -56,7 +56,7 @@ class SearchModel with ChangeNotifier, DiagnosticableTreeMixin {
   int get currentScreen => _currentScreen;
 
   List<Search> _searchList = [
-    Search("", 0, 0, 0, null, null, false, [], "", [],
+    Search("", 0, 0, 0, null, null, false, [], [], [],
         "https://hanime1.me/search?query=")
   ];
 
@@ -120,19 +120,30 @@ class SearchModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addSearchList(String tag, String htmlUrl) {
+  void addSearchList(List<String> tags, String htmlUrl) {
     List tempList = [];
     for (var item in searchTag.data) {
       tempList.addAll(item.data);
     }
-    bool isCustomTag = tempList.indexOf(tag) > -1;
-    _searchList.add(Search("", 0, 0, 0, null, null, false, [tag],
-        isCustomTag ? "" : tag, [], htmlUrl));
-    _currentScreen = _currentScreen + 1;
+    List<String> tagList = tags
+        .where((element) => tempList.contains(element))
+        .map((e) => e.toString())
+        .toList();
+
+    List<String> customTagList = tags
+        .where((element) => !tagList.contains(element))
+        .map((e) => e.toString())
+        .toList();
+    print(tagList);
+    print(customTagList);
+    print(tags);
+    print("wdvwwe");
+    // _searchList.add(Search("", 0, 0, 0, null, null, false, tagList,
+    //     customTagList.length > 0 ? customTagList : [], [], htmlUrl));
+    // _currentScreen = _currentScreen + 1;
   }
 
   void removeSearchList() {
-    // _searchList.removeAt(_searchList.length - 1);
     _searchList.removeLast();
     _currentScreen = _currentScreen - 1;
   }

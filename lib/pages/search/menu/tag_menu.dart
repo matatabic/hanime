@@ -113,14 +113,14 @@ class TagContainer extends StatelessWidget {
     Search search = context.watch<SearchModel>().searchList[currentScreen];
     List<Widget> tagWidgetList = [];
     if (index == 0) {
-      if (search.customTag.length > 0) {
+      for (String tag in search.customTagList) {
         tagWidgetList.add(InkWell(
           onTap: () {
-            onTap(search.customTag);
+            onTap(tag);
           },
           child: TagDetail(
-              title: search.customTag,
-              color: search.tagList.indexOf(search.customTag) > -1
+              title: tag,
+              color: search.tagList.indexOf(tag) > -1
                   ? Theme.of(context).primaryColor
                   : Colors.black),
         ));

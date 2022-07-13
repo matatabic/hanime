@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/utils/dio_manage.dart';
+import 'package:hanime/request/dio_manage.dart';
 import 'package:html/parser.dart';
 
 SearchGenre genre = SearchGenre.fromJson({

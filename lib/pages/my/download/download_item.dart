@@ -5,7 +5,7 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_model.dart';
-import 'package:hanime/utils/dio_range_download_manage.dart';
+import 'package:hanime/request/dio_range_download_manage.dart';
 import 'package:hanime/utils/index.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';

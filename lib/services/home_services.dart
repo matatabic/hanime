@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:hanime/utils/dio_manage.dart';
+import 'package:hanime/request/dio_manage.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getHomeData() async {
