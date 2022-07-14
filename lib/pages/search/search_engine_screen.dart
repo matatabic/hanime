@@ -6,15 +6,13 @@ import 'package:hanime/providers/search_model.dart';
 import 'package:provider/src/provider.dart';
 
 class SearchEngineScreen extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  SearchEngineScreen(
-      {Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  SearchEngineScreen({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
 
     return Container(
       color: Theme.of(context).primaryColor,
@@ -57,9 +55,7 @@ class SearchEngineScreen extends StatelessWidget {
                             maxLines: 1,
                             maxLength: 10,
                             onChanged: (value) {
-                              context
-                                  .read<SearchModel>()
-                                  .setQuery(currentScreen, value);
+                              context.read<SearchModel>().setQuery(value);
                             },
                             onSubmitted: (value) {
                               loadData();
@@ -79,9 +75,7 @@ class SearchEngineScreen extends StatelessWidget {
                           color: Colors.grey,
                           iconSize: Adapt.px(40),
                           onPressed: () {
-                            context
-                                .read<SearchModel>()
-                                .setQuery(currentScreen, "");
+                            context.read<SearchModel>().setQuery("");
                             // _controller.clear();
                             // onSearchTextChanged('');
                           },

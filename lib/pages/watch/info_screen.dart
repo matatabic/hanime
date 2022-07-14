@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
+import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:hanime/utils/index.dart';
 import 'package:provider/src/provider.dart';
 
 class InfoScreen extends StatelessWidget {
@@ -23,8 +23,8 @@ class InfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int currentScreen =
-        Provider.of<SearchModel>(context, listen: false).currentScreen;
+    // int currentScreen =
+    //     Provider.of<SearchModel>(context, listen: false).currentScreen;
     return Padding(
       padding: EdgeInsets.all(Adapt.px(10)),
       child: Column(
@@ -64,18 +64,15 @@ class InfoScreen extends StatelessWidget {
                     watchEntity.tag,
                     (String tag) => {
                           player.pause(),
-                          print(urlAddAllTagParams(
-                              "https://hanime1.me/search?query=", [tag])),
                           context.read<SearchModel>().addSearchList([tag],
                               "https://hanime1.me/search?query=&tags[]=$tag"),
-                          // Navigator.push(
-                          //   context,
-                          //   CupertinoPageRoute(
-                          //       builder: (context) => SearchScreen(
-                          //           htmlUrl:
-                          //               "https://hanime1.me/search?query=&tags[]=$tag",
-                          //           currentScreen: currentScreen)),
-                          // )
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => SearchScreen(
+                                    htmlUrl:
+                                        "https://hanime1.me/search?query=&tags[]=$tag")),
+                          )
                         }),
                 spacing: Adapt.px(20),
                 runSpacing: Adapt.px(20),

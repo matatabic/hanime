@@ -15,12 +15,12 @@ class _MyScreenState extends State<MyScreen>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    print("myasfsafasfas");
     return SafeArea(
       child: DefaultTabController(
           length: 2,

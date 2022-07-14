@@ -11,9 +11,7 @@ import 'package:hanime/pages/home/widght/latest_widget.dart';
 import 'package:hanime/pages/home/widght/tag_widget.dart';
 import 'package:hanime/pages/home/widght/top_widget.dart';
 import 'package:hanime/pages/home/widght/watch_widget.dart';
-import 'package:hanime/providers/home_model.dart';
 import 'package:hanime/services/home_services.dart';
-import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -39,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    print("mainBUBBBBmainBUBBBBmainBUBBBB");
     return Scaffold(
       backgroundColor: Colors.black,
       body: FutureBuilder(
@@ -86,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     HomeEntity homeEntity = snapshot.data;
+
     return NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
         child: Stack(children: [
@@ -96,11 +95,7 @@ class _HomeScreenState extends State<HomeScreen>
             onRefresh: _onRefresh,
             child: CustomScrollView(semanticChildCount: 2, slivers: <Widget>[
               SliverToBoxAdapter(
-                  child: HomeHeaderScreen(
-                swiperList: homeEntity.swiper,
-                currentSwiperImage: homeEntity
-                    .swiper[context.watch<HomeModel>().swiperIndex].imgUrl,
-              )),
+                  child: HomeHeaderScreen(swiperList: homeEntity.swiper)),
               // 当列表项高度固定时，使用 SliverFixedExtendList 比 SliverList 具有更高的性能
               SliverList(
                   delegate: SliverChildBuilderDelegate(

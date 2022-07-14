@@ -19,12 +19,11 @@ import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   final String htmlUrl;
-  final int currentScreen;
-  SearchScreen(
-      {Key? key,
-      this.htmlUrl = "https://hanime1.me/search?query=",
-      this.currentScreen = 0})
-      : super(key: key);
+
+  SearchScreen({
+    Key? key,
+    this.htmlUrl = "https://hanime1.me/search?query=",
+  }) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -51,8 +50,7 @@ class _SearchScreenState extends State<SearchScreen>
   void _onLoading(BuildContext context, bool loadMore) async {
     print("_onLoading");
     // await Future.delayed(Duration(milliseconds: 1000));
-    Search search =
-        context.read<SearchModel>().searchList[widget.currentScreen];
+    Search search = context.read<SearchModel>().searchList;
 
     var htmlUrl = "https://hanime1.me/search?query=${search.query}";
 
@@ -99,8 +97,8 @@ class _SearchScreenState extends State<SearchScreen>
         htmlUrl = "$htmlUrl&page=${page + 1}";
         await loadData(htmlUrl);
         page = page + 1;
-        context.read<SearchModel>().setHtmlUrl(widget.currentScreen, htmlUrl);
-        setState(() {});
+        context.read<SearchModel>().setHtmlUrl(htmlUrl);
+        // setState(() {});
         _refreshController.loadComplete();
       } else {
         _refreshController.loadNoData();
@@ -108,11 +106,11 @@ class _SearchScreenState extends State<SearchScreen>
     } else {
       if (search.htmlUrl != htmlUrl) {
         page = 1;
-        searchVideoList = [];
-        setState(() {
-          _futureBuilderFuture = loadData(htmlUrl);
-        });
-        context.read<SearchModel>().setHtmlUrl(widget.currentScreen, htmlUrl);
+        // searchVideoList = [];
+        // setState(() {
+        //   _futureBuilderFuture = loadData(htmlUrl);
+        // });
+        context.read<SearchModel>().setHtmlUrl(htmlUrl);
         _refreshController.loadComplete();
       }
     }
@@ -121,12 +119,10 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("fgwasrfwqfwqqw");
-    print(widget.currentScreen);
+    print("mainBUBBBB");
     return WillPopScope(
       onWillPop: () async {
         context.read<SearchModel>().removeSearchList();
-        print("12312321");
         return true;
       },
       child: Scaffold(
@@ -177,10 +173,8 @@ class _SearchScreenState extends State<SearchScreen>
                     flexibleSpace: Column(
                       children: [
                         SearchEngineScreen(
-                            currentScreen: widget.currentScreen,
                             loadData: () => _onLoading(context, false)),
                         SearchMenuScreen(
-                            currentScreen: widget.currentScreen,
                             loadData: () => _onLoading(context, false))
                       ],
                     ),
@@ -230,7 +224,9 @@ class _SearchScreenState extends State<SearchScreen>
       case ConnectionState.done:
         print('done');
         if (snapshot.hasError) {
-          String htmlUrl = context.watch<SearchModel>().htmlUrl;
+          String htmlUrl =
+              context.select<SearchModel, String>((search) => search.htmlUrl);
+
           return SliverToBoxAdapter(
             child: Container(
               height: surHeight,
@@ -331,7 +327,6 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   void dispose() async {
-    print("Sfgvdafsa");
     // context.read<SearchModel>().removeSearchList();
     super.dispose();
     // Provider.of<SearchModel>(context, listen: false).removeSearchList();

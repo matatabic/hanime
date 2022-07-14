@@ -6,15 +6,13 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class BrandMenu extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  const BrandMenu(
-      {Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  const BrandMenu({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
       tagWidgetList.add(Material(
@@ -35,9 +33,7 @@ class BrandMenu extends StatelessWidget {
               )),
           child: InkWell(
             onTap: () {
-              context
-                  .read<SearchModel>()
-                  .selectedBrandHandle(currentScreen, title);
+              context.read<SearchModel>().selectedBrandHandle(title);
             },
             child: BrandDetail(
               title: title,

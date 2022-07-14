@@ -6,14 +6,13 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class TagMenu extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  const TagMenu({Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  const TagMenu({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -59,9 +58,7 @@ class TagMenu extends StatelessWidget {
                               value: search.broad,
                               activeColor: Theme.of(context).primaryColor,
                               onChanged: (value) {
-                                context
-                                    .read<SearchModel>()
-                                    .setBroadFlag(currentScreen, value);
+                                context.read<SearchModel>().setBroadFlag(value);
                               },
                             ),
                           ],
@@ -78,12 +75,11 @@ class TagMenu extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return TagContainer(
                             index: index,
-                            currentScreen: currentScreen,
                             searchTagData: searchTag.data[index],
                             onTap: (String title) {
                               context
                                   .read<SearchModel>()
-                                  .selectedTagHandle(currentScreen, title);
+                                  .selectedTagHandle(title);
                             });
                       }),
                 ],
@@ -96,21 +92,19 @@ class TagMenu extends StatelessWidget {
 
 class TagContainer extends StatelessWidget {
   final int index;
-  final int currentScreen;
   final SearchTagData searchTagData;
   final Function(String title) onTap;
 
   const TagContainer(
       {Key? key,
       required this.index,
-      required this.currentScreen,
       required this.searchTagData,
       required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
     List<Widget> tagWidgetList = [];
     if (index == 0) {
       for (String tag in search.customTagList) {

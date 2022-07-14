@@ -22,11 +22,9 @@ List _menuList = [
 ];
 
 class SearchMenuScreen extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  SearchMenuScreen(
-      {Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +35,8 @@ class SearchMenuScreen extends StatelessWidget {
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),
         child: ClipOval(
           child: Material(
-            color: getActive(
-                context.watch<SearchModel>().searchList[currentScreen],
-                menu['id']),
+            color:
+                getActive(context.watch<SearchModel>().searchList, menu['id']),
             child: InkWell(
               customBorder: StadiumBorder(),
               onTap: () {
@@ -47,8 +44,8 @@ class SearchMenuScreen extends StatelessWidget {
                     expand: true,
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context) => menuDetail(
-                        menu['id'], currentScreen, () => loadData()));
+                    builder: (context) =>
+                        menuDetail(menu['id'], () => loadData()));
               },
               child: Container(
                 height: Adapt.px(100),
@@ -104,36 +101,30 @@ Color getActive(Search searchState, index) {
   return Color.fromRGBO(51, 51, 51, 1);
 }
 
-Widget menuDetail(id, currentScreen, loadData) {
+Widget menuDetail(id, loadData) {
   switch (id) {
     case 0:
       return GenreMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
     case 1:
       return TagMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
     case 2:
       return SortMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
     case 3:
       return BrandMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
     case 4:
       return DateMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
     case 5:
       return DurationMenu(
-        currentScreen: currentScreen,
         loadData: () => loadData(),
       );
   }

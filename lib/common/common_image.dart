@@ -12,8 +12,8 @@ class CommonImages extends StatelessWidget {
     return ExtendedImage(
       fit: BoxFit.cover,
       image: ExtendedResizeImage(
-        ExtendedNetworkImageProvider(
-            "http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg",
+        ExtendedNetworkImageProvider(imgUrl,
+            // "http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg",
             cache: true,
             retries: 3,
             timeRetry: const Duration(milliseconds: 100)),

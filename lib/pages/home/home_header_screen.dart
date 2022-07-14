@@ -7,24 +7,28 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
+import 'package:hanime/providers/home_model.dart';
+import 'package:provider/src/provider.dart';
 
 class HomeHeaderScreen extends StatelessWidget {
   final List<HomeSwiper> swiperList;
-  final String currentSwiperImage;
 
-  const HomeHeaderScreen(
-      {Key? key, required this.swiperList, required this.currentSwiperImage})
+  const HomeHeaderScreen({Key? key, required this.swiperList})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int swiperIndex =
+        context.select<HomeModel, int>((value) => value.swiperIndex);
+
     return Container(
       height: Adapt.px(520),
       child: Stack(children: [
         ConstrainedBox(
           constraints: new BoxConstraints.expand(),
           child: Stack(children: [
-            Container(child: CommonImages(imgUrl: currentSwiperImage)),
+            Container(
+                child: CommonImages(imgUrl: swiperList[swiperIndex].imgUrl)),
             Container(
               child: new ClipRect(
                 child: new BackdropFilter(

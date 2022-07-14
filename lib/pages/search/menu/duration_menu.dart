@@ -7,15 +7,13 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class DurationMenu extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  const DurationMenu(
-      {Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  const DurationMenu({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -45,9 +43,7 @@ class DurationMenu extends StatelessWidget {
                 child: MenuRow(
                   title: duration.data[index],
                   onTap: () {
-                    context
-                        .read<SearchModel>()
-                        .setDurationIndex(currentScreen, index);
+                    context.read<SearchModel>().setDurationIndex(index);
                   },
                 ),
               );

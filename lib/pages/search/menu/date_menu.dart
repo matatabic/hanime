@@ -7,15 +7,13 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class DateMenu extends StatelessWidget {
-  final int currentScreen;
   final VoidCallback loadData;
-  const DateMenu(
-      {Key? key, required this.currentScreen, required this.loadData})
-      : super(key: key);
+
+  const DateMenu({Key? key, required this.loadData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList[currentScreen];
+    Search search = context.watch<SearchModel>().searchList;
     return WillPopScope(
       onWillPop: () async {
         loadData();
@@ -53,7 +51,7 @@ class DateMenu extends StatelessWidget {
                     ),
                   ),
                   onChanged: (value) {
-                    context.read<SearchModel>().setYear(currentScreen, value!);
+                    context.read<SearchModel>().setYear(value!);
                   },
                 ),
                 CustomDropdownButton2(
@@ -67,7 +65,7 @@ class DateMenu extends StatelessWidget {
                     ),
                   ),
                   onChanged: (value) {
-                    context.read<SearchModel>().setMonth(currentScreen, value!);
+                    context.read<SearchModel>().setMonth(value!);
                   },
                 )
               ],
