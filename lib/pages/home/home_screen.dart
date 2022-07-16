@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
+    print("_createWidget");
     HomeEntity homeEntity = snapshot.data;
 
     return NotificationListener<ScrollNotification>(

@@ -29,14 +29,14 @@ class SearchMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> dataList = [];
+    Search searchList = context.select((SearchModel model) => model.searchList);
     for (var menu in _menuList) {
       dataList.add(Padding(
         padding: EdgeInsets.symmetric(
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),
         child: ClipOval(
           child: Material(
-            color:
-                getActive(context.watch<SearchModel>().searchList, menu['id']),
+            color: getActive(searchList, menu['id']),
             child: InkWell(
               customBorder: StadiumBorder(),
               onTap: () {
@@ -105,15 +105,15 @@ Widget menuDetail(id, loadData) {
   switch (id) {
     case 0:
       return GenreMenu(
-        loadData: () => loadData(),
+        loadData: loadData,
       );
     case 1:
       return TagMenu(
-        loadData: () => loadData(),
+        loadData: loadData,
       );
     case 2:
       return SortMenu(
-        loadData: () => loadData(),
+        loadData: loadData,
       );
     case 3:
       return BrandMenu(

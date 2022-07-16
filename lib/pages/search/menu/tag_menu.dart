@@ -12,7 +12,7 @@ class TagMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList;
+    Search search = context.select((SearchModel model) => model.searchList);
     return WillPopScope(
       onWillPop: () async {
         loadData();

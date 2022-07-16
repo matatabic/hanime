@@ -12,7 +12,7 @@ class SearchEngineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList;
+    Search search = context.select((SearchModel model) => model.searchList);
 
     return Container(
       color: Theme.of(context).primaryColor,

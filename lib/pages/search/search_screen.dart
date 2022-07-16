@@ -40,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen>
   late int totalPage;
   late int commendCount;
   List<SearchVideo> searchVideoList = [];
-
+  //存储分发
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -326,10 +326,8 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   @override
-  void dispose() async {
-    // context.read<SearchModel>().removeSearchList();
+  void dispose() {
     super.dispose();
-    // Provider.of<SearchModel>(context, listen: false).removeSearchList();
   }
 
   Future loadData(url) async {

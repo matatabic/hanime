@@ -12,7 +12,8 @@ class BrandMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList;
+    // Search search = context.watch<SearchModel>().searchList;
+    Search search = context.select((SearchModel model) => model.searchList);
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
       tagWidgetList.add(Material(
@@ -33,6 +34,7 @@ class BrandMenu extends StatelessWidget {
               )),
           child: InkWell(
             onTap: () {
+              // print("12321321");
               context.read<SearchModel>().selectedBrandHandle(title);
             },
             child: BrandDetail(
@@ -83,6 +85,7 @@ class BrandDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("BrandDetail: $title");
     return Container(
       padding: EdgeInsets.all(Adapt.px(10)),
       child: Text(
