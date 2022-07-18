@@ -36,85 +36,211 @@ class _SearchScreenState extends State<SearchScreen>
   bool get wantKeepAlive => true;
 
   var _futureBuilderFuture;
-  int page = 1;
-  late int totalPage;
-  late int commendCount;
-  List<SearchVideo> searchVideoList = [];
+  int _page = 1;
+  late int _totalPage;
+  late int _commendCount;
+  List<SearchVideo> _searchVideoList = [];
   //存储分发
+  String _htmlUrl = "";
+
+  String _query = "";
+  bool _broad = false;
+  int _genreIndex = 0;
+  int _sortIndex = 0;
+  int _durationIndex = 0;
+
+  dynamic _year;
+  dynamic _month;
+  List<String> _tagList = [];
+  List<String> _brandList = [];
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  double topHeight =
+  double _topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
-  void _onLoading(BuildContext context, bool loadMore) async {
-    print("_onLoading");
-    // await Future.delayed(Duration(milliseconds: 1000));
-    Search search = context.read<SearchModel>().searchList;
+  void _onLoading(dynamic data, bool loadMore) {
+    _saveData(data);
+    String newHtml = _jointHtml();
+    print(_htmlUrl);
+    print(newHtml);
+    // if (loadMore) {
+    //   if (_totalPage - _page > 0) {
+    //     //获取下一页数据
+    //     _htmlUrl = "$_htmlUrl&page=${_page + 1}";
+    //     loadData(_htmlUrl);
+    //     _page = _page + 1;
+    //     _refreshController.loadComplete();
+    //   } else {
+    //     //已经没有更多数据
+    //     _refreshController.loadNoData();
+    //   }
+    // } else {
+    //   //获取新的数据，相同的url就不执行
+    //   if (newHtml != _htmlUrl) {
+    //     _page = 1;
+    //     // searchVideoList = [];
+    //     // setState(() {
+    //     //   _futureBuilderFuture = loadData(htmlUrl);
+    //     // });
+    //     // context.read<SearchModel>().setHtmlUrl(htmlUrl);
+    //     _refreshController.loadComplete();
+    //   }
+    // }
+  }
 
-    var htmlUrl = "https://hanime1.me/search?query=${search.query}";
-
-    if (search.broad) {
-      htmlUrl = "$htmlUrl&broad=on";
-    }
-
-    if (search.genreIndex > 0) {
-      htmlUrl = "$htmlUrl&genre=${genre.data[search.genreIndex]}";
-    }
-
-    if (search.sortIndex > 0) {
-      htmlUrl = "$htmlUrl&sort=${genre.data[search.sortIndex]}";
-    }
-
-    if (search.durationIndex > 0) {
-      htmlUrl = "$htmlUrl&duration=${genre.data[search.durationIndex]}";
-    }
-
-    if (search.year != null && search.year != "全部") {
-      htmlUrl = "$htmlUrl&year=${search.year}";
-      if (search.month != null && search.month != "全部") {
-        htmlUrl = "$htmlUrl&month=${search.month}";
-      }
-    }
-
-    if (search.tagList.length > 0) {
-      for (String tag in search.tagList) {
-        htmlUrl = "$htmlUrl&tags[]=$tag";
-      }
-    }
-
-    if (search.brandList.length > 0) {
-      for (String brand in search.brandList) {
-        htmlUrl = "$htmlUrl&brands[]=$brand";
-      }
-    }
-
-    print(search.htmlUrl);
-    print(htmlUrl);
-
-    if (loadMore) {
-      if (totalPage - page > 0) {
-        htmlUrl = "$htmlUrl&page=${page + 1}";
-        await loadData(htmlUrl);
-        page = page + 1;
-        context.read<SearchModel>().setHtmlUrl(htmlUrl);
-        // setState(() {});
-        _refreshController.loadComplete();
-      } else {
-        _refreshController.loadNoData();
-      }
-    } else {
-      if (search.htmlUrl != htmlUrl) {
-        page = 1;
-        // searchVideoList = [];
-        // setState(() {
-        //   _futureBuilderFuture = loadData(htmlUrl);
-        // });
-        context.read<SearchModel>().setHtmlUrl(htmlUrl);
-        _refreshController.loadComplete();
-      }
+  void _saveData(dynamic data) {
+    switch (data['type']) {
+      case "query":
+        _query = data['data'];
+        break;
+      case "broad":
+        _broad = data['data'];
+        break;
+      case "genre":
+        _genreIndex = data['data'];
+        break;
+      case "sort":
+        _sortIndex = data['data'];
+        break;
+      case "duration":
+        _durationIndex = data['data'];
+        break;
+      case "year":
+        _year = data['data']['year'];
+        _month = data['data']['month'];
+        break;
+      case "tag":
+        _tagList = data['data'];
+        break;
+      case "brand":
+        _brandList = data['data'];
+        break;
     }
   }
+
+  String _jointHtml() {
+    String newHtml = "https://hanime1.me/search?query=";
+    if (_query.length > 0) {
+      newHtml = "htmlUrl$_query";
+    }
+
+    if (_broad) {
+      newHtml = "$newHtml&broad=on";
+    }
+
+    if (_genreIndex > 0) {
+      newHtml = "$newHtml&genre=${genre.data[_genreIndex]}";
+    }
+
+    if (_sortIndex > 0) {
+      newHtml = "$newHtml&sort=${genre.data[_sortIndex]}";
+    }
+
+    if (_durationIndex > 0) {
+      newHtml = "$newHtml&duration=${genre.data[_durationIndex]}";
+    }
+
+    if (_year != null && _year != "全部") {
+      newHtml = "$newHtml&year=$_year";
+      if (_month != null && _month != "全部") {
+        newHtml = "$newHtml&month=$_month";
+      }
+    }
+
+    if (_tagList.length > 0) {
+      for (String tag in _tagList) {
+        newHtml = "$newHtml&tags[]=$tag";
+      }
+    }
+
+    if (_brandList.length > 0) {
+      for (String brand in _brandList) {
+        newHtml = "$newHtml&brands[]=$brand";
+      }
+    }
+
+    return newHtml;
+  }
+
+  // void _onLoading(BuildContext context, bool loadMore) async {
+  //   print("_onLoading");
+  //   // await Future.delayed(Duration(milliseconds: 1000));
+  //   Search search = context.read<SearchModel>().searchList;
+  //
+  //   switch (loadMore) {
+  //     case true:
+  //       print('你的成绩是A');
+  //       break;
+  //     case false:
+  //       print('你的成绩是A');
+  //       break;
+  //   }
+  //
+  //   var htmlUrl = "https://hanime1.me/search?query=${search.query}";
+  //
+  //   if (search.broad) {
+  //     htmlUrl = "$htmlUrl&broad=on";
+  //   }
+  //
+  //   if (search.genreIndex > 0) {
+  //     htmlUrl = "$htmlUrl&genre=${genre.data[search.genreIndex]}";
+  //   }
+  //
+  //   if (search.sortIndex > 0) {
+  //     htmlUrl = "$htmlUrl&sort=${genre.data[search.sortIndex]}";
+  //   }
+  //
+  //   if (search.durationIndex > 0) {
+  //     htmlUrl = "$htmlUrl&duration=${genre.data[search.durationIndex]}";
+  //   }
+  //
+  //   if (search.year != null && search.year != "全部") {
+  //     htmlUrl = "$htmlUrl&year=${search.year}";
+  //     if (search.month != null && search.month != "全部") {
+  //       htmlUrl = "$htmlUrl&month=${search.month}";
+  //     }
+  //   }
+  //
+  //   if (search.tagList.length > 0) {
+  //     for (String tag in search.tagList) {
+  //       htmlUrl = "$htmlUrl&tags[]=$tag";
+  //     }
+  //   }
+  //
+  //   if (search.brandList.length > 0) {
+  //     for (String brand in search.brandList) {
+  //       htmlUrl = "$htmlUrl&brands[]=$brand";
+  //     }
+  //   }
+  //
+  //   print(search.htmlUrl);
+  //   print(htmlUrl);
+  //
+  //   if (loadMore) {
+  //     if (totalPage - page > 0) {
+  //       htmlUrl = "$htmlUrl&page=${page + 1}";
+  //       await loadData(htmlUrl);
+  //       page = page + 1;
+  //       // context.read<SearchModel>().setHtmlUrl(htmlUrl);
+  //       // setState(() {});
+  //       _refreshController.loadComplete();
+  //     } else {
+  //       _refreshController.loadNoData();
+  //     }
+  //   } else {
+  //     if (search.htmlUrl != htmlUrl) {
+  //       page = 1;
+  //       // searchVideoList = [];
+  //       // setState(() {
+  //       //   _futureBuilderFuture = loadData(htmlUrl);
+  //       // });
+  //       context.read<SearchModel>().setHtmlUrl(htmlUrl);
+  //       _refreshController.loadComplete();
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +248,7 @@ class _SearchScreenState extends State<SearchScreen>
     print("mainBUBBBB");
     return WillPopScope(
       onWillPop: () async {
-        context.read<SearchModel>().removeSearchList();
+        // context.read<SearchModel>().removeSearchList();
         return true;
       },
       child: Scaffold(
@@ -168,14 +294,15 @@ class _SearchScreenState extends State<SearchScreen>
                     floating: true,
                     stretch: true,
                     automaticallyImplyLeading: false,
-                    toolbarHeight: topHeight,
-                    expandedHeight: topHeight,
+                    toolbarHeight: _topHeight,
+                    expandedHeight: _topHeight,
                     flexibleSpace: Column(
                       children: [
                         SearchEngineScreen(
-                            loadData: () => _onLoading(context, false)),
+                            onQueryChange: (val) => {_query = val},
+                            loadData: (data) => _onLoading(data, false)),
                         SearchMenuScreen(
-                            loadData: () => _onLoading(context, false))
+                            loadData: (data) => _onLoading(context, false))
                       ],
                     ),
                   ),
@@ -198,8 +325,9 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
+    print("_buildFuture");
     double surHeight = MediaQuery.of(context).size.height -
-        topHeight -
+        _topHeight -
         MediaQueryData.fromWindow(window).padding.top -
         40 -
         kBottomNavigationBarHeight;
@@ -251,24 +379,25 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
+    print("_createWidget");
     List<SearchVideo> videoList = snapshot.data;
 
     return SliverGrid(
       //调整间距
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           //横轴元素个数
-          crossAxisCount: commendCount,
+          crossAxisCount: _commendCount,
           //纵轴间距
           mainAxisSpacing: 5.0,
           //横轴间距
           crossAxisSpacing: 5.0,
           //子组件宽高长度比例
-          childAspectRatio: commendCount == 3 ? 2 / 3 : 1.1),
+          childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           String heroTag = UniqueKey().toString();
-          return commendCount == 3
+          return _commendCount == 3
               ? Anime3Card(
                   onTap: () {
                     Navigator.push(
@@ -335,10 +464,10 @@ class _SearchScreenState extends State<SearchScreen>
 
     SearchEntity searchEntity = SearchEntity.fromJson(data);
 
-    commendCount = searchEntity.commendCount;
-    totalPage = searchEntity.page;
-    searchVideoList.addAll(searchEntity.video);
+    _commendCount = searchEntity.commendCount;
+    _totalPage = searchEntity.page;
+    _searchVideoList.addAll(searchEntity.video);
 
-    return searchVideoList;
+    return _searchVideoList;
   }
 }

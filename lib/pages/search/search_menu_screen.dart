@@ -22,7 +22,12 @@ List _menuList = [
 ];
 
 class SearchMenuScreen extends StatelessWidget {
-  final VoidCallback loadData;
+  final Function(dynamic) loadData;
+  final Function(dynamic) onQueryChange;
+  final Function(dynamic) onQueryChange;
+  final Function(dynamic) onQueryChange;
+  final Function(dynamic) onQueryChange;
+  final Function(dynamic) onQueryChange;
 
   SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
 
@@ -40,12 +45,12 @@ class SearchMenuScreen extends StatelessWidget {
             child: InkWell(
               customBorder: StadiumBorder(),
               onTap: () {
-                showBarModalBottomSheet(
-                    expand: true,
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) =>
-                        menuDetail(menu['id'], () => loadData()));
+                // showBarModalBottomSheet(
+                //     expand: true,
+                //     context: context,
+                //     backgroundColor: Colors.transparent,
+                //     builder: (context) =>
+                //         menuDetail(menu['id'], () => loadData()));
               },
               child: Container(
                 height: Adapt.px(100),
