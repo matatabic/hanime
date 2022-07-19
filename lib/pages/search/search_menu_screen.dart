@@ -25,12 +25,17 @@ class SearchMenuScreen extends StatelessWidget {
   final Function(dynamic) loadData;
   final int genreIndex;
   final int sortIndex;
+  final int durationIndex;
+  final int brandIndex;
+  final int tagIndex;
+  final int dateIndex;
 
   SearchMenuScreen(
       {Key? key,
       required this.loadData,
       required this.genreIndex,
-      required this.sortIndex})
+      required this.sortIndex,
+      required this.durationIndex})
       : super(key: key);
 
   @override
@@ -78,6 +83,7 @@ class SearchMenuScreen extends StatelessWidget {
                         case 5:
                           return DurationMenu(
                             loadData: loadData,
+                            durationIndex: durationIndex,
                           );
                         default:
                           return Container();

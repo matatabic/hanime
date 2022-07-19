@@ -168,16 +168,6 @@ class _SearchScreenState extends State<SearchScreen>
   //   print("_onLoading");
   //   // await Future.delayed(Duration(milliseconds: 1000));
   //   Search search = context.read<SearchModel>().searchList;
-  //
-  //   switch (loadMore) {
-  //     case true:
-  //       print('你的成绩是A');
-  //       break;
-  //     case false:
-  //       print('你的成绩是A');
-  //       break;
-  //   }
-  //
   //   var htmlUrl = "https://hanime1.me/search?query=${search.query}";
   //
   //   if (search.broad) {
@@ -303,10 +293,15 @@ class _SearchScreenState extends State<SearchScreen>
                             loadData: (dynamic data) =>
                                 _onLoading(data, false)),
                         SearchMenuScreen(
-                          loadData: (dynamic data) => _onLoading(data, false),
-                          genreIndex: _genreIndex,
-                          sortIndex: _sortIndex,
-                        )
+                            loadData: (dynamic data) => _onLoading(data, false),
+                            genreIndex: _genreIndex,
+                            sortIndex: _sortIndex,
+                            durationIndex: _durationIndex,
+                            broad: _broad,
+                            year: _year,
+                            month: _month,
+                            tagList: _tagList,
+                            brandList: _brandList)
                       ],
                     ),
                   ),

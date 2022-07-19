@@ -6,17 +6,32 @@ import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
-class DurationMenu extends StatelessWidget {
+class DurationMenu extends StatefulWidget {
   final Function(dynamic) loadData;
+  final int durationIndex;
 
-  const DurationMenu({Key? key, required this.loadData}) : super(key: key);
+  const DurationMenu(
+      {Key? key, required this.loadData, required this.durationIndex})
+      : super(key: key);
+
+  @override
+  State<DurationMenu> createState() => _DurationMenuState();
+}
+
+class _DurationMenuState extends State<DurationMenu> {
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.durationIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.select((SearchModel model) => model.searchList);
     return WillPopScope(
       onWillPop: () async {
-        loadData({});
+        widget.loadData({"type": "duration", "data": _index});
         return true;
       },
       child: Scaffold(
@@ -27,7 +42,7 @@ class DurationMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                loadData({});
+                widget.loadData({"type": "duration", "data": _index});
                 Navigator.pop(context);
               },
             ),
@@ -37,7 +52,7 @@ class DurationMenu extends StatelessWidget {
             padding: EdgeInsets.only(top: Adapt.px(20)),
             itemBuilder: (BuildContext context, int index) {
               return Material(
-                color: index == search.durationIndex
+                color: index == _index
                     ? Theme.of(context).primaryColor
                     : Colors.black,
                 child: MenuRow(
