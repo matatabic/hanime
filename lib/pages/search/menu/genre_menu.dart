@@ -2,21 +2,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/component/menu_row.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 
-class GenreMenu extends StatelessWidget {
-  final VoidCallback loadData;
+class GenreMenu extends StatefulWidget {
+  final Function(dynamic) loadData;
+  final int genreIndex;
 
-  GenreMenu({Key? key, required this.loadData}) : super(key: key);
+  const GenreMenu({Key? key, required this.loadData, required this.genreIndex})
+      : super(key: key);
+
+  @override
+  _GenreMenuState createState() => _GenreMenuState();
+}
+
+class _GenreMenuState extends State<GenreMenu> {
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.genreIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.select((SearchModel model) => model.searchList);
     return WillPopScope(
       onWillPop: () async {
-        loadData();
+        widget.loadData({"type": "genre", "data": _index});
         return true;
       },
       child: Scaffold(
@@ -27,7 +39,7 @@ class GenreMenu extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.close_rounded),
             onPressed: () {
-              loadData();
+              widget.loadData({"type": "genre", "data": _index});
               Navigator.pop(context);
             },
           ),
@@ -38,13 +50,16 @@ class GenreMenu extends StatelessWidget {
           physics: const ClampingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return Material(
-              color: index == search.genreIndex
+              color: index == _index
                   ? Theme.of(context).primaryColor
                   : Colors.black,
               child: MenuRow(
                 title: genre.data[index],
                 onTap: () {
-                  context.read<SearchModel>().setGenreIndex(index);
+                  setState(() {
+                    _index = index;
+                  });
+                  // context.read<SearchModel>().setGenreIndex(index);
                 },
               ),
             );

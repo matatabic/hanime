@@ -299,10 +299,14 @@ class _SearchScreenState extends State<SearchScreen>
                     flexibleSpace: Column(
                       children: [
                         SearchEngineScreen(
-                            onQueryChange: (val) => {_query = val},
-                            loadData: (data) => _onLoading(data, false)),
+                            onQueryChange: (String val) => {_query = val},
+                            loadData: (dynamic data) =>
+                                _onLoading(data, false)),
                         SearchMenuScreen(
-                            loadData: (data) => _onLoading(context, false))
+                          loadData: (dynamic data) => _onLoading(data, false),
+                          genreIndex: _genreIndex,
+                          sortIndex: _sortIndex,
+                        )
                       ],
                     ),
                   ),

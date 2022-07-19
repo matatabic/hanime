@@ -11,7 +11,7 @@ class SearchEngineScreen extends StatelessWidget {
       {Key? key, required this.loadData, required this.onQueryChange})
       : super(key: key);
 
-  late final String queryVal = "";
+  late String queryVal;
 
   @override
   Widget build(BuildContext context) {

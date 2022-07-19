@@ -6,7 +6,7 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class BrandMenu extends StatelessWidget {
-  final VoidCallback loadData;
+  final Function(dynamic) loadData;
 
   const BrandMenu({Key? key, required this.loadData}) : super(key: key);
 
@@ -47,7 +47,7 @@ class BrandMenu extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        loadData();
+        loadData({});
         return true;
       },
       child: Scaffold(
@@ -58,7 +58,7 @@ class BrandMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                loadData();
+                loadData({});
                 Navigator.pop(context);
               },
             ),

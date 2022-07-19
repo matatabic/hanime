@@ -7,7 +7,7 @@ import 'package:hanime/services/search_services.dart';
 import 'package:provider/src/provider.dart';
 
 class DateMenu extends StatelessWidget {
-  final VoidCallback loadData;
+  final Function(dynamic) loadData;
 
   const DateMenu({Key? key, required this.loadData}) : super(key: key);
 
@@ -16,7 +16,7 @@ class DateMenu extends StatelessWidget {
     Search search = context.select((SearchModel model) => model.searchList);
     return WillPopScope(
       onWillPop: () async {
-        loadData();
+        loadData({});
         return true;
       },
       child: Scaffold(
@@ -27,7 +27,7 @@ class DateMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                loadData();
+                loadData({});
                 Navigator.pop(context);
               },
             ),

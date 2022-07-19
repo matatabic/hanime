@@ -23,13 +23,15 @@ List _menuList = [
 
 class SearchMenuScreen extends StatelessWidget {
   final Function(dynamic) loadData;
-  final Function(dynamic) onQueryChange;
-  final Function(dynamic) onQueryChange;
-  final Function(dynamic) onQueryChange;
-  final Function(dynamic) onQueryChange;
-  final Function(dynamic) onQueryChange;
+  final int genreIndex;
+  final int sortIndex;
 
-  SearchMenuScreen({Key? key, required this.loadData}) : super(key: key);
+  SearchMenuScreen(
+      {Key? key,
+      required this.loadData,
+      required this.genreIndex,
+      required this.sortIndex})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +47,44 @@ class SearchMenuScreen extends StatelessWidget {
             child: InkWell(
               customBorder: StadiumBorder(),
               onTap: () {
-                // showBarModalBottomSheet(
-                //     expand: true,
-                //     context: context,
-                //     backgroundColor: Colors.transparent,
-                //     builder: (context) =>
-                //         menuDetail(menu['id'], () => loadData()));
+                showBarModalBottomSheet(
+                    expand: true,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      switch (menu['id']) {
+                        case 0:
+                          return GenreMenu(
+                            loadData: loadData,
+                            genreIndex: genreIndex,
+                          );
+                        case 1:
+                          return TagMenu(
+                            loadData: loadData,
+                          );
+                        case 2:
+                          return SortMenu(
+                            loadData: loadData,
+                            sortIndex: sortIndex,
+                          );
+                        case 3:
+                          return BrandMenu(
+                            loadData: loadData,
+                          );
+                        case 4:
+                          return DateMenu(
+                            loadData: loadData,
+                          );
+                        case 5:
+                          return DurationMenu(
+                            loadData: loadData,
+                          );
+                        default:
+                          return Container();
+                      }
+                    });
               },
+              // menuDetail(genreIndex,menu['id'], loadData)
               child: Container(
                 height: Adapt.px(100),
                 width: Adapt.px(100),
@@ -104,35 +137,4 @@ Color getActive(Search searchState, index) {
           : Color.fromRGBO(51, 51, 51, 1);
   }
   return Color.fromRGBO(51, 51, 51, 1);
-}
-
-Widget menuDetail(id, loadData) {
-  switch (id) {
-    case 0:
-      return GenreMenu(
-        loadData: loadData,
-      );
-    case 1:
-      return TagMenu(
-        loadData: loadData,
-      );
-    case 2:
-      return SortMenu(
-        loadData: loadData,
-      );
-    case 3:
-      return BrandMenu(
-        loadData: () => loadData(),
-      );
-    case 4:
-      return DateMenu(
-        loadData: () => loadData(),
-      );
-    case 5:
-      return DurationMenu(
-        loadData: () => loadData(),
-      );
-  }
-
-  return Container();
 }
