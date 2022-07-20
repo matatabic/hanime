@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/src/provider.dart';
 
 import 'menu/brand_menu.dart';
 import 'menu/date_menu.dart';
@@ -23,32 +21,39 @@ List _menuList = [
 
 class SearchMenuScreen extends StatelessWidget {
   final Function(dynamic) loadData;
+  final bool broad;
   final int genreIndex;
   final int sortIndex;
   final int durationIndex;
-  final int brandIndex;
-  final int tagIndex;
-  final int dateIndex;
+  final String year;
+  final String month;
+  final List<String> tagList;
+  final List<String> brandList;
 
   SearchMenuScreen(
       {Key? key,
+      required this.broad,
       required this.loadData,
       required this.genreIndex,
       required this.sortIndex,
-      required this.durationIndex})
+      required this.durationIndex,
+      required this.year,
+      required this.month,
+      required this.tagList,
+      required this.brandList})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> dataList = [];
-    Search searchList = context.select((SearchModel model) => model.searchList);
+
     for (var menu in _menuList) {
       dataList.add(Padding(
         padding: EdgeInsets.symmetric(
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),
         child: ClipOval(
           child: Material(
-            color: getActive(searchList, menu['id']),
+            color: getActive(this, menu['id']),
             child: InkWell(
               customBorder: StadiumBorder(),
               onTap: () {
@@ -115,30 +120,30 @@ class SearchMenuScreen extends StatelessWidget {
   }
 }
 
-Color getActive(Search searchState, index) {
+Color getActive(that, index) {
   switch (index) {
     case 0:
-      return searchState.genreIndex > 0
+      return that.genreIndex > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 1:
-      return searchState.tagList.length > 0
+      return that.tagList.length > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 2:
-      return searchState.sortIndex > 0
+      return that.sortIndex > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 3:
-      return searchState.brandList.length > 0
+      return that.brandList.length > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 4:
-      return searchState.year != "全部" && searchState.year != null
+      return that.year != "全部" && that.year != null
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
     case 5:
-      return searchState.durationIndex > 0
+      return that.durationIndex > 0
           ? Colors.orangeAccent
           : Color.fromRGBO(51, 51, 51, 1);
   }
