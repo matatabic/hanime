@@ -149,3 +149,37 @@ Color getActive(that, index) {
   }
   return Color.fromRGBO(51, 51, 51, 1);
 }
+
+Widget getMenuDetail(that, index, loadData) {
+  switch (index) {
+    case 0:
+      return GenreMenu(
+        loadData: loadData,
+        genreIndex: that.genreIndex,
+      );
+    case 1:
+      return TagMenu(
+        loadData: loadData,
+      );
+    case 2:
+      return SortMenu(
+        loadData: loadData,
+        sortIndex: that.sortIndex,
+      );
+    case 3:
+      return BrandMenu(
+        loadData: loadData,
+      );
+    case 4:
+      return DateMenu(
+        loadData: loadData,
+      );
+    case 5:
+      return DurationMenu(
+        loadData: loadData,
+        durationIndex: that.durationIndex,
+      );
+    default:
+      return Container();
+  }
+}
