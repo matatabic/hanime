@@ -7,12 +7,20 @@ import 'package:provider/src/provider.dart';
 
 class TagMenu extends StatelessWidget {
   final Function(dynamic) loadData;
+  final bool broad;
+  final List<String> customTagList;
+  final List<String> tagList;
 
-  const TagMenu({Key? key, required this.loadData}) : super(key: key);
+  const TagMenu(
+      {Key? key,
+      required this.loadData,
+      required this.customTagList,
+      required this.tagList,
+      required this.broad})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Search search = context.select((SearchModel model) => model.searchList);
     return WillPopScope(
       onWillPop: () async {
         loadData({});
@@ -55,7 +63,7 @@ class TagMenu extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Switch(
-                              value: search.broad,
+                              value: broad,
                               activeColor: Theme.of(context).primaryColor,
                               onChanged: (value) {
                                 context.read<SearchModel>().setBroadFlag(value);
@@ -74,12 +82,14 @@ class TagMenu extends StatelessWidget {
                       itemCount: searchTag.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         return TagContainer(
+                            customTagList: customTagList,
                             index: index,
+                            // active: tagList.contains(searchTag.data[index]),
                             searchTagData: searchTag.data[index],
                             onTap: (String title) {
-                              context
-                                  .read<SearchModel>()
-                                  .selectedTagHandle(title);
+                              // context
+                              //     .read<SearchModel>()
+                              //     .selectedTagHandle(title);
                             });
                       }),
                 ],
@@ -91,12 +101,15 @@ class TagMenu extends StatelessWidget {
 }
 
 class TagContainer extends StatelessWidget {
+  final List<String> customTagList;
+  // final List<String> tagList;
   final int index;
   final SearchTagData searchTagData;
   final Function(String title) onTap;
 
   const TagContainer(
       {Key? key,
+      required this.customTagList,
       required this.index,
       required this.searchTagData,
       required this.onTap})
@@ -107,7 +120,7 @@ class TagContainer extends StatelessWidget {
     Search search = context.watch<SearchModel>().searchList;
     List<Widget> tagWidgetList = [];
     if (index == 0) {
-      for (String tag in search.customTagList) {
+      for (String tag in customTagList) {
         tagWidgetList.add(InkWell(
           onTap: () {
             onTap(tag);

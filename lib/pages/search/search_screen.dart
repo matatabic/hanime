@@ -51,6 +51,7 @@ class _SearchScreenState extends State<SearchScreen>
 
   dynamic _year;
   dynamic _month;
+  List<String> _customTagList = [];
   List<String> _tagList = [];
   List<String> _brandList = [];
 
@@ -164,74 +165,6 @@ class _SearchScreenState extends State<SearchScreen>
     return newHtml;
   }
 
-  // void _onLoading(BuildContext context, bool loadMore) async {
-  //   print("_onLoading");
-  //   // await Future.delayed(Duration(milliseconds: 1000));
-  //   Search search = context.read<SearchModel>().searchList;
-  //   var htmlUrl = "https://hanime1.me/search?query=${search.query}";
-  //
-  //   if (search.broad) {
-  //     htmlUrl = "$htmlUrl&broad=on";
-  //   }
-  //
-  //   if (search.genreIndex > 0) {
-  //     htmlUrl = "$htmlUrl&genre=${genre.data[search.genreIndex]}";
-  //   }
-  //
-  //   if (search.sortIndex > 0) {
-  //     htmlUrl = "$htmlUrl&sort=${genre.data[search.sortIndex]}";
-  //   }
-  //
-  //   if (search.durationIndex > 0) {
-  //     htmlUrl = "$htmlUrl&duration=${genre.data[search.durationIndex]}";
-  //   }
-  //
-  //   if (search.year != null && search.year != "全部") {
-  //     htmlUrl = "$htmlUrl&year=${search.year}";
-  //     if (search.month != null && search.month != "全部") {
-  //       htmlUrl = "$htmlUrl&month=${search.month}";
-  //     }
-  //   }
-  //
-  //   if (search.tagList.length > 0) {
-  //     for (String tag in search.tagList) {
-  //       htmlUrl = "$htmlUrl&tags[]=$tag";
-  //     }
-  //   }
-  //
-  //   if (search.brandList.length > 0) {
-  //     for (String brand in search.brandList) {
-  //       htmlUrl = "$htmlUrl&brands[]=$brand";
-  //     }
-  //   }
-  //
-  //   print(search.htmlUrl);
-  //   print(htmlUrl);
-  //
-  //   if (loadMore) {
-  //     if (totalPage - page > 0) {
-  //       htmlUrl = "$htmlUrl&page=${page + 1}";
-  //       await loadData(htmlUrl);
-  //       page = page + 1;
-  //       // context.read<SearchModel>().setHtmlUrl(htmlUrl);
-  //       // setState(() {});
-  //       _refreshController.loadComplete();
-  //     } else {
-  //       _refreshController.loadNoData();
-  //     }
-  //   } else {
-  //     if (search.htmlUrl != htmlUrl) {
-  //       page = 1;
-  //       // searchVideoList = [];
-  //       // setState(() {
-  //       //   _futureBuilderFuture = loadData(htmlUrl);
-  //       // });
-  //       context.read<SearchModel>().setHtmlUrl(htmlUrl);
-  //       _refreshController.loadComplete();
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -300,6 +233,7 @@ class _SearchScreenState extends State<SearchScreen>
                             broad: _broad,
                             year: _year,
                             month: _month,
+                            customTagList: _customTagList,
                             tagList: _tagList,
                             brandList: _brandList)
                       ],

@@ -1,53 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 
 class BrandMenu extends StatelessWidget {
   final Function(dynamic) loadData;
+  final List<String> brandList;
 
-  const BrandMenu({Key? key, required this.loadData}) : super(key: key);
+  const BrandMenu({Key? key, required this.loadData, required this.brandList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Search search = context.watch<SearchModel>().searchList;
-    Search search = context.select((SearchModel model) => model.searchList);
+    print('BrandMenu build');
     List<Widget> tagWidgetList = [];
     for (String title in brand.data) {
-      tagWidgetList.add(Material(
-        borderRadius: BorderRadius.all(
-          Radius.circular(Adapt.px(15)),
-        ),
-        color: search.brandList.indexOf(title) > -1
-            ? Theme.of(context).primaryColor
-            : Colors.black,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(Adapt.px(15)),
-              ),
-              border: new Border.all(
-                color: Colors.grey, //边框颜色
-                width: Adapt.px(5), //边框粗细
-              )),
-          child: InkWell(
-            onTap: () {
-              // print("12321321");
-              context.read<SearchModel>().selectedBrandHandle(title);
-            },
-            child: BrandDetail(
-              title: title,
-            ),
-          ),
-        ),
-      ));
+      tagWidgetList.add(BrandDetail(
+          brandList: brandList,
+          title: title,
+          active: brandList.contains(title)));
     }
 
     return WillPopScope(
       onWillPop: () async {
-        loadData({});
+        // loadData({});
         return true;
       },
       child: Scaffold(
@@ -58,7 +34,7 @@ class BrandMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                loadData({});
+                // loadData({});
                 Navigator.pop(context);
               },
             ),
@@ -79,18 +55,72 @@ class BrandMenu extends StatelessWidget {
   }
 }
 
-class BrandDetail extends StatelessWidget {
+// search.brandList.indexOf(title) > -1
+class BrandDetail extends StatefulWidget {
+  final List<String> brandList;
   final String title;
-  const BrandDetail({Key? key, required this.title}) : super(key: key);
+  final bool active;
+
+  const BrandDetail(
+      {Key? key,
+      required this.brandList,
+      required this.title,
+      required this.active})
+      : super(key: key);
+
+  @override
+  State<BrandDetail> createState() => _BrandDetailState();
+}
+
+class _BrandDetailState extends State<BrandDetail> {
+  bool _active = false;
+
+  @override
+  initState() {
+    super.initState();
+    _active = widget.active;
+  }
+
+  void _onPressHandler() {
+    setState(() {
+      _active = !_active;
+    });
+    if (_active) {
+      widget.brandList.add(widget.title);
+    } else {
+      widget.brandList.remove(widget.title);
+    }
+    print('_brandList: $widget.brandList');
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("BrandDetail: $title");
-    return Container(
-      padding: EdgeInsets.all(Adapt.px(10)),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: Adapt.px(34)),
+    print("_BrandDetailState build");
+    return Material(
+      borderRadius: BorderRadius.all(
+        Radius.circular(Adapt.px(15)),
+      ),
+      color: _active ? Theme.of(context).primaryColor : Colors.black,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(Adapt.px(15)),
+            ),
+            border: new Border.all(
+              color: Colors.grey, //边框颜色
+              width: Adapt.px(5), //边框粗细
+            )),
+        child: InkWell(
+            onTap: () {
+              _onPressHandler();
+            },
+            child: Container(
+              padding: EdgeInsets.all(Adapt.px(10)),
+              child: Text(
+                widget.title,
+                style: TextStyle(fontSize: Adapt.px(34)),
+              ),
+            )),
       ),
     );
   }

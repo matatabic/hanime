@@ -25,8 +25,9 @@ class SearchMenuScreen extends StatelessWidget {
   final int genreIndex;
   final int sortIndex;
   final int durationIndex;
-  final String year;
-  final String month;
+  final year;
+  final month;
+  final List<String> customTagList;
   final List<String> tagList;
   final List<String> brandList;
 
@@ -39,6 +40,7 @@ class SearchMenuScreen extends StatelessWidget {
       required this.durationIndex,
       required this.year,
       required this.month,
+      required this.customTagList,
       required this.tagList,
       required this.brandList})
       : super(key: key);
@@ -62,37 +64,7 @@ class SearchMenuScreen extends StatelessWidget {
                     context: context,
                     backgroundColor: Colors.transparent,
                     builder: (context) {
-                      switch (menu['id']) {
-                        case 0:
-                          return GenreMenu(
-                            loadData: loadData,
-                            genreIndex: genreIndex,
-                          );
-                        case 1:
-                          return TagMenu(
-                            loadData: loadData,
-                          );
-                        case 2:
-                          return SortMenu(
-                            loadData: loadData,
-                            sortIndex: sortIndex,
-                          );
-                        case 3:
-                          return BrandMenu(
-                            loadData: loadData,
-                          );
-                        case 4:
-                          return DateMenu(
-                            loadData: loadData,
-                          );
-                        case 5:
-                          return DurationMenu(
-                            loadData: loadData,
-                            durationIndex: durationIndex,
-                          );
-                        default:
-                          return Container();
-                      }
+                      return getMenuDetail(this, menu['id'], loadData);
                     });
               },
               // menuDetail(genreIndex,menu['id'], loadData)
@@ -160,6 +132,9 @@ Widget getMenuDetail(that, index, loadData) {
     case 1:
       return TagMenu(
         loadData: loadData,
+        broad: that.broad,
+        customTagList: that.customTagList,
+        tagList: that.tagList,
       );
     case 2:
       return SortMenu(
@@ -169,10 +144,13 @@ Widget getMenuDetail(that, index, loadData) {
     case 3:
       return BrandMenu(
         loadData: loadData,
+        brandList: that.brandList,
       );
     case 4:
       return DateMenu(
         loadData: loadData,
+        year: that.year,
+        month: that.month,
       );
     case 5:
       return DurationMenu(
