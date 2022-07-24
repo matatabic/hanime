@@ -34,7 +34,6 @@ class TagMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                loadData({});
                 Navigator.pop(context);
               },
             ),
@@ -46,36 +45,7 @@ class TagMenu extends StatelessWidget {
             child: Container(
               child: Column(
                 children: [
-                  Container(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: Adapt.px(32), vertical: Adapt.px(15)),
-                    height: Adapt.px(220),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "廣泛配對",
-                              style: TextStyle(
-                                  fontSize: Adapt.px(45),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Switch(
-                              value: broad,
-                              activeColor: Theme.of(context).primaryColor,
-                              onChanged: (value) {
-                                context.read<SearchModel>().setBroadFlag(value);
-                              },
-                            ),
-                          ],
-                        ),
-                        Container(
-                            child: Text("較多結果，較不精準。配對所有包含任何一個選擇的標籤的影片，而非全部標籤。"))
-                      ],
-                    ),
-                  ),
+                  BroadContainer(broad: broad),
                   ListView.builder(
                       shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
@@ -84,6 +54,7 @@ class TagMenu extends StatelessWidget {
                         return TagContainer(
                             customTagList: customTagList,
                             index: index,
+                            tagList: tagList,
                             // active: tagList.contains(searchTag.data[index]),
                             searchTagData: searchTag.data[index],
                             onTap: (String title) {
@@ -102,7 +73,7 @@ class TagMenu extends StatelessWidget {
 
 class TagContainer extends StatelessWidget {
   final List<String> customTagList;
-  // final List<String> tagList;
+  final List<String> tagList;
   final int index;
   final SearchTagData searchTagData;
   final Function(String title) onTap;
@@ -110,6 +81,7 @@ class TagContainer extends StatelessWidget {
   const TagContainer(
       {Key? key,
       required this.customTagList,
+      required this.tagList,
       required this.index,
       required this.searchTagData,
       required this.onTap})
@@ -122,29 +94,22 @@ class TagContainer extends StatelessWidget {
     if (index == 0) {
       for (String tag in customTagList) {
         tagWidgetList.add(InkWell(
-          onTap: () {
-            onTap(tag);
-          },
-          child: TagDetail(
+            onTap: () {
+              onTap(tag);
+            },
+            child: TagDetail(
               title: tag,
-              color: search.tagList.indexOf(tag) > -1
-                  ? Theme.of(context).primaryColor
-                  : Colors.black),
-        ));
+              active: search.tagList.indexOf(tag) > -1,
+            )));
       }
     }
     for (String title in searchTagData.data) {
       tagWidgetList.add(InkWell(
-        onTap: () {
-          onTap(title);
-        },
-        child: TagDetail(
-          title: title,
-          color: search.tagList.indexOf(title) > -1
-              ? Theme.of(context).primaryColor
-              : Colors.black,
-        ),
-      ));
+          onTap: () {
+            onTap(title);
+          },
+          child: TagDetail(
+              title: title, active: search.tagList.indexOf(title) > -1)));
     }
 
     return Container(
@@ -174,19 +139,83 @@ class TagContainer extends StatelessWidget {
   }
 }
 
-class TagDetail extends StatelessWidget {
-  final String title;
-  final Color color;
+class BroadContainer extends StatefulWidget {
+  final bool broad;
 
-  const TagDetail({Key? key, required this.title, required this.color})
+  const BroadContainer({Key? key, required this.broad}) : super(key: key);
+
+  @override
+  State<BroadContainer> createState() => _BroadContainerState();
+}
+
+class _BroadContainerState extends State<BroadContainer> {
+  bool _broad = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _broad = widget.broad;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color.fromRGBO(51, 51, 51, 1),
+      padding: EdgeInsets.symmetric(
+          horizontal: Adapt.px(32), vertical: Adapt.px(15)),
+      height: Adapt.px(220),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "廣泛配對",
+                style: TextStyle(
+                    fontSize: Adapt.px(45), fontWeight: FontWeight.bold),
+              ),
+              Switch(
+                value: _broad,
+                activeColor: Theme.of(context).primaryColor,
+                onChanged: (value) {
+                  context.read<SearchModel>().setBroadFlag(value);
+                },
+              ),
+            ],
+          ),
+          Text("較多結果，較不精準。配對所有包含任何一個選擇的標籤的影片，而非全部標籤。")
+        ],
+      ),
+    );
+  }
+}
+
+class TagDetail extends StatefulWidget {
+  final String title;
+  final bool active;
+
+  const TagDetail({Key? key, required this.title, required this.active})
       : super(key: key);
+
+  @override
+  State<TagDetail> createState() => _TagDetailState();
+}
+
+class _TagDetailState extends State<TagDetail> {
+  bool _active = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _active = widget.active;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Adapt.px(10)),
       decoration: BoxDecoration(
-          color: color,
+          color: _active ? Theme.of(context).primaryColor : Colors.black,
           borderRadius: BorderRadius.all(
             Radius.circular(Adapt.px(15)),
           ),
@@ -195,7 +224,7 @@ class TagDetail extends StatelessWidget {
             width: Adapt.px(5), //边框粗细
           )),
       child: Text(
-        title,
+        widget.title,
         style: TextStyle(fontSize: Adapt.px(34)),
       ),
     );
