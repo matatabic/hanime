@@ -108,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen>
       case "duration":
         _durationIndex = data['data'];
         break;
-      case "year":
+      case "date":
         _year = data['data']['year'];
         _month = data['data']['month'];
         break;

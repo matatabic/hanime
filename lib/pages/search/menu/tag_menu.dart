@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 
 class TagMenu extends StatelessWidget {
   final Function(dynamic) loadData;
@@ -23,7 +21,7 @@ class TagMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        loadData({});
+        loadData({"type": "broad", "data": _broad});
         return true;
       },
       child: Scaffold(
@@ -34,6 +32,7 @@ class TagMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
+                loadData({"type": "broad", "data": _broad});
                 Navigator.pop(context);
               },
             ),
@@ -56,12 +55,7 @@ class TagMenu extends StatelessWidget {
                             index: index,
                             tagList: tagList,
                             // active: tagList.contains(searchTag.data[index]),
-                            searchTagData: searchTag.data[index],
-                            onTap: (String title) {
-                              // context
-                              //     .read<SearchModel>()
-                              //     .selectedTagHandle(title);
-                            });
+                            searchTagData: searchTag.data[index]);
                       }),
                 ],
               ),
@@ -71,45 +65,43 @@ class TagMenu extends StatelessWidget {
   }
 }
 
-class TagContainer extends StatelessWidget {
+class TagContainer extends StatefulWidget {
   final List<String> customTagList;
   final List<String> tagList;
   final int index;
   final SearchTagData searchTagData;
-  final Function(String title) onTap;
 
   const TagContainer(
       {Key? key,
       required this.customTagList,
       required this.tagList,
       required this.index,
-      required this.searchTagData,
-      required this.onTap})
+      required this.searchTagData})
       : super(key: key);
 
   @override
+  State<TagContainer> createState() => _TagContainerState();
+}
+
+class _TagContainerState extends State<TagContainer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Search search = context.watch<SearchModel>().searchList;
     List<Widget> tagWidgetList = [];
-    if (index == 0) {
-      for (String tag in customTagList) {
-        tagWidgetList.add(InkWell(
-            onTap: () {
-              onTap(tag);
-            },
-            child: TagDetail(
-              title: tag,
-              active: search.tagList.indexOf(tag) > -1,
-            )));
-      }
+    if (widget.index == 0) {
+      print("_TagContainerState build");
+      print(widget.customTagList);
+      widget.searchTagData.data.insertAll(0, widget.customTagList);
     }
-    for (String title in searchTagData.data) {
-      tagWidgetList.add(InkWell(
-          onTap: () {
-            onTap(title);
-          },
-          child: TagDetail(
-              title: title, active: search.tagList.indexOf(title) > -1)));
+    for (String title in widget.searchTagData.data) {
+      tagWidgetList.add(TagDetail(
+          tagList: widget.tagList,
+          title: title,
+          active: widget.tagList.indexOf(title) > -1));
     }
 
     return Container(
@@ -121,7 +113,7 @@ class TagContainer extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: Adapt.px(10)),
             child: Text(
-              searchTagData.label,
+              widget.searchTagData.label,
               style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
@@ -148,9 +140,9 @@ class BroadContainer extends StatefulWidget {
   State<BroadContainer> createState() => _BroadContainerState();
 }
 
-class _BroadContainerState extends State<BroadContainer> {
-  bool _broad = false;
+bool _broad = false;
 
+class _BroadContainerState extends State<BroadContainer> {
   @override
   void initState() {
     super.initState();
@@ -178,7 +170,9 @@ class _BroadContainerState extends State<BroadContainer> {
                 value: _broad,
                 activeColor: Theme.of(context).primaryColor,
                 onChanged: (value) {
-                  context.read<SearchModel>().setBroadFlag(value);
+                  setState(() {
+                    _broad = value;
+                  });
                 },
               ),
             ],
@@ -191,10 +185,15 @@ class _BroadContainerState extends State<BroadContainer> {
 }
 
 class TagDetail extends StatefulWidget {
+  final List<String> tagList;
   final String title;
   final bool active;
 
-  const TagDetail({Key? key, required this.title, required this.active})
+  const TagDetail(
+      {Key? key,
+      required this.tagList,
+      required this.title,
+      required this.active})
       : super(key: key);
 
   @override
@@ -210,22 +209,39 @@ class _TagDetailState extends State<TagDetail> {
     _active = widget.active;
   }
 
+  void _onPressHandler() {
+    setState(() {
+      _active = !_active;
+    });
+    if (_active) {
+      widget.tagList.add(widget.title);
+    } else {
+      widget.tagList.remove(widget.title);
+    }
+    print('_brandList: $widget.brandList');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(Adapt.px(10)),
-      decoration: BoxDecoration(
-          color: _active ? Theme.of(context).primaryColor : Colors.black,
-          borderRadius: BorderRadius.all(
-            Radius.circular(Adapt.px(15)),
-          ),
-          border: new Border.all(
-            color: Colors.grey, //边框颜色
-            width: Adapt.px(5), //边框粗细
-          )),
-      child: Text(
-        widget.title,
-        style: TextStyle(fontSize: Adapt.px(34)),
+    return InkWell(
+      onTap: () {
+        _onPressHandler();
+      },
+      child: Container(
+        padding: EdgeInsets.all(Adapt.px(10)),
+        decoration: BoxDecoration(
+            color: _active ? Theme.of(context).primaryColor : Colors.black,
+            borderRadius: BorderRadius.all(
+              Radius.circular(Adapt.px(15)),
+            ),
+            border: new Border.all(
+              color: Colors.grey, //边框颜色
+              width: Adapt.px(5), //边框粗细
+            )),
+        child: Text(
+          widget.title,
+          style: TextStyle(fontSize: Adapt.px(34)),
+        ),
       ),
     );
   }

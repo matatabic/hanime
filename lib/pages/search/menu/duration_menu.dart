@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/component/menu_row.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 
 class DurationMenu extends StatefulWidget {
   final Function(dynamic) loadData;
@@ -58,7 +56,9 @@ class _DurationMenuState extends State<DurationMenu> {
                 child: MenuRow(
                   title: duration.data[index],
                   onTap: () {
-                    context.read<SearchModel>().setDurationIndex(index);
+                    setState(() {
+                      _index = index;
+                    });
                   },
                 ),
               );
