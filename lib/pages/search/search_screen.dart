@@ -136,11 +136,11 @@ class _SearchScreenState extends State<SearchScreen>
     }
 
     if (_sortIndex > 0) {
-      newHtml = "$newHtml&sort=${genre.data[_sortIndex]}";
+      newHtml = "$newHtml&sort=${sort.data[_sortIndex]}";
     }
 
     if (_durationIndex > 0) {
-      newHtml = "$newHtml&duration=${genre.data[_durationIndex]}";
+      newHtml = "$newHtml&duration=${duration.data[_durationIndex]}";
     }
 
     if (_year != null && _year != "全部") {
