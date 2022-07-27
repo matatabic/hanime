@@ -10,19 +10,17 @@ import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_engine_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:provider/src/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  final String htmlUrl;
+  final List tagList;
 
   SearchScreen({
     Key? key,
-    this.htmlUrl = "https://hanime1.me/search?query=",
+    this.tagList = const [],
   }) : super(key: key);
 
   @override
@@ -61,37 +59,47 @@ class _SearchScreenState extends State<SearchScreen>
   double _topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
 
-  void _onLoading(dynamic data, bool loadMore) {
+  void _onLoading(dynamic data, bool loadMore) async {
+    print("_onLoading");
+    print(data);
     _saveData(data);
     String newHtml = _jointHtml();
     print(_htmlUrl);
     print(newHtml);
-    // if (loadMore) {
-    //   if (_totalPage - _page > 0) {
-    //     //获取下一页数据
-    //     _htmlUrl = "$_htmlUrl&page=${_page + 1}";
-    //     loadData(_htmlUrl);
-    //     _page = _page + 1;
-    //     _refreshController.loadComplete();
-    //   } else {
-    //     //已经没有更多数据
-    //     _refreshController.loadNoData();
-    //   }
-    // } else {
-    //   //获取新的数据，相同的url就不执行
-    //   if (newHtml != _htmlUrl) {
-    //     _page = 1;
-    //     // searchVideoList = [];
-    //     // setState(() {
-    //     //   _futureBuilderFuture = loadData(htmlUrl);
-    //     // });
-    //     // context.read<SearchModel>().setHtmlUrl(htmlUrl);
-    //     _refreshController.loadComplete();
-    //   }
-    // }
+    if (loadMore) {
+      if (_totalPage - _page > 0) {
+        //获取下一页数据
+        print("获取下一页数据");
+        _page = _page + 1;
+        String tempHtml = "$newHtml&page=$_page";
+        await loadData(tempHtml);
+        setState(() {});
+        // setState(() {
+        //   _futureBuilderFuture = loadData(_htmlUrl);
+        // });
+        _refreshController.loadComplete();
+      } else {
+        //已经没有更多数据
+        print("已经没有更多数据");
+        _refreshController.loadNoData();
+      }
+    } else {
+      //获取新的数据，相同的url就不执行
+      print("获取新的数据，相同的url就不执行");
+      if (newHtml != _htmlUrl) {
+        _page = 1;
+        _searchVideoList = [];
+        // setState(() {
+        _futureBuilderFuture = loadData(newHtml);
+        // });
+
+        _refreshController.loadComplete();
+      }
+    }
   }
 
   void _saveData(dynamic data) {
+    print("_saveData: $data");
     switch (data['type']) {
       case "query":
         _query = data['data'];
@@ -189,7 +197,7 @@ class _SearchScreenState extends State<SearchScreen>
               enablePullDown: false,
               enablePullUp: true,
               controller: _refreshController,
-              onLoading: () => _onLoading(context, true),
+              onLoading: () => _onLoading({}, true),
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus? mode) {
                   Widget body;
@@ -285,8 +293,8 @@ class _SearchScreenState extends State<SearchScreen>
       case ConnectionState.done:
         print('done');
         if (snapshot.hasError) {
-          String htmlUrl =
-              context.select<SearchModel, String>((search) => search.htmlUrl);
+          // String htmlUrl =
+          //     context.select<SearchModel, String>((search) => search.htmlUrl);
 
           return SliverToBoxAdapter(
             child: Container(
@@ -298,7 +306,7 @@ class _SearchScreenState extends State<SearchScreen>
                 child: Text('网络异常,点击重新加载'),
                 onPressed: () {
                   setState(() {
-                    _futureBuilderFuture = loadData(htmlUrl);
+                    _futureBuilderFuture = loadData({});
                   });
                 },
               )),
@@ -383,8 +391,29 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   void initState() {
+    print("1231initStateinitStateinitStateinitState2321");
     super.initState();
-    _futureBuilderFuture = loadData(widget.htmlUrl);
+    initTagListAndCustomTagList();
+    _futureBuilderFuture = loadData(_jointHtml());
+  }
+
+  void initTagListAndCustomTagList() {
+    List tempList = [];
+
+    for (var item in searchTag.data) {
+      tempList.addAll(item.data);
+    }
+
+    for (var item in widget.tagList) {
+      if (tempList.contains(item)) {
+        _tagList.add(item);
+      } else {
+        _customTagList.add(item);
+      }
+    }
+
+    print("_tagList: $_tagList");
+    print("_customTagList: $_customTagList");
   }
 
   @override
@@ -396,11 +425,12 @@ class _SearchScreenState extends State<SearchScreen>
     var data = await getSearchData(url);
 
     SearchEntity searchEntity = SearchEntity.fromJson(data);
-
+    _htmlUrl = url;
     _commendCount = searchEntity.commendCount;
     _totalPage = searchEntity.page;
     _searchVideoList.addAll(searchEntity.video);
-
+    print(_searchVideoList.length);
+    print("async loadData");
     return _searchVideoList;
   }
 }

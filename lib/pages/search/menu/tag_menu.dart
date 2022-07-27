@@ -97,6 +97,7 @@ class _TagContainerState extends State<TagContainer> {
       print(widget.customTagList);
       widget.searchTagData.data.insertAll(0, widget.customTagList);
     }
+    print(widget.searchTagData.data);
     for (String title in widget.searchTagData.data) {
       tagWidgetList.add(TagDetail(
           tagList: widget.tagList,

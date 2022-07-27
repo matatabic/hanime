@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
-import 'package:hanime/providers/search_model.dart';
 import 'package:hanime/services/watch_services.dart';
-import 'package:provider/src/provider.dart';
 
 class InfoScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -64,14 +62,13 @@ class InfoScreen extends StatelessWidget {
                     watchEntity.tag,
                     (String tag) => {
                           player.pause(),
-                          context.read<SearchModel>().addSearchList([tag],
-                              "https://hanime1.me/search?query=&tags[]=$tag"),
+                          // context.read<SearchModel>().addSearchList([tag],
+                          //     "https://hanime1.me/search?query=&tags[]=$tag"),
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => SearchScreen(
-                                    htmlUrl:
-                                        "https://hanime1.me/search?query=&tags[]=$tag")),
+                                builder: (context) =>
+                                    SearchScreen(tagList: [tag])),
                           )
                         }),
                 spacing: Adapt.px(20),

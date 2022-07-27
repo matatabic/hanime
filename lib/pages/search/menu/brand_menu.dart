@@ -23,7 +23,7 @@ class BrandMenu extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        // loadData({});
+        loadData({});
         return true;
       },
       child: Scaffold(
@@ -34,7 +34,7 @@ class BrandMenu extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.close_rounded),
               onPressed: () {
-                // loadData({});
+                loadData({});
                 Navigator.pop(context);
               },
             ),
