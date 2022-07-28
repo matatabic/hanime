@@ -92,10 +92,14 @@ class _TagContainerState extends State<TagContainer> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tagWidgetList = [];
+
     if (widget.index == 0) {
-      print("_TagContainerState build");
-      print(widget.customTagList);
-      widget.searchTagData.data.insertAll(0, widget.customTagList);
+      for (String title in widget.customTagList) {
+        tagWidgetList.add(TagDetail(
+            tagList: widget.tagList,
+            title: title,
+            active: widget.tagList.indexOf(title) > -1));
+      }
     }
     print(widget.searchTagData.data);
     for (String title in widget.searchTagData.data) {

@@ -89,10 +89,9 @@ class _SearchScreenState extends State<SearchScreen>
       if (newHtml != _htmlUrl) {
         _page = 1;
         _searchVideoList = [];
-        // setState(() {
-        _futureBuilderFuture = loadData(newHtml);
-        // });
-
+        setState(() {
+          _futureBuilderFuture = loadData(newHtml);
+        });
         _refreshController.loadComplete();
       }
     }
@@ -132,7 +131,7 @@ class _SearchScreenState extends State<SearchScreen>
   String _jointHtml() {
     String newHtml = "https://hanime1.me/search?query=";
     if (_query.length > 0) {
-      newHtml = "htmlUrl$_query";
+      newHtml = "$newHtml$_query";
     }
 
     if (_broad) {
@@ -230,9 +229,8 @@ class _SearchScreenState extends State<SearchScreen>
                     flexibleSpace: Column(
                       children: [
                         SearchEngineScreen(
-                            onQueryChange: (String val) => {_query = val},
-                            loadData: (dynamic data) =>
-                                _onLoading(data, false)),
+                            loadData: (dynamic data) => _onLoading(data, false),
+                            query: _query),
                         SearchMenuScreen(
                             loadData: (dynamic data) => _onLoading(data, false),
                             genreIndex: _genreIndex,
@@ -405,9 +403,8 @@ class _SearchScreenState extends State<SearchScreen>
     }
 
     for (var item in widget.tagList) {
-      if (tempList.contains(item)) {
-        _tagList.add(item);
-      } else {
+      _tagList.add(item);
+      if (!tempList.contains(item)) {
         _customTagList.add(item);
       }
     }
@@ -422,6 +419,7 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future loadData(url) async {
+    print("请求数据");
     var data = await getSearchData(url);
 
     SearchEntity searchEntity = SearchEntity.fromJson(data);
