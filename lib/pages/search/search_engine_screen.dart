@@ -198,6 +198,9 @@ class _SearchEngineScreenState extends State<SearchEngineScreen> {
                           color: Colors.grey,
                           iconSize: Adapt.px(40),
                           onPressed: () {
+                            setState(() {
+                              _query = "";
+                            });
                             // context.read<SearchModel>().setQuery("");
                             // _controller.clear();
                             // onSearchTextChanged('');

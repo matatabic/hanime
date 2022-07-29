@@ -18,6 +18,7 @@ class DownloadItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widgetContext = context;
     Widget _widget;
     List<Widget> ws = [];
     if (downloadEntity.success || downloadEntity.waitDownload) {
@@ -35,8 +36,8 @@ class DownloadItem extends StatelessWidget {
               CustomDialog.showDialog(
                   context,
                   "确认暂停下载?",
-                  (dialogContext) => {
-                        context
+                  () => {
+                        widgetContext
                             .read<DownloadModel>()
                             .pause(downloadEntity.htmlUrl),
                         if (downloadEntity.videoUrl.contains("m3u8"))
@@ -46,17 +47,17 @@ class DownloadItem extends StatelessWidget {
                             DioRangeDownloadManage.cancelDownload(
                                 downloadEntity.videoUrl)
                           },
-                        Navigator.pop(dialogContext)
+                        Navigator.pop(widgetContext)
                       });
             } else {
               CustomDialog.showDialog(
                   context,
                   "确认开始下载?",
-                  (dialogContext) => {
-                        context
+                  () => {
+                        widgetContext
                             .read<DownloadModel>()
                             .download(downloadEntity.htmlUrl),
-                        Navigator.pop(dialogContext)
+                        Navigator.pop(widgetContext)
                       });
             }
           },

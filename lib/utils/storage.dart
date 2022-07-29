@@ -1,41 +1,34 @@
 import 'dart:convert';
 
+import 'package:hanime/entity/download_entity.dart';
+import 'package:hanime/entity/favourite_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // 本地存储
-class SpUtil {
-  SpUtil._internal();
-  static final SpUtil _instance = SpUtil._internal();
+class StorageUtil {
+  static Future<dynamic> getFavouriteCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var json = prefs.getString("favouriteList");
 
-  factory SpUtil() {
-    return _instance;
+    return json;
   }
 
-  SharedPreferences? prefs;
-
-  Future<void> init() async {
-    prefs = await SharedPreferences.getInstance();
+  static Future<void> setFavouriteCache(List<FavouriteEntity> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        "favouriteList", jsonEncode(data.map((v) => v.toJson()).toList()));
   }
 
-  Future<bool> setJSON(String key, dynamic jsonVal) {
-    String jsonString = jsonEncode(jsonVal);
-    return prefs!.setString(key, jsonString);
+  static Future<dynamic> getDownloadCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var json = prefs.getString("downloadList");
+
+    return json;
   }
 
-  dynamic getJSON(String key) {
-    String? jsonString = prefs?.getString(key);
-    return jsonString == null ? null : jsonDecode(jsonString);
-  }
-
-  Future<bool> setBool(String key, bool val) {
-    return prefs!.setBool(key, val);
-  }
-
-  bool? getBool(String key) {
-    return prefs!.getBool(key);
-  }
-
-  Future<bool> remove(String key) {
-    return prefs!.remove(key);
+  static Future<void> setDownloadCache(List<DownloadEntity> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        "downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
   }
 }

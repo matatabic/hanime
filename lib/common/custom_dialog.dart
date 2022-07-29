@@ -54,7 +54,7 @@ class CustomDialog {
               ),
               CupertinoDialogAction(
                 onPressed: () {
-                  onPressed(context);
+                  onPressed();
                 },
                 child: Text('确定'),
               ),

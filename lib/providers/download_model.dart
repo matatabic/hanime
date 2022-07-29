@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/utils/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<DownloadEntity> _downloadList = [];
@@ -13,10 +10,12 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<DownloadEntity> get downloadList => _downloadList;
 
   void addDownload(WatchInfo info, String videoUrl, String localVideoUrl) {
-    int index = _downloadList.indexWhere(
-        (element) => element.htmlUrl == info.htmlUrl && element.success);
+    int index =
+        _downloadList.indexWhere((element) => element.htmlUrl == info.htmlUrl);
     if (index > -1) {
-      _downloadList[index].waitDownload = true;
+      if (!_downloadList[index].success) {
+        _downloadList[index].waitDownload = true;
+      }
     } else {
       _downloadList.insert(
           0,
@@ -40,8 +39,8 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void removeItem(String htmlUrl) {
-    int index = _downloadList
-        .indexWhere((element) => element.htmlUrl == htmlUrl && element.success);
+    int index =
+        _downloadList.indexWhere((element) => element.htmlUrl == htmlUrl);
     _downloadList.removeAt(index);
     saveData(_downloadList);
     notifyListeners();
@@ -135,55 +134,20 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void getCache() async {
-    // List<DownloadEntity> data = [
-    //   DownloadEntity.fromJson({
-    //     "id": 38462,
-    //     "title": "小さな蕾のその奥に…… ～妖しく齧る爛れた蕾……",
-    //     "imageUrl":
-    //         "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
-    //     "htmlUrl": "https://hanime1.me/watch?v=38462",
-    //     "videoUrl":
-    //         "https://vstream.hembed.com/hls/38462.m3u8?token=wzLwJmriR0A53qxMP34rqDq4GEo4y9KYJBW25NYx4BQ&expires=1656601202",
-    //     "localVideoUrl": "",
-    //     "progress": 0.0,
-    //     "success": false,
-    //     "downloading": false,
-    //     "waitDownload": false,
-    //     "reTry": false,
-    //     "reTryTime": 0,
-    //   }),
-    //   DownloadEntity.fromJson({
-    //     "id": 23177,
-    //     "title": "なま LO Re：ふらちもの THE ANIMATION",
-    //     "imageUrl":
-    //         "https://cdn.jsdelivr.net/gh/guaishushukanlifan/Project-H@latest/asset/thumbnail/aH3xcyhl.jpg",
-    //     "htmlUrl": "https://hanime1.me/watch?v=23177",
-    //     "videoUrl":
-    //         "https://vdownload-4.sb-cd.com/1/1/11712492-720p.mp4?secure=TK5LOSLX9OUWWeMTQZ7O8Q,1656561320&m=4&d=3&_tid=11712492",
-    //     "localVideoUrl": "",
-    //     "progress": 1,
-    //     "success": true,
-    //     "downloading": false,
-    //     "waitDownload": false,
-    //     "reTry": false,
-    //     "reTryTime": 0,
-    //   }),
-    // ];
-    // _downloadList = data;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var json = prefs.getString("downloadList");
-    if (json != null) {
-      _downloadList = jsonDecode(json)
-          .map<DownloadEntity>((json) => DownloadEntity.fromJson(json))
-          .toList();
-      print(_downloadList);
-    }
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var json = prefs.getString("downloadList");
+    // if (json != null) {
+    //   _downloadList = jsonDecode(json)
+    //       .map<DownloadEntity>((json) => DownloadEntity.fromJson(json))
+    //       .toList();
+    // }
   }
 
   saveData(List<DownloadEntity> data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        "downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
+    // SpUtil().prefs?.setString(
+    //     "downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // StorageUtil.setString("downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
   }
 
   @override

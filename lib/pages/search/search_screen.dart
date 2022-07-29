@@ -178,7 +178,6 @@ class _SearchScreenState extends State<SearchScreen>
     print("mainBUBBBB");
     return WillPopScope(
       onWillPop: () async {
-        // context.read<SearchModel>().removeSearchList();
         return true;
       },
       child: Scaffold(
@@ -304,7 +303,7 @@ class _SearchScreenState extends State<SearchScreen>
                 child: Text('网络异常,点击重新加载'),
                 onPressed: () {
                   setState(() {
-                    _futureBuilderFuture = loadData({});
+                    _futureBuilderFuture = loadData(_jointHtml());
                   });
                 },
               )),

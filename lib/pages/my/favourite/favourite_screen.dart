@@ -109,6 +109,8 @@ class _FavouriteScreen extends State<FavouriteScreen>
   }
 
   _buildList(FavouriteEntity favourite) {
+    final widgetContext = context;
+
     return DragAndDropListExpansion(
       canDrag: !_deleteMode,
       title: Text(favourite.name),
@@ -121,10 +123,9 @@ class _FavouriteScreen extends State<FavouriteScreen>
                 CustomDialog.showDialog(
                     context,
                     "确认删除该收藏夹?",
-                    (context) => {
-                          Provider.of<FavouriteModel>(context, listen: false)
-                              .removeList(favourite),
-                          Navigator.pop(context)
+                    () => {
+                          context.read<FavouriteModel>().removeList(favourite),
+                          Navigator.pop(widgetContext)
                         });
               },
               child: ShakeAnimationWidget(
@@ -145,6 +146,8 @@ class _FavouriteScreen extends State<FavouriteScreen>
   }
 
   _buildItem(FavouriteChildren anime) {
+    final widgetContext = context;
+
     return DragAndDropItem(
       canDrag: !_deleteMode,
       feedbackWidget: Container(
@@ -160,9 +163,11 @@ class _FavouriteScreen extends State<FavouriteScreen>
                 CustomDialog.showDialog(
                     context,
                     "确认删除该影片?",
-                    (context) => {
-                          context.read<FavouriteModel>().removeItem(anime),
-                          Navigator.pop(context)
+                    () => {
+                          widgetContext
+                              .read<FavouriteModel>()
+                              .removeItem(anime),
+                          Navigator.pop(widgetContext)
                         });
               },
               backgroundColor: Color(0xFFFE4A49),
