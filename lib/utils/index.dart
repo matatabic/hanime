@@ -27,7 +27,6 @@ Future<String> findBasePath(String htmlUrl) async {
   root = Directory(baseDir);
   if (!root.existsSync()) {
     await root.create();
-    root.delete(recursive: true);
   }
 
   return baseDir;
