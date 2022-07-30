@@ -93,7 +93,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   void loadCache() async {
     context.read<FavouriteModel>().getCache();
-    // context.read<DownloadModel>().getCache();
+    context.read<DownloadModel>().getCache();
   }
 
   void initM3u8Downloader() async {

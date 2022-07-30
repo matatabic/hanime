@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/utils/index.dart';
+import 'package:hanime/utils/storage.dart';
 
 class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<DownloadEntity> _downloadList = [];
@@ -42,6 +45,7 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     int index =
         _downloadList.indexWhere((element) => element.htmlUrl == htmlUrl);
     _downloadList.removeAt(index);
+    deleteVideo(htmlUrl);
     saveData(_downloadList);
     notifyListeners();
   }
@@ -134,20 +138,16 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void getCache() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // var json = prefs.getString("downloadList");
-    // if (json != null) {
-    //   _downloadList = jsonDecode(json)
-    //       .map<DownloadEntity>((json) => DownloadEntity.fromJson(json))
-    //       .toList();
-    // }
+    var json = await StorageUtil.getCache("downloadList");
+    if (json != null) {
+      _downloadList = jsonDecode(json)
+          .map<DownloadEntity>((json) => DownloadEntity.fromJson(json))
+          .toList();
+    }
   }
 
-  saveData(List<DownloadEntity> data) async {
-    // SpUtil().prefs?.setString(
-    //     "downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // StorageUtil.setString("downloadList", jsonEncode(data.map((v) => v.toCacheJson()).toList()));
+  saveData(List<DownloadEntity> data) {
+    StorageUtil.setDownloadCache(data);
   }
 
   @override

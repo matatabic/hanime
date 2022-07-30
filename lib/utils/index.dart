@@ -27,9 +27,23 @@ Future<String> findBasePath(String htmlUrl) async {
   root = Directory(baseDir);
   if (!root.existsSync()) {
     await root.create();
+    root.delete(recursive: true);
   }
 
   return baseDir;
+}
+
+Future<dynamic> deleteVideo(String htmlUrl) async {
+  final directory = Platform.isAndroid
+      ? await getExternalStorageDirectory()
+      : await getApplicationDocumentsDirectory();
+
+  String baseDir = directory!.path + '/video/' + getVideoId(htmlUrl).toString();
+
+  Directory root = Directory(baseDir);
+  if (root.existsSync()) {
+    await root.delete(recursive: true);
+  }
 }
 
 int getVideoId(String htmlUrl) {

@@ -24,9 +24,6 @@ class _DownloadScreenState extends State<DownloadScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final downloadList = context.watch<DownloadModel>().downloadList;
-    // List<DownloadEntity> currentDynamic =
-    //     context.select<DownloadModel, List<DownloadEntity>>(
-    //         (dynamicDetail) => dynamicDetail.downloadList);
     return Scaffold(
       body: DragAndDropLists(
         contentsWhenEmpty: Center(
@@ -83,13 +80,4 @@ class _DownloadScreenState extends State<DownloadScreen>
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
 
   _onListReorder(int oldListIndex, int newListIndex) {}
-}
-
-class FrontCover extends StatelessWidget {
-  const FrontCover({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:hanime/entity/favourite_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hanime/utils/storage.dart';
 
 class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<FavouriteEntity> _favouriteList = [
@@ -66,8 +66,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void getCache() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var json = prefs.getString("favouriteList");
+    var json = await StorageUtil.getCache("favouriteList");
     if (json != null) {
       _favouriteList = jsonDecode(json)
           .map<FavouriteEntity>((json) => FavouriteEntity.fromJson(json))
@@ -75,12 +74,8 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
-  saveData(List<FavouriteEntity> data) async {
-    // SpUtil().prefs?.setString(
-    //     "favouriteList", jsonEncode(data.map((v) => v.toJson()).toList()));
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        "favouriteList", jsonEncode(data.map((v) => v.toJson()).toList()));
+  saveData(List<FavouriteEntity> data) {
+    StorageUtil.setFavouriteCache(data);
   }
 
   @override
