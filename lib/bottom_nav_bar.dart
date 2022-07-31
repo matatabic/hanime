@@ -13,7 +13,7 @@ import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:hanime/request/dio_range_download_manage.dart';
 import 'package:hanime/request/m3u8_range_download_manage.dart';
-import 'package:hanime/utils/index.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:provider/src/provider.dart';
 
@@ -113,7 +113,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         case 1: //下载中
           Provider.of<DownloadModel>(context, listen: false)
               .changeDownloadProgress(
-                  data['url'], doubleRemoveDecimal(data['progress'], 3));
+                  data['url'], Utils.doubleRemoveDecimal(data['progress'], 3));
           break;
         case 2: //下载完成
           Provider.of<DownloadModel>(context, listen: false)
@@ -148,19 +148,19 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   void _download(DownloadEntity downloadEntity) async {
-    String baseUrl = await findBasePath(downloadEntity.htmlUrl);
+    String baseUrl = await Utils.findBasePath(downloadEntity.htmlUrl);
 
     if (downloadEntity.videoUrl.indexOf("m3u8") > -1) {
       M3u8RangeDownloadManage.downloadWithChunks(downloadEntity, baseUrl);
     } else {
       await DioRangeDownloadManage.downloadWithChunks(
         url: downloadEntity.videoUrl,
-        savePath: "$baseUrl/${getVideoId(downloadEntity.htmlUrl)}.mp4",
+        savePath: "$baseUrl/${Utils.getVideoId(downloadEntity.htmlUrl)}.mp4",
         onReceiveProgress: (received, total) {
           if (total != -1) {
             Provider.of<DownloadModel>(context, listen: false)
                 .changeDownloadProgress(downloadEntity.videoUrl,
-                    doubleRemoveDecimal(received / total, 3));
+                    Utils.doubleRemoveDecimal(received / total, 3));
 
             print("下载1已接收：" +
                 received.toString() +

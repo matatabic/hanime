@@ -6,7 +6,7 @@ import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/request/dio_range_download_manage.dart';
-import 'package:hanime/utils/index.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/src/provider.dart';
@@ -81,7 +81,7 @@ class DownloadItem extends StatelessWidget {
         animateFromLastPercent: true,
         lineHeight: Adapt.px(200),
         animationDuration: 1000,
-        percent: progress2showProgress(downloadEntity.progress),
+        percent: Utils.progress2showProgress(downloadEntity.progress),
         padding: EdgeInsets.all(0),
         linearStrokeCap: LinearStrokeCap.butt,
         backgroundColor: Colors.transparent,

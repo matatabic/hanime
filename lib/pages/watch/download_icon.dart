@@ -4,7 +4,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/permission.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
-import 'package:hanime/utils/index.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
 class DownloadIcon extends StatelessWidget {
@@ -52,11 +52,12 @@ class DownloadIcon extends StatelessWidget {
                                     checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
                                         String localVideoUrl =
-                                            await findBasePath(info.htmlUrl);
+                                            await Utils.findBasePath(
+                                                info.htmlUrl);
                                         String downloadUrl;
                                         if (videoUrl.indexOf("m3u8") > -1) {
                                           downloadUrl =
-                                              await getM3u8Url(videoUrl);
+                                              await Utils.getM3u8Url(videoUrl);
                                         } else {
                                           downloadUrl = videoUrl;
                                         }

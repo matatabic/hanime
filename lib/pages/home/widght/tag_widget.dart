@@ -4,7 +4,7 @@ import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
-import 'package:hanime/utils/index.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 
 import '../home_tag_card.dart';
@@ -52,7 +52,7 @@ class TagWidget extends StatelessWidget {
                       heroTag: 't$heroTag',
                       data: data.video[itemIndex][0],
                       onTap: () {
-                        List<String> tagList = getUrlParamsByName(
+                        List<String> tagList = Utils.getUrlParamsByName(
                             data.video[itemIndex][0].htmlUrl, 'tag');
                         Navigator.push(
                           context,
@@ -87,7 +87,7 @@ class TagWidget extends StatelessWidget {
                       heroTag: 'b$heroTag',
                       data: data.video[itemIndex][1],
                       onTap: () {
-                        List<String> tagList = getUrlParamsByName(
+                        List<String> tagList = Utils.getUrlParamsByName(
                             data.video[itemIndex][1].htmlUrl, 'tag');
                         Navigator.push(
                           context,
