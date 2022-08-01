@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/custom_dialog.dart';
+import 'package:hanime/component/loading_cover.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/request/dio_range_download_manage.dart';
@@ -95,9 +96,13 @@ class DownloadItem extends StatelessWidget {
               Text("${(downloadEntity.progress * 100).toStringAsFixed(1)}%")));
     }
 
-    // if (downloadEntity.waitDownload) {
-    //   ws.add(LoadingCover());
-    // }
+    if (downloadEntity.waitDownload) {
+      ws.add(LoadingCover(
+        width: Adapt.px(300),
+        height: Adapt.px(200),
+      ));
+    }
+
     return Container(
         padding: EdgeInsets.symmetric(
             vertical: Adapt.px(10), horizontal: Adapt.px(10)),
