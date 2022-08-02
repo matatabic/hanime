@@ -99,6 +99,7 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
+    print("_createWidget");
     WatchEntity watchEntity = snapshot.data;
 
     return SafeArea(

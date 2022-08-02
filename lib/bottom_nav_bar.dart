@@ -176,7 +176,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           print("下载1完成");
         },
         failed: (String error) {
-          print("12321321321");
+          print("下载1失败");
           print(error);
           if (error.contains("410")) {
             Provider.of<DownloadModel>(context, listen: false)

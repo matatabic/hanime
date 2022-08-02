@@ -11,7 +11,7 @@ class DioManage {
       retries: 2, // retry count (optional)
       retryDelays: const [
         Duration(seconds: 1), // wait 1 sec before first retry
-        Duration(seconds: 2), // wait 2 sec before second retry
+        Duration(seconds: 1), // wait 2 sec before second retry
       ],
     ));
 

@@ -124,23 +124,27 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void errorDownload(String errorMessage) {
-    print("errorDownload");
     print(errorMessage);
     for (var i = 0; i < _downloadList.length; i++) {
+      print(_downloadList[i].videoUrl);
       if (errorMessage.indexOf(_downloadList[i].videoUrl) > -1) {
+        print("errorDownload");
         if (!_downloadList[i].reTry &&
             DateTime.now().microsecondsSinceEpoch - _downloadList[i].reTryTime >
                 50000) {
           print("reTryreTryreTryreTry");
           _downloadList[i].waitDownload = true;
+          _downloadList[i].downloading = false;
           _downloadList[i].reTry = true;
           _downloadList[i].reTryTime = DateTime.now().microsecondsSinceEpoch;
         } else {
           print("停止下载");
           _downloadList[i].downloading = false;
+          _downloadList[i].downloading = false;
           _downloadList[i].reTry = false;
           _downloadList[i].reTryTime = 0;
         }
+        notifyListeners();
         break;
       }
     }

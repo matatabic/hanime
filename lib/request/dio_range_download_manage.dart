@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 
 class DioRangeDownloadManage {
   /// 用于记录正在下载的url，避免重复下载
@@ -29,6 +30,17 @@ class DioRangeDownloadManage {
       return;
     }
     var dio = Dio();
+
+    dio.interceptors.add(RetryInterceptor(
+      dio: dio,
+      logPrint: print, // specify log function (optional)
+      retries: 2, // retry count (optional)
+      retryDelays: const [
+        Duration(seconds: 1), // wait 1 sec before first retry
+        Duration(seconds: 1), // wait 2 sec before second retry
+      ],
+    ));
+
     CancelToken cancelToken = CancelToken();
     downloadingUrls[url] = cancelToken;
     try {

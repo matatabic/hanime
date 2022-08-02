@@ -24,6 +24,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final downloadList = context.watch<DownloadModel>().downloadList;
+    print('downloadListdownloadListdownloadListdownloadListdownloadList:');
     return Scaffold(
       body: DragAndDropLists(
         contentsWhenEmpty: Center(
@@ -40,6 +41,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   }
 
   List<DragAndDropList> _buildItem(List<DownloadEntity> downloadEntity) {
+    print('_buildItem_buildItem_buildItem_buildItem_buildItem_buildItem:');
     return [
       DragAndDropList(
           children: downloadEntity
