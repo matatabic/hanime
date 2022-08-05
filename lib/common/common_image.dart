@@ -21,7 +21,9 @@ class CommonImages extends StatelessWidget {
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return null;
+            return Center(
+              child: CircularProgressIndicator(),
+            );
             return Image.asset(
               "assets/images/error.png",
               fit: BoxFit.fill,

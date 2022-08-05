@@ -66,8 +66,8 @@ class FireWidget extends StatelessWidget {
                                     opacityCurve.transform(animation.value),
                                 child: HeroSlidePage(
                                   heroTag: heroTag,
-                                  url:
-                                      'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                                  url:data.video[index].imgUrl
+                                      // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
                                 ),
                               );
                             },

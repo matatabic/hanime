@@ -21,8 +21,6 @@ class InfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // int currentScreen =
-    //     Provider.of<SearchModel>(context, listen: false).currentScreen;
     return Padding(
       padding: EdgeInsets.all(Adapt.px(10)),
       child: Column(
@@ -62,8 +60,6 @@ class InfoScreen extends StatelessWidget {
                     watchEntity.tag,
                     (String tag) => {
                           player.pause(),
-                          // context.read<SearchModel>().addSearchList([tag],
-                          //     "https://hanime1.me/search?query=&tags[]=$tag"),
                           Navigator.push(
                             context,
                             CupertinoPageRoute(

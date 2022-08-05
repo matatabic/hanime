@@ -60,7 +60,21 @@ class _WatchScreenState extends State<WatchScreen> {
         );
       case ConnectionState.done:
         print('done');
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+        if (snapshot.hasError) {
+          return Center(
+              child: MaterialButton(
+            color: Colors.blue,
+            textColor: Colors.white,
+            child: Text('网络异常,点击重新加载'),
+            onPressed: () {
+              setState(() {
+                _futureBuilderFuture = loadData();
+              });
+            },
+          ));
+          // return Text('Error: ${snapshot.error}');
+        }
+        ;
         return _createWidget(context, snapshot);
     }
   }

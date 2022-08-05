@@ -21,9 +21,7 @@ class LoadingCover extends StatelessWidget {
           ),
         ),
         Center(
-          child: CircularProgressIndicator(
-            value: null,
-          ),
+          child: CircularProgressIndicator(),
         )
       ],
     );

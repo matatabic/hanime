@@ -17,7 +17,7 @@ class SwiperScreen extends StatelessWidget {
     return Container(
       height: Adapt.px(400),
       child: Swiper(
-        autoplay: false,
+        autoplay: true,
         onTap: (int index) {
           onTap(swiperList[index]);
         },
