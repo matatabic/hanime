@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/component/menu_row.dart';
+import 'package:hanime/component/menu_widget.dart';
 import 'package:hanime/services/search_services.dart';
 
 class DurationMenu extends StatefulWidget {
@@ -53,7 +53,7 @@ class _DurationMenuState extends State<DurationMenu> {
                 color: index == _index
                     ? Theme.of(context).primaryColor
                     : Colors.black,
-                child: MenuRow(
+                child: MenuWidget(
                   title: duration.data[index],
                   onTap: () {
                     setState(() {

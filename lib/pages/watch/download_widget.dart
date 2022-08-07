@@ -7,11 +7,11 @@ import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
-class DownloadIcon extends StatelessWidget {
+class DownloadWidget extends StatelessWidget {
   final WatchInfo info;
   final String videoUrl;
 
-  DownloadIcon({Key? key, required this.info, required this.videoUrl})
+  DownloadWidget({Key? key, required this.info, required this.videoUrl})
       : super(key: key);
 
   @override

@@ -22,24 +22,6 @@ class HeroPhotoView extends StatefulWidget {
 }
 
 class _HeroPhotoViewState extends State<HeroPhotoView> {
-  late PhotoViewController controller;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void listener(PhotoViewControllerValue value) {
-    print("listener");
-    print(value.position);
-    // setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,9 +38,6 @@ class _HeroPhotoViewState extends State<HeroPhotoView> {
         enablePanAlways: true,
         disableGestures: false,
         tightMode: true,
-        onScaleEnd: (BuildContext context, ScaleEndDetails scaleEndDetails,
-            PhotoViewControllerValue photoViewControllerValue) {},
-        scaleStateChangedCallback: (PhotoViewScaleState photoViewScaleState) {},
         // gestureDetectorBehavior: HitTestBehavior.opaque,
         heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
       ),

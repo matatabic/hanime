@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/component/menu_row.dart';
+import 'package:hanime/component/menu_widget.dart';
 import 'package:hanime/services/search_services.dart';
 
 class GenreMenu extends StatefulWidget {
@@ -53,13 +53,12 @@ class _GenreMenuState extends State<GenreMenu> {
               color: index == _index
                   ? Theme.of(context).primaryColor
                   : Colors.black,
-              child: MenuRow(
+              child: MenuWidget(
                 title: genre.data[index],
                 onTap: () {
                   setState(() {
                     _index = index;
                   });
-                  // context.read<SearchModel>().setGenreIndex(index);
                 },
               ),
             );

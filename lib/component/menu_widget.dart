@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../common/adapt.dart';
 
-class MenuRow extends StatelessWidget {
+class MenuWidget extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const MenuRow({Key? key, required this.title, required this.onTap})
+  const MenuWidget({Key? key, required this.title, required this.onTap})
       : super(key: key);
 
   @override

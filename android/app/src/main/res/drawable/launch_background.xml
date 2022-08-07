@@ -7,7 +7,7 @@
      <item>
         <bitmap
             android:gravity="fill"
-            android:src="drawable/launch_image" />
+            android:src="@mipmap/launch_image" />
 
     </item>
 </layer-list>

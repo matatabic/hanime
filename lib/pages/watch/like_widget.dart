@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hanime/common/LikeButton.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/like_button.dart';
 import 'package:hanime/common/like_button_widget/Model.dart';
 import 'package:hanime/common/like_button_widget/Popup.dart';
 import 'package:hanime/entity/favourite_entity.dart';
@@ -8,16 +8,16 @@ import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
 
-class LikeIcon extends StatefulWidget {
+class LikeWidget extends StatefulWidget {
   final WatchInfo info;
 
-  LikeIcon({Key? key, required this.info}) : super(key: key);
+  LikeWidget({Key? key, required this.info}) : super(key: key);
 
   @override
   _LikeIconState createState() => _LikeIconState();
 }
 
-class _LikeIconState extends State<LikeIcon> {
+class _LikeIconState extends State<LikeWidget> {
   ///给获取详细信息的widget设置一个key
   GlobalKey iconKey = new GlobalKey();
 

@@ -5,8 +5,8 @@ import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo_view.dart';
 import 'package:hanime/entity/watch_entity.dart';
 
-import 'download_icon.dart';
-import 'like_icon.dart';
+import 'download_widget.dart';
+import 'like_widget.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -27,21 +27,56 @@ class BriefScreen extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).push(PageRouteBuilder(
-                    opaque: false,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return AnimatedBuilder(
-                        animation: animation,
-                        builder: (context, child) {
-                          return HeroPhotoView(
-                            heroTag: heroTag,
-                            maxScale: 1.5,
-                            imageProvider:
-                                NetworkImage(watchEntity.info.imgUrl),
-                          );
-                        },
+                // Navigator.of(context).push(PageRouteBuilder(
+                //     opaque: false,
+                //     pageBuilder: (context, animation, secondaryAnimation) {
+                //       return AnimatedBuilder(
+                //         animation: animation,
+                //         builder: (context, child) {
+                //           return HeroSlidePage(
+                //               heroTag: heroTag, url: watchEntity.info.imgUrl
+                //               // 'http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg',
+                //               );
+                //         },
+                //       );
+                //     }));
+                // Navigator.of(context).push(NoAnimRouter(
+                //   HeroPhotoView(
+                //     heroTag: heroTag,
+                //     maxScale: 1.5,
+                //     imageProvider: NetworkImage(watchEntity.info.imgUrl),
+                //   ),
+                // ));
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (ctx, anim1, anim2) {
+                      return FadeTransition(
+                        opacity: anim1,
+                        child: HeroPhotoView(
+                          heroTag: heroTag,
+                          maxScale: 1.5,
+                          imageProvider: NetworkImage(watchEntity.info.imgUrl),
+                        ),
                       );
-                    }));
+                    },
+                  ),
+                );
+                // Navigator.of(context).push(PageRouteBuilder(
+                //     opaque: false,
+                //     pageBuilder: (context, animation, secondaryAnimation) {
+                //       return AnimatedBuilder(
+                //         animation: animation,
+                //         builder: (context, child) {
+                //           return HeroPhotoView(
+                //             heroTag: heroTag,
+                //             maxScale: 1.5,
+                //             imageProvider:
+                //                 NetworkImage(watchEntity.info.imgUrl),
+                //           );
+                //         },
+                //       );
+                //     }));
               },
               onLongPress: () {
                 Navigator.of(context).push(PageRouteBuilder(
@@ -93,11 +128,11 @@ class BriefScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                DownloadIcon(
+                                DownloadWidget(
                                     info: watchEntity.info,
                                     videoUrl: watchEntity
                                         .videoData.video[0].list[0].url),
-                                LikeIcon(info: watchEntity.info)
+                                LikeWidget(info: watchEntity.info)
                               ],
                             ),
                           ),
