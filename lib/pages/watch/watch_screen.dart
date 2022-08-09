@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
-import 'package:hanime/common/hero_photo_view.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
@@ -27,6 +26,7 @@ class WatchScreen extends StatefulWidget {
 }
 
 class _WatchScreenState extends State<WatchScreen> {
+  Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
   var _videoIndex;
@@ -73,9 +73,9 @@ class _WatchScreenState extends State<WatchScreen> {
             },
           ));
           // return Text('Error: ${snapshot.error}');
+        } else {
+          return _createWidget(context, snapshot);
         }
-        ;
-        return _createWidget(context, snapshot);
     }
   }
 
@@ -242,13 +242,23 @@ class _WatchScreenState extends State<WatchScreen> {
                                       watchEntity.commend[index].htmlUrl)));
                     },
                     onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoView(
-                            heroTag: heroTag,
-                            maxScale: 1.5,
-                            imageProvider: NetworkImage(
-                                watchEntity.commend[index].imgUrl)),
-                      ));
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity:
+                                      opacityCurve.transform(animation.value),
+                                  child: HeroSlidePage(
+                                      heroTag: heroTag,
+                                      url: watchEntity.commend[index].imgUrl),
+                                );
+                              },
+                            );
+                          }));
                     },
                     heroTag: heroTag,
                     title: watchEntity.commend[index].title,
@@ -264,13 +274,23 @@ class _WatchScreenState extends State<WatchScreen> {
                                       watchEntity.commend[index].htmlUrl)));
                     },
                     onLongPress: () {
-                      Navigator.of(context).push(NoAnimRouter(
-                        HeroPhotoView(
-                            heroTag: heroTag,
-                            maxScale: 1.5,
-                            imageProvider: NetworkImage(
-                                watchEntity.commend[index].imgUrl)),
-                      ));
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity:
+                                      opacityCurve.transform(animation.value),
+                                  child: HeroSlidePage(
+                                      heroTag: heroTag,
+                                      url: watchEntity.commend[index].imgUrl),
+                                );
+                              },
+                            );
+                          }));
                     },
                     heroTag: heroTag,
                     htmlUrl: watchEntity.commend[index].htmlUrl,

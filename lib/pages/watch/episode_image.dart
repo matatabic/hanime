@@ -26,6 +26,6 @@ class EpisodePhoto extends StatelessWidget {
           color: selector ? Colors.pinkAccent : Colors.grey, //边框颜色
           width: 1.0, //边框粗细
         )),
-        child: CommonImages(imgUrl: imgUrl));
+        child: CommonImage(imgUrl: imgUrl));
   }
 }

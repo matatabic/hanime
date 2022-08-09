@@ -28,7 +28,7 @@ class HomeHeaderScreen extends StatelessWidget {
           constraints: new BoxConstraints.expand(),
           child: Stack(children: [
             Container(
-                child: CommonImages(imgUrl: swiperList[swiperIndex].imgUrl)),
+                child: CommonImage(imgUrl: swiperList[swiperIndex].imgUrl)),
             Container(
               child: new ClipRect(
                 child: new BackdropFilter(

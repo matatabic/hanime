@@ -32,7 +32,7 @@ class HomeTagCard extends StatelessWidget {
             children: [
               ConstrainedBox(
                   child: Hero(
-                      tag: heroTag, child: CommonImages(imgUrl: data.imgUrl)),
+                      tag: heroTag, child: CommonImage(imgUrl: data.imgUrl)),
                   constraints: new BoxConstraints.expand()),
               Container(color: Colors.black26),
               Container(

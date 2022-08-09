@@ -3,8 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/hero_photo_view.dart';
-import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
@@ -33,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
+  Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
   var _futureBuilderFuture;
   int _page = 1;
   late int _totalPage;
@@ -290,9 +290,6 @@ class _SearchScreenState extends State<SearchScreen>
       case ConnectionState.done:
         print('done');
         if (snapshot.hasError) {
-          // String htmlUrl =
-          //     context.select<SearchModel, String>((search) => search.htmlUrl);
-
           return SliverToBoxAdapter(
             child: Container(
               height: surHeight,
@@ -345,12 +342,22 @@ class _SearchScreenState extends State<SearchScreen>
                                 htmlUrl: videoList[index].htmlUrl)));
                   },
                   onLongPress: () {
-                    Navigator.of(context).push(NoAnimRouter(
-                      HeroPhotoView(
-                          heroTag: heroTag,
-                          maxScale: 1.5,
-                          imageProvider: NetworkImage(videoList[index].imgUrl)),
-                    ));
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: HeroSlidePage(
+                                    heroTag: heroTag,
+                                    url: videoList[index].imgUrl),
+                              );
+                            },
+                          );
+                        }));
                   },
                   heroTag: heroTag,
                   title: videoList[index].title,
@@ -364,12 +371,22 @@ class _SearchScreenState extends State<SearchScreen>
                                 htmlUrl: videoList[index].htmlUrl)));
                   },
                   onLongPress: () {
-                    Navigator.of(context).push(NoAnimRouter(
-                      HeroPhotoView(
-                          heroTag: heroTag,
-                          maxScale: 1.0,
-                          imageProvider: NetworkImage(videoList[index].imgUrl)),
-                    ));
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: HeroSlidePage(
+                                    heroTag: heroTag,
+                                    url: videoList[index].imgUrl),
+                              );
+                            },
+                          );
+                        }));
                   },
                   heroTag: heroTag,
                   htmlUrl: videoList[index].htmlUrl,

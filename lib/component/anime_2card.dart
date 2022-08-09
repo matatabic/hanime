@@ -42,7 +42,7 @@ class Anime2Card extends StatelessWidget {
               children: [
                 ConstrainedBox(
                     child:
-                        Hero(tag: heroTag, child: CommonImages(imgUrl: imgUrl)),
+                        Hero(tag: heroTag, child: CommonImage(imgUrl: imgUrl)),
                     constraints: new BoxConstraints.expand()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),

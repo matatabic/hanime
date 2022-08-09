@@ -44,7 +44,7 @@ class HomeCard extends StatelessWidget {
                   children: [
                     ConstrainedBox(
                         child: Hero(
-                            tag: heroTag, child: CommonImages(imgUrl: imgUrl)),
+                            tag: heroTag, child: CommonImage(imgUrl: imgUrl)),
                         constraints: new BoxConstraints.expand()),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),

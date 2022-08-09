@@ -22,7 +22,7 @@ class SwiperScreen extends StatelessWidget {
           onTap(swiperList[index]);
         },
         itemBuilder: (BuildContext context, int index) {
-          return CommonImages(
+          return CommonImage(
             imgUrl: swiperList[index].imgUrl,
           );
         },

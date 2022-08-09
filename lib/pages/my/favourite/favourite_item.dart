@@ -38,7 +38,7 @@ class FavouriteItem extends StatelessWidget {
                     child: Container(
                       width: Adapt.px(140),
                       height: Adapt.px(140),
-                      child: CommonImages(
+                      child: CommonNormalImage(
                         imgUrl: anime.imageUrl,
                       ),
                     ),

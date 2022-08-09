@@ -36,7 +36,7 @@ class CommonCard extends StatelessWidget {
               alignment: Alignment(-1, 1),
               children: [
                 ConstrainedBox(
-                    child: CommonImages(imgUrl: imgUrl),
+                    child: CommonImage(imgUrl: imgUrl),
                     constraints: new BoxConstraints.expand()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),

@@ -22,11 +22,12 @@ class Anime3Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Stack(
           alignment: Alignment(-1, 1),
           children: <Widget>[
             ConstrainedBox(
-              child: CommonImages(imgUrl: imgUrl),
+              child: Hero(tag: heroTag, child: CommonImage(imgUrl: imgUrl)),
               constraints: new BoxConstraints.expand(),
             ),
             Container(

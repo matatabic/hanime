@@ -24,22 +24,23 @@ class HeroPhotoView extends StatefulWidget {
 class _HeroPhotoViewState extends State<HeroPhotoView> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(
-        height: MediaQuery.of(context).size.height,
-      ),
-      color: Colors.black12,
-      child: PhotoView(
-        imageProvider: widget.imageProvider,
-        backgroundDecoration:
-            BoxDecoration(color: Theme.of(context).dialogBackgroundColor),
-        minScale: widget.minScale,
-        maxScale: widget.maxScale,
-        enablePanAlways: true,
-        disableGestures: false,
-        tightMode: true,
-        // gestureDetectorBehavior: HitTestBehavior.opaque,
-        heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
+        constraints: BoxConstraints.expand(
+          height: MediaQuery.of(context).size.height,
+        ),
+        color: Colors.black12,
+        child: PhotoView(
+          imageProvider: widget.imageProvider,
+          minScale: widget.minScale,
+          maxScale: widget.maxScale,
+          enablePanAlways: true,
+          disableGestures: false,
+          tightMode: true,
+          gestureDetectorBehavior: HitTestBehavior.opaque,
+          heroAttributes: PhotoViewHeroAttributes(tag: widget.heroTag),
+        ),
       ),
     );
   }

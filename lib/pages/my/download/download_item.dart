@@ -26,7 +26,7 @@ class DownloadItem extends StatelessWidget {
       _widget = Stack(alignment: Alignment.center, children: ws);
       ws.add(Container(
         height: Adapt.px(200),
-        child: CommonImages(
+        child: CommonImage(
           imgUrl: downloadEntity.imageUrl,
         ),
       ));
@@ -65,7 +65,7 @@ class DownloadItem extends StatelessWidget {
           child: Stack(alignment: Alignment.center, children: ws));
       ws.add(Container(
         height: Adapt.px(200),
-        child: CommonImages(
+        child: CommonImage(
           imgUrl: downloadEntity.imageUrl,
         ),
       ));
