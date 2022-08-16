@@ -19,7 +19,7 @@ List _menuList = [
   {"id": 5, "icon": Icons.update}
 ];
 
-class SearchMenuScreen extends StatelessWidget {
+class SearchMenuWidget extends StatelessWidget {
   final Function(dynamic) loadData;
   final bool broad;
   final int genreIndex;
@@ -31,7 +31,7 @@ class SearchMenuScreen extends StatelessWidget {
   final List<String> tagList;
   final List<String> brandList;
 
-  SearchMenuScreen(
+  SearchMenuWidget(
       {Key? key,
       required this.broad,
       required this.loadData,
@@ -67,7 +67,6 @@ class SearchMenuScreen extends StatelessWidget {
                       return getMenuDetail(this, menu['id'], loadData);
                     });
               },
-              // menuDetail(genreIndex,menu['id'], loadData)
               child: Container(
                 height: Adapt.px(100),
                 width: Adapt.px(100),

@@ -2,17 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/pages/search/search_engine_screen.dart';
+import 'package:hanime/pages/search/search_engine_widget.dart';
+import 'package:hanime/pages/search/search_menu_widget.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'search_menu_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   final List tagList;
@@ -35,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen>
   Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
 
   ScrollController _scrollController = ScrollController();
+  final focusNode = FocusNode();
 
   var _futureBuilderFuture;
   int _page = 1;
@@ -77,9 +78,6 @@ class _SearchScreenState extends State<SearchScreen>
         String tempHtml = "$newHtml&page=$_page";
         await loadData(tempHtml);
         setState(() {});
-        // setState(() {
-        //   _futureBuilderFuture = loadData(_htmlUrl);
-        // });
         _refreshController.loadComplete();
       } else {
         //已经没有更多数据
@@ -185,73 +183,85 @@ class _SearchScreenState extends State<SearchScreen>
       },
       child: Scaffold(
           backgroundColor: Colors.black,
-          body: SmartRefresher(
-            // physics: const ClampingScrollPhysics(),
-            enablePullDown: false,
-            enablePullUp: true,
-            controller: _refreshController,
-            onLoading: () => _onLoading({}, true),
-            footer: CustomFooter(
-              builder: (BuildContext context, LoadStatus? mode) {
-                Widget body;
-                if (mode == LoadStatus.loading) {
-                  body = CupertinoActivityIndicator();
-                } else if (mode == LoadStatus.failed) {
-                  body = Text("加载失败！点击重试！");
-                } else if (mode == LoadStatus.canLoading) {
-                  body = Text("松手,加载更多!");
-                } else if (mode == LoadStatus.noMore) {
-                  body = Text("没有更多数据了!");
-                } else {
-                  body = Text("没有更多数据了!");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child: body),
-                );
-              },
-            ),
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverAppBar(
-                  pinned: false,
-                  floating: true,
-                  stretch: true,
-                  automaticallyImplyLeading: false,
-                  toolbarHeight: _topHeight,
-                  expandedHeight: _topHeight,
-                  flexibleSpace: Column(
-                    children: [
-                      SearchEngineScreen(
-                          loadData: (dynamic data) => _onLoading(data, false),
-                          query: _query),
-                      SearchMenuScreen(
-                          loadData: (dynamic data) => _onLoading(data, false),
-                          genreIndex: _genreIndex,
-                          sortIndex: _sortIndex,
-                          durationIndex: _durationIndex,
-                          broad: _broad,
-                          year: _year,
-                          month: _month,
-                          customTagList: _customTagList,
-                          tagList: _tagList,
-                          brandList: _brandList)
-                    ],
+          body: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              print("123333333333333333333333");
+              FocusManager.instance.rootScope.requestFocus(FocusNode());
+            },
+            child: SmartRefresher(
+              // physics: const ClampingScrollPhysics(),
+              enablePullDown: false,
+              enablePullUp: true,
+              controller: _refreshController,
+              onLoading: () => _onLoading({}, true),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus? mode) {
+                  Widget body;
+                  if (mode == LoadStatus.loading) {
+                    body = CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = Text("加载失败！点击重试！");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = Text("松手,加载更多!");
+                  } else if (mode == LoadStatus.noMore) {
+                    body = Text("没有更多数据了!");
+                  } else {
+                    body = Text("没有更多数据了!");
+                  }
+                  return Container(
+                    height: 55.0,
+                    child: Center(child: body),
+                  );
+                },
+              ),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: false,
+                    floating: true,
+                    stretch: true,
+                    automaticallyImplyLeading: false,
+                    toolbarHeight: _topHeight,
+                    expandedHeight: _topHeight,
+                    flexibleSpace: FlexibleSpaceBar(
+                      titlePadding: EdgeInsets.all(0),
+                      title: Column(
+                        children: [
+                          SearchEngineWidget(
+                              focusNode: focusNode,
+                              loadData: (dynamic data) =>
+                                  _onLoading(data, false),
+                              query: _query),
+                          SearchMenuWidget(
+                              loadData: (dynamic data) =>
+                                  _onLoading(data, false),
+                              genreIndex: _genreIndex,
+                              sortIndex: _sortIndex,
+                              durationIndex: _durationIndex,
+                              broad: _broad,
+                              year: _year,
+                              month: _month,
+                              customTagList: _customTagList,
+                              tagList: _tagList,
+                              brandList: _brandList)
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                FutureBuilder(
-                  builder: _buildFuture,
-                  future:
-                      _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-              ],
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  FutureBuilder(
+                    builder: _buildFuture,
+                    future:
+                        _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 10),
+                  ),
+                ],
+              ),
             ),
           )),
     );

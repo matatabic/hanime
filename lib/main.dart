@@ -39,6 +39,6 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.orange[300],
           scaffoldBackgroundColor: Colors.black26,
         ),
-        home: new BottomNavBar());
+        home: BottomNavBar());
   }
 }

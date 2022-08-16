@@ -35,8 +35,6 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   ReceivePort _port = ReceivePort();
 
-  late BuildContext context1;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -53,7 +51,6 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   @override
   Widget build(BuildContext context) {
-    context1 = context;
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           // backgroundColor: colors[currentIndex],
