@@ -6,12 +6,14 @@ import 'package:hanime/common/adapt.dart';
 
 class SearchEngineWidget extends StatefulWidget {
   final FocusNode focusNode;
+  final Function(dynamic) onChangeQuery;
   final Function(dynamic) loadData;
   final String query;
 
   const SearchEngineWidget(
       {Key? key,
       required this.loadData,
+      required this.onChangeQuery,
       required this.query,
       required this.focusNode})
       : super(key: key);
@@ -76,6 +78,7 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
                                 maxLines: 1,
                                 maxLength: 10,
                                 onChanged: (value) {
+                                  widget.onChangeQuery(value);
                                   setState(() {
                                     _query = value;
                                   });
@@ -83,8 +86,6 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
                                   // context.read<SearchModel>().setQuery(value);
                                 },
                                 onSubmitted: (value) {
-                                  print("onSubmitted");
-                                  print(value);
                                   widget.loadData(
                                       {"type": "query", "data": value});
                                 },

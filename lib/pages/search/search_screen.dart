@@ -8,8 +8,7 @@ import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/search_entity.dart';
-import 'package:hanime/pages/search/search_engine_widget.dart';
-import 'package:hanime/pages/search/search_menu_widget.dart';
+import 'package:hanime/pages/search/search_header_widget.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -34,15 +33,12 @@ class _SearchScreenState extends State<SearchScreen>
 
   Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
 
-  ScrollController _scrollController = ScrollController();
-  final focusNode = FocusNode();
-
   var _futureBuilderFuture;
   int _page = 1;
   late int _totalPage;
   late int _commendCount;
   List<SearchVideo> _searchVideoList = [];
-  //存储分发
+
   String _htmlUrl = "";
 
   String _query = "";
@@ -62,116 +58,6 @@ class _SearchScreenState extends State<SearchScreen>
 
   double _topHeight =
       MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
-
-  void _onLoading(dynamic data, bool loadMore) async {
-    print("_onLoading");
-    print(data);
-    _saveData(data);
-    String newHtml = _jointHtml();
-    print(_htmlUrl);
-    print(newHtml);
-    if (loadMore) {
-      if (_totalPage - _page > 0) {
-        //获取下一页数据
-        print("获取下一页数据");
-        _page = _page + 1;
-        String tempHtml = "$newHtml&page=$_page";
-        await loadData(tempHtml);
-        setState(() {});
-        _refreshController.loadComplete();
-      } else {
-        //已经没有更多数据
-        print("已经没有更多数据");
-        _refreshController.loadNoData();
-      }
-    } else {
-      //获取新的数据，相同的url就不执行
-      print("获取新的数据，相同的url就不执行");
-      if (newHtml != _htmlUrl) {
-        _page = 1;
-        _searchVideoList = [];
-        setState(() {
-          _futureBuilderFuture = loadData(newHtml);
-        });
-        _refreshController.loadComplete();
-      }
-    }
-  }
-
-  void _saveData(dynamic data) {
-    print("_saveData: $data");
-    switch (data['type']) {
-      case "query":
-        _query = data['data'];
-        break;
-      case "broad":
-        _broad = data['data'];
-        break;
-      case "genre":
-        _genreIndex = data['data'];
-        break;
-      case "sort":
-        _sortIndex = data['data'];
-        break;
-      case "duration":
-        _durationIndex = data['data'];
-        break;
-      case "date":
-        _year = data['data']['year'];
-        _month = data['data']['month'];
-        break;
-      case "tag":
-        _tagList = data['data'];
-        break;
-      case "brand":
-        _brandList = data['data'];
-        break;
-    }
-  }
-
-  String _jointHtml() {
-    String newHtml = "https://hanime1.me/search?query=";
-    if (_query.length > 0) {
-      newHtml = "$newHtml$_query";
-    }
-
-    if (_broad) {
-      newHtml = "$newHtml&broad=on";
-    }
-
-    if (_genreIndex > 0) {
-      newHtml = "$newHtml&genre=${genre.data[_genreIndex]}";
-    }
-
-    if (_sortIndex > 0) {
-      newHtml = "$newHtml&sort=${sort.data[_sortIndex]}";
-    }
-
-    if (_durationIndex > 0) {
-      newHtml = "$newHtml&duration=${duration.data[_durationIndex]}";
-    }
-
-    if (_year != null && _year != "全部") {
-      newHtml = "$newHtml&year=$_year";
-      if (_month != null && _month != "全部") {
-        newHtml = "$newHtml&month=$_month";
-      }
-    }
-
-    if (_tagList.length > 0) {
-      for (String tag in _tagList) {
-        newHtml = "$newHtml&tags[]=$tag";
-      }
-    }
-
-    if (_brandList.length > 0) {
-      for (String brand in _brandList) {
-        newHtml = "$newHtml&brands[]=$brand";
-      }
-    }
-
-    return newHtml;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,37 +103,18 @@ class _SearchScreenState extends State<SearchScreen>
               ),
               child: CustomScrollView(
                 slivers: <Widget>[
-                  SliverAppBar(
-                    pinned: false,
-                    floating: true,
-                    stretch: true,
-                    automaticallyImplyLeading: false,
-                    toolbarHeight: _topHeight,
-                    expandedHeight: _topHeight,
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: EdgeInsets.all(0),
-                      title: Column(
-                        children: [
-                          SearchEngineWidget(
-                              focusNode: focusNode,
-                              loadData: (dynamic data) =>
-                                  _onLoading(data, false),
-                              query: _query),
-                          SearchMenuWidget(
-                              loadData: (dynamic data) =>
-                                  _onLoading(data, false),
-                              genreIndex: _genreIndex,
-                              sortIndex: _sortIndex,
-                              durationIndex: _durationIndex,
-                              broad: _broad,
-                              year: _year,
-                              month: _month,
-                              customTagList: _customTagList,
-                              tagList: _tagList,
-                              brandList: _brandList)
-                        ],
-                      ),
-                    ),
+                  SearchHeaderWidget(
+                    loadData: (dynamic data) => _onLoading(data, false),
+                    topHeight: _topHeight,
+                    genreIndex: _genreIndex,
+                    sortIndex: _sortIndex,
+                    durationIndex: _durationIndex,
+                    broad: _broad,
+                    year: _year,
+                    month: _month,
+                    customTagList: _customTagList,
+                    tagList: _tagList,
+                    brandList: _brandList,
                   ),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 10),
@@ -410,14 +277,9 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   void initState() {
-    print("1231initStateinitStateinitStateinitState2321");
     super.initState();
     initTagListAndCustomTagList();
     _futureBuilderFuture = loadData(_jointHtml());
-    _scrollController.addListener(() {
-      _hideKeyboard(context);
-      print('${_scrollController.position}');
-    });
   }
 
   void initTagListAndCustomTagList() {
@@ -443,13 +305,114 @@ class _SearchScreenState extends State<SearchScreen>
     super.dispose();
   }
 
-  void _hideKeyboard(BuildContext context) {
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    // print("currentFocus: $currentFocus");
-    // print(currentFocus.focusedChild);
-    // if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-    //   FocusManager.instance.primaryFocus?.unfocus();
-    // }
+  void _onLoading(dynamic data, bool loadMore) async {
+    print("_onLoading");
+    print(data);
+    _saveData(data);
+    String newHtml = _jointHtml();
+    print(_htmlUrl);
+    print(newHtml);
+    if (loadMore) {
+      if (_totalPage - _page > 0) {
+        //获取下一页数据
+        print("获取下一页数据");
+        _page = _page + 1;
+        String tempHtml = "$newHtml&page=$_page";
+        await loadData(tempHtml);
+        setState(() {});
+        _refreshController.loadComplete();
+      } else {
+        //已经没有更多数据
+        print("已经没有更多数据");
+        _refreshController.loadNoData();
+      }
+    } else {
+      //获取新的数据，相同的url就不执行
+      print("获取新的数据，相同的url就不执行");
+      if (newHtml != _htmlUrl) {
+        _page = 1;
+        _searchVideoList = [];
+        setState(() {
+          _futureBuilderFuture = loadData(newHtml);
+        });
+        _refreshController.loadComplete();
+      }
+    }
+  }
+
+  void _saveData(dynamic data) {
+    print("_saveData: $data");
+    switch (data['type']) {
+      case "query":
+        _query = data['data'];
+        break;
+      case "broad":
+        _broad = data['data'];
+        break;
+      case "genre":
+        _genreIndex = data['data'];
+        break;
+      case "sort":
+        _sortIndex = data['data'];
+        break;
+      case "duration":
+        _durationIndex = data['data'];
+        break;
+      case "date":
+        _year = data['data']['year'];
+        _month = data['data']['month'];
+        break;
+      case "tag":
+        _tagList = data['data'];
+        break;
+      case "brand":
+        _brandList = data['data'];
+        break;
+    }
+  }
+
+  String _jointHtml() {
+    String newHtml = "https://hanime1.me/search?query=";
+    if (_query.length > 0) {
+      newHtml = "$newHtml$_query";
+    }
+
+    if (_broad) {
+      newHtml = "$newHtml&broad=on";
+    }
+
+    if (_genreIndex > 0) {
+      newHtml = "$newHtml&genre=${genre.data[_genreIndex]}";
+    }
+
+    if (_sortIndex > 0) {
+      newHtml = "$newHtml&sort=${sort.data[_sortIndex]}";
+    }
+
+    if (_durationIndex > 0) {
+      newHtml = "$newHtml&duration=${duration.data[_durationIndex]}";
+    }
+
+    if (_year != null && _year != "全部") {
+      newHtml = "$newHtml&year=$_year";
+      if (_month != null && _month != "全部") {
+        newHtml = "$newHtml&month=$_month";
+      }
+    }
+
+    if (_tagList.length > 0) {
+      for (String tag in _tagList) {
+        newHtml = "$newHtml&tags[]=$tag";
+      }
+    }
+
+    if (_brandList.length > 0) {
+      for (String brand in _brandList) {
+        newHtml = "$newHtml&brands[]=$brand";
+      }
+    }
+
+    return newHtml;
   }
 
   Future loadData(url) async {
