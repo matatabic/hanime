@@ -2,6 +2,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/pages/my/download/download_item.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -24,7 +25,6 @@ class _DownloadScreenState extends State<DownloadScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final downloadList = context.watch<DownloadModel>().downloadList;
-    print('downloadListdownloadListdownloadListdownloadListdownloadList:');
     return Scaffold(
       body: DragAndDropLists(
         contentsWhenEmpty: Center(
@@ -41,7 +41,7 @@ class _DownloadScreenState extends State<DownloadScreen>
   }
 
   List<DragAndDropList> _buildItem(List<DownloadEntity> downloadEntity) {
-    print('_buildItem_buildItem_buildItem_buildItem_buildItem_buildItem:');
+    final widgetContext = context;
     return [
       DragAndDropList(
           children: downloadEntity
@@ -54,9 +54,15 @@ class _DownloadScreenState extends State<DownloadScreen>
                           SlidableAction(
                             flex: 1,
                             onPressed: (BuildContext context) {
-                              context
-                                  .read<DownloadModel>()
-                                  .removeItem(item.htmlUrl);
+                              CustomDialog.showDialog(
+                                  context,
+                                  "确认暂停下载?",
+                                  () => {
+                                        widgetContext
+                                            .read<DownloadModel>()
+                                            .removeItem(item.htmlUrl),
+                                        Navigator.pop(widgetContext)
+                                      });
                             },
                             backgroundColor: Color(0xFFFE4A49),
                             foregroundColor: Colors.white,
