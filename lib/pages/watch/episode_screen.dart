@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/selected_cover.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_image.dart';
-import 'package:hanime/pages/watch/selected_cover.dart';
 
 import '../../component/loading_cover.dart';
 

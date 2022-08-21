@@ -123,14 +123,17 @@ class _BottomNavBarState extends State<BottomNavBar>
       }
     });
 
-    Timer.periodic(Duration(milliseconds: 10000), (_) {
+    Timer.periodic(Duration(milliseconds: 5000), (_) {
       List<DownloadEntity> downloadList =
           Provider.of<DownloadModel>(context, listen: false).downloadList;
-
-      for (DownloadEntity item in downloadList) {
-        if (item.waitDownload) {
-          print("开始下载");
-          _download(item);
+      List<DownloadEntity> downloadingList =
+          downloadList.where((element) => element.downloading).toList();
+      if (downloadingList.length < 3) {
+        for (DownloadEntity item in downloadList) {
+          if (item.waitDownload) {
+            print("开始下载");
+            _download(item);
+          }
         }
       }
     });

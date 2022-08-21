@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,10 +71,28 @@ class _FavouriteScreen extends State<FavouriteScreen>
                 backgroundColor: Colors.orange,
                 label: '删除收藏夹',
                 labelStyle: TextStyle(fontSize: Adapt.px(38)),
-                onTap: () => {
-                  setState(() {
-                    _deleteMode = true;
-                  })
+                onTap: () {
+                  BotToast.showCustomNotification(
+                      align: Alignment(0, -1.2),
+                      toastBuilder: (void Function() cancelFunc) {
+                        return Container(
+                          width: Adapt.screenW(),
+                          height: 300,
+                          alignment: Alignment.bottomCenter,
+                          color: Colors.red,
+                          child: Text("删除收藏夹"),
+                        );
+                      });
+
+                  // if (favouriteList.length == 1) {
+                  //   BotToast.showSimpleNotification(
+                  //       title: "至少保留一个收藏夹",
+                  //       backgroundColor: Theme.of(context).primaryColor);
+                  // } else {
+                  //   setState(() {
+                  //     _deleteMode = true;
+                  //   });
+                  // }
                 },
               )
             ]),

@@ -23,7 +23,7 @@ class FavouriteItem extends StatelessWidget {
         child: Row(
           children: [
             InkWell(
-              onTap: () {
+              onLongPress: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoView(
                     heroTag: heroTag,

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/utils/storage.dart';
 
@@ -44,9 +46,9 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
 
   void removeList(FavouriteEntity favourite) {
     int index = _favouriteList.indexOf(favourite);
-    _favouriteList.removeAt(index);
-    saveData(_favouriteList);
-    notifyListeners();
+    // _favouriteList.removeAt(index);
+    // saveData(_favouriteList);
+    // notifyListeners();
   }
 
   void removeItem(FavouriteChildren anime) {
