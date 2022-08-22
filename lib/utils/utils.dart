@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -96,5 +97,51 @@ class Utils {
       res = res + "&tags[]=" + tag;
     }
     return res;
+  }
+
+  static Function debounce(
+    Function func, [
+    Duration delay = const Duration(milliseconds: 1000),
+  ]) {
+    Timer? timer;
+    Function target = () {
+      if (timer?.isActive ?? false) {
+        timer?.cancel();
+      }
+      timer = Timer(delay, () {
+        func.call();
+      });
+    };
+    return target;
+  }
+}
+
+class CommonUtil {
+  static const deFaultDurationTime = 5000;
+  static Timer? timer;
+
+  // 防抖函数
+  static debounce(Function doSomething, {durationTime = deFaultDurationTime}) {
+    timer?.cancel();
+    timer = new Timer(Duration(milliseconds: durationTime), () {
+      doSomething.call();
+      timer = null;
+    });
+  }
+
+  // 节流函数
+  static const String deFaultThrottleId = 'DeFaultThrottleId';
+  static Map<String, int> startTimeMap = {deFaultThrottleId: 0};
+  static throttle(Function doSomething,
+      {String throttleId = deFaultThrottleId,
+      durationTime = deFaultDurationTime,
+      Function? continueClick}) {
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    if (currentTime - (startTimeMap[throttleId] ?? 0) > durationTime) {
+      doSomething.call();
+      startTimeMap[throttleId] = DateTime.now().millisecondsSinceEpoch;
+    } else {
+      continueClick?.call();
+    }
   }
 }

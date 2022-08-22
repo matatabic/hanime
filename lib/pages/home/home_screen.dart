@@ -13,6 +13,7 @@ import 'package:hanime/pages/home/widght/tag_widget.dart';
 import 'package:hanime/pages/home/widght/top_widget.dart';
 import 'package:hanime/pages/home/widght/watch_widget.dart';
 import 'package:hanime/services/home_services.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,6 +67,14 @@ class _HomeScreenState extends State<HomeScreen>
         print(snapshot.error);
         if (snapshot.hasError) {
           return InAppWebView(
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+            },
+            initialOptions: InAppWebViewGroupOptions(
+              crossPlatform: InAppWebViewOptions(
+                clearCache: true,
+              ),
+            ),
             initialUrlRequest:
                 URLRequest(url: Uri.parse("https://hanime1.me/")),
             onLoadStop: (controller, url) async {
@@ -74,7 +83,25 @@ class _HomeScreenState extends State<HomeScreen>
               //   this.url = url.toString();
               //   urlController.text = this.url;
               // });
+
               print("onLoadStoponLoadStoponLoadStoponLoadStop");
+            },
+            onUpdateVisitedHistory: (controller, url, androidIsReload) {
+              print("onUpdateVisitedH12321312312");
+              print(androidIsReload);
+              CommonUtil.debounce(() async {
+                print("debounce1235124521412");
+                String? html = await webViewController?.getHtml();
+                // HomeEntity homeEntity = ( getHome(aa!));
+                // print(homeEntity.toJson());
+                setState(() {
+                  _futureBuilderFuture = getHome(html!);
+                });
+              });
+              // debounce111(() {
+              //   print("onUpdateVisitedHistory");
+              //   print(androidIsReload);
+              // });
             },
           );
 
