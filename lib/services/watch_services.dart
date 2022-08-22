@@ -4,8 +4,8 @@ import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
-  Response response = await DioManage.get(url);
-  final resHtml = response.data;
+  Response? response = await DioManage.get(url);
+  final resHtml = response?.data;
   var document = parse(resHtml);
 
   List tagList = [];
@@ -153,20 +153,20 @@ Future getWatchData(url) async {
 }
 
 Future translate(String prefixText, String expandableText) async {
-  Response response1 = await DioManage.get(
+  Response? response1 = await DioManage.get(
       'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$prefixText');
   // var res = json.decode(response1.data);
   String _prefixText = "";
   String _expandableText = "";
-  List res1 = response1.data['translateResult'];
+  List res1 = response1?.data['translateResult'];
 
   for (var item in res1) {
     _prefixText = _prefixText + item[0]['tgt'];
   }
 
-  Response response2 = await DioManage.get(
+  Response? response2 = await DioManage.get(
       'https://fanyi.youdao.com/translate?&doctype=json&type=JA2ZH_CN&i=$expandableText');
-  List res2 = response2.data['translateResult'];
+  List res2 = response2?.data['translateResult'];
 
   for (var item in res2) {
     _expandableText = _expandableText + item[0]['tgt'];

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
@@ -30,14 +31,13 @@ class _HomeScreenState extends State<HomeScreen>
   late Animation _colorTween;
 
   Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
-
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  InAppWebViewController? webViewController;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("mainBUBBBBmainBUBBBBmainBUBBBB");
     return Scaffold(
       backgroundColor: Colors.black,
       body: FutureBuilder(
@@ -63,7 +63,21 @@ class _HomeScreenState extends State<HomeScreen>
         );
       case ConnectionState.done:
         print('done');
+        print(snapshot.error);
         if (snapshot.hasError) {
+          return InAppWebView(
+            initialUrlRequest:
+                URLRequest(url: Uri.parse("https://hanime1.me/")),
+            onLoadStop: (controller, url) async {
+              // pullToRefreshController.endRefreshing();
+              // setState(() {
+              //   this.url = url.toString();
+              //   urlController.text = this.url;
+              // });
+              print("onLoadStoponLoadStoponLoadStoponLoadStop");
+            },
+          );
+
           return Center(
               child: MaterialButton(
             color: Colors.blue,
@@ -161,6 +175,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future loadData() async {
     var data = await getHomeData();
+    print("loadDataloadDataloadDataloadDataloadDataloadData");
+    print(data);
     HomeEntity homeEntity = HomeEntity.fromJson(data);
 
     return homeEntity;

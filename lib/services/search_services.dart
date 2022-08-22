@@ -310,9 +310,9 @@ SearchDuration duration = SearchDuration.fromJson({
 });
 
 Future getSearchData(_htmlUrl) async {
-  Response response = await DioManage.get(_htmlUrl);
+  Response? response = await DioManage.get(_htmlUrl);
   print(_htmlUrl);
-  final resHtml = response.data;
+  final resHtml = response?.data;
   var document = parse(resHtml);
   var videoList = [];
   var page;

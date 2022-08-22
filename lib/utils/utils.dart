@@ -53,8 +53,8 @@ class Utils {
   }
 
   static Future<String> getM3u8Url(String url) async {
-    Response response = await DioManage.get(url);
-    final res = response.data;
+    Response? response = await DioManage.get(url);
+    final res = response?.data;
 
     if (res.contains("EXTINF")) {
       return url;
