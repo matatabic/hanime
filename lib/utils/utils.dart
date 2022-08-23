@@ -8,6 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import '../request/dio_manage.dart';
 
 class Utils {
+  static const deFaultDurationTime = 1000;
+  static Timer? timer;
+
   static int randomNumber(int min, int max) {
     int res = min + Random().nextInt(max - min + 1);
     return res;
@@ -98,27 +101,6 @@ class Utils {
     }
     return res;
   }
-
-  static Function debounce(
-    Function func, [
-    Duration delay = const Duration(milliseconds: 1000),
-  ]) {
-    Timer? timer;
-    Function target = () {
-      if (timer?.isActive ?? false) {
-        timer?.cancel();
-      }
-      timer = Timer(delay, () {
-        func.call();
-      });
-    };
-    return target;
-  }
-}
-
-class CommonUtil {
-  static const deFaultDurationTime = 5000;
-  static Timer? timer;
 
   // 防抖函数
   static debounce(Function doSomething, {durationTime = deFaultDurationTime}) {

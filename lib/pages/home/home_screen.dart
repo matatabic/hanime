@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hanime/common/adapt.dart';
+import 'package:hanime/common/constant.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
 import 'package:hanime/pages/home/widght/fire_widget.dart';
@@ -31,10 +32,14 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _colorAnimationController;
   late Animation _colorTween;
 
-  Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
+  int _cloudFlareStep = 0;
+  int _durationTime = 1500;
+  bool _networkError = false;
+  InAppWebViewController? _webViewController;
+
+  Interval _opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  InAppWebViewController? webViewController;
 
   @override
   Widget build(BuildContext context) {
@@ -66,56 +71,75 @@ class _HomeScreenState extends State<HomeScreen>
         print('done');
         print(snapshot.error);
         if (snapshot.hasError) {
-          return InAppWebView(
-            onWebViewCreated: (controller) {
-              webViewController = controller;
-            },
-            initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                clearCache: true,
-              ),
-            ),
-            initialUrlRequest:
-                URLRequest(url: Uri.parse("https://hanime1.me/")),
-            onLoadStop: (controller, url) async {
-              // pullToRefreshController.endRefreshing();
-              // setState(() {
-              //   this.url = url.toString();
-              //   urlController.text = this.url;
-              // });
-
-              print("onLoadStoponLoadStoponLoadStoponLoadStop");
-            },
-            onUpdateVisitedHistory: (controller, url, androidIsReload) {
-              print("onUpdateVisitedH12321312312");
-              print(androidIsReload);
-              CommonUtil.debounce(() async {
-                print("debounce1235124521412");
-                String? html = await webViewController?.getHtml();
-                // HomeEntity homeEntity = ( getHome(aa!));
-                // print(homeEntity.toJson());
+          if (_networkError) {
+            return Center(
+                child: MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: Text('网络异常,点击重新加载'),
+              onPressed: () {
                 setState(() {
-                  _futureBuilderFuture = getHome(html!);
+                  _networkError = false;
+                  _futureBuilderFuture = loadData();
                 });
-              });
-              // debounce111(() {
-              //   print("onUpdateVisitedHistory");
-              //   print(androidIsReload);
-              // });
-            },
+              },
+            ));
+          }
+          return Stack(
+            children: [
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  width: 1,
+                  height: 1,
+                  child: InAppWebView(
+                    onWebViewCreated: (controller) {
+                      _webViewController = controller;
+                    },
+                    initialOptions: InAppWebViewGroupOptions(
+                      crossPlatform: InAppWebViewOptions(
+                        clearCache: false,
+                      ),
+                    ),
+                    initialUrlRequest:
+                        URLRequest(url: Uri.parse(Constant.home_url)),
+                    onLoadError: (controller, url, code, message) {
+                      print("onLoadError");
+                    },
+                    onLoadHttpError: (controller, url, code, message) {
+                      print("onLoadHttpError");
+                    },
+                    onUpdateVisitedHistory:
+                        (controller, url, androidIsReload) async {
+                      if (url.toString() != Constant.home_url) {
+                        _durationTime = 5000;
+                      }
+                      if (_cloudFlareStep == 4) {
+                        _durationTime = 2000;
+                      }
+
+                      Utils.debounce(() async {
+                        String? html = await _webViewController?.getHtml();
+                        _cloudFlareStep = 0;
+                        if (html != null && !html.contains("net::ERR")) {
+                          setState(() {
+                            _futureBuilderFuture = homeHtml2Data(html);
+                          });
+                        } else {
+                          setState(() {
+                            _networkError = true;
+                          });
+                        }
+                      }, durationTime: _durationTime);
+                      _cloudFlareStep++;
+                    },
+                  ),
+                ),
+              ),
+              Center(child: CircularProgressIndicator())
+            ],
           );
 
-          return Center(
-              child: MaterialButton(
-            color: Colors.blue,
-            textColor: Colors.white,
-            child: Text('网络异常,点击重新加载'),
-            onPressed: () {
-              setState(() {
-                _futureBuilderFuture = loadData();
-              });
-            },
-          ));
           // return Text('Error: ${snapshot.error}');
         } else {
           return _createWidget(context, snapshot);
@@ -145,22 +169,22 @@ class _HomeScreenState extends State<HomeScreen>
                 switch (index) {
                   case 0:
                     return TopWidget(
-                        data: homeEntity.top, opacityCurve: opacityCurve);
+                        data: homeEntity.top, opacityCurve: _opacityCurve);
                   case 1:
                     return LatestWidget(
-                        data: homeEntity.latest, opacityCurve: opacityCurve);
+                        data: homeEntity.latest, opacityCurve: _opacityCurve);
                   case 2:
                     return FireWidget(
-                        data: homeEntity.fire, opacityCurve: opacityCurve);
+                        data: homeEntity.fire, opacityCurve: _opacityCurve);
                   case 3:
                     return TagWidget(
-                        data: homeEntity.tag, opacityCurve: opacityCurve);
+                        data: homeEntity.tag, opacityCurve: _opacityCurve);
                   case 4:
                     return HotWidget(
-                        data: homeEntity.hot, opacityCurve: opacityCurve);
+                        data: homeEntity.hot, opacityCurve: _opacityCurve);
                   case 5:
                     return WatchWidget(
-                        data: homeEntity.watch, opacityCurve: opacityCurve);
+                        data: homeEntity.watch, opacityCurve: _opacityCurve);
                 }
               }, childCount: 6)),
             ]),
@@ -201,10 +225,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future loadData() async {
-    var data = await getHomeData();
-    print("loadDataloadDataloadDataloadDataloadDataloadData");
-    print(data);
-    HomeEntity homeEntity = HomeEntity.fromJson(data);
+    HomeEntity homeEntity = await getHomeData(Constant.home_url);
 
     return homeEntity;
   }

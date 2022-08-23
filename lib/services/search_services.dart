@@ -311,14 +311,22 @@ SearchDuration duration = SearchDuration.fromJson({
 
 Future getSearchData(_htmlUrl) async {
   Response? response = await DioManage.get(_htmlUrl);
-  print(_htmlUrl);
-  final resHtml = response?.data;
-  var document = parse(resHtml);
+  if (response == null) {
+    return null;
+  }
+
+  final resHtml = response.data;
+
+  return await searchHtml2Data(resHtml);
+}
+
+Future searchHtml2Data(String html) async {
+  var document = parse(html);
   var videoList = [];
   var page;
   RegExp pageReg = RegExp(r"(?<=\) < )(.*?)(?=- 1)");
 
-  var match = pageReg.firstMatch(resHtml);
+  var match = pageReg.firstMatch(html);
   if (match != null) {
     page = int.parse(match.group(0)!);
   }
@@ -361,5 +369,6 @@ Future getSearchData(_htmlUrl) async {
     }
   }
 
-  return {"video": videoList, "commendCount": commendCount, "page": page};
+  return SearchEntity.fromJson(
+      {"video": videoList, "commendCount": commendCount, "page": page});
 }
