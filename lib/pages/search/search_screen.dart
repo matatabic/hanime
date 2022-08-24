@@ -13,7 +13,6 @@ import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_header_widget.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:hanime/utils/logUtil.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -46,9 +45,11 @@ class _SearchScreenState extends State<SearchScreen>
   int _cloudFlareStep = 0;
   int _durationTime = 1500;
   bool _networkError = false;
+  bool _webViewNetworkError = false;
   InAppWebViewController? _webViewController;
 
-  String _htmlUrl = "";
+  String _htmlUrl = Constant.search_url;
+  String _tempHtmlUrl = Constant.search_url;
 
   String _query = "";
   bool _broad = false;
@@ -72,6 +73,12 @@ class _SearchScreenState extends State<SearchScreen>
   Widget build(BuildContext context) {
     super.build(context);
     print("mainBUBBBB");
+    double surHeight = MediaQuery.of(context).size.height -
+        _topHeight -
+        MediaQueryData.fromWindow(window).padding.top -
+        40 -
+        kBottomNavigationBarHeight;
+
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -101,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen>
                   } else if (mode == LoadStatus.noMore) {
                     body = Text("没有更多数据了!");
                   } else {
-                    body = Text("没有更多数据了!");
+                    body = Text("正在加载数据!");
                   }
                   return Container(
                     height: 55.0,
@@ -124,6 +131,91 @@ class _SearchScreenState extends State<SearchScreen>
                     tagList: _tagList,
                     brandList: _brandList,
                   ),
+                  _networkError
+                      ? SliverToBoxAdapter(
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0,
+                                child: SizedBox(
+                                  width: 1,
+                                  height: 1,
+                                  child: InAppWebView(
+                                    onWebViewCreated: (controller) {
+                                      _webViewController = controller;
+                                    },
+                                    initialOptions: InAppWebViewGroupOptions(
+                                      crossPlatform: InAppWebViewOptions(
+                                        clearCache: true,
+                                      ),
+                                    ),
+                                    initialUrlRequest: URLRequest(
+                                        url: Uri.parse(_tempHtmlUrl)),
+                                    onLoadError:
+                                        (controller, url, code, message) {
+                                      print("onLoadError");
+                                    },
+                                    onLoadHttpError:
+                                        (controller, url, code, message) {
+                                      print("onLoadHttpError");
+                                    },
+                                    onUpdateVisitedHistory: (controller, url,
+                                        androidIsReload) async {
+                                      if (url.toString() != _tempHtmlUrl) {
+                                        _durationTime = 5000;
+                                      }
+                                      if (_cloudFlareStep == 4) {
+                                        _durationTime = 2000;
+                                      }
+
+                                      Utils.debounce(() async {
+                                        String? html =
+                                            await _webViewController?.getHtml();
+                                        _cloudFlareStep = 0;
+                                        if (html != null &&
+                                            !html.contains("net::ERR")) {
+                                          // LogUtil.d(html);
+
+                                          var data =
+                                              await searchHtml2Data(html);
+                                          // setState(() {
+                                          //   _networkError = false;
+                                          //   _webViewNetworkError = false;
+                                          //   _futureBuilderFuture =
+                                          //       loadDataHandle(data);
+                                          // });
+                                          loadDataHandle(data);
+                                          setState(() {
+                                            _networkError = false;
+                                            _webViewNetworkError = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            _networkError = false;
+                                            _webViewNetworkError = true;
+                                          });
+                                        }
+                                      }, durationTime: _durationTime);
+                                      _cloudFlareStep++;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              // Container(
+                              //   height: surHeight,
+                              //   child: Center(
+                              //     child: CircularProgressIndicator(),
+                              //   ),
+                              // )
+                            ],
+                          ),
+                        )
+                      : SliverToBoxAdapter(
+                          child: Container(
+                            width: 1,
+                            height: 1,
+                          ),
+                        ),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 10),
                   ),
@@ -169,92 +261,45 @@ class _SearchScreenState extends State<SearchScreen>
         );
       case ConnectionState.done:
         print('done');
-        String searchUrl = _jointHtml();
-        if (snapshot.hasError) {
-          if (_networkError) {
-            return SliverToBoxAdapter(
-              child: Container(
-                height: surHeight,
-                child: Center(
-                    child: MaterialButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  child: Text('网络异常,点击重新加载'),
-                  onPressed: () {
-                    setState(() {
-                      _futureBuilderFuture = loadData(_jointHtml());
-                    });
-                  },
-                )),
-              ),
-            );
-          }
+        print(_tempHtmlUrl);
+        if (_webViewNetworkError) {
           return SliverToBoxAdapter(
-            child: Stack(
-              children: [
-                Opacity(
-                  opacity: 0,
-                  child: SizedBox(
-                    width: 1,
-                    height: 1,
-                    child: InAppWebView(
-                      onWebViewCreated: (controller) {
-                        _webViewController = controller;
-                      },
-                      initialOptions: InAppWebViewGroupOptions(
-                        crossPlatform: InAppWebViewOptions(
-                          clearCache: false,
-                        ),
-                      ),
-                      initialUrlRequest: URLRequest(url: Uri.parse(searchUrl)),
-                      onLoadError: (controller, url, code, message) {
-                        print("onLoadError");
-                      },
-                      onLoadHttpError: (controller, url, code, message) {
-                        print("onLoadHttpError");
-                      },
-                      onUpdateVisitedHistory:
-                          (controller, url, androidIsReload) async {
-                        if (url.toString() != searchUrl) {
-                          _durationTime = 5000;
-                        }
-                        if (_cloudFlareStep == 4) {
-                          _durationTime = 2000;
-                        }
-
-                        Utils.debounce(() async {
-                          String? html = await _webViewController?.getHtml();
-                          _cloudFlareStep = 0;
-                          if (html != null && !html.contains("net::ERR")) {
-                            LogUtil.d(html);
-                            var data = await searchHtml2Data(html);
-                            setState(() {
-                              _futureBuilderFuture =
-                                  loadDataHandle(searchUrl, data);
-                            });
-                          } else {
-                            setState(() {
-                              _networkError = true;
-                            });
-                          }
-                        }, durationTime: _durationTime);
-                        _cloudFlareStep++;
-                      },
-                    ),
-                  ),
-                ),
-                Container(
-                  height: surHeight,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              ],
+            child: Container(
+              height: surHeight,
+              child: Center(
+                  child: MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: Text('网络异常,点击重新加载'),
+                onPressed: () {
+                  setState(() {
+                    _futureBuilderFuture = loadData(_jointHtml());
+                  });
+                },
+              )),
             ),
           );
-
-          // return Text('Error: ${snapshot.error}');
+        }
+        if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: Container(
+              height: surHeight,
+              child: Center(
+                  child: MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: Text('网络异常,点击重新加载'),
+                onPressed: () {
+                  setState(() {
+                    _futureBuilderFuture = loadData(_jointHtml());
+                  });
+                },
+              )),
+            ),
+          );
         } else {
+          print("snapshotsnapshotsnapshotsnapshotsnapshotsnapshot");
+
           return _createWidget(context, snapshot);
         }
     }
@@ -264,90 +309,94 @@ class _SearchScreenState extends State<SearchScreen>
     print("_createWidget");
     List<SearchVideo> videoList = snapshot.data;
 
-    return SliverGrid(
-      //调整间距
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //横轴元素个数
-          crossAxisCount: _commendCount,
-          //纵轴间距
-          mainAxisSpacing: 5.0,
-          //横轴间距
-          crossAxisSpacing: 5.0,
-          //子组件宽高长度比例
-          childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
-      //加载内容
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          String heroTag = UniqueKey().toString();
-          return _commendCount == 3
-              ? Anime3Card(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => WatchScreen(
-                                htmlUrl: videoList[index].htmlUrl)));
-                  },
-                  onLongPress: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return AnimatedBuilder(
-                            animation: animation,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity:
-                                    opacityCurve.transform(animation.value),
-                                child: HeroSlidePage(
-                                    heroTag: heroTag,
-                                    url: videoList[index].imgUrl),
-                              );
-                            },
-                          );
-                        }));
-                  },
-                  heroTag: heroTag,
-                  title: videoList[index].title,
-                  imgUrl: videoList[index].imgUrl)
-              : Anime2Card(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => WatchScreen(
-                                htmlUrl: videoList[index].htmlUrl)));
-                  },
-                  onLongPress: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return AnimatedBuilder(
-                            animation: animation,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity:
-                                    opacityCurve.transform(animation.value),
-                                child: HeroSlidePage(
-                                    heroTag: heroTag,
-                                    url: videoList[index].imgUrl),
-                              );
-                            },
-                          );
-                        }));
-                  },
-                  heroTag: heroTag,
-                  htmlUrl: videoList[index].htmlUrl,
-                  title: videoList[index].title,
-                  imgUrl: videoList[index].imgUrl,
-                  duration: videoList[index].duration,
-                  genre: videoList[index].genre,
-                  author: videoList[index].author,
-                  created: videoList[index].created,
-                );
-        },
-        childCount: videoList.length, //设置个数
-      ),
-    );
+    return videoList.length > 0
+        ? SliverGrid(
+            //调整间距
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //横轴元素个数
+                crossAxisCount: _commendCount,
+                //纵轴间距
+                mainAxisSpacing: 5.0,
+                //横轴间距
+                crossAxisSpacing: 5.0,
+                //子组件宽高长度比例
+                childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
+            //加载内容
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                String heroTag = UniqueKey().toString();
+                return _commendCount == 3
+                    ? Anime3Card(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => WatchScreen(
+                                      htmlUrl: videoList[index].htmlUrl)));
+                        },
+                        onLongPress: () {
+                          Navigator.of(context).push(PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return AnimatedBuilder(
+                                  animation: animation,
+                                  builder: (context, child) {
+                                    return Opacity(
+                                      opacity: opacityCurve
+                                          .transform(animation.value),
+                                      child: HeroSlidePage(
+                                          heroTag: heroTag,
+                                          url: videoList[index].imgUrl),
+                                    );
+                                  },
+                                );
+                              }));
+                        },
+                        heroTag: heroTag,
+                        title: videoList[index].title,
+                        imgUrl: videoList[index].imgUrl)
+                    : Anime2Card(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => WatchScreen(
+                                      htmlUrl: videoList[index].htmlUrl)));
+                        },
+                        onLongPress: () {
+                          Navigator.of(context).push(PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return AnimatedBuilder(
+                                  animation: animation,
+                                  builder: (context, child) {
+                                    return Opacity(
+                                      opacity: opacityCurve
+                                          .transform(animation.value),
+                                      child: HeroSlidePage(
+                                          heroTag: heroTag,
+                                          url: videoList[index].imgUrl),
+                                    );
+                                  },
+                                );
+                              }));
+                        },
+                        heroTag: heroTag,
+                        htmlUrl: videoList[index].htmlUrl,
+                        title: videoList[index].title,
+                        imgUrl: videoList[index].imgUrl,
+                        duration: videoList[index].duration,
+                        genre: videoList[index].genre,
+                        author: videoList[index].author,
+                        created: videoList[index].created,
+                      );
+              },
+              childCount: videoList.length, //设置个数
+            ),
+          )
+        : SliverToBoxAdapter(child: Container());
   }
 
   @override
@@ -392,8 +441,8 @@ class _SearchScreenState extends State<SearchScreen>
         //获取下一页数据
         print("获取下一页数据");
         _page = _page + 1;
-        String tempHtml = "$newHtml&page=$_page";
-        await loadData(tempHtml);
+        _tempHtmlUrl = "$newHtml&page=$_page";
+        await loadData(_tempHtmlUrl);
         setState(() {});
         _refreshController.loadComplete();
       } else {
@@ -405,6 +454,7 @@ class _SearchScreenState extends State<SearchScreen>
       //获取新的数据，相同的url就不执行
       print("获取新的数据，相同的url就不执行");
       if (newHtml != _htmlUrl) {
+        _tempHtmlUrl = _htmlUrl;
         _page = 1;
         _searchVideoList = [];
         setState(() {
@@ -490,19 +540,26 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future loadData(url) async {
-    SearchEntity searchEntity =
+    print("loadDataloadDataloadDataloadDataloadDataloadDataloadDataloadData");
+    print("12541241");
+    var searchEntity =
         await getSearchData("https://hanime1111.me/search?query=");
-
-    _htmlUrl = url;
-    _commendCount = searchEntity.commendCount;
-    _totalPage = searchEntity.page;
-    _searchVideoList.addAll(searchEntity.video);
-
+    print("searchEntity");
+    print(searchEntity);
+    // _htmlUrl = url;
+    // _commendCount = searchEntity.commendCount;
+    // _totalPage = searchEntity.page;
+    // _searchVideoList.addAll(searchEntity.video);
+    if (searchEntity == null) {
+      setState(() {
+        _networkError = true;
+      });
+    }
     return _searchVideoList;
   }
 
-  Future loadDataHandle(url, searchEntity) async {
-    _htmlUrl = url;
+  Future loadDataHandle(searchEntity) async {
+    // _htmlUrl = url;
     _commendCount = searchEntity.commendCount;
     _totalPage = searchEntity.page;
     _searchVideoList.addAll(searchEntity.video);

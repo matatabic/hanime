@@ -15,6 +15,14 @@ class DioManage {
       ],
     ));
 
-    return await dio.get(htmlUrl);
+    try {
+      //404
+      return await dio.get(htmlUrl);
+      // await dio.get('https://wendux.github.io/xsddddd');
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      return null;
+    }
   }
 }
