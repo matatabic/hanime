@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
@@ -29,6 +31,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar>
     with SingleTickerProviderStateMixin {
+  dynamic _lastTime;
   late TabController tabController;
 
   int currentIndex = 0;
@@ -74,6 +77,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         ),
         body: WillPopScope(
           onWillPop: () async {
+            _doQuit();
             return false;
           },
           child: TabBarView(
@@ -189,5 +193,25 @@ class _BottomNavBarState extends State<BottomNavBar>
     }
     Provider.of<DownloadModel>(context, listen: false)
         .changeDownloadState(downloadEntity);
+  }
+
+  void _doQuit() async {
+    // 两秒内没有再点过退出按钮
+    if (_lastTime == null ||
+        DateTime.now().difference(_lastTime) > Duration(seconds: 2)) {
+      // 重置最后一次点击的时间
+      _lastTime = DateTime.now();
+      BotToast.showCustomNotification(toastBuilder: (_) {
+        return Container(
+          width: 200,
+          height: 300,
+          color: Colors.red,
+        );
+      });
+    }
+    // 两秒内点了两次退出按钮，则退出 APP
+    else {
+      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    }
   }
 }

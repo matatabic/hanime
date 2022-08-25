@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hanime/common/adapt.dart';
-import 'package:hanime/common/constant.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
@@ -13,7 +11,6 @@ import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/pages/search/search_header_widget.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/services/search_services.dart';
-import 'package:hanime/utils/utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -42,14 +39,7 @@ class _SearchScreenState extends State<SearchScreen>
   late int _commendCount;
   List<SearchVideo> _searchVideoList = [];
 
-  int _cloudFlareStep = 0;
-  int _durationTime = 1500;
-  bool _networkError = false;
-  bool _webViewNetworkError = false;
-  InAppWebViewController? _webViewController;
-
-  String _htmlUrl = Constant.search_url;
-  String _tempHtmlUrl = Constant.search_url;
+  String _htmlUrl = "";
 
   String _query = "";
   bool _broad = false;
@@ -73,12 +63,6 @@ class _SearchScreenState extends State<SearchScreen>
   Widget build(BuildContext context) {
     super.build(context);
     print("mainBUBBBB");
-    double surHeight = MediaQuery.of(context).size.height -
-        _topHeight -
-        MediaQueryData.fromWindow(window).padding.top -
-        40 -
-        kBottomNavigationBarHeight;
-
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -88,6 +72,7 @@ class _SearchScreenState extends State<SearchScreen>
           body: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
+              print("123333333333333333333333");
               FocusManager.instance.rootScope.requestFocus(FocusNode());
             },
             child: SmartRefresher(
@@ -108,7 +93,7 @@ class _SearchScreenState extends State<SearchScreen>
                   } else if (mode == LoadStatus.noMore) {
                     body = Text("没有更多数据了!");
                   } else {
-                    body = Text("正在加载数据!");
+                    body = Text("没有更多数据了!");
                   }
                   return Container(
                     height: 55.0,
@@ -131,91 +116,6 @@ class _SearchScreenState extends State<SearchScreen>
                     tagList: _tagList,
                     brandList: _brandList,
                   ),
-                  _networkError
-                      ? SliverToBoxAdapter(
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: 0,
-                                child: SizedBox(
-                                  width: 1,
-                                  height: 1,
-                                  child: InAppWebView(
-                                    onWebViewCreated: (controller) {
-                                      _webViewController = controller;
-                                    },
-                                    initialOptions: InAppWebViewGroupOptions(
-                                      crossPlatform: InAppWebViewOptions(
-                                        clearCache: true,
-                                      ),
-                                    ),
-                                    initialUrlRequest: URLRequest(
-                                        url: Uri.parse(_tempHtmlUrl)),
-                                    onLoadError:
-                                        (controller, url, code, message) {
-                                      print("onLoadError");
-                                    },
-                                    onLoadHttpError:
-                                        (controller, url, code, message) {
-                                      print("onLoadHttpError");
-                                    },
-                                    onUpdateVisitedHistory: (controller, url,
-                                        androidIsReload) async {
-                                      if (url.toString() != _tempHtmlUrl) {
-                                        _durationTime = 5000;
-                                      }
-                                      if (_cloudFlareStep == 4) {
-                                        _durationTime = 2000;
-                                      }
-
-                                      Utils.debounce(() async {
-                                        String? html =
-                                            await _webViewController?.getHtml();
-                                        _cloudFlareStep = 0;
-                                        if (html != null &&
-                                            !html.contains("net::ERR")) {
-                                          // LogUtil.d(html);
-
-                                          var data =
-                                              await searchHtml2Data(html);
-                                          // setState(() {
-                                          //   _networkError = false;
-                                          //   _webViewNetworkError = false;
-                                          //   _futureBuilderFuture =
-                                          //       loadDataHandle(data);
-                                          // });
-                                          loadDataHandle(data);
-                                          setState(() {
-                                            _networkError = false;
-                                            _webViewNetworkError = false;
-                                          });
-                                        } else {
-                                          setState(() {
-                                            _networkError = false;
-                                            _webViewNetworkError = true;
-                                          });
-                                        }
-                                      }, durationTime: _durationTime);
-                                      _cloudFlareStep++;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              // Container(
-                              //   height: surHeight,
-                              //   child: Center(
-                              //     child: CircularProgressIndicator(),
-                              //   ),
-                              // )
-                            ],
-                          ),
-                        )
-                      : SliverToBoxAdapter(
-                          child: Container(
-                            width: 1,
-                            height: 1,
-                          ),
-                        ),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 10),
                   ),
@@ -261,25 +161,6 @@ class _SearchScreenState extends State<SearchScreen>
         );
       case ConnectionState.done:
         print('done');
-        print(_tempHtmlUrl);
-        if (_webViewNetworkError) {
-          return SliverToBoxAdapter(
-            child: Container(
-              height: surHeight,
-              child: Center(
-                  child: MaterialButton(
-                color: Colors.blue,
-                textColor: Colors.white,
-                child: Text('网络异常,点击重新加载'),
-                onPressed: () {
-                  setState(() {
-                    _futureBuilderFuture = loadData(_jointHtml());
-                  });
-                },
-              )),
-            ),
-          );
-        }
         if (snapshot.hasError) {
           return SliverToBoxAdapter(
             child: Container(
@@ -297,9 +178,8 @@ class _SearchScreenState extends State<SearchScreen>
               )),
             ),
           );
+          // return Text('Error: ${snapshot.error}');
         } else {
-          print("snapshotsnapshotsnapshotsnapshotsnapshotsnapshot");
-
           return _createWidget(context, snapshot);
         }
     }
@@ -309,94 +189,90 @@ class _SearchScreenState extends State<SearchScreen>
     print("_createWidget");
     List<SearchVideo> videoList = snapshot.data;
 
-    return videoList.length > 0
-        ? SliverGrid(
-            //调整间距
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //横轴元素个数
-                crossAxisCount: _commendCount,
-                //纵轴间距
-                mainAxisSpacing: 5.0,
-                //横轴间距
-                crossAxisSpacing: 5.0,
-                //子组件宽高长度比例
-                childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
-            //加载内容
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                String heroTag = UniqueKey().toString();
-                return _commendCount == 3
-                    ? Anime3Card(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => WatchScreen(
-                                      htmlUrl: videoList[index].htmlUrl)));
-                        },
-                        onLongPress: () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return AnimatedBuilder(
-                                  animation: animation,
-                                  builder: (context, child) {
-                                    return Opacity(
-                                      opacity: opacityCurve
-                                          .transform(animation.value),
-                                      child: HeroSlidePage(
-                                          heroTag: heroTag,
-                                          url: videoList[index].imgUrl),
-                                    );
-                                  },
-                                );
-                              }));
-                        },
-                        heroTag: heroTag,
-                        title: videoList[index].title,
-                        imgUrl: videoList[index].imgUrl)
-                    : Anime2Card(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => WatchScreen(
-                                      htmlUrl: videoList[index].htmlUrl)));
-                        },
-                        onLongPress: () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return AnimatedBuilder(
-                                  animation: animation,
-                                  builder: (context, child) {
-                                    return Opacity(
-                                      opacity: opacityCurve
-                                          .transform(animation.value),
-                                      child: HeroSlidePage(
-                                          heroTag: heroTag,
-                                          url: videoList[index].imgUrl),
-                                    );
-                                  },
-                                );
-                              }));
-                        },
-                        heroTag: heroTag,
-                        htmlUrl: videoList[index].htmlUrl,
-                        title: videoList[index].title,
-                        imgUrl: videoList[index].imgUrl,
-                        duration: videoList[index].duration,
-                        genre: videoList[index].genre,
-                        author: videoList[index].author,
-                        created: videoList[index].created,
-                      );
-              },
-              childCount: videoList.length, //设置个数
-            ),
-          )
-        : SliverToBoxAdapter(child: Container());
+    return SliverGrid(
+      //调整间距
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //横轴元素个数
+          crossAxisCount: _commendCount,
+          //纵轴间距
+          mainAxisSpacing: 5.0,
+          //横轴间距
+          crossAxisSpacing: 5.0,
+          //子组件宽高长度比例
+          childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
+      //加载内容
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          String heroTag = UniqueKey().toString();
+          return _commendCount == 3
+              ? Anime3Card(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => WatchScreen(
+                                htmlUrl: videoList[index].htmlUrl)));
+                  },
+                  onLongPress: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: HeroSlidePage(
+                                    heroTag: heroTag,
+                                    url: videoList[index].imgUrl),
+                              );
+                            },
+                          );
+                        }));
+                  },
+                  heroTag: heroTag,
+                  title: videoList[index].title,
+                  imgUrl: videoList[index].imgUrl)
+              : Anime2Card(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => WatchScreen(
+                                htmlUrl: videoList[index].htmlUrl)));
+                  },
+                  onLongPress: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AnimatedBuilder(
+                            animation: animation,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity:
+                                    opacityCurve.transform(animation.value),
+                                child: HeroSlidePage(
+                                    heroTag: heroTag,
+                                    url: videoList[index].imgUrl),
+                              );
+                            },
+                          );
+                        }));
+                  },
+                  heroTag: heroTag,
+                  htmlUrl: videoList[index].htmlUrl,
+                  title: videoList[index].title,
+                  imgUrl: videoList[index].imgUrl,
+                  duration: videoList[index].duration,
+                  genre: videoList[index].genre,
+                  author: videoList[index].author,
+                  created: videoList[index].created,
+                );
+        },
+        childCount: videoList.length, //设置个数
+      ),
+    );
   }
 
   @override
@@ -441,8 +317,8 @@ class _SearchScreenState extends State<SearchScreen>
         //获取下一页数据
         print("获取下一页数据");
         _page = _page + 1;
-        _tempHtmlUrl = "$newHtml&page=$_page";
-        await loadData(_tempHtmlUrl);
+        String tempHtml = "$newHtml&page=$_page";
+        await loadData(tempHtml);
         setState(() {});
         _refreshController.loadComplete();
       } else {
@@ -454,7 +330,6 @@ class _SearchScreenState extends State<SearchScreen>
       //获取新的数据，相同的url就不执行
       print("获取新的数据，相同的url就不执行");
       if (newHtml != _htmlUrl) {
-        _tempHtmlUrl = _htmlUrl;
         _page = 1;
         _searchVideoList = [];
         setState(() {
@@ -466,6 +341,7 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   void _saveData(dynamic data) {
+    print("_saveData: $data");
     switch (data['type']) {
       case "query":
         _query = data['data'];
@@ -496,7 +372,7 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   String _jointHtml() {
-    String newHtml = Constant.search_url;
+    String newHtml = "https://hanime1.me/search?query=";
     if (_query.length > 0) {
       newHtml = "$newHtml$_query";
     }
@@ -540,29 +416,16 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Future loadData(url) async {
-    print("loadDataloadDataloadDataloadDataloadDataloadDataloadDataloadData");
-    print("12541241");
-    var searchEntity =
-        await getSearchData("https://hanime1111.me/search?query=");
-    print("searchEntity");
-    print(searchEntity);
-    // _htmlUrl = url;
-    // _commendCount = searchEntity.commendCount;
-    // _totalPage = searchEntity.page;
-    // _searchVideoList.addAll(searchEntity.video);
-    if (searchEntity == null) {
-      setState(() {
-        _networkError = true;
-      });
-    }
-    return _searchVideoList;
-  }
+    print("请求数据");
+    var data = await getSearchData(url);
 
-  Future loadDataHandle(searchEntity) async {
-    // _htmlUrl = url;
+    SearchEntity searchEntity = data;
+    _htmlUrl = url;
     _commendCount = searchEntity.commendCount;
     _totalPage = searchEntity.page;
     _searchVideoList.addAll(searchEntity.video);
+    print(_searchVideoList.length);
+    print("async loadData");
     return _searchVideoList;
   }
 }

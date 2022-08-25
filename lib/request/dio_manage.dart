@@ -8,10 +8,10 @@ class DioManage {
     dio.interceptors.add(RetryInterceptor(
       dio: dio,
       logPrint: print, // specify log function (optional)
-      retries: 1, // retry count (optional)
+      retries: 2, // retry count (optional)
       retryDelays: const [
         Duration(milliseconds: 500), // wait 1 sec before first retry
-        // Duration(milliseconds: 500), // wait 2 sec before second retry
+        Duration(milliseconds: 500), // wait 2 sec before second retry
       ],
     ));
 

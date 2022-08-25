@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import 'bottom_nav_bar.dart';
 
-// void main() => runApp(new MyApp());
 void main() => runApp(
       MultiProvider(
         providers: [
