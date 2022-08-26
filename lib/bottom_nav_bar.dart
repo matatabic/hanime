@@ -208,7 +208,7 @@ class _BottomNavBarState extends State<BottomNavBar>
             return Container(
               alignment: Alignment.bottomLeft,
               width: Adapt.screenW(),
-              height: Adapt.px(300),
+              height: Adapt.px(260),
               color: Colors.redAccent,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),

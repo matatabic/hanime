@@ -22,7 +22,7 @@ class DownloadItem extends StatelessWidget {
     final widgetContext = context;
     Widget _widget;
     List<Widget> ws = [];
-    if (downloadEntity.success || downloadEntity.waitDownload) {
+    if (downloadEntity.success) {
       _widget = Stack(alignment: Alignment.center, children: ws);
       ws.add(Container(
         height: Adapt.px(200),
@@ -33,33 +33,36 @@ class DownloadItem extends StatelessWidget {
     } else {
       _widget = InkWell(
           onTap: () {
+            if (downloadEntity.waitDownload) {
+              CustomDialog.showDialog(context, "确认暂停下载?", () {
+                widgetContext
+                    .read<DownloadModel>()
+                    .pause(downloadEntity.htmlUrl);
+                Navigator.pop(widgetContext);
+              });
+              return;
+            }
+
             if (downloadEntity.downloading) {
-              CustomDialog.showDialog(
-                  context,
-                  "确认暂停下载?",
-                  () => {
-                        widgetContext
-                            .read<DownloadModel>()
-                            .pause(downloadEntity.htmlUrl),
-                        if (downloadEntity.videoUrl.contains("m3u8"))
-                          {M3u8Downloader.pause(downloadEntity.videoUrl)}
-                        else
-                          {
-                            DioRangeDownloadManage.cancelDownload(
-                                downloadEntity.videoUrl)
-                          },
-                        Navigator.pop(widgetContext)
-                      });
+              CustomDialog.showDialog(context, "确认暂停下载?", () {
+                widgetContext
+                    .read<DownloadModel>()
+                    .pause(downloadEntity.htmlUrl);
+                if (downloadEntity.videoUrl.contains("m3u8")) {
+                  M3u8Downloader.pause(downloadEntity.videoUrl);
+                } else {
+                  DioRangeDownloadManage.cancelDownload(
+                      downloadEntity.videoUrl);
+                }
+                Navigator.pop(widgetContext);
+              });
             } else {
-              CustomDialog.showDialog(
-                  context,
-                  "确认开始下载?",
-                  () => {
-                        widgetContext
-                            .read<DownloadModel>()
-                            .download(downloadEntity.htmlUrl),
-                        Navigator.pop(widgetContext)
-                      });
+              CustomDialog.showDialog(context, "确认开始下载?", () {
+                widgetContext
+                    .read<DownloadModel>()
+                    .download(downloadEntity.htmlUrl);
+                Navigator.pop(widgetContext);
+              });
             }
           },
           child: Stack(alignment: Alignment.center, children: ws));
@@ -69,7 +72,7 @@ class DownloadItem extends StatelessWidget {
           imgUrl: downloadEntity.imageUrl,
         ),
       ));
-      if (!downloadEntity.downloading) {
+      if (!downloadEntity.downloading && !downloadEntity.waitDownload) {
         ws.add(Icon(Icons.cloud_download,
             size: Adapt.px(100), color: Colors.green));
       }

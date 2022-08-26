@@ -5,7 +5,16 @@ import 'package:html/parser.dart' show parse;
 
 Future getWatchData(url) async {
   Response? response = await DioManage.get(url);
-  final resHtml = response?.data;
+
+  if (response == null) {
+    return null;
+  }
+  final resHtml = response.data;
+
+  return await watchHtml2Data(resHtml, url);
+}
+
+Future watchHtml2Data(String resHtml, String url) async {
   var document = parse(resHtml);
 
   List tagList = [];

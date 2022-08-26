@@ -6,8 +6,8 @@ import 'package:hanime/common/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/entity/watch_entity.dart';
 
-import 'download_widget.dart';
-import 'like_widget.dart';
+import 'IconWidget/download_widget.dart';
+import 'IconWidget/like_widget.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -28,15 +28,15 @@ class BriefScreen extends StatelessWidget {
         child: Row(
           children: [
             InkWell(
-              onTap: () {
-                Navigator.of(context).push(NoAnimRouter(
-                  HeroPhotoView(
-                    heroTag: heroTag,
-                    maxScale: 1.5,
-                    imageProvider: NetworkImage(watchEntity.info.imgUrl),
-                  ),
-                ));
-              },
+              // onTap: () {
+              //   Navigator.of(context).push(NoAnimRouter(
+              //     HeroPhotoView(
+              //       heroTag: heroTag,
+              //       maxScale: 1.5,
+              //       imageProvider: NetworkImage(watchEntity.info.imgUrl),
+              //     ),
+              //   ));
+              // },
               onLongPress: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoView(

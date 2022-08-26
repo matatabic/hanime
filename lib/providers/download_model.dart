@@ -104,7 +104,9 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   void pause(String htmlUrl) {
     int index =
         _downloadList.indexWhere((element) => element.htmlUrl == htmlUrl);
-    if (_downloadList[index].downloading) {
+    if (_downloadList[index].waitDownload) {
+      _downloadList[index].waitDownload = false;
+    } else if (_downloadList[index].downloading) {
       _downloadList[index].downloading = false;
     } else {
       _downloadList[index].waitDownload = false;
