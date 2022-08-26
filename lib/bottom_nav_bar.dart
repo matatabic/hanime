@@ -201,13 +201,32 @@ class _BottomNavBarState extends State<BottomNavBar>
         DateTime.now().difference(_lastTime) > Duration(seconds: 2)) {
       // 重置最后一次点击的时间
       _lastTime = DateTime.now();
-      BotToast.showCustomNotification(toastBuilder: (_) {
-        return Container(
-          width: 200,
-          height: 300,
-          color: Colors.red,
-        );
-      });
+      BotToast.showCustomNotification(
+          duration: const Duration(seconds: 2),
+          align: Alignment(0, -1.2),
+          toastBuilder: (_) {
+            return Container(
+              alignment: Alignment.bottomLeft,
+              width: Adapt.screenW(),
+              height: Adapt.px(300),
+              color: Colors.redAccent,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                    Icon(Icons.west),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(
+                        "再按一次返回键退出应用",
+                        style: TextStyle(fontSize: Adapt.px(32)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
     }
     // 两秒内点了两次退出按钮，则退出 APP
     else {

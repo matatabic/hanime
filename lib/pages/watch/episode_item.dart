@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/common_image.dart';
 
-class EpisodePhoto extends StatelessWidget {
+class EpisodeItem extends StatelessWidget {
   final String imgUrl;
   final double width;
   final double height;
   final bool selector;
 
-  const EpisodePhoto(
+  const EpisodeItem(
       {Key? key,
       required this.imgUrl,
       required this.width,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/selected_cover.dart';
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/pages/watch/episode_image.dart';
+import 'package:hanime/pages/watch/episode_item.dart';
 
 import '../../component/loading_cover.dart';
 
@@ -119,7 +119,7 @@ class Episode extends StatelessWidget {
           direction: direction ? Axis.vertical : Axis.horizontal,
           children: [
             Stack(children: [
-              EpisodePhoto(
+              EpisodeItem(
                 width: itemWidth,
                 height: itemHeight,
                 imgUrl: videoList.imgUrl,

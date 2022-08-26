@@ -183,9 +183,12 @@ class _WatchScreenState extends State<WatchScreen> {
             loading: _loading,
             direction: true,
             onTap: (index) async {
-              if (index == _videoIndex || _loading) {
+              if (_loading) {
                 return;
               }
+              // if (index == _videoIndex || _loading) {
+              //   return;
+              // }
               setState(() {
                 _loading = true;
                 _videoIndex = index;
