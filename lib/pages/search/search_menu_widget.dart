@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'menu/brand_menu.dart';
@@ -51,8 +50,7 @@ class SearchMenuWidget extends StatelessWidget {
 
     for (var menu in _menuList) {
       dataList.add(Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         child: ClipOval(
           child: Material(
             color: getActive(this, menu['id']),
@@ -68,8 +66,8 @@ class SearchMenuWidget extends StatelessWidget {
                     });
               },
               child: Container(
-                height: Adapt.px(100),
-                width: Adapt.px(100),
+                height: 50,
+                width: 50,
                 child: Center(
                   child: Icon(
                     menu['icon'] as IconData,

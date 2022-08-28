@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/component/menu_widget.dart';
 import 'package:hanime/services/search_services.dart';
 
@@ -46,7 +45,7 @@ class _GenreMenuState extends State<GenreMenu> {
           title: Text(genre.label),
         ),
         body: ListView.separated(
-          padding: EdgeInsets.only(top: Adapt.px(20)),
+          padding: EdgeInsets.only(top: 10),
           physics: const ClampingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return Material(
@@ -66,7 +65,7 @@ class _GenreMenuState extends State<GenreMenu> {
           itemCount: genre.data.length,
           separatorBuilder: (BuildContext context, int index) {
             return Container(
-              height: Adapt.px(5),
+              height: 2.5,
               color: Colors.white30,
             );
           },

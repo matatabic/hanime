@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hanime/common/Ignore_show.dart';
-import 'package:hanime/common/adapt.dart';
 
 class SearchEngineWidget extends StatefulWidget {
   final FocusNode focusNode;
@@ -40,14 +39,14 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
           top: MediaQueryData.fromWindow(window).padding.top,
         ),
         child: Container(
-          height: Adapt.px(110),
+          height: 55,
           child: Row(
             children: [
               new Padding(
-                  padding: EdgeInsets.all(Adapt.px(10)),
+                  padding: EdgeInsets.all(5),
                   child: new Card(
                       child: new Container(
-                    width: Adapt.px(600),
+                    width: 300,
                     child: new Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
@@ -60,8 +59,8 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
                         ),
                         Expanded(
                           child: Container(
-                            height: Adapt.px(55),
-                            width: Adapt.px(430),
+                            height: 23,
+                            width: 215,
                             child: IgnoreShowOnScreenWidget(
                               child: TextField(
                                 focusNode: widget.focusNode,
@@ -104,7 +103,7 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
                         new IconButton(
                           icon: new Icon(Icons.cancel),
                           color: Colors.grey,
-                          iconSize: Adapt.px(40),
+                          iconSize: 20,
                           onPressed: () {
                             setState(() {
                               _query = "";

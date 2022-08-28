@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/like_button.dart';
 import 'package:hanime/common/like_button_widget/Model.dart';
 import 'package:hanime/common/like_button_widget/Popup.dart';
@@ -61,7 +60,7 @@ class _LikeIconState extends State<LikeWidget> {
         return null;
       },
       isLiked: isLiked,
-      size: Adapt.px(60),
+      size: 30,
     );
   }
 
@@ -71,8 +70,8 @@ class _LikeIconState extends State<LikeWidget> {
     final favouriteList =
         Provider.of<FavouriteModel>(context, listen: false).favouriteList;
     // final favouriteList = context.watch<FavouriteModel>().favouriteList;
-    double _width = Adapt.px(260);
-    double _height = Adapt.px(60 + favouriteList.length * 110);
+    double _width = 65;
+    double _height = 60 + favouriteList.length * 55;
 
     Navigator.push(
       context,
@@ -84,7 +83,7 @@ class _LikeIconState extends State<LikeWidget> {
           child: Container(
             width: _width,
             height: _height,
-            child: buildMenu(favouriteList, favouriteList.length * 110),
+            child: buildMenu(favouriteList, favouriteList.length * 55),
           ),
           fun: (close) {
             closeModel = close;
@@ -100,15 +99,15 @@ class _LikeIconState extends State<LikeWidget> {
       child: Stack(
         children: [
           Positioned(
-            right: Adapt.px(10),
-            top: Adapt.px(30),
+            right: 5,
+            top: 15,
             child: Container(
-              width: Adapt.px(40),
-              height: Adapt.px(40),
+              width: 20,
+              height: 20,
               transform: Matrix4.rotationZ(45 * 3.14 / 180),
               decoration: BoxDecoration(
                 color: Color.fromRGBO(46, 53, 61, 1),
-                borderRadius: BorderRadius.circular(Adapt.px(10)),
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
           ),
@@ -117,10 +116,10 @@ class _LikeIconState extends State<LikeWidget> {
           Positioned(
             bottom: 0,
             child: Container(
-              width: Adapt.px(260),
-              height: Adapt.px(itemHeight),
+              width: 130,
+              height: itemHeight,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Adapt.px(20)),
+                borderRadius: BorderRadius.circular(10),
                 color: Color.fromRGBO(46, 53, 61, 1),
               ),
               child: Column(
@@ -136,7 +135,7 @@ class _LikeIconState extends State<LikeWidget> {
                                 item.name,
                                 style: TextStyle(
                                   color: Colors.white70,
-                                  fontSize: Adapt.px(28),
+                                  fontSize: 14,
                                 ),
                               ),
                             ),

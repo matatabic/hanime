@@ -2,7 +2,6 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/services/watch_services.dart';
@@ -22,7 +21,7 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(Adapt.px(10)),
+      padding: EdgeInsets.all(5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +29,7 @@ class InfoScreen extends StatelessWidget {
             shareTitle.length > 0 ? shareTitle : watchEntity.info.shareTitle,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: Adapt.px(36),
+              fontSize: 18,
             ),
           ),
           Container(
@@ -44,7 +43,7 @@ class InfoScreen extends StatelessWidget {
                 prefixText: watchEntity.info.title,
                 prefixStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: Adapt.px(45),
+                    fontSize: 26,
                     color: Theme.of(context).primaryColor),
                 expandText: '顯示完整資訊',
                 collapseText: '只顯示部分資訊',
@@ -54,7 +53,7 @@ class InfoScreen extends StatelessWidget {
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(top: Adapt.px(30)),
+              padding: EdgeInsets.only(top: 15),
               child: Wrap(
                 children: _buildTagWidget(
                     watchEntity.tag,
@@ -67,8 +66,8 @@ class InfoScreen extends StatelessWidget {
                                     SearchScreen(tagList: [tag])),
                           )
                         }),
-                spacing: Adapt.px(20),
-                runSpacing: Adapt.px(20),
+                spacing: 10,
+                runSpacing: 10,
               ))
         ],
       ),
@@ -86,11 +85,11 @@ List<Widget> _buildTagWidget(List<WatchTag> tagList, onTap) {
         decoration: BoxDecoration(
             border: new Border.all(
           color: Colors.grey, //边框颜色
-          width: Adapt.px(2), //边框粗细
+          width: 1, //边框粗细
         )),
         child: Text(
           item.title,
-          style: TextStyle(fontSize: Adapt.px(35)),
+          style: TextStyle(fontSize: 17),
         ),
       ),
     ));

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
@@ -7,7 +9,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -57,7 +58,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                   child: Icon(Icons.add),
                   backgroundColor: Colors.red,
                   label: '新建收藏夹',
-                  labelStyle: TextStyle(fontSize: Adapt.px(38)),
+                  labelStyle: TextStyle(fontSize: 19),
                   onTap: () => CustomDialog.showTextDialog(
                       context,
                       "新建收藏夹",
@@ -70,13 +71,13 @@ class _FavouriteScreen extends State<FavouriteScreen>
                 child: Icon(Icons.brush),
                 backgroundColor: Colors.orange,
                 label: '删除收藏夹',
-                labelStyle: TextStyle(fontSize: Adapt.px(38)),
+                labelStyle: TextStyle(fontSize: 19),
                 onTap: () {
                   BotToast.showCustomNotification(
                       align: Alignment(0, -1.2),
                       toastBuilder: (void Function() cancelFunc) {
                         return Container(
-                          width: Adapt.screenW(),
+                          width: MediaQueryData.fromWindow(window).size.width,
                           height: 300,
                           alignment: Alignment.bottomCenter,
                           color: Colors.red,
@@ -150,12 +151,11 @@ class _FavouriteScreen extends State<FavouriteScreen>
               child: ShakeAnimationWidget(
                   isForward: true,
                   shakeRange: 0.3,
-                  child: Icon(Icons.delete,
-                      size: Adapt.px(64), color: Colors.red)),
+                  child: Icon(Icons.delete, size: 32, color: Colors.red)),
             )
           : Icon(
               Icons.folder,
-              size: Adapt.px(64),
+              size: 32,
             ), // Icon(Icons.folder),
       children: favourite.children
           .map((v) => _buildItem(v) as DragAndDropItem)

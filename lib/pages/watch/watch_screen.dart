@@ -1,7 +1,6 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
@@ -122,10 +121,10 @@ class _WatchScreenState extends State<WatchScreen> {
       SliverAppBar(
           automaticallyImplyLeading: false,
           pinned: true,
-          collapsedHeight: Adapt.px(520),
+          collapsedHeight: 260,
           floating: true,
           stretch: false,
-          expandedHeight: Adapt.px(520),
+          expandedHeight: 260,
           flexibleSpace: VideoScreen(
             watchEntity: watchEntity,
             videoSource: context
@@ -139,8 +138,8 @@ class _WatchScreenState extends State<WatchScreen> {
             playerChange: (String url) => playerChange,
             episodeScreen: EpisodeScreen(
                 watchEntity: watchEntity,
-                itemWidth: 320,
-                itemHeight: 220,
+                itemWidth: 170,
+                itemHeight: 110,
                 direction: false,
                 videoIndex: _videoIndex,
                 loading: _loading,
@@ -176,9 +175,9 @@ class _WatchScreenState extends State<WatchScreen> {
       SliverToBoxAdapter(
         child: EpisodeScreen(
             watchEntity: watchEntity,
-            containerHeight: 300,
-            itemWidth: 320,
-            itemHeight: 200,
+            containerHeight: 150,
+            itemWidth: 170,
+            itemHeight: 110,
             videoIndex: _videoIndex,
             loading: _loading,
             direction: true,
@@ -205,13 +204,13 @@ class _WatchScreenState extends State<WatchScreen> {
       ),
       SliverToBoxAdapter(
         child: Container(
-          height: Adapt.px(100),
+          height: 50,
           child: Center(
             child: Text(
               "相關推薦",
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
-                fontSize: Adapt.px(45),
+                fontSize: 23,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -224,9 +223,9 @@ class _WatchScreenState extends State<WatchScreen> {
             //横轴元素个数
             crossAxisCount: watchEntity.commendCount,
             //纵轴间距
-            mainAxisSpacing: Adapt.px(10),
+            mainAxisSpacing: 5,
             //横轴间距
-            crossAxisSpacing: Adapt.px(10),
+            crossAxisSpacing: 5,
             //子组件宽高长度比例
             childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 1.1),
         //加载内容

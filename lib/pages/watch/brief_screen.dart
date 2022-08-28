@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
@@ -23,7 +22,7 @@ class BriefScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         color: Color.fromRGBO(58, 60, 63, 1),
-        height: Adapt.px(220),
+        height: 110,
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
@@ -50,22 +49,22 @@ class BriefScreen extends StatelessWidget {
                   tag: heroTag,
                   child: ClipOval(
                     child: Container(
-                      width: Adapt.px(140),
-                      height: Adapt.px(140),
+                      width: 70,
+                      height: 70,
                       child: CommonNormalImage(imgUrl: watchEntity.info.imgUrl),
                     ),
                   )),
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: Adapt.px(20)),
+                padding: EdgeInsets.only(left: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(watchEntity.info.title,
                         maxLines: 2, overflow: TextOverflow.ellipsis),
                     Padding(
-                      padding: EdgeInsets.only(top: Adapt.px(5)),
+                      padding: EdgeInsets.only(top: 2.5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -73,7 +72,7 @@ class BriefScreen extends StatelessWidget {
                             watchEntity.info.countTitle,
                           ),
                           Container(
-                            width: Adapt.px(150),
+                            width: 75,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

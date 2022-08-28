@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
@@ -56,8 +55,7 @@ class _SearchScreenState extends State<SearchScreen>
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  double _topHeight =
-      MediaQueryData.fromWindow(window).padding.top + Adapt.px(160);
+  double _topHeight = MediaQueryData.fromWindow(window).padding.top + 82;
 
   @override
   Widget build(BuildContext context) {

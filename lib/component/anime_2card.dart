@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 
 class Anime2Card extends StatelessWidget {
@@ -45,7 +44,7 @@ class Anime2Card extends StatelessWidget {
                         Hero(tag: heroTag, child: CommonImage(imgUrl: imgUrl)),
                     constraints: new BoxConstraints.expand()),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),
+                  padding: EdgeInsets.symmetric(horizontal: 2.5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -53,8 +52,7 @@ class Anime2Card extends StatelessWidget {
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Icon(Icons.access_alarm_outlined,
-                                size: Adapt.px(30)),
+                            Icon(Icons.access_alarm_outlined, size: 15),
                             Text(created)
                           ]),
                       Text(duration),
@@ -66,7 +64,7 @@ class Anime2Card extends StatelessWidget {
         Expanded(
             flex: 2,
             child: Padding(
-              padding: EdgeInsets.all(Adapt.px(5)),
+              padding: EdgeInsets.all(2.5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +75,7 @@ class Anime2Card extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                          margin: EdgeInsets.only(right: Adapt.px(15)),
+                          margin: EdgeInsets.only(right: 7),
                           decoration: new BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(2.0)),

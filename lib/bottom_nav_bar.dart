@@ -19,7 +19,6 @@ import 'package:hanime/utils/utils.dart';
 import 'package:m3u8_downloader/m3u8_downloader.dart';
 import 'package:provider/src/provider.dart';
 
-import 'common/adapt.dart';
 import 'entity/download_entity.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -62,9 +61,9 @@ class _BottomNavBarState extends State<BottomNavBar>
           backgroundColor: Colors.black26,
           index: currentIndex,
           items: <Widget>[
-            Icon(Icons.home, size: Adapt.px(60)),
-            Icon(Icons.cloud_circle, size: Adapt.px(60)),
-            Icon(Icons.collections, size: Adapt.px(60)),
+            Icon(Icons.home, size: 30),
+            Icon(Icons.cloud_circle, size: 30),
+            Icon(Icons.collections, size: 30),
           ],
           onTap: (index) {
             //Handle button tap
@@ -207,8 +206,8 @@ class _BottomNavBarState extends State<BottomNavBar>
           toastBuilder: (_) {
             return Container(
               alignment: Alignment.bottomLeft,
-              width: Adapt.screenW(),
-              height: Adapt.px(260),
+              width: MediaQueryData.fromWindow(window).size.width,
+              height: 130,
               color: Colors.redAccent,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
@@ -219,7 +218,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
                         "再按一次返回键退出应用",
-                        style: TextStyle(fontSize: Adapt.px(32)),
+                        style: TextStyle(fontSize: 16),
                       ),
                     )
                   ],

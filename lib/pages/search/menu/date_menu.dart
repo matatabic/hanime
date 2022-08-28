@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/services/search_services.dart';
 
 // class DateMenu extends StatelessWidget {
@@ -127,8 +126,7 @@ class _DateMenuState extends State<DateMenu> {
             title: Text(date.label),
           ),
           body: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: Adapt.px(80), horizontal: Adapt.px(70)),
+            padding: EdgeInsets.symmetric(vertical: 40, horizontal: 35),
             child: Flex(
               direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

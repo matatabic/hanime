@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/constant.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/home_header_screen.dart';
@@ -218,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen>
   bool _scrollListener(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.axis == Axis.vertical) {
       _colorAnimationController.animateTo(scrollInfo.metrics.pixels /
-          (Adapt.px(520) - MediaQuery.of(context).padding.top));
+          (260 - MediaQuery.of(context).padding.top));
       return true;
     }
     return false;

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/component/loading_cover.dart';
@@ -25,7 +24,7 @@ class DownloadItem extends StatelessWidget {
     if (downloadEntity.success) {
       _widget = Stack(alignment: Alignment.center, children: ws);
       ws.add(Container(
-        height: Adapt.px(200),
+        height: 100,
         child: CommonImage(
           imgUrl: downloadEntity.imageUrl,
         ),
@@ -67,14 +66,13 @@ class DownloadItem extends StatelessWidget {
           },
           child: Stack(alignment: Alignment.center, children: ws));
       ws.add(Container(
-        height: Adapt.px(200),
+        height: 100,
         child: CommonImage(
           imgUrl: downloadEntity.imageUrl,
         ),
       ));
       if (!downloadEntity.downloading && !downloadEntity.waitDownload) {
-        ws.add(Icon(Icons.cloud_download,
-            size: Adapt.px(100), color: Colors.green));
+        ws.add(Icon(Icons.cloud_download, size: 50, color: Colors.green));
       }
     }
 
@@ -83,7 +81,7 @@ class DownloadItem extends StatelessWidget {
         animation: true,
         isRTL: true,
         animateFromLastPercent: true,
-        lineHeight: Adapt.px(200),
+        lineHeight: 100,
         animationDuration: 1000,
         percent: Utils.progress2showProgress(downloadEntity.progress),
         padding: EdgeInsets.all(0),
@@ -91,8 +89,7 @@ class DownloadItem extends StatelessWidget {
         backgroundColor: Colors.transparent,
         progressColor: Colors.black87,
       ));
-      ws.add(Icon(Icons.pause_circle_filled,
-          size: Adapt.px(100), color: Colors.grey));
+      ws.add(Icon(Icons.pause_circle_filled, size: 50, color: Colors.grey));
       ws.add(Align(
           alignment: Alignment.bottomRight,
           child:
@@ -101,28 +98,27 @@ class DownloadItem extends StatelessWidget {
 
     if (downloadEntity.waitDownload) {
       ws.add(LoadingCover(
-        width: Adapt.px(300),
-        height: Adapt.px(200),
+        width: 150,
+        height: 100,
       ));
     }
 
     return Container(
-        padding: EdgeInsets.symmetric(
-            vertical: Adapt.px(10), horizontal: Adapt.px(10)),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         color: Color.fromRGBO(58, 60, 63, 1),
-        height: Adapt.px(220),
+        height: 110,
         child: Row(
           children: [
             SizedBox(
-              width: Adapt.px(300),
+              width: 150,
               child: _widget,
             ),
             Expanded(
               child: Container(
-                  padding: EdgeInsets.only(left: Adapt.px(20)),
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(downloadEntity.title,
                       style: TextStyle(
-                          fontSize: Adapt.px(30),
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white))),
             )

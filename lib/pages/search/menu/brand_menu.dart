@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/services/search_services.dart';
 
 class BrandMenu extends StatelessWidget {
@@ -43,12 +42,12 @@ class BrandMenu extends StatelessWidget {
           body: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: SingleChildScrollView(
-                padding: EdgeInsets.only(top: Adapt.px(20)),
+                padding: EdgeInsets.only(top: 10),
                 physics: const ClampingScrollPhysics(),
                 child: Wrap(
                   children: tagWidgetList,
-                  spacing: Adapt.px(20),
-                  runSpacing: Adapt.px(20),
+                  spacing: 10,
+                  runSpacing: 10,
                 )),
           )),
     );
@@ -98,27 +97,27 @@ class _BrandDetailState extends State<BrandDetail> {
     print("_BrandDetailState build");
     return Material(
       borderRadius: BorderRadius.all(
-        Radius.circular(Adapt.px(15)),
+        Radius.circular(7),
       ),
       color: _active ? Theme.of(context).primaryColor : Colors.black,
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-              Radius.circular(Adapt.px(15)),
+              Radius.circular(7),
             ),
             border: new Border.all(
               color: Colors.grey, //边框颜色
-              width: Adapt.px(5), //边框粗细
+              width: 2.5, //边框粗细
             )),
         child: InkWell(
             onTap: () {
               _onPressHandler();
             },
             child: Container(
-              padding: EdgeInsets.all(Adapt.px(10)),
+              padding: EdgeInsets.all(5),
               child: Text(
                 widget.title,
-                style: TextStyle(fontSize: Adapt.px(34)),
+                style: TextStyle(fontSize: 17),
               ),
             )),
       ),

@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:wakelock/wakelock.dart';
 
 import './schema.dart' show VideoSourceFormat;
@@ -306,7 +305,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               position: _animation!,
               child: Container(
                 height: window.physicalSize.height,
-                width: Adapt.px(650),
+                width: 325,
                 child: _buildPlayDrawer(),
               ),
             ),
@@ -321,16 +320,15 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     return Scaffold(
       backgroundColor: Color.fromRGBO(0, 0, 0, 0.4),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(Adapt.px(100)), // here the desired height
+        preferredSize: Size.fromHeight(50), // here the desired height
         child: AppBar(
           centerTitle: false,
           automaticallyImplyLeading: false,
           backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
           elevation: 0.1,
           title: Container(
-            width: Adapt.px(120),
-            height: Adapt.px(90),
+            width: 60,
+            height: 45,
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,

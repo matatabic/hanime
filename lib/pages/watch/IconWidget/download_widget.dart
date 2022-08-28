@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/permission.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
@@ -18,20 +17,19 @@ class DownloadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final widgetContext = context;
     return Container(
-        width: Adapt.px(60),
-        height: Adapt.px(60),
+        width: 30,
+        height: 30,
         alignment: Alignment.center,
         child: SizedBox(
-            width: Adapt.px(60),
-            height: Adapt.px(60),
+            width: 30,
+            height: 30,
             child: context.watch<DownloadModel>().downloadList.any((element) =>
                     element.htmlUrl == info.htmlUrl &&
                     (element.waitDownload ||
                         element.downloading ||
                         element.success))
                 ? Container(
-                    child: Icon(Icons.downloading,
-                        size: Adapt.px(60), color: Colors.red))
+                    child: Icon(Icons.downloading, size: 30, color: Colors.red))
                 : IconButton(
                     padding: EdgeInsets.all(0),
                     onPressed: () async {
@@ -75,8 +73,7 @@ class DownloadWidget extends StatelessWidget {
                             );
                           });
                     },
-                    icon: Icon(Icons.downloading,
-                        size: Adapt.px(60), color: Colors.grey),
+                    icon: Icon(Icons.downloading, size: 30, color: Colors.grey),
                   )));
   }
 }

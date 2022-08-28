@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 
 class HomeCard extends StatelessWidget {
@@ -47,13 +46,12 @@ class HomeCard extends StatelessWidget {
                             tag: heroTag, child: CommonImage(imgUrl: imgUrl)),
                         constraints: new BoxConstraints.expand()),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),
+                      padding: EdgeInsets.symmetric(horizontal: 2.5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            Icon(Icons.access_alarm_outlined,
-                                size: Adapt.px(40)),
+                            Icon(Icons.access_alarm_outlined, size: 20),
                             Text(created)
                           ]),
                           Text(duration)
@@ -65,7 +63,7 @@ class HomeCard extends StatelessWidget {
             Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: EdgeInsets.all(Adapt.px(5)),
+                  padding: EdgeInsets.all(2.5),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +74,7 @@ class HomeCard extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                              margin: EdgeInsets.only(right: Adapt.px(15)),
+                              margin: EdgeInsets.only(right: 7.5),
                               decoration: new BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(2.0)),

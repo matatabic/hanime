@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/selected_cover.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_item.dart';
@@ -54,19 +53,17 @@ class EpisodeScreen extends StatelessWidget {
 
     return Container(
       color: Color.fromRGBO(48, 48, 48, 1),
-      height: direction
-          ? Adapt.px(containerHeight)
-          : MediaQuery.of(context).size.height - Adapt.px(50),
+      height:
+          direction ? containerHeight : MediaQuery.of(context).size.height - 25,
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: ListView.separated(
           // shrinkWrap: true,
-          controller:
-              ScrollController(initialScrollOffset: Adapt.px(scrollOffset)),
+          controller: ScrollController(initialScrollOffset: scrollOffset),
           scrollDirection: direction ? Axis.horizontal : Axis.vertical,
           itemCount: watchEntity.episode.length,
           separatorBuilder: (BuildContext context, int index) => Container(
-                width: Adapt.px(direction ? LIST_SPACE : 0),
-                height: Adapt.px(direction ? 0 : LIST_SPACE),
+                width: direction ? LIST_SPACE : 0,
+                height: direction ? 0 : LIST_SPACE,
               ),
           itemBuilder: (BuildContext context, int index) {
             return Episode(
@@ -74,8 +71,8 @@ class EpisodeScreen extends StatelessWidget {
               selector: videoIndex == null
                   ? watchEntity.info.videoIndex == index
                   : videoIndex == index,
-              itemWidth: Adapt.px(itemWidth),
-              itemHeight: Adapt.px(itemHeight),
+              itemWidth: itemWidth,
+              itemHeight: itemHeight,
               direction: direction,
               onTap: () => {onTap(index)},
               loading: loading,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/entity/search_entity.dart';
 import 'package:hanime/services/search_services.dart';
 
@@ -110,25 +109,24 @@ class _TagContainerState extends State<TagContainer> {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: Adapt.px(32), vertical: Adapt.px(20)),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: Adapt.px(10)),
+            padding: EdgeInsets.only(bottom: 5),
             child: Text(
               widget.searchTagData.label,
               style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
-                  fontSize: Adapt.px(40)),
+                  fontSize: 20),
             ),
           ),
           Wrap(
             children: tagWidgetList,
-            spacing: Adapt.px(20),
-            runSpacing: Adapt.px(20),
+            spacing: 10,
+            runSpacing: 10,
           )
         ],
       ),
@@ -158,9 +156,8 @@ class _BroadContainerState extends State<BroadContainer> {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(51, 51, 51, 1),
-      padding: EdgeInsets.symmetric(
-          horizontal: Adapt.px(32), vertical: Adapt.px(15)),
-      height: Adapt.px(220),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7.5),
+      height: 110,
       child: Column(
         children: [
           Row(
@@ -168,8 +165,7 @@ class _BroadContainerState extends State<BroadContainer> {
             children: [
               Text(
                 "廣泛配對",
-                style: TextStyle(
-                    fontSize: Adapt.px(45), fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
               ),
               Switch(
                 value: _broad,
@@ -233,19 +229,19 @@ class _TagDetailState extends State<TagDetail> {
         _onPressHandler();
       },
       child: Container(
-        padding: EdgeInsets.all(Adapt.px(10)),
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: _active ? Theme.of(context).primaryColor : Colors.black,
             borderRadius: BorderRadius.all(
-              Radius.circular(Adapt.px(15)),
+              Radius.circular(7),
             ),
             border: new Border.all(
               color: Colors.grey, //边框颜色
-              width: Adapt.px(5), //边框粗细
+              width: 2.5, //边框粗细
             )),
         child: Text(
           widget.title,
-          style: TextStyle(fontSize: Adapt.px(34)),
+          style: TextStyle(fontSize: 17),
         ),
       ),
     );

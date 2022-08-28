@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -50,25 +50,25 @@ class _LatestWidgetState extends State<LatestWidget> {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Container(
-          height: Adapt.px(70),
+          height: 35,
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
+          margin: EdgeInsets.only(left: 2.5),
           child: Row(children: <Widget>[
             Text(
               widget.data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
+              style: TextStyle(fontSize: 19),
             ),
             Icon(
               Icons.arrow_forward_ios,
-              size: Adapt.px(36),
+              size: 18,
             )
           ]),
           width: double.infinity),
       SizedBox(
-        height: Adapt.px(760),
+        height: 380,
         child: InfiniteCarousel.builder(
           itemCount: widget.data.video.length,
-          itemExtent: Adapt.screenW() / 2,
+          itemExtent: MediaQueryData.fromWindow(window).size.width / 2,
           controller: controller,
           center: false,
           anchor: 1,

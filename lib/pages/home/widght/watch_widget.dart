@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/entity/home_entity.dart';
@@ -18,17 +17,17 @@ class WatchWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-            height: Adapt.px(70),
+            height: 35,
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(left: Adapt.px(5)),
+            margin: EdgeInsets.only(left: 2.5),
             child: Row(children: <Widget>[
               Text(
                 data.label,
-                style: TextStyle(fontSize: Adapt.px(38)),
+                style: TextStyle(fontSize: 19),
               ),
               Icon(
                 Icons.arrow_forward_ios,
-                size: Adapt.px(36),
+                size: 18,
               )
             ]),
             width: double.infinity),
@@ -42,9 +41,9 @@ class WatchWidget extends StatelessWidget {
               //横轴元素个数
               crossAxisCount: 2,
               //纵轴间距
-              mainAxisSpacing: Adapt.px(10),
+              mainAxisSpacing: 5,
               //横轴间距
-              crossAxisSpacing: Adapt.px(10),
+              crossAxisSpacing: 5,
               //子组件宽高长度比例
               childAspectRatio: 1.05),
           itemBuilder: (BuildContext context, int index) {

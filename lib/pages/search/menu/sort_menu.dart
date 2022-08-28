@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/component/menu_widget.dart';
 import 'package:hanime/services/search_services.dart';
 
@@ -46,7 +45,7 @@ class _SortMenuState extends State<SortMenu> {
             title: Text(sort.label),
           ),
           body: ListView.separated(
-            padding: EdgeInsets.only(top: Adapt.px(20)),
+            padding: EdgeInsets.only(top: 10),
             itemBuilder: (BuildContext context, int index) {
               return Material(
                 color: index == _index
@@ -65,7 +64,7 @@ class _SortMenuState extends State<SortMenu> {
             itemCount: sort.data.length,
             separatorBuilder: (BuildContext context, int index) {
               return Container(
-                height: Adapt.px(5),
+                height: 2.5,
                 color: Colors.white30,
               );
             },

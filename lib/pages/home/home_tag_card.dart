@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 
@@ -23,7 +22,7 @@ class HomeTagCard extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: EdgeInsets.only(top: Adapt.px(7)),
+        padding: EdgeInsets.only(top: 3.5),
         child: InkWell(
           onTap: onTap,
           onLongPress: onLongPress,
@@ -36,16 +35,15 @@ class HomeTagCard extends StatelessWidget {
                   constraints: new BoxConstraints.expand()),
               Container(color: Colors.black26),
               Container(
-                  height: Adapt.px(100),
-                  padding: EdgeInsets.symmetric(horizontal: Adapt.px(5)),
+                  height: 50,
+                  padding: EdgeInsets.symmetric(horizontal: 2.5),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         data.title,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Adapt.px(35)),
+                            fontWeight: FontWeight.bold, fontSize: 17),
                       ),
                       Text(
                         data.total,

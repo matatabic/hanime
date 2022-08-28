@@ -1,6 +1,5 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
@@ -81,7 +80,7 @@ class _VideoScreenState extends State<VideoScreen>
     return Column(
       children: [
         FijkView(
-          height: Adapt.px(520),
+          height: 260,
           color: Colors.black,
           cover: NetworkImage(widget.watchEntity.info.cover),
           fit: FijkFit.cover,

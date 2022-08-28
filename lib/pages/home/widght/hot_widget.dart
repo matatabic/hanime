@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/adapt.dart';
 import 'package:hanime/common/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
@@ -18,22 +17,22 @@ class HotWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Container(
-          height: Adapt.px(70),
+          height: 35,
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(left: Adapt.px(5)),
+          margin: EdgeInsets.only(left: 2.5),
           child: Row(children: <Widget>[
             Text(
               data.label,
-              style: TextStyle(fontSize: Adapt.px(38)),
+              style: TextStyle(fontSize: 19),
             ),
             Icon(
               Icons.arrow_forward_ios,
-              size: Adapt.px(36),
+              size: 18,
             )
           ]),
           width: double.infinity),
       SizedBox(
-          height: Adapt.px(400),
+          height: 200,
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -44,7 +43,7 @@ class HotWidget extends StatelessWidget {
                   title: data.video[index].title,
                   imgUrl: data.video[index].imgUrl,
                   heroTag: heroTag,
-                  width: Adapt.px(270),
+                  width: 135,
                   onTap: () {
                     Navigator.push(
                       context,

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../common/adapt.dart';
-
 class MenuWidget extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
@@ -16,13 +14,13 @@ class MenuWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: Adapt.px(120),
+        height: 60,
         child: Center(
             child: Text(
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: Adapt.px(36),
+            fontSize: 18,
           ),
         )),
       ),
