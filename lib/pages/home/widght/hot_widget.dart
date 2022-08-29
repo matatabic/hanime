@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/hero_slide_page.dart';
+import 'package:hanime/common/widget/hero_slide_page.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';
 

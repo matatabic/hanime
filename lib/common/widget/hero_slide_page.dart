@@ -1,8 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:hanime/common/hero_widget.dart';
+import 'package:hanime/common/hero_widget/hero_widget.dart';
 
 class HeroSlidePage extends StatefulWidget {
   const HeroSlidePage({required this.url, required this.heroTag});

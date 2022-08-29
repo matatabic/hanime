@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/common_image.dart';
+import 'package:hanime/common/widget/common_image.dart';
 import 'package:hanime/entity/home_entity.dart';
 import 'package:hanime/pages/home/swiper_screen.dart';
 import 'package:hanime/pages/watch/watch_screen.dart';

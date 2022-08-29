@@ -1,5 +1,7 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/common/permission.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
@@ -63,6 +65,11 @@ class DownloadWidget extends StatelessWidget {
                                             .read<DownloadModel>()
                                             .addDownload(info, downloadUrl,
                                                 localVideoUrl);
+                                      } else {
+                                        CustomDialog.showDialog(
+                                            context, "请开启读写文件权限", () {
+                                          AppSettings.openAppSettings();
+                                        });
                                       }
                                     });
                                     Navigator.pop(context);

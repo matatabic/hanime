@@ -26,29 +26,33 @@ Future homeHtml2Data(String html) async {
 
   List swiper = [
     {
-      "title": "[yuukis] 亞絲娜 [刀劍神域]",
-      "imgUrl": "https://i.imgur.com/meKHvP3l.png",
-      "htmlUrl": "https://hanime1.me/watch?v=37460",
+      "title": "緣之空",
+      "imgUrl":
+          "https://cdn.jsdelivr.net/gh/bandoguru/bandoguru-h@latest/asset/thumbnail/8vLcXfoh.jpg",
+      "htmlUrl": "https://hanime1.me/watch?v=4417",
     },
     {
-      "title": "[JXH33] 早坂愛 [輝夜姬想讓人告白～天才們的戀愛頭腦戰～]",
-      "imgUrl": "https://i.imgur.com/vZWIadjl.png",
-      "htmlUrl": "https://hanime1.me/watch?v=38240",
+      "title": "回復術士的重啟人生",
+      "imgUrl":
+          "https://cdn.jsdelivr.net/gh/furansutsukai/furansutsukai-h@latest/asset/thumbnail/pDTqnxcl.jpg",
+      "htmlUrl": "https://hanime1.me/watch?v=19954",
     },
     {
-      "title": "[akinoya] 阿爾托莉雅·潘德拉貢 [Fate/stay night]",
-      "imgUrl": "https://i.imgur.com/AnWHF7xl.png",
-      "htmlUrl": "https://hanime1.me/watch?v=38258",
+      "title": "地味變!!～改變土妹子的純潔異性交往～",
+      "imgUrl":
+          "https://cdn.jsdelivr.net/gh/kochokochokaeru/kochokochokaeru-h@latest/asset/thumbnail/jl8TZR2h.jpg",
+      "htmlUrl": "https://hanime1.me/watch?v=19494",
     },
     {
-      "title": "菜月昴君和愛蜜莉雅碳",
-      "imgUrl": "https://i.imgur.com/PzHQqSHl.png",
-      "htmlUrl": "https://hanime1.me/watch?v=211",
+      "title": "異世界迷宮裡的後宮生活",
+      "imgUrl": "https://i.imgur.com/MLuHHPPl.jpg",
+      "htmlUrl": "https://hanime1.me/watch?v=38946",
     },
     {
-      "title": "[Kamuo] 優菈 [原神]",
-      "imgUrl": "https://i.imgur.com/PnmtcyQl.png",
-      "htmlUrl": "https://hanime1.me/watch?v=36679",
+      "title": "終末的後宮",
+      "imgUrl":
+          "https://cdn.jsdelivr.net/gh/tatakanuta/tatakanuta@v1.0.0/asset/thumbnail/thzo0Ilh.jpg",
+      "htmlUrl": "https://hanime1.me/watch?v=401054",
     },
   ];
 

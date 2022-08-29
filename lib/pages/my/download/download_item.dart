@@ -1,7 +1,9 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/common_image.dart';
 import 'package:hanime/common/custom_dialog.dart';
+import 'package:hanime/common/permission.dart';
+import 'package:hanime/common/widget/common_image.dart';
 import 'package:hanime/component/loading_cover.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/providers/download_model.dart';
@@ -37,7 +39,6 @@ class DownloadItem extends StatelessWidget {
                 widgetContext
                     .read<DownloadModel>()
                     .pause(downloadEntity.htmlUrl);
-                Navigator.pop(widgetContext);
               });
               return;
             }
@@ -53,14 +54,20 @@ class DownloadItem extends StatelessWidget {
                   DioRangeDownloadManage.cancelDownload(
                       downloadEntity.videoUrl);
                 }
-                Navigator.pop(widgetContext);
               });
             } else {
               CustomDialog.showDialog(context, "确认开始下载?", () {
-                widgetContext
-                    .read<DownloadModel>()
-                    .download(downloadEntity.htmlUrl);
-                Navigator.pop(widgetContext);
+                checkPermission().then((hasGranted) async {
+                  if (hasGranted) {
+                    widgetContext
+                        .read<DownloadModel>()
+                        .download(downloadEntity.htmlUrl);
+                  } else {
+                    CustomDialog.showDialog(context, "请开启读写文件权限", () {
+                      AppSettings.openAppSettings();
+                    });
+                  }
+                });
               });
             }
           },

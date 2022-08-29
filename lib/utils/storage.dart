@@ -9,8 +9,6 @@ class StorageUtil {
   static getCache(String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(name);
-    // print("getCache: $json");
-    // return json;
   }
 
   static Future<void> setFavouriteCache(List<FavouriteEntity> data) async {

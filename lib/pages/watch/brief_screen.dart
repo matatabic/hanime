@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanime/common/common_image.dart';
-import 'package:hanime/common/hero_photo_view.dart';
+import 'package:hanime/common/hero_widget/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
+import 'package:hanime/common/widget/common_image.dart';
 import 'package:hanime/entity/watch_entity.dart';
 
 import 'IconWidget/download_widget.dart';

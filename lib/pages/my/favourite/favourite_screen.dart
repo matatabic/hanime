@@ -64,8 +64,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                       "新建收藏夹",
                       (String content) => {
                             if (content.length > 0)
-                              context.read<FavouriteModel>().addList(content),
-                            Navigator.pop(context)
+                              context.read<FavouriteModel>().addList(content)
                           })),
               SpeedDialChild(
                 child: Icon(Icons.brush),
@@ -145,7 +144,6 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     "确认删除该收藏夹?",
                     () => {
                           context.read<FavouriteModel>().removeList(favourite),
-                          Navigator.pop(widgetContext)
                         });
               },
               child: ShakeAnimationWidget(
@@ -183,10 +181,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
                     context,
                     "确认删除该影片?",
                     () => {
-                          widgetContext
-                              .read<FavouriteModel>()
-                              .removeItem(anime),
-                          Navigator.pop(widgetContext)
+                          widgetContext.read<FavouriteModel>().removeItem(anime)
                         });
               },
               backgroundColor: Color(0xFFFE4A49),

@@ -8,7 +8,7 @@ import 'package:hanime/pages/watch/episode_item.dart';
 
 import '../../component/loading_cover.dart';
 
-const double LIST_SPACE = 20;
+const double LIST_SPACE = 15;
 
 class EpisodeScreen extends StatelessWidget {
   final WatchEntity watchEntity;
@@ -35,27 +35,26 @@ class EpisodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var scrollOffset;
+    double scrollOffset;
     if (watchEntity.info.videoIndex == 0) {
       scrollOffset = 0;
     } else {
       if (direction) {
-        scrollOffset =
-            (watchEntity.info.videoIndex) * (itemWidth + LIST_SPACE) -
-                (MediaQuery.of(context).size.width / 2);
+        scrollOffset = watchEntity.info.videoIndex * (itemWidth + LIST_SPACE) -
+            (MediaQuery.of(context).size.width - 2 * LIST_SPACE) / 2 +
+            itemWidth / 2;
       } else {
-        scrollOffset =
-            (watchEntity.info.videoIndex) * (itemHeight + LIST_SPACE) -
-                ((MediaQuery.of(context).size.height) / 2);
+        scrollOffset = watchEntity.info.videoIndex * (itemHeight + LIST_SPACE) -
+            (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
+            itemHeight / 2;
       }
     }
-    // scrollOffset = double.parse(scrollOffset.toString());
 
     return Container(
       color: Color.fromRGBO(48, 48, 48, 1),
       height:
           direction ? containerHeight : MediaQuery.of(context).size.height - 25,
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: LIST_SPACE),
       child: ListView.separated(
           // shrinkWrap: true,
           controller: ScrollController(initialScrollOffset: scrollOffset),

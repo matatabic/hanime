@@ -31,6 +31,7 @@ class CustomDialog {
               CupertinoDialogAction(
                 onPressed: () {
                   onPressed(content);
+                  Navigator.pop(context);
                 },
                 child: Text('确定'),
               ),
@@ -55,6 +56,7 @@ class CustomDialog {
               CupertinoDialogAction(
                 onPressed: () {
                   onPressed();
+                  Navigator.pop(context);
                 },
                 child: Text('确定'),
               ),

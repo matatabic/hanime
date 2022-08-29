@@ -2,7 +2,7 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
-import 'package:hanime/common/hero_slide_page.dart';
+import 'package:hanime/common/widget/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
 import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
