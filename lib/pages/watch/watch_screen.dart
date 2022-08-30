@@ -26,11 +26,24 @@ class WatchScreen extends StatefulWidget {
 
 class _WatchScreenState extends State<WatchScreen> {
   Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
+  ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
   var _videoIndex;
   bool _loading = false;
   String _shareTitle = "";
+
+  @override
+  initState() {
+    super.initState();
+    _futureBuilderFuture = loadData();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +105,6 @@ class _WatchScreenState extends State<WatchScreen> {
     await player.pause();
   }
 
-  initState() {
-    super.initState();
-    _futureBuilderFuture = loadData();
-  }
-
   Future loadData() async {
     var data = await getWatchData(widget.htmlUrl);
     WatchEntity watchEntity = WatchEntity.fromJson(data);
@@ -117,7 +125,7 @@ class _WatchScreenState extends State<WatchScreen> {
 
     return SafeArea(
         child: SizedBox.expand(
-            child: CustomScrollView(slivers: <Widget>[
+            child: CustomScrollView(controller: _controller, slivers: <Widget>[
       SliverAppBar(
           automaticallyImplyLeading: false,
           pinned: true,
@@ -165,6 +173,7 @@ class _WatchScreenState extends State<WatchScreen> {
           child: BriefScreen(
         watchEntity: watchEntity,
         playerChange: (String url) => playerChange,
+        controller: _controller,
       )),
       SliverToBoxAdapter(
           child: InfoScreen(

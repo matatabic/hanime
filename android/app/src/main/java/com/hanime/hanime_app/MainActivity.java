@@ -1,4 +1,4 @@
-package com.hanime.hanime;
+package com.hanime.hanime_app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

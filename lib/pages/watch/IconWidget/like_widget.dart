@@ -5,12 +5,15 @@ import 'package:hanime/common/like_button_widget/like_button.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_model.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class LikeWidget extends StatefulWidget {
   final WatchInfo info;
+  final ScrollController controller;
 
-  LikeWidget({Key? key, required this.info}) : super(key: key);
+  LikeWidget({Key? key, required this.info, required this.controller})
+      : super(key: key);
 
   @override
   _LikeIconState createState() => _LikeIconState();
@@ -30,6 +33,17 @@ class _LikeIconState extends State<LikeWidget> {
   late Function closeModel;
 
   bool isPanel = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.controller.addListener(() {
+      Utils.debounce(() {
+        setState(() {});
+      }, durationTime: 300);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +83,8 @@ class _LikeIconState extends State<LikeWidget> {
     /// 设置传入弹窗的高宽
     final favouriteList =
         Provider.of<FavouriteModel>(context, listen: false).favouriteList;
-    // final favouriteList = context.watch<FavouriteModel>().favouriteList;
-    double _width = 65;
-    double _height = 60 + favouriteList.length * 55;
+    double _width = 130;
+    double _height = 30 + favouriteList.length * 55;
 
     Navigator.push(
       context,
@@ -94,7 +107,7 @@ class _LikeIconState extends State<LikeWidget> {
   }
 
   ///构造传入的widget
-  Widget buildMenu(List<FavouriteEntity> favList, itemHeight) {
+  Widget buildMenu(List<FavouriteEntity> favList, double itemHeight) {
     return Container(
       child: Stack(
         children: [
@@ -128,6 +141,7 @@ class _LikeIconState extends State<LikeWidget> {
                     .map<Widget>((item) => Expanded(
                           flex: 1,
                           child: InkWell(
+                            customBorder: StadiumBorder(),
                             child: Container(
                               width: double.infinity,
                               alignment: Alignment.center,

@@ -16,7 +16,7 @@ class CommonImage extends StatelessWidget {
             // "http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg",
             cache: true,
             retries: 3,
-            timeRetry: const Duration(milliseconds: 100)),
+            timeRetry: const Duration(milliseconds: 700)),
       ),
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {

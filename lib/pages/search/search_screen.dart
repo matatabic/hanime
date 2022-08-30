@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("mainBUBBBB");
+
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -70,7 +70,6 @@ class _SearchScreenState extends State<SearchScreen>
           body: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              print("123333333333333333333333");
               FocusManager.instance.rootScope.requestFocus(FocusNode());
             },
             child: SmartRefresher(

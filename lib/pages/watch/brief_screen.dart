@@ -11,8 +11,13 @@ import 'IconWidget/like_widget.dart';
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final Function(String url) playerChange;
+  final ScrollController controller;
 
-  BriefScreen({Key? key, required this.watchEntity, required this.playerChange})
+  BriefScreen(
+      {Key? key,
+      required this.watchEntity,
+      required this.playerChange,
+      required this.controller})
       : super(key: key);
 
   @override
@@ -27,15 +32,6 @@ class BriefScreen extends StatelessWidget {
         child: Row(
           children: [
             InkWell(
-              // onTap: () {
-              //   Navigator.of(context).push(NoAnimRouter(
-              //     HeroPhotoView(
-              //       heroTag: heroTag,
-              //       maxScale: 1.5,
-              //       imageProvider: NetworkImage(watchEntity.info.imgUrl),
-              //     ),
-              //   ));
-              // },
               onLongPress: () {
                 Navigator.of(context).push(NoAnimRouter(
                   HeroPhotoView(
@@ -80,7 +76,9 @@ class BriefScreen extends StatelessWidget {
                                     info: watchEntity.info,
                                     videoUrl: watchEntity
                                         .videoData.video[0].list[0].url),
-                                LikeWidget(info: watchEntity.info)
+                                LikeWidget(
+                                    info: watchEntity.info,
+                                    controller: controller),
                               ],
                             ),
                           ),

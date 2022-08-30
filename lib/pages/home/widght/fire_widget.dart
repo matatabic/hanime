@@ -23,7 +23,7 @@ class FireWidget extends StatelessWidget {
           child: Row(children: <Widget>[
             Text(
               data.label,
-              style: TextStyle(fontSize: 199),
+              style: TextStyle(fontSize: 19),
             ),
             Icon(
               Icons.arrow_forward_ios,
