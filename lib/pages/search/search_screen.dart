@@ -196,7 +196,7 @@ class _SearchScreenState extends State<SearchScreen>
           //横轴间距
           crossAxisSpacing: 5.0,
           //子组件宽高长度比例
-          childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.1),
+          childAspectRatio: _commendCount == 3 ? 2 / 3 : 1.05),
       //加载内容
       delegate: SliverChildBuilderDelegate(
         (context, index) {

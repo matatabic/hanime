@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/custom_dialog.dart';
@@ -65,6 +66,8 @@ class DownloadWidget extends StatelessWidget {
                                             .read<DownloadModel>()
                                             .addDownload(info, downloadUrl,
                                                 localVideoUrl);
+                                        BotToast.showSimpleNotification(
+                                            title: "已经加入下载队列");
                                       } else {
                                         CustomDialog.showDialog(
                                             context, "请开启读写文件权限", () {

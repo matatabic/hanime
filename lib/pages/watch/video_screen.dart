@@ -4,7 +4,6 @@ import 'package:hanime/common/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart'
     show VideoSourceFormat;
 import 'package:hanime/entity/watch_entity.dart';
-import 'package:hanime/services/watch_services.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -115,12 +114,5 @@ class _VideoScreenState extends State<VideoScreen>
         )
       ],
     );
-  }
-
-  getEpisodeData(htmlUrl) async {
-    var data = await getWatchData(htmlUrl);
-    WatchEntity watchEntity = WatchEntity.fromJson(data);
-
-    return watchEntity;
   }
 }

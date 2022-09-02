@@ -11,7 +11,7 @@ Future getWatchData(url) async {
   }
   final resHtml = response.data;
 
-  return await watchHtml2Data(resHtml, url);
+  return watchHtml2Data(resHtml, url);
 }
 
 Future watchHtml2Data(String resHtml, String url) async {
@@ -27,11 +27,19 @@ Future watchHtml2Data(String resHtml, String url) async {
   var title = titleElement!.attributes['content'];
   var shareTitle = document.querySelector("#shareBtn-title")!.text;
 
-  var currentPlayer;
+  String currentPlayer = "";
   RegExp playerReg = RegExp(r'(?<="contentUrl": ")(.*)(?=",)');
+  RegExp playerRegMp4 = RegExp(r'(?<=source src=")(.*)(?=" type=")');
   var match = playerReg.firstMatch(resHtml);
   if (match != null) {
     currentPlayer = match.group(0)!;
+  }
+
+  if (currentPlayer.length == 0) {
+    var matchMp4 = playerRegMp4.firstMatch(resHtml);
+    if (matchMp4 != null) {
+      currentPlayer = matchMp4.group(0)!;
+    }
   }
 
   var videoElement = document.querySelector("#player");

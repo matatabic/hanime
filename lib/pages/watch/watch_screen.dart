@@ -36,7 +36,7 @@ class _WatchScreenState extends State<WatchScreen> {
   @override
   initState() {
     super.initState();
-    _futureBuilderFuture = loadData();
+    _futureBuilderFuture = loadData(widget.htmlUrl);
   }
 
   @override
@@ -80,7 +80,7 @@ class _WatchScreenState extends State<WatchScreen> {
             child: Text('网络异常,点击重新加载'),
             onPressed: () {
               setState(() {
-                _futureBuilderFuture = loadData();
+                _futureBuilderFuture = loadData(widget.htmlUrl);
               });
             },
           ));
@@ -105,14 +105,7 @@ class _WatchScreenState extends State<WatchScreen> {
     await player.pause();
   }
 
-  Future loadData() async {
-    var data = await getWatchData(widget.htmlUrl);
-    WatchEntity watchEntity = WatchEntity.fromJson(data);
-
-    return watchEntity;
-  }
-
-  getEpisodeData(htmlUrl) async {
+  Future loadData(htmlUrl) async {
     var data = await getWatchData(htmlUrl);
     WatchEntity watchEntity = WatchEntity.fromJson(data);
 
@@ -160,7 +153,7 @@ class _WatchScreenState extends State<WatchScreen> {
                     _videoIndex = index;
                   });
                   WatchEntity data =
-                      await getEpisodeData(watchEntity.episode[index].htmlUrl);
+                      await loadData(watchEntity.episode[index].htmlUrl);
                   playerChange(data.videoData.video[0].list[0].url);
 
                   setState(() {
@@ -202,7 +195,7 @@ class _WatchScreenState extends State<WatchScreen> {
                 _videoIndex = index;
               });
               WatchEntity data =
-                  await getEpisodeData(watchEntity.episode[index].htmlUrl);
+                  await loadData(watchEntity.episode[index].htmlUrl);
               playerChange(data.videoData.video[0].list[0].url);
 
               setState(() {
@@ -236,7 +229,7 @@ class _WatchScreenState extends State<WatchScreen> {
             //横轴间距
             crossAxisSpacing: 5,
             //子组件宽高长度比例
-            childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 1.1),
+            childAspectRatio: watchEntity.commendCount == 3 ? 2 / 3 : 1.05),
         //加载内容
         delegate: SliverChildBuilderDelegate(
           (context, index) {

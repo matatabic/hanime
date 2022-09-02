@@ -126,7 +126,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       }
     });
 
-    Timer.periodic(Duration(milliseconds: 5000), (_) {
+    Timer.periodic(Duration(milliseconds: 2500), (_) {
       List<DownloadEntity> downloadList =
           Provider.of<DownloadModel>(context, listen: false).downloadList;
       List<DownloadEntity> downloadingList =
@@ -213,12 +213,12 @@ class _BottomNavBarState extends State<BottomNavBar>
                 padding: const EdgeInsets.only(left: 16),
                 child: Row(
                   children: [
-                    Icon(Icons.west),
+                    Icon(Icons.voicemail, color: Colors.white),
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
                         "再按一次返回键退出应用",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 18),
                       ),
                     )
                   ],
