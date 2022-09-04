@@ -72,27 +72,15 @@ class _FavouriteScreen extends State<FavouriteScreen>
                 label: '删除收藏夹',
                 labelStyle: TextStyle(fontSize: 19),
                 onTap: () {
-                  BotToast.showCustomNotification(
-                      align: Alignment(0, -1.2),
-                      toastBuilder: (void Function() cancelFunc) {
-                        return Container(
-                          width: MediaQueryData.fromWindow(window).size.width,
-                          height: 300,
-                          alignment: Alignment.bottomCenter,
-                          color: Colors.red,
-                          child: Text("删除收藏夹"),
-                        );
-                      });
-
-                  // if (favouriteList.length == 1) {
-                  //   BotToast.showSimpleNotification(
-                  //       title: "至少保留一个收藏夹",
-                  //       backgroundColor: Theme.of(context).primaryColor);
-                  // } else {
-                  //   setState(() {
-                  //     _deleteMode = true;
-                  //   });
-                  // }
+                  if (favouriteList.length == 1) {
+                    BotToast.showSimpleNotification(
+                        title: "至少保留一个收藏夹",
+                        backgroundColor: Theme.of(context).primaryColor);
+                  } else {
+                    setState(() {
+                      _deleteMode = true;
+                    });
+                  }
                 },
               )
             ]),
