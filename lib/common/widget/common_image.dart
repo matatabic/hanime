@@ -66,6 +66,7 @@ class CommonNormalImage extends StatelessWidget {
     return Image.network(this.imgUrl, fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
       return Image.network(
+        // "http://img5.mtime.cn/mt/2022/01/19/102417.23221502_1280X720X2.jpg",
         this.imgUrl + '?reload',
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {

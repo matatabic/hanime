@@ -36,20 +36,16 @@ class EpisodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double scrollOffset;
-    if (watchEntity.info.videoIndex == 0) {
-      scrollOffset = 0;
+    if (direction) {
+      scrollOffset = watchEntity.info.videoIndex * (itemWidth + LIST_SPACE) -
+          (MediaQuery.of(context).size.width - 2 * LIST_SPACE) / 2 +
+          itemWidth / 2;
     } else {
-      if (direction) {
-        scrollOffset = watchEntity.info.videoIndex * (itemWidth + LIST_SPACE) -
-            (MediaQuery.of(context).size.width - 2 * LIST_SPACE) / 2 +
-            itemWidth / 2;
-      } else {
-        scrollOffset =
-            (videoIndex != null ? videoIndex : watchEntity.info.videoIndex) *
-                    (itemHeight + LIST_SPACE) -
-                (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
-                itemHeight / 2;
-      }
+      scrollOffset =
+          (videoIndex != null ? videoIndex : watchEntity.info.videoIndex) *
+                  (itemHeight + LIST_SPACE) -
+              (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
+              itemHeight / 2;
     }
 
     return Container(
