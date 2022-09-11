@@ -10,14 +10,9 @@ import 'IconWidget/like_widget.dart';
 
 class BriefScreen extends StatelessWidget {
   final WatchEntity watchEntity;
-  final Function(String url) playerChange;
   final ScrollController controller;
 
-  BriefScreen(
-      {Key? key,
-      required this.watchEntity,
-      required this.playerChange,
-      required this.controller})
+  BriefScreen({Key? key, required this.watchEntity, required this.controller})
       : super(key: key);
 
   @override
