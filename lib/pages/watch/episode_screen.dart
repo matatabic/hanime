@@ -10,74 +10,104 @@ import '../../component/loading_cover.dart';
 
 const double LIST_SPACE = 15;
 
-class EpisodeScreen extends StatelessWidget {
+class EpisodeScreen extends StatefulWidget {
   final WatchEntity watchEntity;
   final bool direction;
   final double? containerHeight;
   final double itemWidth;
   final double itemHeight;
-  final dynamic videoIndex;
-  final bool loading;
-
+  final Function(String) loadData;
+  final Function(String) playerChange;
+  // final dynamic videoIndex;
+  // final bool loading;
   final Function(int index) onTap;
 
-  const EpisodeScreen({
-    Key? key,
-    required this.watchEntity,
-    required this.onTap,
-    required this.direction,
-    this.containerHeight,
-    required this.itemWidth,
-    required this.itemHeight,
-    required this.videoIndex,
-    required this.loading,
-  }) : super(key: key);
+  const EpisodeScreen(
+      {Key? key,
+      required this.watchEntity,
+      required this.onTap,
+      required this.direction,
+      this.containerHeight,
+      required this.itemWidth,
+      required this.itemHeight,
+      required this.loadData,
+      required this.playerChange
+      // required this.videoIndex,
+      // required this.loading,
+      })
+      : super(key: key);
+
+  @override
+  _EpisodeScreenState createState() => _EpisodeScreenState();
+}
+
+class _EpisodeScreenState extends State<EpisodeScreen> {
+  var _videoIndex;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     double scrollOffset;
-    if (watchEntity.info.videoIndex == 0) {
+    if (widget.watchEntity.info.videoIndex == 0) {
       scrollOffset = 0;
     } else {
-      if (direction) {
-        scrollOffset = watchEntity.info.videoIndex * (itemWidth + LIST_SPACE) -
+      if (widget.direction) {
+        scrollOffset = widget.watchEntity.info.videoIndex *
+                (widget.itemWidth + LIST_SPACE) -
             (MediaQuery.of(context).size.width - 2 * LIST_SPACE) / 2 +
-            itemWidth / 2;
+            widget.itemWidth / 2;
       } else {
-        scrollOffset =
-            (videoIndex != null ? videoIndex : watchEntity.info.videoIndex) *
-                    (itemHeight + LIST_SPACE) -
-                (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
-                itemHeight / 2;
+        scrollOffset = (_videoIndex != null
+                    ? _videoIndex
+                    : widget.watchEntity.info.videoIndex) *
+                (widget.itemHeight + LIST_SPACE) -
+            (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
+            widget.itemHeight / 2;
       }
     }
 
     return Container(
       color: Color.fromRGBO(48, 48, 48, 1),
-      height:
-          direction ? containerHeight : MediaQuery.of(context).size.height - 25,
+      height: widget.direction
+          ? widget.containerHeight
+          : MediaQuery.of(context).size.height - 25,
       padding: EdgeInsets.symmetric(horizontal: LIST_SPACE),
       child: ListView.separated(
           // shrinkWrap: true,
           controller: ScrollController(initialScrollOffset: scrollOffset),
-          scrollDirection: direction ? Axis.horizontal : Axis.vertical,
-          itemCount: watchEntity.episode.length,
+          scrollDirection: widget.direction ? Axis.horizontal : Axis.vertical,
+          itemCount: widget.watchEntity.episode.length,
           separatorBuilder: (BuildContext context, int index) => Container(
-                width: direction ? LIST_SPACE : 0,
-                height: direction ? 0 : LIST_SPACE,
+                width: widget.direction ? LIST_SPACE : 0,
+                height: widget.direction ? 0 : LIST_SPACE,
               ),
           itemBuilder: (BuildContext context, int index) {
             return Episode(
-              videoList: watchEntity.episode[index],
-              selector: videoIndex == null
-                  ? watchEntity.info.videoIndex == index
-                  : videoIndex == index,
-              itemWidth: itemWidth,
-              itemHeight: itemHeight,
-              direction: direction,
-              onTap: () => {onTap(index)},
-              loading: loading,
-              videoIndex: videoIndex,
+              videoList: widget.watchEntity.episode[index],
+              selector: _videoIndex == null
+                  ? widget.watchEntity.info.videoIndex == index
+                  : _videoIndex == index,
+              itemWidth: widget.itemWidth,
+              itemHeight: widget.itemHeight,
+              direction: widget.direction,
+              onTap: () async {
+                if (_loading) {
+                  return;
+                }
+                setState(() {
+                  _loading = true;
+                  _videoIndex = index;
+                });
+                WatchEntity data = await widget
+                    .loadData(widget.watchEntity.episode[index].htmlUrl);
+                widget.playerChange(data.videoData.video[0].list[0].url);
+                //
+                setState(() {
+                  // _shareTitle = data.info.shareTitle;
+                  _loading = false;
+                });
+              },
+              loading: _loading,
             );
           }),
     );
@@ -91,7 +121,6 @@ class Episode extends StatelessWidget {
   final bool direction;
   final double itemWidth;
   final double itemHeight;
-  final dynamic videoIndex;
   final bool loading;
 
   const Episode(
@@ -102,7 +131,6 @@ class Episode extends StatelessWidget {
       required this.direction,
       required this.itemWidth,
       required this.itemHeight,
-      required this.videoIndex,
       required this.loading})
       : super(key: key);
 

@@ -29,8 +29,8 @@ class _WatchScreenState extends State<WatchScreen> {
   ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
-  var _videoIndex;
-  bool _loading = false;
+  // var _videoIndex;
+  // bool _loading = false;
   String _shareTitle = "";
 
   @override
@@ -142,24 +142,26 @@ class _WatchScreenState extends State<WatchScreen> {
                 itemWidth: 170,
                 itemHeight: 110,
                 direction: false,
-                videoIndex: _videoIndex,
-                loading: _loading,
+                // videoIndex: _videoIndex,
+                // loading: _loading,
+                loadData: (String htmlUrl) => loadData(htmlUrl),
+                playerChange: (String url) => playerChange(url),
                 onTap: (index) async {
-                  if (_videoIndex == index || _loading) {
-                    return;
-                  }
-                  setState(() {
-                    _loading = true;
-                    _videoIndex = index;
-                  });
-                  WatchEntity data =
-                      await loadData(watchEntity.episode[index].htmlUrl);
-                  playerChange(data.videoData.video[0].list[0].url);
-
-                  setState(() {
-                    _shareTitle = data.info.shareTitle;
-                    _loading = false;
-                  });
+                  // if (_videoIndex == index || _loading) {
+                  //   return;
+                  // }
+                  // setState(() {
+                  //   _loading = true;
+                  //   _videoIndex = index;
+                  // });
+                  // WatchEntity data =
+                  //     await loadData(watchEntity.episode[index].htmlUrl);
+                  // playerChange(data.videoData.video[0].list[0].url);
+                  //
+                  // setState(() {
+                  //   _shareTitle = data.info.shareTitle;
+                  //   _loading = false;
+                  // });
                 }),
           )),
       SliverToBoxAdapter(
@@ -180,28 +182,30 @@ class _WatchScreenState extends State<WatchScreen> {
             containerHeight: 150,
             itemWidth: 170,
             itemHeight: 110,
-            videoIndex: _videoIndex,
-            loading: _loading,
+            // videoIndex: _videoIndex,
+            // loading: _loading,
             direction: true,
+            loadData: (String htmlUrl) => loadData(htmlUrl),
+            playerChange: (String url) => playerChange(url),
             onTap: (index) async {
-              if (_loading) {
-                return;
-              }
-              // if (index == _videoIndex || _loading) {
+              // if (_loading) {
               //   return;
               // }
-              setState(() {
-                _loading = true;
-                _videoIndex = index;
-              });
-              WatchEntity data =
-                  await loadData(watchEntity.episode[index].htmlUrl);
-              playerChange(data.videoData.video[0].list[0].url);
-
-              setState(() {
-                _shareTitle = data.info.shareTitle;
-                _loading = false;
-              });
+              // // if (index == _videoIndex || _loading) {
+              // //   return;
+              // // }
+              // setState(() {
+              //   _loading = true;
+              //   _videoIndex = index;
+              // });
+              // WatchEntity data =
+              //     await loadData(watchEntity.episode[index].htmlUrl);
+              // playerChange(data.videoData.video[0].list[0].url);
+              //
+              // setState(() {
+              //   _shareTitle = data.info.shareTitle;
+              //   _loading = false;
+              // });
             }),
       ),
       SliverToBoxAdapter(
