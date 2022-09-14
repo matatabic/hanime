@@ -138,31 +138,15 @@ class _WatchScreenState extends State<WatchScreen> {
             player: player,
             playerChange: (String url) => playerChange,
             episodeScreen: EpisodeScreen(
-                watchEntity: watchEntity,
-                itemWidth: 170,
-                itemHeight: 110,
-                direction: false,
-                // videoIndex: _videoIndex,
-                // loading: _loading,
-                loadData: (String htmlUrl) => loadData(htmlUrl),
-                playerChange: (String url) => playerChange(url),
-                onTap: (index) async {
-                  // if (_videoIndex == index || _loading) {
-                  //   return;
-                  // }
-                  // setState(() {
-                  //   _loading = true;
-                  //   _videoIndex = index;
-                  // });
-                  // WatchEntity data =
-                  //     await loadData(watchEntity.episode[index].htmlUrl);
-                  // playerChange(data.videoData.video[0].list[0].url);
-                  //
-                  // setState(() {
-                  //   _shareTitle = data.info.shareTitle;
-                  //   _loading = false;
-                  // });
-                }),
+              watchEntity: watchEntity,
+              itemWidth: 170,
+              itemHeight: 110,
+              direction: false,
+              // videoIndex: _videoIndex,
+              // loading: _loading,
+              loadData: (String htmlUrl) => loadData,
+              playerChange: (String url) => playerChange,
+            ),
           )),
       SliverToBoxAdapter(
           child: BriefScreen(
@@ -178,35 +162,16 @@ class _WatchScreenState extends State<WatchScreen> {
       )),
       SliverToBoxAdapter(
         child: EpisodeScreen(
-            watchEntity: watchEntity,
-            containerHeight: 150,
-            itemWidth: 170,
-            itemHeight: 110,
-            // videoIndex: _videoIndex,
-            // loading: _loading,
-            direction: true,
-            loadData: (String htmlUrl) => loadData(htmlUrl),
-            playerChange: (String url) => playerChange(url),
-            onTap: (index) async {
-              // if (_loading) {
-              //   return;
-              // }
-              // // if (index == _videoIndex || _loading) {
-              // //   return;
-              // // }
-              // setState(() {
-              //   _loading = true;
-              //   _videoIndex = index;
-              // });
-              // WatchEntity data =
-              //     await loadData(watchEntity.episode[index].htmlUrl);
-              // playerChange(data.videoData.video[0].list[0].url);
-              //
-              // setState(() {
-              //   _shareTitle = data.info.shareTitle;
-              //   _loading = false;
-              // });
-            }),
+          watchEntity: watchEntity,
+          containerHeight: 150,
+          itemWidth: 170,
+          itemHeight: 110,
+          // videoIndex: _videoIndex,
+          // loading: _loading,
+          direction: true,
+          loadData: (String htmlUrl) => loadData,
+          playerChange: (String url) => playerChange,
+        ),
       ),
       SliverToBoxAdapter(
         child: Container(

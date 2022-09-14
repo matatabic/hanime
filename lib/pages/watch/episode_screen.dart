@@ -18,23 +18,16 @@ class EpisodeScreen extends StatefulWidget {
   final double itemHeight;
   final Function(String) loadData;
   final Function(String) playerChange;
-  // final dynamic videoIndex;
-  // final bool loading;
-  final Function(int index) onTap;
 
   const EpisodeScreen(
       {Key? key,
       required this.watchEntity,
-      required this.onTap,
       required this.direction,
       this.containerHeight,
       required this.itemWidth,
       required this.itemHeight,
       required this.loadData,
-      required this.playerChange
-      // required this.videoIndex,
-      // required this.loading,
-      })
+      required this.playerChange})
       : super(key: key);
 
   @override

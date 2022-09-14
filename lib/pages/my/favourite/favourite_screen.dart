@@ -10,8 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/custom_dialog.dart';
+import 'package:hanime/common/expansionLayout.dart';
 import 'package:hanime/entity/favourite_entity.dart';
-import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shake_animation_widget/shake_animation_widget.dart';
@@ -165,12 +165,9 @@ class _FavouriteScreen extends State<FavouriteScreen>
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                CustomDialog.showDialog(
-                    context,
-                    "确认删除该影片?",
-                    () => {
-                          widgetContext.read<FavouriteModel>().removeItem(anime)
-                        });
+                CustomDialog.showDialog(context, "确认删除该影片?", () {
+                  widgetContext.read<FavouriteModel>().removeItem(anime);
+                });
               },
               backgroundColor: Color(0xFFFE4A49),
               foregroundColor: Colors.white,
@@ -179,17 +176,7 @@ class _FavouriteScreen extends State<FavouriteScreen>
             )
           ],
         ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => WatchScreen(htmlUrl: anime.htmlUrl)));
-          },
-          child: FavouriteItem(
-            anime: anime,
-          ),
-        ),
+        child: BuildItem(anime: anime),
       ),
     );
   }
@@ -203,5 +190,53 @@ class _FavouriteScreen extends State<FavouriteScreen>
 
   _onListReorder(int oldListIndex, int newListIndex) {
     context.read<FavouriteModel>().orderList(oldListIndex, newListIndex);
+  }
+}
+
+class BuildItem extends StatefulWidget {
+  final FavouriteChildren anime;
+
+  const BuildItem({Key? key, required this.anime}) : super(key: key);
+
+  @override
+  _BuildItemState createState() => _BuildItemState();
+}
+
+class _BuildItemState extends State<BuildItem> {
+  bool isExpanded = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        InkWell(
+            onTap: () {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            },
+            child: Text("123123123412")),
+        FavouriteItem(
+          anime: widget.anime,
+        ),
+        ExpansionLayout(
+            onExpansionChanged: (bool value) {
+              print(value);
+              // setState(() {
+              //   isExpanded = !isExpanded;
+              // });
+            },
+            backgroundColor: Colors.white,
+            trailing: Icon(Icons.remove_red_eye_outlined),
+            isExpanded: isExpanded,
+            children: [
+              Text("12312"),
+              Text("12312"),
+              Text("12312"),
+              Text("12312"),
+              Text("12312"),
+            ])
+      ],
+    );
   }
 }

@@ -78,6 +78,7 @@ class BriefScreen extends StatelessWidget {
                                         .videoData.video[0].list[0].url),
                                 LikeWidget(
                                     info: watchEntity.info,
+                                    episodeList: watchEntity.episode,
                                     controller: controller),
                               ],
                             ),
