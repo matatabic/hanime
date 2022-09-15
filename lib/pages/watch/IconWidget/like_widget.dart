@@ -63,9 +63,11 @@ class _LikeIconState extends State<LikeWidget> {
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
     });
-    final favouriteList = context.watch<FavouriteModel>().favouriteList;
-    bool isLiked = favouriteList.any((element) => element.children
-        .any((element) => element.htmlUrl == widget.info.htmlUrl));
+    context.read<FavouriteModel>().isFavouriteEpisode(widget.episodeList);
+    // final favouriteList = context.watch<FavouriteModel>().favouriteList;
+    // bool isLiked = favouriteList.any((element) => element.children
+    //     .any((element) => element.htmlUrl == widget.info.htmlUrl));
+    bool isLiked = false;
     return LikeButton(
       key: iconKey,
       isPanel: isPanel,

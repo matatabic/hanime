@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
@@ -7,10 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/custom_dialog.dart';
-import 'package:hanime/common/expansionLayout.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
@@ -150,33 +146,16 @@ class _FavouriteScreen extends State<FavouriteScreen>
     );
   }
 
-  _buildItem(FavouriteChildren anime) {
+  _buildItem(FavouriteChildren episodeList) {
     final widgetContext = context;
 
     return DragAndDropItem(
       canDrag: !_deleteMode,
       feedbackWidget: Container(
-        child: FavouriteItem(anime: anime, showBg: false),
+        child: Favourite(episodeList: episodeList, showBg: false),
       ),
-      child: Slidable(
-        key: const ValueKey(1),
-        startActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) {
-                CustomDialog.showDialog(context, "确认删除该影片?", () {
-                  widgetContext.read<FavouriteModel>().removeItem(anime);
-                });
-              },
-              backgroundColor: Color(0xFFFE4A49),
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: '删除',
-            )
-          ],
-        ),
-        child: BuildItem(anime: anime),
+      child: Favourite(
+        episodeList: episodeList,
       ),
     );
   }
@@ -190,53 +169,5 @@ class _FavouriteScreen extends State<FavouriteScreen>
 
   _onListReorder(int oldListIndex, int newListIndex) {
     context.read<FavouriteModel>().orderList(oldListIndex, newListIndex);
-  }
-}
-
-class BuildItem extends StatefulWidget {
-  final FavouriteChildren anime;
-
-  const BuildItem({Key? key, required this.anime}) : super(key: key);
-
-  @override
-  _BuildItemState createState() => _BuildItemState();
-}
-
-class _BuildItemState extends State<BuildItem> {
-  bool isExpanded = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-            onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
-            },
-            child: Text("123123123412")),
-        FavouriteItem(
-          anime: widget.anime,
-        ),
-        ExpansionLayout(
-            onExpansionChanged: (bool value) {
-              print(value);
-              // setState(() {
-              //   isExpanded = !isExpanded;
-              // });
-            },
-            backgroundColor: Colors.white,
-            trailing: Icon(Icons.remove_red_eye_outlined),
-            isExpanded: isExpanded,
-            children: [
-              Text("12312"),
-              Text("12312"),
-              Text("12312"),
-              Text("12312"),
-              Text("12312"),
-            ])
-      ],
-    );
   }
 }

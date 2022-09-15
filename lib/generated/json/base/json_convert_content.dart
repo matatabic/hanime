@@ -89,6 +89,9 @@ class JsonConvert {
     if (type == (FavouriteChildren).toString()) {
       return FavouriteChildren.fromJson(json) as M;
     }
+    if (type == (FavouriteChildrenChildren).toString()) {
+      return FavouriteChildrenChildren.fromJson(json) as M;
+    }
     if (type == (HomeEntity).toString()) {
       return HomeEntity.fromJson(json) as M;
     }
@@ -209,6 +212,12 @@ class JsonConvert {
       return data
           .map<FavouriteChildren>(
               (Map<String, dynamic> e) => FavouriteChildren.fromJson(e))
+          .toList() as M;
+    }
+    if (<FavouriteChildrenChildren>[] is M) {
+      return data
+          .map<FavouriteChildrenChildren>(
+              (Map<String, dynamic> e) => FavouriteChildrenChildren.fromJson(e))
           .toList() as M;
     }
     if (<HomeEntity>[] is M) {
