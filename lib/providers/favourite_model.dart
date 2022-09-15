@@ -130,16 +130,16 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   //判断是否已经收藏
-  void isFavouriteEpisode(List<WatchEpisode> episodeList) {
-    ;
-    bool isFavourite = _favouriteList.any((element) => element.children.any(
-        (element) => element.children.any((element) =>
+  bool isFavouriteEpisode(List<WatchEpisode> episodeList) {
+    return _favouriteList.any((element) => element.children.any((element) =>
+        element.children.any((element) =>
             episodeList.any((episode) => episode.htmlUrl == element.htmlUrl))));
-    print(
-        "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
-    print(isFavourite);
-    print(
-        "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
+    // print(
+    //     "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
+    // print(isFavourite);
+    // print(
+    //     "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
+
     // _favouriteList.forEach((element) {
     //   element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
     // });
