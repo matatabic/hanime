@@ -10,9 +10,14 @@ import 'package:provider/provider.dart';
 
 class LikeWidget extends StatefulWidget {
   final WatchInfo info;
+  final List<WatchEpisode> episodeList;
   final ScrollController controller;
 
-  LikeWidget({Key? key, required this.info, required this.controller})
+  LikeWidget(
+      {Key? key,
+      required this.info,
+      required this.controller,
+      required this.episodeList})
       : super(key: key);
 
   @override
@@ -58,16 +63,22 @@ class _LikeIconState extends State<LikeWidget> {
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
     });
-    final favouriteList = context.watch<FavouriteModel>().favouriteList;
-    bool isLiked = favouriteList.any((element) => element.children
-        .any((element) => element.htmlUrl == widget.info.htmlUrl));
+    bool isLiked =
+        context.read<FavouriteModel>().isFavouriteEpisode(widget.episodeList);
+    // final favouriteList = context.watch<FavouriteModel>().favouriteList;
+    // bool isLiked = favouriteList.any((element) => element.children
+    //     .any((element) => element.htmlUrl == widget.info.htmlUrl));
+
     return LikeButton(
       key: iconKey,
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          Provider.of<FavouriteModel>(context, listen: false)
+          context
+              .read<FavouriteModel>()
               .removeItemByHtmlUrl(widget.info.htmlUrl);
+          // Provider.of<FavouriteModel>(context, listen: false)
+          //     .removeItemByHtmlUrl(widget.info.htmlUrl);
         } else {
           showModel();
         }
@@ -154,13 +165,19 @@ class _LikeIconState extends State<LikeWidget> {
                               ),
                             ),
                             onTap: () async {
-                              context.read<FavouriteModel>().saveAnime(
-                                  FavouriteChildren.fromJson({
-                                    "imageUrl": widget.info.imgUrl,
-                                    "htmlUrl": widget.info.htmlUrl,
-                                    "title": widget.info.title
-                                  }),
-                                  item);
+                              print(widget.episodeList);
+                              print(widget.info);
+
+                              // context.read<FavouriteModel>().saveAnime(
+                              //     FavouriteChildren.fromJson({
+                              //       "imageUrl": widget.info.imgUrl,
+                              //       "htmlUrl": widget.info.htmlUrl,
+                              //       "title": widget.info.title
+                              //     }),
+                              //     item);
+                              context
+                                  .read<FavouriteModel>()
+                                  .saveAnime(widget.episodeList, item);
                               isPanel = true;
                               await closeModel();
                             },

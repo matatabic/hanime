@@ -23,9 +23,8 @@ class FavouriteEntity {
 
 @JsonSerializable()
 class FavouriteChildren {
-  late String title;
-  late String imageUrl;
-  late String htmlUrl;
+  late String name;
+  late List<FavouriteChildrenChildren> children;
 
   FavouriteChildren();
 
@@ -33,6 +32,25 @@ class FavouriteChildren {
       $FavouriteChildrenFromJson(json);
 
   Map<String, dynamic> toJson() => $FavouriteChildrenToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+@JsonSerializable()
+class FavouriteChildrenChildren {
+  late String title;
+  late String htmlUrl;
+  late String imgUrl;
+
+  FavouriteChildrenChildren();
+
+  factory FavouriteChildrenChildren.fromJson(Map<String, dynamic> json) =>
+      $FavouriteChildrenChildrenFromJson(json);
+
+  Map<String, dynamic> toJson() => $FavouriteChildrenChildrenToJson(this);
 
   @override
   String toString() {

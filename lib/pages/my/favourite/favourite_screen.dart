@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
@@ -7,11 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/entity/favourite_entity.dart';
-import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shake_animation_widget/shake_animation_widget.dart';
@@ -150,46 +146,16 @@ class _FavouriteScreen extends State<FavouriteScreen>
     );
   }
 
-  _buildItem(FavouriteChildren anime) {
+  _buildItem(FavouriteChildren episodeList) {
     final widgetContext = context;
 
     return DragAndDropItem(
       canDrag: !_deleteMode,
       feedbackWidget: Container(
-        child: FavouriteItem(anime: anime, showBg: false),
+        child: Favourite(episodeList: episodeList, showBg: false),
       ),
-      child: Slidable(
-        key: const ValueKey(1),
-        startActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) {
-                CustomDialog.showDialog(
-                    context,
-                    "确认删除该影片?",
-                    () => {
-                          widgetContext.read<FavouriteModel>().removeItem(anime)
-                        });
-              },
-              backgroundColor: Color(0xFFFE4A49),
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: '删除',
-            )
-          ],
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => WatchScreen(htmlUrl: anime.htmlUrl)));
-          },
-          child: FavouriteItem(
-            anime: anime,
-          ),
-        ),
+      child: Favourite(
+        episodeList: episodeList,
       ),
     );
   }

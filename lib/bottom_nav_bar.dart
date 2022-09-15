@@ -12,7 +12,6 @@ import 'package:hanime/pages/home/home_screen.dart';
 import 'package:hanime/pages/my/my_screen.dart';
 import 'package:hanime/pages/search/search_screen.dart';
 import 'package:hanime/providers/download_model.dart';
-import 'package:hanime/providers/favourite_model.dart';
 import 'package:hanime/request/dio_range_download_manage.dart';
 import 'package:hanime/request/m3u8_range_download_manage.dart';
 import 'package:hanime/utils/utils.dart';
@@ -92,8 +91,8 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   void loadCache() async {
-    context.read<FavouriteModel>().getCache();
-    context.read<DownloadModel>().getCache();
+    // context.read<FavouriteModel>().getCache();
+    // context.read<DownloadModel>().getCache();
   }
 
   void initM3u8Downloader() async {
