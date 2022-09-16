@@ -39,11 +39,13 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           "name": "剧集1",
           "children": [
             {
+              "index": 0,
               "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
               "htmlUrl": "124124162412",
               "title": "111111111",
             },
             {
+              "index": 1,
               "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
               "htmlUrl": "124124124152",
               "title": "2222222222222",
@@ -51,9 +53,10 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           ]
         },
         {
-          "name": "剧集2",
+          "name": "緣之空",
           "children": [
             {
+              "index": 0,
               "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
               "htmlUrl": "https://hanime1.me/watch?v=39231",
               "title": "33333333333333",
@@ -90,7 +93,20 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void saveAnime(List<WatchEpisode> episodeList, FavouriteEntity favourite) {
+  void saveAnime(
+      List<WatchEpisode> episodeList, WatchInfo favourite, int favIndex) {
+    print(_favouriteList[favIndex]
+        .children
+        .any((element) => element.name == favourite.title));
+    print("indexindexindexindexindexindex");
+    // print(index);
+    print(favIndex);
+    // if (index > -1) {
+    //   _favouriteList[index].children = episodeList;
+    // } else {
+    //   _favouriteList.add(FavouriteEntity.fromJson(
+    //       {"name": "${favourite.title}", "children": episodeList}));
+    // }
     // int index = _favouriteList.indexOf(favourite);
     // _favouriteList[index].children.insert(0, anime);
     // saveData(_favouriteList);
@@ -131,38 +147,18 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
 
   //判断是否已经收藏
   bool isFavouriteEpisode(List<WatchEpisode> episodeList) {
-    return _favouriteList.any((element) => element.children.any((element) =>
-        element.children.any((element) =>
+    bool isFavourite = _favouriteList.any((element) => element.children.any(
+        (element) => element.children.any((element) =>
             episodeList.any((episode) => episode.htmlUrl == element.htmlUrl))));
-    // print(
-    //     "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
-    // print(isFavourite);
-    // print(
-    //     "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
-
-    // _favouriteList.forEach((element) {
-    //   element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
-    // });
-    // saveData(_favouriteList);
-    // notifyListeners();
+    return isFavourite;
   }
 
   //判断是否已经收藏
-  void isFavouriteAnime(String htmlUrl, List<WatchEpisode> episodeList) {
-    episodeList.any((element) => element.htmlUrl == htmlUrl);
+  bool isFavouriteAnime(String htmlUrl) {
     bool isFavourite = _favouriteList.any((element) => element.children.any(
         (element) =>
             element.children.any((element) => element.htmlUrl == htmlUrl)));
-    print(
-        "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
-    print(isFavourite);
-    print(
-        "isFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavouriteisFavourite");
-    // _favouriteList.forEach((element) {
-    //   element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
-    // });
-    // saveData(_favouriteList);
-    // notifyListeners();
+    return isFavourite;
   }
 
   saveData(List<FavouriteEntity> data) {
