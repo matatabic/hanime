@@ -64,10 +64,7 @@ class _LikeIconState extends State<LikeWidget> {
       iconOffset = box.localToGlobal(Offset.zero);
     });
     bool isLiked =
-        context.read<FavouriteModel>().isFavouriteEpisode(widget.episodeList);
-    // final favouriteList = context.watch<FavouriteModel>().favouriteList;
-    // bool isLiked = favouriteList.any((element) => element.children
-    //     .any((element) => element.htmlUrl == widget.info.htmlUrl));
+        context.read<FavouriteModel>().isFavouriteAnime(widget.info.htmlUrl);
 
     return LikeButton(
       key: iconKey,
@@ -149,7 +146,10 @@ class _LikeIconState extends State<LikeWidget> {
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: favList
-                    .map<Widget>((item) => Expanded(
+                    .asMap()
+                    .map((index, element) => MapEntry(
+                        index,
+                        Expanded(
                           flex: 1,
                           child: InkWell(
                             customBorder: StadiumBorder(),
@@ -157,7 +157,7 @@ class _LikeIconState extends State<LikeWidget> {
                               width: double.infinity,
                               alignment: Alignment.center,
                               child: Text(
-                                item.name,
+                                element.name,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 14,
@@ -175,14 +175,17 @@ class _LikeIconState extends State<LikeWidget> {
                               //       "title": widget.info.title
                               //     }),
                               //     item);
-                              context
-                                  .read<FavouriteModel>()
-                                  .saveAnime(widget.episodeList, item);
+                              // context
+                              //     .read<FavouriteModel>()
+                              //     .saveAnime(widget.episodeList, item);
+                              context.read<FavouriteModel>().saveAnime(
+                                  widget.episodeList, widget.info, index);
                               isPanel = true;
                               await closeModel();
                             },
                           ),
-                        ))
+                        )))
+                    .values
                     .toList(),
               ),
             ),
