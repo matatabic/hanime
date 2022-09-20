@@ -6,65 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/utils/storage.dart';
+import 'package:hanime/utils/utils.dart';
 
 class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
-  // List<FavouriteEntity> _favouriteList = [
-  //   FavouriteEntity.fromJson({
-  //     "name": "我的收藏夹",
-  //     "children": [
-  //       {
-  //         "imageUrl": "https://i.imgur.com/NeeUy2W.jpg",
-  //         "htmlUrl": "12412412412",
-  //         "title": "12412412412",
-  //       },
-  //       {
-  //         "imageUrl": "https://i.imgur.com/NeeUy2W.jpg",
-  //         "htmlUrl": "12412412412",
-  //         "title": "12412412412",
-  //       },
-  //       {
-  //         "imageUrl": "https://i.imgur.com/NeeUy2W.jpg",
-  //         "htmlUrl": "12412412412",
-  //         "title": "12412412412",
-  //       }
-  //     ]
-  //   })
-  // ];
-
   List<FavouriteEntity> _favouriteList = [
-    FavouriteEntity.fromJson({
-      "name": "我的收藏夹",
-      "children": [
-        {
-          "name": "剧集1",
-          "children": [
-            {
-              "index": 0,
-              "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
-              "htmlUrl": "124124162412",
-              "title": "111111111",
-            },
-            {
-              "index": 1,
-              "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
-              "htmlUrl": "124124124152",
-              "title": "2222222222222",
-            }
-          ]
-        },
-        {
-          "name": "緣之空",
-          "children": [
-            {
-              "index": 0,
-              "imgUrl": "https://i.imgur.com/NeeUy2W.jpg",
-              "htmlUrl": "https://hanime1.me/watch?v=39231",
-              "title": "33333333333333",
-            },
-          ]
-        },
-      ]
-    })
+    FavouriteEntity.fromJson({"name": "我的收藏夹", "children": []})
   ];
 
   List<FavouriteEntity> get favouriteList => _favouriteList;
@@ -93,24 +39,45 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void saveAnime(
-      List<WatchEpisode> episodeList, WatchInfo favourite, int favIndex) {
-    print(_favouriteList[favIndex]
-        .children
-        .any((element) => element.name == favourite.title));
-    print("indexindexindexindexindexindex");
+  void addAnimeByFavIndex(WatchInfo watchInfo, int favIndex) {
+    print(watchInfo);
+    _favouriteList[favIndex].children.insert(
+        0,
+        FavouriteChildren.fromJson({
+          "name": "${watchInfo.title}",
+          "children": [
+            FavouriteChildrenChildren.fromJson({
+              "id": Utils.getVideoId(watchInfo.htmlUrl),
+              "imgUrl": watchInfo.imgUrl,
+              "htmlUrl": watchInfo.htmlUrl,
+              "title": watchInfo.shareTitle
+            })
+          ]
+        }));
+
+    // _favouriteList[favIndex].children.insert(0, F));
+    // _favouriteList[favIndex].children.insert(favIndex, Favourite);
+  }
+
+  void addAnime(WatchInfo watchInfo) {
+    print(favouriteList);
+    // int episodeIndex = _favouriteList[favIndex]
+    //     .children
+    //     .indexWhere((element) => element.name == favourite.title);
+    // _favouriteList[favIndex].children[episodeIndex].children.insert(
+    //     0,
+    //     FavouriteChildrenChildren.fromJson({
+    //       "imageUrl": favourite.imgUrl,
+    //       "htmlUrl": favourite.htmlUrl,
+    //       "title": favourite.title
+    //     }));
     // print(index);
-    print(favIndex);
-    // if (index > -1) {
-    //   _favouriteList[index].children = episodeList;
-    // } else {
-    //   _favouriteList.add(FavouriteEntity.fromJson(
-    //       {"name": "${favourite.title}", "children": episodeList}));
-    // }
+    // print(favIndex);
+
     // int index = _favouriteList.indexOf(favourite);
     // _favouriteList[index].children.insert(0, anime);
     // saveData(_favouriteList);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void removeList(FavouriteEntity favourite) {
@@ -132,7 +99,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     // _favouriteList.forEach((element) {
     //   element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
     // });
-    saveData(_favouriteList);
+    // saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -145,11 +112,20 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
+  dynamic findFavouriteEpisodeIndex(WatchInfo info) {
+    for (var i = 0; i < _favouriteList.length; i++) {
+      for (var j = 0; j < _favouriteList[i].children.length; j++) {
+        if (_favouriteList[i].children[j].name == info.title) {
+          // return [i, j];
+        }
+      }
+    }
+  }
+
   //判断是否已经收藏
-  bool isFavouriteEpisode(List<WatchEpisode> episodeList) {
-    bool isFavourite = _favouriteList.any((element) => element.children.any(
-        (element) => element.children.any((element) =>
-            episodeList.any((episode) => episode.htmlUrl == element.htmlUrl))));
+  bool isFavouriteEpisode(List<WatchEpisode> episodeList, WatchInfo info) {
+    bool isFavourite = _favouriteList.any((element) =>
+        element.children.any((element) => element.name == info.title));
     return isFavourite;
   }
 

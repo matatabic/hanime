@@ -71,13 +71,23 @@ class _LikeIconState extends State<LikeWidget> {
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          context
-              .read<FavouriteModel>()
-              .removeItemByHtmlUrl(widget.info.htmlUrl);
+          // context
+          //     .read<FavouriteModel>()
+          //     .removeItemByHtmlUrl(widget.info.htmlUrl);
           // Provider.of<FavouriteModel>(context, listen: false)
           //     .removeItemByHtmlUrl(widget.info.htmlUrl);
         } else {
-          showModel();
+          bool isFavouriteEpisode = context
+              .read<FavouriteModel>()
+              .isFavouriteEpisode(widget.episodeList, widget.info);
+          if (isFavouriteEpisode) {
+            context.read<FavouriteModel>().addAnime(widget.info);
+            print("已经收藏过了");
+          } else {
+            print("没有收藏过");
+            context.read<FavouriteModel>().addAnimeByFavIndex(widget.info, 0);
+          }
+          // showModel();
         }
         return null;
       },
@@ -165,21 +175,9 @@ class _LikeIconState extends State<LikeWidget> {
                               ),
                             ),
                             onTap: () async {
-                              print(widget.episodeList);
-                              print(widget.info);
-
-                              // context.read<FavouriteModel>().saveAnime(
-                              //     FavouriteChildren.fromJson({
-                              //       "imageUrl": widget.info.imgUrl,
-                              //       "htmlUrl": widget.info.htmlUrl,
-                              //       "title": widget.info.title
-                              //     }),
-                              //     item);
-                              // context
-                              //     .read<FavouriteModel>()
-                              //     .saveAnime(widget.episodeList, item);
-                              context.read<FavouriteModel>().saveAnime(
-                                  widget.episodeList, widget.info, index);
+                              context
+                                  .read<FavouriteModel>()
+                                  .addAnimeByFavIndex(widget.info, index);
                               isPanel = true;
                               await closeModel();
                             },

@@ -65,6 +65,7 @@ FavouriteChildrenChildren $FavouriteChildrenChildrenFromJson(
 Map<String, dynamic> $FavouriteChildrenChildrenToJson(
     FavouriteChildrenChildren entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['title'] = entity.title;
   data['htmlUrl'] = entity.htmlUrl;
   data['imgUrl'] = entity.imgUrl;

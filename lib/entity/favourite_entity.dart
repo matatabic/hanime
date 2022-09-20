@@ -41,6 +41,7 @@ class FavouriteChildren {
 
 @JsonSerializable()
 class FavouriteChildrenChildren {
+  late int id;
   late String title;
   late String htmlUrl;
   late String imgUrl;
