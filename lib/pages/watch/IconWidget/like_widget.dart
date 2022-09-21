@@ -63,31 +63,32 @@ class _LikeIconState extends State<LikeWidget> {
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
     });
-    bool isLiked =
-        context.read<FavouriteModel>().isFavouriteAnime(widget.info.htmlUrl);
+    List<FavouriteEntity> favouriteList =
+        context.watch<FavouriteModel>().favouriteList;
+
+    bool isLiked = favouriteList.any((element) => element.children.any(
+        (element) => element.children
+            .any((element) => element.htmlUrl == widget.info.htmlUrl)));
 
     return LikeButton(
       key: iconKey,
       isPanel: isPanel,
       onTap: (bool isLike) async {
         if (isLike) {
-          // context
-          //     .read<FavouriteModel>()
-          //     .removeItemByHtmlUrl(widget.info.htmlUrl);
-          // Provider.of<FavouriteModel>(context, listen: false)
-          //     .removeItemByHtmlUrl(widget.info.htmlUrl);
+          context
+              .read<FavouriteModel>()
+              .removeItemByHtmlUrl(widget.info.htmlUrl);
         } else {
           bool isFavouriteEpisode = context
               .read<FavouriteModel>()
               .isFavouriteEpisode(widget.episodeList, widget.info);
+          isPanel = true;
           if (isFavouriteEpisode) {
             context.read<FavouriteModel>().addAnime(widget.info);
             print("已经收藏过了");
           } else {
-            print("没有收藏过");
-            context.read<FavouriteModel>().addAnimeByFavIndex(widget.info, 0);
+            showModel();
           }
-          // showModel();
         }
         return null;
       },

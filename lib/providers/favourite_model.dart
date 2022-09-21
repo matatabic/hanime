@@ -55,12 +55,12 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           ]
         }));
 
-    // _favouriteList[favIndex].children.insert(0, F));
-    // _favouriteList[favIndex].children.insert(favIndex, Favourite);
+    notifyListeners();
   }
 
   void addAnime(WatchInfo watchInfo) {
     print(favouriteList);
+    findFavouriteEpisodeIndex(watchInfo);
     // int episodeIndex = _favouriteList[favIndex]
     //     .children
     //     .indexWhere((element) => element.name == favourite.title);
@@ -96,9 +96,11 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void removeItemByHtmlUrl(String htmlUrl) {
-    // _favouriteList.forEach((element) {
-    //   element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
-    // });
+    _favouriteList.forEach((element) {
+      element.children.forEach((anime) {
+        anime.children.removeWhere((episode) => episode.htmlUrl == htmlUrl);
+      });
+    });
     // saveData(_favouriteList);
     notifyListeners();
   }
@@ -116,6 +118,16 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     for (var i = 0; i < _favouriteList.length; i++) {
       for (var j = 0; j < _favouriteList[i].children.length; j++) {
         if (_favouriteList[i].children[j].name == info.title) {
+          for (var k = 0;
+              k < _favouriteList[i].children[j].children.length;
+              k++) {
+            if (_favouriteList[i].children[j].children[k].htmlUrl ==
+                info.htmlUrl) {
+              return [i, j, k];
+            }
+          }
+          print("找到了");
+          print([i, j]);
           // return [i, j];
         }
       }
@@ -134,6 +146,8 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     bool isFavourite = _favouriteList.any((element) => element.children.any(
         (element) =>
             element.children.any((element) => element.htmlUrl == htmlUrl)));
+    print(_favouriteList);
+    print("判断是否已经收藏");
     return isFavourite;
   }
 
