@@ -48,7 +48,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           "children": [
             FavouriteChildrenChildren.fromJson({
               "id": Utils.getVideoId(watchInfo.htmlUrl),
-              "imgUrl": watchInfo.imgUrl,
+              "imgUrl": watchInfo.cover,
               "htmlUrl": watchInfo.htmlUrl,
               "title": watchInfo.shareTitle
             })
@@ -59,25 +59,17 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addAnime(WatchInfo watchInfo) {
-    print(favouriteList);
-    findFavouriteEpisodeIndex(watchInfo);
-    // int episodeIndex = _favouriteList[favIndex]
-    //     .children
-    //     .indexWhere((element) => element.name == favourite.title);
-    // _favouriteList[favIndex].children[episodeIndex].children.insert(
-    //     0,
-    //     FavouriteChildrenChildren.fromJson({
-    //       "imageUrl": favourite.imgUrl,
-    //       "htmlUrl": favourite.htmlUrl,
-    //       "title": favourite.title
-    //     }));
-    // print(index);
-    // print(favIndex);
+    var data = findFavouriteEpisodeIndex(_favouriteList, watchInfo);
 
-    // int index = _favouriteList.indexOf(favourite);
-    // _favouriteList[index].children.insert(0, anime);
-    // saveData(_favouriteList);
-    // notifyListeners();
+    _favouriteList[data[0]].children[data[1]].children.insert(
+        data[2],
+        FavouriteChildrenChildren.fromJson({
+          "id": Utils.getVideoId(watchInfo.htmlUrl),
+          "imgUrl": watchInfo.cover,
+          "htmlUrl": watchInfo.htmlUrl,
+          "title": watchInfo.shareTitle
+        }));
+    notifyListeners();
   }
 
   void removeList(FavouriteEntity favourite) {
@@ -114,21 +106,25 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
-  dynamic findFavouriteEpisodeIndex(WatchInfo info) {
+  dynamic findFavouriteEpisodeIndex(
+      List<FavouriteEntity> _favouriteList, WatchInfo info) {
+    int id = Utils.getVideoId(info.htmlUrl);
+
     for (var i = 0; i < _favouriteList.length; i++) {
       for (var j = 0; j < _favouriteList[i].children.length; j++) {
         if (_favouriteList[i].children[j].name == info.title) {
+          if (_favouriteList[i].children[j].children.length == 0) {
+            return [i, j, 0];
+          }
           for (var k = 0;
               k < _favouriteList[i].children[j].children.length;
               k++) {
-            if (_favouriteList[i].children[j].children[k].htmlUrl ==
-                info.htmlUrl) {
+            print(_favouriteList);
+            if (_favouriteList[i].children[j].children[k].id > id ||
+                k == _favouriteList[i].children[j].children.length - 1) {
               return [i, j, k];
             }
           }
-          print("找到了");
-          print([i, j]);
-          // return [i, j];
         }
       }
     }

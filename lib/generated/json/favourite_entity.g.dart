@@ -47,6 +47,10 @@ FavouriteChildrenChildren $FavouriteChildrenChildrenFromJson(
     Map<String, dynamic> json) {
   final FavouriteChildrenChildren favouriteChildrenChildren =
       FavouriteChildrenChildren();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    favouriteChildrenChildren.id = id;
+  }
   final String? title = jsonConvert.convert<String>(json['title']);
   if (title != null) {
     favouriteChildrenChildren.title = title;
