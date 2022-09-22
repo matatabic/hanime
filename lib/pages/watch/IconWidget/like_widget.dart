@@ -74,6 +74,7 @@ class _LikeIconState extends State<LikeWidget> {
       key: iconKey,
       isPanel: isPanel,
       onTap: (bool isLike) async {
+        print(widget.info);
         if (isLike) {
           context
               .read<FavouriteModel>()
