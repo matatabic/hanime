@@ -83,8 +83,8 @@ class _LikeIconState extends State<LikeWidget> {
           bool isFavouriteEpisode = context
               .read<FavouriteModel>()
               .isFavouriteEpisode(widget.episodeList, widget.info);
-          isPanel = true;
           if (isFavouriteEpisode) {
+            isPanel = true;
             context.read<FavouriteModel>().addAnime(widget.info);
             print("已经收藏过了");
           } else {

@@ -106,6 +106,7 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 
   Future loadData(htmlUrl) async {
+    print("htmlUrl: $htmlUrl");
     var data = await getWatchData(htmlUrl);
     WatchEntity watchEntity = WatchEntity.fromJson(data);
 
@@ -144,8 +145,8 @@ class _WatchScreenState extends State<WatchScreen> {
               direction: false,
               // videoIndex: _videoIndex,
               // loading: _loading,
-              loadData: (String htmlUrl) => loadData,
-              playerChange: (String url) => playerChange,
+              loadData: (String htmlUrl) => loadData(htmlUrl),
+              playerChange: (String url) => playerChange(url),
             ),
           )),
       SliverToBoxAdapter(
@@ -156,7 +157,7 @@ class _WatchScreenState extends State<WatchScreen> {
       )),
       SliverToBoxAdapter(
           child: InfoScreen(
-        shareTitle: _shareTitle,
+        // shareTitle: _shareTitle,
         player: player,
         watchEntity: watchEntity,
       )),
@@ -166,11 +167,9 @@ class _WatchScreenState extends State<WatchScreen> {
           containerHeight: 150,
           itemWidth: 170,
           itemHeight: 110,
-          // videoIndex: _videoIndex,
-          // loading: _loading,
           direction: true,
-          loadData: (String htmlUrl) => loadData,
-          playerChange: (String url) => playerChange,
+          loadData: (String htmlUrl) => loadData(htmlUrl),
+          playerChange: (String url) => playerChange(url),
         ),
       ),
       SliverToBoxAdapter(
@@ -202,6 +201,7 @@ class _WatchScreenState extends State<WatchScreen> {
         //加载内容
         delegate: SliverChildBuilderDelegate(
           (context, index) {
+            print("SliverChildBuilderDelegate");
             String heroTag = UniqueKey().toString();
             return watchEntity.commendCount == 3
                 ? Anime3Card(

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/selected_cover.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_item.dart';
+import 'package:hanime/providers/watch_model.dart';
+import 'package:provider/src/provider.dart';
 
 import '../../component/loading_cover.dart';
 
@@ -93,8 +95,10 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
                 });
                 WatchEntity data = await widget
                     .loadData(widget.watchEntity.episode[index].htmlUrl);
+                print(data);
                 widget.playerChange(data.videoData.video[0].list[0].url);
                 //
+                context.read<WatchModel>().setShareTitle = data.info.shareTitle;
                 setState(() {
                   // _shareTitle = data.info.shareTitle;
                   _loading = false;
