@@ -29,9 +29,6 @@ class _WatchScreenState extends State<WatchScreen> {
   ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
-  // var _videoIndex;
-  // bool _loading = false;
-  String _shareTitle = "";
 
   @override
   initState() {
@@ -97,7 +94,7 @@ class _WatchScreenState extends State<WatchScreen> {
     }
 
     await player.reset().then((_) async {
-      player.setDataSource(url, autoPlay: true);
+      player.setDataSource(url, autoPlay: false);
     });
   }
 
@@ -106,7 +103,6 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 
   Future loadData(htmlUrl) async {
-    print("htmlUrl: $htmlUrl");
     var data = await getWatchData(htmlUrl);
     WatchEntity watchEntity = WatchEntity.fromJson(data);
 

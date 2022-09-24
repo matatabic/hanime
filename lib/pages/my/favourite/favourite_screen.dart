@@ -55,13 +55,11 @@ class _FavouriteScreen extends State<FavouriteScreen>
                   backgroundColor: Colors.red,
                   label: '新建收藏夹',
                   labelStyle: TextStyle(fontSize: 19),
-                  onTap: () => CustomDialog.showTextDialog(
-                      context,
-                      "新建收藏夹",
-                      (String content) => {
-                            if (content.length > 0)
-                              context.read<FavouriteModel>().addList(content)
-                          })),
+                  onTap: () => CustomDialog.showTextDialog(context, "新建收藏夹",
+                          (String content) {
+                        if (content.length > 0)
+                          context.read<FavouriteModel>().addList(content);
+                      })),
               SpeedDialChild(
                 child: Icon(Icons.brush),
                 backgroundColor: Colors.orange,
@@ -112,8 +110,6 @@ class _FavouriteScreen extends State<FavouriteScreen>
   }
 
   _buildList(FavouriteEntity favourite) {
-    final widgetContext = context;
-
     return DragAndDropListExpansion(
       canDrag: !_deleteMode,
       title: Text(favourite.name),
@@ -123,12 +119,9 @@ class _FavouriteScreen extends State<FavouriteScreen>
       leading: _deleteMode
           ? InkWell(
               onTap: () {
-                CustomDialog.showDialog(
-                    context,
-                    "确认删除该收藏夹?",
-                    () => {
-                          context.read<FavouriteModel>().removeList(favourite),
-                        });
+                CustomDialog.showDialog(context, "确认删除该收藏夹?", () {
+                  context.read<FavouriteModel>().removeList(favourite);
+                });
               },
               child: ShakeAnimationWidget(
                   isForward: true,
@@ -147,8 +140,6 @@ class _FavouriteScreen extends State<FavouriteScreen>
   }
 
   _buildItem(FavouriteChildren episodeList) {
-    final widgetContext = context;
-
     return DragAndDropItem(
       canDrag: !_deleteMode,
       feedbackWidget: Container(

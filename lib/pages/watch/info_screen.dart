@@ -60,17 +60,15 @@ class InfoScreen extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: 15),
               child: Wrap(
-                children: _buildTagWidget(
-                    watchEntity.tag,
-                    (String tag) => {
-                          player.pause(),
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) =>
-                                    SearchScreen(tagList: [tag])),
-                          )
-                        }),
+                children: _buildTagWidget(watchEntity.tag, (String tag) {
+                  context.read<WatchModel>().clear();
+                  player.pause();
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => SearchScreen(tagList: [tag])),
+                  );
+                }),
                 spacing: 10,
                 runSpacing: 10,
               ))

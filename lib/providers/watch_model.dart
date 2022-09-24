@@ -1,35 +1,40 @@
 import 'package:flutter/foundation.dart';
+import 'package:hanime/entity/watch_entity.dart';
 
 class WatchModel with ChangeNotifier, DiagnosticableTreeMixin {
-  String _title = "";
   String _shareTitle = "";
-  bool _liked = false;
-  int _currentAnimeId = 0;
+  String _currentHtml = "";
+  bool _isFlicker = false;
 
-  String get title => _title;
   String get shareTitle => _shareTitle;
-  bool get liked => _liked;
+  String get currentHtml => _currentHtml;
+  bool get isFlicker => _isFlicker;
 
-  set setTitle(String title) {
-    _title = title;
+  setWatchInfo(WatchInfo watchInfo) {
+    _shareTitle = watchInfo.shareTitle;
+    _currentHtml = watchInfo.htmlUrl;
+    _isFlicker = false;
     notifyListeners();
   }
 
-  set setShareTitle(String shareTitle) {
-    _shareTitle = shareTitle;
+  setIsFlicker(bool data) {
+    _isFlicker = data;
     notifyListeners();
   }
 
-  set setLiked(bool liked) {
-    _liked = liked;
+  clear() {
+    _shareTitle = "";
+    _currentHtml = "";
+    _isFlicker = false;
     notifyListeners();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty('title', title));
     properties.add(StringProperty('shareTitle', shareTitle));
-    properties.add(FlagProperty('liked', value: liked, ifTrue: 'liked'));
+    properties.add(StringProperty('currentAnimeId', currentHtml));
+    properties
+        .add(FlagProperty('isFlicker', value: isFlicker, ifTrue: 'isFlicker'));
   }
 }
