@@ -89,9 +89,7 @@ class _LikeIconState extends State<LikeWidget> {
         key: iconKey,
         onTap: (bool isLike) async {
           if (isLike) {
-            context
-                .read<FavouriteModel>()
-                .removeItemByHtmlUrl(widget.info.title, htmlUrl);
+            context.read<FavouriteModel>().removeAnime(htmlUrl);
           } else {
             bool isFavouriteEpisode = context
                 .read<FavouriteModel>()

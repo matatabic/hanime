@@ -79,24 +79,27 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void removeItem(FavouriteChildren anime) {
-    // int index = _favouriteList
-    //     .indexWhere((favourite) => favourite.children.contains(anime));
-    // _favouriteList[index].children.remove(anime);
-    // saveData(_favouriteList);
-    notifyListeners();
+  void removeEpisode(String name) {
+    _favouriteList.forEach((element) {
+      element.children.removeWhere((element) => element.name == name);
+    });
+    removeHandle();
   }
 
-  void removeItemByHtmlUrl(String animeName, String htmlUrl) {
+  void removeAnime(String htmlUrl) {
     _favouriteList.forEach((element) {
-      element.children.forEach((episode) {
-        episode.children.removeWhere((anime) => anime.htmlUrl == htmlUrl);
+      element.children.forEach((element) {
+        element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
       });
     });
+    removeHandle();
+  }
 
+  void removeHandle() {
     _favouriteList.forEach((element) {
       element.children.removeWhere((episode) => episode.children.isEmpty);
     });
+
     saveData(_favouriteList);
     notifyListeners();
   }

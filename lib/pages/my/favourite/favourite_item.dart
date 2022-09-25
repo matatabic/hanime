@@ -107,13 +107,14 @@ class _FavouriteState extends State<Favourite>
       key: ValueKey(widget.episodeList.name),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
+        extentRatio: 0.25,
         children: [
           SlidableAction(
             onPressed: (BuildContext context) {
-              CustomDialog.showDialog(context, "确认删除该影片?", () {
+              CustomDialog.showDialog(context, "确认删除该剧集?", () {
                 widgetContext
                     .read<FavouriteModel>()
-                    .removeItem(widget.episodeList);
+                    .removeEpisode(widget.episodeList.name);
               });
             },
             backgroundColor: Color(0xFFFE4A49),
@@ -148,13 +149,12 @@ class _FavouriteState extends State<Favourite>
       key: ValueKey(item.htmlUrl),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
+        extentRatio: 0.25,
         children: [
           SlidableAction(
             onPressed: (BuildContext context) {
               CustomDialog.showDialog(context, "确认删除该影片?", () {
-                widgetContext
-                    .read<FavouriteModel>()
-                    .removeItem(widget.episodeList);
+                widgetContext.read<FavouriteModel>().removeAnime(item.htmlUrl);
               });
             },
             backgroundColor: Color(0xFFFE4A49),

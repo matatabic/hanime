@@ -9,7 +9,7 @@ Future getHomeData(String url) async {
     return null;
   }
   final resHtml = response.data;
-  return await homeHtml2Data(resHtml);
+  return homeHtml2Data(resHtml);
 }
 
 Future homeHtml2Data(String html) async {

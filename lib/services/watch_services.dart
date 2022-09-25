@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/request/dio_manage.dart';
 import 'package:hanime/utils/logUtil.dart';
 import 'package:html/parser.dart' show parse;
@@ -145,8 +146,7 @@ Future watchHtml2Data(String resHtml, String url) async {
   //     'name': playerElement.attributes['name']
   //   });
   // }
-
-  return {
+  var watchData = {
     "info": {
       "title": watchTitle,
       "imgUrl": watchImg,
@@ -167,6 +167,8 @@ Future watchHtml2Data(String resHtml, String url) async {
     "commendCount": commendCount,
     "commend": commendList
   };
+
+  return WatchEntity.fromJson(watchData);
 }
 
 Future translate(String prefixText, String expandableText) async {
