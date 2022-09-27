@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/common/permission.dart';
+import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
+import 'package:hanime/providers/watch_model.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
@@ -19,6 +21,18 @@ class DownloadWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widgetContext = context;
+
+    String currentHtml =
+        context.select<WatchModel, String>((value) => value.currentHtml);
+    List<DownloadEntity> downloadList =
+        context.watch<DownloadModel>().downloadList;
+
+    String htmlUrl = currentHtml.length > 0 ? currentHtml : info.htmlUrl;
+
+    bool isDownload = downloadList.any((element) =>
+        element.htmlUrl == htmlUrl &&
+        (element.waitDownload || element.downloading || element.success));
+
     return Container(
         width: 30,
         height: 30,
@@ -26,11 +40,7 @@ class DownloadWidget extends StatelessWidget {
         child: SizedBox(
             width: 30,
             height: 30,
-            child: context.watch<DownloadModel>().downloadList.any((element) =>
-                    element.htmlUrl == info.htmlUrl &&
-                    (element.waitDownload ||
-                        element.downloading ||
-                        element.success))
+            child: isDownload
                 ? Container(
                     child: Icon(Icons.downloading, size: 30, color: Colors.red))
                 : IconButton(

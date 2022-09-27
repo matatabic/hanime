@@ -5,6 +5,7 @@ import 'package:hanime/common/like_button_widget/like_button.dart';
 import 'package:hanime/entity/favourite_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/favourite_model.dart';
+import 'package:hanime/providers/watch_model.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -63,38 +64,53 @@ class _LikeIconState extends State<LikeWidget> {
       ///获取位置
       iconOffset = box.localToGlobal(Offset.zero);
     });
+
     List<FavouriteEntity> favouriteList =
         context.watch<FavouriteModel>().favouriteList;
 
-    bool isLiked = favouriteList.any((element) => element.children.any(
-        (element) => element.children
-            .any((element) => element.htmlUrl == widget.info.htmlUrl)));
+    String currentHtml =
+        context.select<WatchModel, String>((value) => value.currentHtml);
+    String htmlUrl = currentHtml.length > 0 ? currentHtml : widget.info.htmlUrl;
 
-    return LikeButton(
-      key: iconKey,
-      isPanel: isPanel,
-      onTap: (bool isLike) async {
-        print(widget.info);
-        if (isLike) {
-          context
-              .read<FavouriteModel>()
-              .removeItemByHtmlUrl(widget.info.htmlUrl);
-        } else {
-          bool isFavouriteEpisode = context
-              .read<FavouriteModel>()
-              .isFavouriteEpisode(widget.episodeList, widget.info);
-          isPanel = true;
-          if (isFavouriteEpisode) {
-            context.read<FavouriteModel>().addAnime(widget.info);
-            print("已经收藏过了");
-          } else {
-            showModel();
-          }
-        }
-        return null;
+    bool isFlicker =
+        context.select<WatchModel, bool>((value) => value.isFlicker);
+
+    bool isLiked = favouriteList.any((element) => element.children.any(
+        (element) =>
+            element.children.any((element) => element.htmlUrl == htmlUrl)));
+
+    return WillPopScope(
+      onWillPop: () {
+        context.read<WatchModel>().clear();
+        Navigator.pop(context);
+        return Future.value(false);
       },
-      isLiked: isLiked,
-      size: 30,
+      child: LikeButton(
+        key: iconKey,
+        onTap: (bool isLike) async {
+          if (isLike) {
+            context.read<FavouriteModel>().removeAnime(htmlUrl);
+          } else {
+            bool isFavouriteEpisode = context
+                .read<FavouriteModel>()
+                .isFavouriteEpisode(
+                    widget.episodeList, widget.info..htmlUrl = htmlUrl);
+            if (isFavouriteEpisode) {
+              context
+                  .read<FavouriteModel>()
+                  .addAnime(widget.info..htmlUrl = htmlUrl);
+              context.read<WatchModel>().setIsFlicker(true);
+              print("已经收藏过了");
+            } else {
+              showModel();
+            }
+          }
+          return null;
+        },
+        isFlicker: isFlicker,
+        isLiked: isLiked,
+        size: 30,
+      ),
     );
   }
 
@@ -180,7 +196,8 @@ class _LikeIconState extends State<LikeWidget> {
                               context
                                   .read<FavouriteModel>()
                                   .addAnimeByFavIndex(widget.info, index);
-                              isPanel = true;
+                              context.read<WatchModel>().setIsFlicker(true);
+                              // isPanel = isFlicker;
                               await closeModel();
                             },
                           ),

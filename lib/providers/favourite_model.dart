@@ -21,7 +21,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
         _favouriteList[oldListIndex].children.removeAt(oldItemIndex);
     _favouriteList[newListIndex].children.insert(newItemIndex, movedItem);
     saveData(_favouriteList);
-    print(_favouriteList);
+
     notifyListeners();
   }
 
@@ -79,21 +79,28 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void removeItem(FavouriteChildren anime) {
-    int index = _favouriteList
-        .indexWhere((favourite) => favourite.children.contains(anime));
-    _favouriteList[index].children.remove(anime);
-    saveData(_favouriteList);
-    notifyListeners();
+  void removeEpisode(String name) {
+    _favouriteList.forEach((element) {
+      element.children.removeWhere((element) => element.name == name);
+    });
+    removeHandle();
   }
 
-  void removeItemByHtmlUrl(String htmlUrl) {
+  void removeAnime(String htmlUrl) {
     _favouriteList.forEach((element) {
-      element.children.forEach((anime) {
-        anime.children.removeWhere((episode) => episode.htmlUrl == htmlUrl);
+      element.children.forEach((element) {
+        element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
       });
     });
-    // saveData(_favouriteList);
+    removeHandle();
+  }
+
+  void removeHandle() {
+    _favouriteList.forEach((element) {
+      element.children.removeWhere((episode) => episode.children.isEmpty);
+    });
+
+    saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -142,8 +149,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     bool isFavourite = _favouriteList.any((element) => element.children.any(
         (element) =>
             element.children.any((element) => element.htmlUrl == htmlUrl)));
-    print(_favouriteList);
-    print("判断是否已经收藏");
+
     return isFavourite;
   }
 

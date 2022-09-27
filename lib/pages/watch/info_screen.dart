@@ -4,22 +4,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/search/search_screen.dart';
+import 'package:hanime/providers/watch_model.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:provider/src/provider.dart';
 
 class InfoScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
-  final String shareTitle;
+  // final String shareTitle;
 
-  InfoScreen(
-      {Key? key,
-      required this.watchEntity,
-      required this.player,
-      required this.shareTitle})
-      : super(key: key);
+  InfoScreen({
+    Key? key,
+    required this.watchEntity,
+    required this.player,
+    // required this.shareTitle
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String shareTitle =
+        context.select<WatchModel, String>((value) => value.shareTitle);
+
     return Padding(
       padding: EdgeInsets.all(5),
       child: Column(
@@ -55,17 +60,15 @@ class InfoScreen extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(top: 15),
               child: Wrap(
-                children: _buildTagWidget(
-                    watchEntity.tag,
-                    (String tag) => {
-                          player.pause(),
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) =>
-                                    SearchScreen(tagList: [tag])),
-                          )
-                        }),
+                children: _buildTagWidget(watchEntity.tag, (String tag) {
+                  context.read<WatchModel>().clear();
+                  player.pause();
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => SearchScreen(tagList: [tag])),
+                  );
+                }),
                 spacing: 10,
                 runSpacing: 10,
               ))

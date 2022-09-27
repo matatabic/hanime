@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hanime/common/custom_dialog.dart';
 import 'package:hanime/common/expansionLayout.dart';
 import 'package:hanime/common/hero_widget/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/common/widget/common_image.dart';
 import 'package:hanime/entity/favourite_entity.dart';
+import 'package:hanime/providers/favourite_model.dart';
+import 'package:provider/src/provider.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -98,16 +101,21 @@ class _FavouriteState extends State<Favourite>
   }
 
   Widget _buildChildren(BuildContext context, Widget? child) {
+    final widgetContext = context;
+
     return Slidable(
       key: ValueKey(widget.episodeList.name),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
+        extentRatio: 0.25,
         children: [
           SlidableAction(
             onPressed: (BuildContext context) {
-              // CustomDialog.showDialog(context, "确认删除该影片?", () {
-              //   widgetContext.read<FavouriteModel>().removeItem(episodeList);
-              // });
+              CustomDialog.showDialog(context, "确认删除该剧集?", () {
+                widgetContext
+                    .read<FavouriteModel>()
+                    .removeEpisode(widget.episodeList.name);
+              });
             },
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -135,16 +143,19 @@ class _FavouriteState extends State<Favourite>
   }
 
   Widget _buildItem(FavouriteChildrenChildren item) {
+    final widgetContext = context;
+
     return Slidable(
       key: ValueKey(item.htmlUrl),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
+        extentRatio: 0.25,
         children: [
           SlidableAction(
             onPressed: (BuildContext context) {
-              // CustomDialog.showDialog(context, "确认删除该影片?", () {
-              //   widgetContext.read<FavouriteModel>().removeItem(episodeList);
-              // });
+              CustomDialog.showDialog(context, "确认删除该影片?", () {
+                widgetContext.read<FavouriteModel>().removeAnime(item.htmlUrl);
+              });
             },
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,

@@ -18,7 +18,7 @@ class LikeButton extends StatefulWidget {
       double? circleSize,
       this.likeCount,
       this.isLiked = false,
-      this.isPanel = false,
+      this.isFlicker = false,
       this.mainAxisAlignment = MainAxisAlignment.center,
       this.crossAxisAlignment = CrossAxisAlignment.center,
       this.animationDuration = const Duration(milliseconds: 1000),
@@ -65,7 +65,7 @@ class LikeButton extends StatefulWidget {
   ///whether it is liked
   final bool? isLiked;
 
-  final bool? isPanel;
+  final bool? isFlicker;
 
   ///like count
   ///if null, will not show
@@ -120,7 +120,7 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
   late Animation<double> _opacityAnimation;
 
   bool? _isLiked = false;
-  bool? _isPanel = false;
+  bool? _isFlicker = false;
 
   int? _likeCount;
   int? _preLikeCount;
@@ -128,7 +128,7 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _isLiked = widget.isLiked;
-    _isPanel = widget.isPanel;
+    _isFlicker = widget.isFlicker;
 
     _likeCount = widget.likeCount;
     _preLikeCount = _likeCount;
@@ -173,7 +173,7 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isLiked == true && widget.isPanel == true) {
+    if (widget.isLiked == true && widget.isFlicker == true) {
       _controller!.reset();
       _controller!.forward();
     }

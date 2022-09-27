@@ -1,6 +1,7 @@
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hanime/common/fijkplayer_skin/schema.dart';
 import 'package:hanime/common/widget/hero_slide_page.dart';
 import 'package:hanime/component/anime_2card.dart';
@@ -9,6 +10,7 @@ import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/providers/download_model.dart';
 import 'package:hanime/services/watch_services.dart';
+import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
 import 'brief_screen.dart';
@@ -29,9 +31,11 @@ class _WatchScreenState extends State<WatchScreen> {
   ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
-  // var _videoIndex;
-  // bool _loading = false;
-  String _shareTitle = "";
+
+  int _cloudFlareStep = 0;
+  int _durationTime = 1500;
+  bool _networkError = false;
+  InAppWebViewController? _webViewController;
 
   @override
   initState() {
@@ -72,18 +76,78 @@ class _WatchScreenState extends State<WatchScreen> {
         );
       case ConnectionState.done:
         print('done');
+        print(snapshot.error);
         if (snapshot.hasError) {
-          return Center(
-              child: MaterialButton(
-            color: Colors.blue,
-            textColor: Colors.white,
-            child: Text('网络异常,点击重新加载'),
-            onPressed: () {
-              setState(() {
-                _futureBuilderFuture = loadData(widget.htmlUrl);
-              });
-            },
-          ));
+          if (_networkError) {
+            return Center(
+                child: MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: Text('网络异常,点击重新加载'),
+              onPressed: () {
+                setState(() {
+                  _networkError = false;
+                  _futureBuilderFuture = loadData(widget.htmlUrl);
+                });
+              },
+            ));
+          }
+          return Stack(
+            children: [
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  width: 1,
+                  height: 1,
+                  child: InAppWebView(
+                    onWebViewCreated: (controller) {
+                      _webViewController = controller;
+                    },
+                    initialOptions: InAppWebViewGroupOptions(
+                      crossPlatform: InAppWebViewOptions(
+                        clearCache: false,
+                      ),
+                    ),
+                    initialUrlRequest:
+                        URLRequest(url: Uri.parse(widget.htmlUrl)),
+                    onLoadError: (controller, url, code, message) {
+                      print("onLoadError");
+                    },
+                    onLoadHttpError: (controller, url, code, message) {
+                      print("onLoadHttpError");
+                    },
+                    onUpdateVisitedHistory:
+                        (controller, url, androidIsReload) async {
+                      if (url.toString() != widget.htmlUrl) {
+                        _durationTime = 5000;
+                      }
+                      if (_cloudFlareStep == 4) {
+                        _durationTime = 2000;
+                      }
+
+                      Utils.debounce(() async {
+                        String? html = await _webViewController?.getHtml();
+                        _cloudFlareStep = 0;
+                        if (html != null && !html.contains("net::ERR")) {
+                          setState(() {
+                            _futureBuilderFuture =
+                                watchHtml2Data(html, widget.htmlUrl);
+                          });
+                        } else {
+                          setState(() {
+                            _networkError = true;
+                          });
+                        }
+                      }, durationTime: _durationTime);
+                      _cloudFlareStep++;
+                    },
+                  ),
+                ),
+              ),
+              Center(child: CircularProgressIndicator())
+            ],
+          );
+
           // return Text('Error: ${snapshot.error}');
         } else {
           return _createWidget(context, snapshot);
@@ -97,7 +161,7 @@ class _WatchScreenState extends State<WatchScreen> {
     }
 
     await player.reset().then((_) async {
-      player.setDataSource(url, autoPlay: true);
+      player.setDataSource(url, autoPlay: false);
     });
   }
 
@@ -106,8 +170,7 @@ class _WatchScreenState extends State<WatchScreen> {
   }
 
   Future loadData(htmlUrl) async {
-    var data = await getWatchData(htmlUrl);
-    WatchEntity watchEntity = WatchEntity.fromJson(data);
+    WatchEntity watchEntity = await getWatchData(htmlUrl);
 
     return watchEntity;
   }
@@ -138,71 +201,38 @@ class _WatchScreenState extends State<WatchScreen> {
             player: player,
             playerChange: (String url) => playerChange,
             episodeScreen: EpisodeScreen(
-                watchEntity: watchEntity,
-                itemWidth: 170,
-                itemHeight: 110,
-                direction: false,
-                // videoIndex: _videoIndex,
-                // loading: _loading,
-                playerChange: (String url) => playerChange(url),
-                loadData: (htmlUrl) => loadData(htmlUrl),
-                onTap: (index) async {
-                  // if (_loading) {
-                  //   return;
-                  // }
-                  // setState(() {
-                  //   _loading = true;
-                  //   _videoIndex = index;
-                  // });
-                  // WatchEntity data =
-                  //     await loadData(watchEntity.episode[index].htmlUrl);
-                  // playerChange(data.videoData.video[0].list[0].url);
-                  //
-                  // setState(() {
-                  //   _shareTitle = data.info.shareTitle;
-                  //   _loading = false;
-                  // });
-                }),
+              watchEntity: watchEntity,
+              itemWidth: 170,
+              itemHeight: 110,
+              direction: false,
+              // videoIndex: _videoIndex,
+              // loading: _loading,
+              loadData: (String htmlUrl) => loadData(htmlUrl),
+              playerChange: (String url) => playerChange(url),
+            ),
           )),
       SliverToBoxAdapter(
           child: BriefScreen(
         watchEntity: watchEntity,
+        playerChange: (String url) => playerChange,
         controller: _controller,
       )),
       SliverToBoxAdapter(
           child: InfoScreen(
-        shareTitle: _shareTitle,
+        // shareTitle: _shareTitle,
         player: player,
         watchEntity: watchEntity,
       )),
       SliverToBoxAdapter(
         child: EpisodeScreen(
-            watchEntity: watchEntity,
-            containerHeight: 150,
-            itemWidth: 170,
-            itemHeight: 110,
-            // videoIndex: _videoIndex,
-            // loading: _loading,
-            loadData: (htmlUrl) => loadData,
-            playerChange: (String url) => playerChange,
-            direction: true,
-            onTap: (index) async {
-              // if (_loading) {
-              //   return;
-              // }
-              // setState(() {
-              //   _loading = true;
-              //   _videoIndex = index;
-              // });
-              // WatchEntity data =
-              //     await loadData(watchEntity.episode[index].htmlUrl);
-              // playerChange(data.videoData.video[0].list[0].url);
-              //
-              // setState(() {
-              //   _shareTitle = data.info.shareTitle;
-              //   _loading = false;
-              // });
-            }),
+          watchEntity: watchEntity,
+          containerHeight: 150,
+          itemWidth: 170,
+          itemHeight: 110,
+          direction: true,
+          loadData: (String htmlUrl) => loadData(htmlUrl),
+          playerChange: (String url) => playerChange(url),
+        ),
       ),
       SliverToBoxAdapter(
         child: Container(
@@ -233,6 +263,7 @@ class _WatchScreenState extends State<WatchScreen> {
         //加载内容
         delegate: SliverChildBuilderDelegate(
           (context, index) {
+            print("SliverChildBuilderDelegate");
             String heroTag = UniqueKey().toString();
             return watchEntity.commendCount == 3
                 ? Anime3Card(
