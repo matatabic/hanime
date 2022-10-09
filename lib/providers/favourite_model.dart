@@ -48,7 +48,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           "children": [
             FavouriteChildrenChildren.fromJson({
               "id": Utils.getVideoId(watchInfo.htmlUrl),
-              "imgUrl": watchInfo.cover,
+              "imgUrl": watchInfo.imgUrl,
               "htmlUrl": watchInfo.htmlUrl,
               "title": watchInfo.shareTitle
             })
@@ -86,6 +86,17 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     removeHandle();
   }
 
+  void removeAnimeListeners(String htmlUrl) {
+    _favouriteList.forEach((element) {
+      element.children.forEach((element) {
+        element.children.removeWhere((element) => element.htmlUrl == htmlUrl);
+      });
+    });
+
+    removeHandle();
+    notifyListeners();
+  }
+
   void removeAnime(String htmlUrl) {
     _favouriteList.forEach((element) {
       element.children.forEach((element) {
@@ -101,7 +112,6 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
     });
 
     saveData(_favouriteList);
-    notifyListeners();
   }
 
   void getCache() async {

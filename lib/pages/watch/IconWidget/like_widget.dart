@@ -70,7 +70,12 @@ class _LikeIconState extends State<LikeWidget> {
 
     String currentHtml =
         context.select<WatchModel, String>((value) => value.currentHtml);
+    String currentShareTitle =
+        context.select<WatchModel, String>((value) => value.currentShareTitle);
+
     String htmlUrl = currentHtml.length > 0 ? currentHtml : widget.info.htmlUrl;
+    String shareTitle =
+        currentShareTitle.length > 0 ? currentShareTitle : widget.info.title;
 
     bool isFlicker =
         context.select<WatchModel, bool>((value) => value.isFlicker);
@@ -89,16 +94,16 @@ class _LikeIconState extends State<LikeWidget> {
         key: iconKey,
         onTap: (bool isLike) async {
           if (isLike) {
-            context.read<FavouriteModel>().removeAnime(htmlUrl);
+            context.read<FavouriteModel>().removeAnimeListeners(htmlUrl);
           } else {
             bool isFavouriteEpisode = context
                 .read<FavouriteModel>()
                 .isFavouriteEpisode(
                     widget.episodeList, widget.info..htmlUrl = htmlUrl);
             if (isFavouriteEpisode) {
-              context
-                  .read<FavouriteModel>()
-                  .addAnime(widget.info..htmlUrl = htmlUrl);
+              context.read<FavouriteModel>().addAnime(widget.info
+                ..htmlUrl = htmlUrl
+                ..shareTitle = shareTitle);
               context.read<WatchModel>().setIsFlicker(true);
               print("已经收藏过了");
             } else {

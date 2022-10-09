@@ -7,6 +7,7 @@ import 'package:hanime/common/hero_widget/hero_photo_view.dart';
 import 'package:hanime/common/modal_bottom_route.dart';
 import 'package:hanime/common/widget/common_image.dart';
 import 'package:hanime/entity/favourite_entity.dart';
+import 'package:hanime/pages/watch/watch_screen.dart';
 import 'package:hanime/providers/favourite_model.dart';
 import 'package:provider/src/provider.dart';
 
@@ -43,6 +44,7 @@ class _FavouriteState extends State<Favourite>
   late Animation<Color?> _headerColor;
 
   bool _isExpanded = false;
+  late FavouriteChildren _episodeList;
 
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _FavouriteState extends State<Favourite>
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
-
+    _episodeList = widget.episodeList;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -66,9 +68,6 @@ class _FavouriteState extends State<Favourite>
   }
 
   void _setExpanded(bool expanded) {
-    // setState(() {
-    //   _isExpanded = expanded;
-    // });
     if (_isExpanded != expanded) {
       setState(() {
         _isExpanded = expanded;
@@ -104,7 +103,7 @@ class _FavouriteState extends State<Favourite>
     final widgetContext = context;
 
     return Slidable(
-      key: ValueKey(widget.episodeList.name),
+      key: ValueKey(_episodeList.name),
       startActionPane: ActionPane(
         motion: ScrollMotion(),
         extentRatio: 0.25,
@@ -114,7 +113,7 @@ class _FavouriteState extends State<Favourite>
               CustomDialog.showDialog(context, "确认删除该剧集?", () {
                 widgetContext
                     .read<FavouriteModel>()
-                    .removeEpisode(widget.episodeList.name);
+                    .removeEpisode(_episodeList.name);
               });
             },
             backgroundColor: Color(0xFFFE4A49),
@@ -131,41 +130,13 @@ class _FavouriteState extends State<Favourite>
           child: ListTile(
             onTap: toggle,
             leading: Icon(Icons.file_copy),
-            title: Text(widget.episodeList.name),
+            title: Text(_episodeList.name),
             trailing: RotationTransition(
               turns: _iconTurns,
               child: const Icon(Icons.expand_more),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildItem(FavouriteChildrenChildren item) {
-    final widgetContext = context;
-
-    return Slidable(
-      key: ValueKey(item.htmlUrl),
-      startActionPane: ActionPane(
-        motion: ScrollMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            onPressed: (BuildContext context) {
-              CustomDialog.showDialog(context, "确认删除该影片?", () {
-                widgetContext.read<FavouriteModel>().removeAnime(item.htmlUrl);
-              });
-            },
-            backgroundColor: Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: '删除',
-          )
-        ],
-      ),
-      child: FavouriteItem(
-        anime: item,
       ),
     );
   }
@@ -185,61 +156,126 @@ class _FavouriteState extends State<Favourite>
             backgroundColor: Colors.white,
             trailing: Icon(Icons.remove_red_eye_outlined),
             isExpanded: _isExpanded,
-            children:
-                widget.episodeList.children.map((e) => _buildItem(e)).toList())
+            children: _episodeList.children
+                .map((anime) => FavouriteWrapper(
+                      episodeList: _episodeList,
+                      anime: anime,
+                    ))
+                .toList())
       ],
     );
   }
 }
 
-class FavouriteItem extends StatelessWidget {
+class FavouriteWrapper extends StatefulWidget {
   final FavouriteChildrenChildren anime;
+  final FavouriteChildren episodeList;
+
+  const FavouriteWrapper(
+      {Key? key, required this.anime, required this.episodeList})
+      : super(key: key);
+
+  @override
+  State<FavouriteWrapper> createState() => _FavouriteWrapperState();
+}
+
+class _FavouriteWrapperState extends State<FavouriteWrapper> {
+  bool _isDelete = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final widgetContext = context;
+
+    return Slidable(
+      key: ValueKey(widget.anime.htmlUrl),
+      startActionPane: ActionPane(
+        motion: ScrollMotion(),
+        extentRatio: 0.25,
+        children: [
+          SlidableAction(
+            onPressed: (BuildContext context) {
+              CustomDialog.showDialog(context, "确认删除该影片?", () {
+                setState(() {
+                  _isDelete = true;
+                });
+                widget.episodeList.children.remove(widget.anime);
+                widgetContext
+                    .read<FavouriteModel>()
+                    .removeAnime(widget.anime.htmlUrl);
+              });
+            },
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: '删除',
+          )
+        ],
+      ),
+      child: _isDelete
+          ? Container()
+          : FavouriteItem(
+              item: widget.anime,
+            ),
+    );
+  }
+}
+
+class FavouriteItem extends StatelessWidget {
+  final FavouriteChildrenChildren item;
   final bool showBg;
   final String heroTag = UniqueKey().toString();
 
-  FavouriteItem({Key? key, required this.anime, this.showBg = true})
+  FavouriteItem({Key? key, required this.item, this.showBg = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        color: showBg ? Color.fromRGBO(58, 60, 63, 1) : Colors.transparent,
-        height: 110,
-        child: Row(
-          children: [
-            InkWell(
-              onLongPress: () {
-                Navigator.of(context).push(NoAnimRouter(
-                  HeroPhotoView(
-                    heroTag: heroTag,
-                    maxScale: 1.5,
-                    imageProvider: NetworkImage(anime.imgUrl),
-                  ),
-                ));
-              },
-              child: Hero(
-                  tag: heroTag,
-                  child: ClipOval(
-                    child: Container(
-                      width: 70,
-                      height: 70,
-                      child: CommonNormalImage(
-                        imgUrl: anime.imgUrl,
-                      ),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (context) => WatchScreen(htmlUrl: item.htmlUrl)));
+      },
+      child: Container(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          color: showBg ? Color.fromRGBO(58, 60, 63, 1) : Colors.transparent,
+          height: 110,
+          child: Row(
+            children: [
+              InkWell(
+                onLongPress: () {
+                  Navigator.of(context).push(NoAnimRouter(
+                    HeroPhotoView(
+                      heroTag: heroTag,
+                      maxScale: 1.5,
+                      imageProvider: NetworkImage(item.imgUrl),
                     ),
-                  )),
-            ),
-            Expanded(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(anime.title,
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white))),
-            ),
-          ],
-        ));
+                  ));
+                },
+                child: Hero(
+                    tag: heroTag,
+                    child: ClipOval(
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        child: CommonNormalImage(
+                          imgUrl: item.imgUrl,
+                        ),
+                      ),
+                    )),
+              ),
+              Expanded(
+                child: Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(item.title,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white))),
+              ),
+            ],
+          )),
+    );
   }
 }

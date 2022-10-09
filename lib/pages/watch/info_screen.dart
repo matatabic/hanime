@@ -23,7 +23,7 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String shareTitle =
-        context.select<WatchModel, String>((value) => value.shareTitle);
+        context.select<WatchModel, String>((value) => value.currentShareTitle);
 
     return Padding(
       padding: EdgeInsets.all(5),

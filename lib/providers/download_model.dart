@@ -81,6 +81,15 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
     _downloadList[index].downloading = true;
   }
 
+  void orderItem(int oldItemIndex, int newItemIndex) {
+    var movedItem = _downloadList.removeAt(oldItemIndex);
+    _downloadList.insert(newItemIndex, movedItem);
+
+    saveData(_downloadList);
+
+    notifyListeners();
+  }
+
   void changeDownloadProgress(String videoUrl, double progress) {
     int index =
         _downloadList.indexWhere((element) => element.videoUrl == videoUrl);

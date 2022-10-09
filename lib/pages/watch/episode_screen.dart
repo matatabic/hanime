@@ -97,7 +97,7 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
                     .loadData(widget.watchEntity.episode[index].htmlUrl);
                 widget.playerChange(data.videoData.video[0].list[0].url);
 
-                context.read<WatchModel>().setWatchInfo(data.info);
+                context.read<WatchModel>().setWatchInfo(data);
                 setState(() {
                   // _shareTitle = data.info.shareTitle;
                   _loading = false;

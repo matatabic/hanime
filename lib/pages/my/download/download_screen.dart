@@ -91,7 +91,9 @@ class _DownloadScreenState extends State<DownloadScreen>
   }
 
   _onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {}
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    context.read<DownloadModel>().orderItem(oldItemIndex, newItemIndex);
+  }
 
   _onListReorder(int oldListIndex, int newListIndex) {}
 }

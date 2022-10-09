@@ -24,10 +24,22 @@ class DownloadWidget extends StatelessWidget {
 
     String currentHtml =
         context.select<WatchModel, String>((value) => value.currentHtml);
+    String currentCover =
+        context.select<WatchModel, String>((value) => value.currentCover);
+    String currentVideoUrl =
+        context.select<WatchModel, String>((value) => value.currentVideoUrl);
+    String currentShareTitle =
+        context.select<WatchModel, String>((value) => value.currentShareTitle);
+
     List<DownloadEntity> downloadList =
         context.watch<DownloadModel>().downloadList;
 
     String htmlUrl = currentHtml.length > 0 ? currentHtml : info.htmlUrl;
+    String cover = currentCover.length > 0 ? currentCover : info.cover;
+    String videoUrl =
+        currentVideoUrl.length > 0 ? currentVideoUrl : this.videoUrl;
+    String shareTitle =
+        currentShareTitle.length > 0 ? currentShareTitle : info.shareTitle;
 
     bool isDownload = downloadList.any((element) =>
         element.htmlUrl == htmlUrl &&
@@ -60,11 +72,13 @@ class DownloadWidget extends StatelessWidget {
                                 ),
                                 CupertinoDialogAction(
                                   onPressed: () {
+                                    print("下载");
+                                    print(currentHtml);
+
                                     checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
                                         String localVideoUrl =
-                                            await Utils.findBasePath(
-                                                info.htmlUrl);
+                                            await Utils.findBasePath(htmlUrl);
                                         String downloadUrl;
                                         if (videoUrl.indexOf("m3u8") > -1) {
                                           downloadUrl =
@@ -74,7 +88,12 @@ class DownloadWidget extends StatelessWidget {
                                         }
                                         widgetContext
                                             .read<DownloadModel>()
-                                            .addDownload(info, downloadUrl,
+                                            .addDownload(
+                                                info
+                                                  ..cover = cover
+                                                  ..shareTitle = shareTitle
+                                                  ..htmlUrl = htmlUrl,
+                                                downloadUrl,
                                                 localVideoUrl);
                                         BotToast.showSimpleNotification(
                                             title: "已经加入下载队列");

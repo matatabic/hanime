@@ -161,7 +161,7 @@ class _WatchScreenState extends State<WatchScreen> {
     }
 
     await player.reset().then((_) async {
-      player.setDataSource(url, autoPlay: false);
+      player.setDataSource(url, autoPlay: true);
     });
   }
 

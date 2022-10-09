@@ -213,7 +213,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                 padding: const EdgeInsets.only(left: 16),
                 child: Row(
                   children: [
-                    Icon(Icons.voicemail, color: Colors.white),
+                    Icon(Icons.airport_shuttle, color: Colors.white),
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
