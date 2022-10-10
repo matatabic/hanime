@@ -31,6 +31,9 @@ class _WatchScreenState extends State<WatchScreen> {
   ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
   final FijkPlayer player = FijkPlayer();
+  dynamic _videoIndex;
+  bool _loading = false;
+  String _shareTitle = '';
 
   int _cloudFlareStep = 0;
   int _durationTime = 1500;
@@ -205,10 +208,31 @@ class _WatchScreenState extends State<WatchScreen> {
               itemWidth: 170,
               itemHeight: 110,
               direction: false,
-              // videoIndex: _videoIndex,
-              // loading: _loading,
+              videoIndex: _videoIndex,
+              loading: _loading,
               loadData: (String htmlUrl) => loadData(htmlUrl),
               playerChange: (String url) => playerChange(url),
+              videoChange: (int index) async {
+                if (_loading) {
+                  return;
+                }
+                setState(() {
+                  _loading = true;
+                  _videoIndex = index;
+                });
+                WatchEntity data =
+                    await loadData(watchEntity.episode[index].htmlUrl);
+                playerChange(data.videoData.video[0].list[0].url);
+                watchEntity.info.videoIndex = index;
+                watchEntity.info.shareTitle = watchEntity.info.shareTitle;
+                watchEntity.info.cover = watchEntity.info.cover;
+                watchEntity.videoData = data.videoData;
+
+                setState(() {
+                  _shareTitle = data.info.shareTitle;
+                  _loading = false;
+                });
+              },
             ),
           )),
       SliverToBoxAdapter(
@@ -219,7 +243,7 @@ class _WatchScreenState extends State<WatchScreen> {
       )),
       SliverToBoxAdapter(
           child: InfoScreen(
-        // shareTitle: _shareTitle,
+        shareTitle: _shareTitle,
         player: player,
         watchEntity: watchEntity,
       )),
@@ -230,8 +254,32 @@ class _WatchScreenState extends State<WatchScreen> {
           itemWidth: 170,
           itemHeight: 110,
           direction: true,
+          videoIndex: _videoIndex,
+          loading: _loading,
           loadData: (String htmlUrl) => loadData(htmlUrl),
           playerChange: (String url) => playerChange(url),
+          videoChange: (int index) async {
+            if (_loading) {
+              return;
+            }
+            setState(() {
+              _loading = true;
+              _videoIndex = index;
+            });
+            WatchEntity data =
+                await loadData(watchEntity.episode[index].htmlUrl);
+            playerChange(data.videoData.video[0].list[0].url);
+            watchEntity.info.videoIndex = index;
+            watchEntity.info.shareTitle = watchEntity.info.shareTitle;
+            watchEntity.info.cover = watchEntity.info.cover;
+            watchEntity.videoData = data.videoData;
+
+            // context.read<WatchModel>().setWatchInfo(data);
+            setState(() {
+              _shareTitle = data.info.shareTitle;
+              _loading = false;
+            });
+          },
         ),
       ),
       SliverToBoxAdapter(

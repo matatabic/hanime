@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hanime/common/selected_cover.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/episode_item.dart';
-import 'package:hanime/providers/watch_model.dart';
-import 'package:provider/src/provider.dart';
 
 import '../../component/loading_cover.dart';
 
@@ -20,6 +18,9 @@ class EpisodeScreen extends StatefulWidget {
   final double itemHeight;
   final Function(String) loadData;
   final Function(String) playerChange;
+  final Function(int) videoChange;
+  final dynamic videoIndex;
+  final bool loading;
 
   const EpisodeScreen(
       {Key? key,
@@ -29,7 +30,10 @@ class EpisodeScreen extends StatefulWidget {
       required this.itemWidth,
       required this.itemHeight,
       required this.loadData,
-      required this.playerChange})
+      required this.playerChange,
+      required this.videoChange,
+      required this.videoIndex,
+      required this.loading})
       : super(key: key);
 
   @override
@@ -37,8 +41,8 @@ class EpisodeScreen extends StatefulWidget {
 }
 
 class _EpisodeScreenState extends State<EpisodeScreen> {
-  var _videoIndex;
-  bool _loading = false;
+  // var _videoIndex;
+  // bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +56,8 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
             (MediaQuery.of(context).size.width - 2 * LIST_SPACE) / 2 +
             widget.itemWidth / 2;
       } else {
-        scrollOffset = (_videoIndex != null
-                    ? _videoIndex
+        scrollOffset = (widget.videoIndex != null
+                    ? widget.videoIndex
                     : widget.watchEntity.info.videoIndex) *
                 (widget.itemHeight + LIST_SPACE) -
             (MediaQuery.of(context).size.height - 2 * LIST_SPACE) / 2 +
@@ -79,31 +83,14 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
           itemBuilder: (BuildContext context, int index) {
             return Episode(
               videoList: widget.watchEntity.episode[index],
-              selector: _videoIndex == null
+              selector: widget.videoIndex == null
                   ? widget.watchEntity.info.videoIndex == index
-                  : _videoIndex == index,
+                  : widget.videoIndex == index,
               itemWidth: widget.itemWidth,
               itemHeight: widget.itemHeight,
               direction: widget.direction,
-              onTap: () async {
-                if (_loading) {
-                  return;
-                }
-                setState(() {
-                  _loading = true;
-                  _videoIndex = index;
-                });
-                WatchEntity data = await widget
-                    .loadData(widget.watchEntity.episode[index].htmlUrl);
-                widget.playerChange(data.videoData.video[0].list[0].url);
-
-                context.read<WatchModel>().setWatchInfo(data);
-                setState(() {
-                  // _shareTitle = data.info.shareTitle;
-                  _loading = false;
-                });
-              },
-              loading: _loading,
+              onTap: () => widget.videoChange(index),
+              loading: widget.loading,
             );
           }),
     );

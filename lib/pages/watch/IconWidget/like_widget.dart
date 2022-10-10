@@ -68,21 +68,22 @@ class _LikeIconState extends State<LikeWidget> {
     List<FavouriteEntity> favouriteList =
         context.watch<FavouriteModel>().favouriteList;
 
-    String currentHtml =
-        context.select<WatchModel, String>((value) => value.currentHtml);
-    String currentShareTitle =
-        context.select<WatchModel, String>((value) => value.currentShareTitle);
-
-    String htmlUrl = currentHtml.length > 0 ? currentHtml : widget.info.htmlUrl;
-    String shareTitle =
-        currentShareTitle.length > 0 ? currentShareTitle : widget.info.title;
-
+    // String currentHtml =
+    //     context.select<WatchModel, String>((value) => value.currentHtml);
+    // String currentShareTitle =
+    //     context.select<WatchModel, String>((value) => value.currentShareTitle);
+    //
+    // String htmlUrl = currentHtml.length > 0 ? currentHtml : widget.info.htmlUrl;
+    // String shareTitle =
+    //     currentShareTitle.length > 0 ? currentShareTitle : widget.info.title;
+    print("widget.info.htmlUrl");
+    print(widget.info.htmlUrl);
     bool isFlicker =
         context.select<WatchModel, bool>((value) => value.isFlicker);
 
     bool isLiked = favouriteList.any((element) => element.children.any(
-        (element) =>
-            element.children.any((element) => element.htmlUrl == htmlUrl)));
+        (element) => element.children
+            .any((element) => element.htmlUrl == widget.info.htmlUrl)));
 
     return WillPopScope(
       onWillPop: () {
@@ -94,16 +95,16 @@ class _LikeIconState extends State<LikeWidget> {
         key: iconKey,
         onTap: (bool isLike) async {
           if (isLike) {
-            context.read<FavouriteModel>().removeAnimeListeners(htmlUrl);
+            context
+                .read<FavouriteModel>()
+                .removeAnimeListeners(widget.info.htmlUrl);
           } else {
             bool isFavouriteEpisode = context
                 .read<FavouriteModel>()
-                .isFavouriteEpisode(
-                    widget.episodeList, widget.info..htmlUrl = htmlUrl);
+                .isFavouriteEpisode(widget.episodeList,
+                    widget.info..htmlUrl = widget.info.htmlUrl);
             if (isFavouriteEpisode) {
-              context.read<FavouriteModel>().addAnime(widget.info
-                ..htmlUrl = htmlUrl
-                ..shareTitle = shareTitle);
+              context.read<FavouriteModel>().addAnime(widget.info);
               context.read<WatchModel>().setIsFlicker(true);
               print("已经收藏过了");
             } else {

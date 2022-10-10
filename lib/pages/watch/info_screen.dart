@@ -11,19 +11,19 @@ import 'package:provider/src/provider.dart';
 class InfoScreen extends StatelessWidget {
   final WatchEntity watchEntity;
   final FijkPlayer player;
-  // final String shareTitle;
+  final String shareTitle;
 
-  InfoScreen({
-    Key? key,
-    required this.watchEntity,
-    required this.player,
-    // required this.shareTitle
-  }) : super(key: key);
+  InfoScreen(
+      {Key? key,
+      required this.watchEntity,
+      required this.player,
+      required this.shareTitle})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String shareTitle =
-        context.select<WatchModel, String>((value) => value.currentShareTitle);
+    // String shareTitle =
+    //     context.select<WatchModel, String>((value) => value.currentShareTitle);
 
     return Padding(
       padding: EdgeInsets.all(5),

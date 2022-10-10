@@ -7,7 +7,6 @@ import 'package:hanime/common/permission.dart';
 import 'package:hanime/entity/download_entity.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/providers/download_model.dart';
-import 'package:hanime/providers/watch_model.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
 
@@ -22,24 +21,24 @@ class DownloadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final widgetContext = context;
 
-    String currentHtml =
-        context.select<WatchModel, String>((value) => value.currentHtml);
-    String currentCover =
-        context.select<WatchModel, String>((value) => value.currentCover);
-    String currentVideoUrl =
-        context.select<WatchModel, String>((value) => value.currentVideoUrl);
-    String currentShareTitle =
-        context.select<WatchModel, String>((value) => value.currentShareTitle);
+    // String currentHtml =
+    //     context.select<WatchModel, String>((value) => value.currentHtml);
+    // String currentCover =
+    //     context.select<WatchModel, String>((value) => value.currentCover);
+    // String currentVideoUrl =
+    //     context.select<WatchModel, String>((value) => value.currentVideoUrl);
+    // String currentShareTitle =
+    //     context.select<WatchModel, String>((value) => value.currentShareTitle);
 
     List<DownloadEntity> downloadList =
         context.watch<DownloadModel>().downloadList;
-
-    String htmlUrl = currentHtml.length > 0 ? currentHtml : info.htmlUrl;
-    String cover = currentCover.length > 0 ? currentCover : info.cover;
-    String videoUrl =
-        currentVideoUrl.length > 0 ? currentVideoUrl : this.videoUrl;
-    String shareTitle =
-        currentShareTitle.length > 0 ? currentShareTitle : info.shareTitle;
+    //
+    String htmlUrl = info.htmlUrl;
+    // String cover = currentCover.length > 0 ? currentCover : info.cover;
+    // String videoUrl =
+    //     currentVideoUrl.length > 0 ? currentVideoUrl : this.videoUrl;
+    // String shareTitle =
+    //     currentShareTitle.length > 0 ? currentShareTitle : info.shareTitle;
 
     bool isDownload = downloadList.any((element) =>
         element.htmlUrl == htmlUrl &&
@@ -73,7 +72,7 @@ class DownloadWidget extends StatelessWidget {
                                 CupertinoDialogAction(
                                   onPressed: () {
                                     print("下载");
-                                    print(currentHtml);
+                                    // print(currentHtml);
 
                                     checkPermission().then((hasGranted) async {
                                       if (hasGranted) {
@@ -88,12 +87,7 @@ class DownloadWidget extends StatelessWidget {
                                         }
                                         widgetContext
                                             .read<DownloadModel>()
-                                            .addDownload(
-                                                info
-                                                  ..cover = cover
-                                                  ..shareTitle = shareTitle
-                                                  ..htmlUrl = htmlUrl,
-                                                downloadUrl,
+                                            .addDownload(info, downloadUrl,
                                                 localVideoUrl);
                                         BotToast.showSimpleNotification(
                                             title: "已经加入下载队列");

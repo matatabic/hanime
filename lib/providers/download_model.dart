@@ -13,33 +13,34 @@ class DownloadModel with ChangeNotifier, DiagnosticableTreeMixin {
   List<DownloadEntity> get downloadList => _downloadList;
 
   void addDownload(WatchInfo info, String videoUrl, String localVideoUrl) {
-    int index =
-        _downloadList.indexWhere((element) => element.htmlUrl == info.htmlUrl);
-    if (index > -1) {
-      if (!_downloadList[index].success) {
-        _downloadList[index].waitDownload = true;
-      }
-    } else {
-      _downloadList.insert(
-          0,
-          DownloadEntity.fromJson({
-            "title": info.shareTitle,
-            "imageUrl": info.cover,
-            "htmlUrl": info.htmlUrl,
-            "videoUrl": videoUrl,
-            "localVideoUrl":
-                '$localVideoUrl/${Utils.getVideoId(info.htmlUrl)}.mp4',
-            "progress": 0,
-            "success": false,
-            "downloading": false,
-            "waitDownload": true,
-            "reTry": false,
-            "reTryTime": 0,
-          }));
-      saveData(_downloadList);
-    }
-
-    notifyListeners();
+    print(info);
+    // int index =
+    //     _downloadList.indexWhere((element) => element.htmlUrl == info.htmlUrl);
+    // if (index > -1) {
+    //   if (!_downloadList[index].success) {
+    //     _downloadList[index].waitDownload = true;
+    //   }
+    // } else {
+    //   _downloadList.insert(
+    //       0,
+    //       DownloadEntity.fromJson({
+    //         "title": info.shareTitle,
+    //         "imageUrl": info.cover,
+    //         "htmlUrl": info.htmlUrl,
+    //         "videoUrl": videoUrl,
+    //         "localVideoUrl":
+    //             '$localVideoUrl/${Utils.getVideoId(info.htmlUrl)}.mp4',
+    //         "progress": 0,
+    //         "success": false,
+    //         "downloading": false,
+    //         "waitDownload": true,
+    //         "reTry": false,
+    //         "reTryTime": 0,
+    //       }));
+    //   saveData(_downloadList);
+    // }
+    //
+    // notifyListeners();
   }
 
   void removeItem(String htmlUrl) {
