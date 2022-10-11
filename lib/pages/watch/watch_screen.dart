@@ -9,6 +9,7 @@ import 'package:hanime/component/anime_3card.dart';
 import 'package:hanime/entity/watch_entity.dart';
 import 'package:hanime/pages/watch/video_screen.dart';
 import 'package:hanime/providers/download_model.dart';
+import 'package:hanime/providers/watch_model.dart';
 import 'package:hanime/services/watch_services.dart';
 import 'package:hanime/utils/utils.dart';
 import 'package:provider/src/provider.dart';
@@ -26,7 +27,12 @@ class WatchScreen extends StatefulWidget {
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends State<WatchScreen> {
+class _WatchScreenState extends State<WatchScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   Interval opacityCurve = Interval(0.0, 1, curve: Curves.fastOutSlowIn);
   ScrollController _controller = ScrollController();
   var _futureBuilderFuture;
@@ -172,16 +178,37 @@ class _WatchScreenState extends State<WatchScreen> {
     await player.pause();
   }
 
+  videoChange(WatchEntity watchEntity, int index) async {
+    if (_loading) {
+      return;
+    }
+    playerStop();
+    setState(() {
+      _loading = true;
+      _videoIndex = index;
+    });
+    context.read<WatchModel>().setIsFlicker(false);
+    WatchEntity data = await loadData(watchEntity.episode[index].htmlUrl);
+    playerChange(data.videoData.video[0].list[0].url);
+    setState(() {
+      watchEntity.info = data.info;
+      watchEntity.videoData = data.videoData;
+      _shareTitle = data.info.shareTitle;
+      _loading = false;
+    });
+  }
+
   Future loadData(htmlUrl) async {
     WatchEntity watchEntity = await getWatchData(htmlUrl);
-
+    print("loadDataloadDataloadDataloadData");
     return watchEntity;
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     print("_createWidget");
     WatchEntity watchEntity = snapshot.data;
-
+    print("watchEntitywatchEntitywatchEntitywatchEntity");
+    print(watchEntity);
     return SafeArea(
         child: SizedBox.expand(
             child: CustomScrollView(controller: _controller, slivers: <Widget>[
@@ -204,36 +231,13 @@ class _WatchScreenState extends State<WatchScreen> {
             player: player,
             playerChange: (String url) => playerChange,
             episodeScreen: EpisodeScreen(
-              watchEntity: watchEntity,
-              itemWidth: 170,
-              itemHeight: 110,
-              direction: false,
-              videoIndex: _videoIndex,
-              loading: _loading,
-              loadData: (String htmlUrl) => loadData(htmlUrl),
-              playerChange: (String url) => playerChange(url),
-              videoChange: (int index) async {
-                if (_loading) {
-                  return;
-                }
-                setState(() {
-                  _loading = true;
-                  _videoIndex = index;
-                });
-                WatchEntity data =
-                    await loadData(watchEntity.episode[index].htmlUrl);
-                playerChange(data.videoData.video[0].list[0].url);
-                watchEntity.info.videoIndex = index;
-                watchEntity.info.shareTitle = watchEntity.info.shareTitle;
-                watchEntity.info.cover = watchEntity.info.cover;
-                watchEntity.videoData = data.videoData;
-
-                setState(() {
-                  _shareTitle = data.info.shareTitle;
-                  _loading = false;
-                });
-              },
-            ),
+                watchEntity: watchEntity,
+                itemWidth: 170,
+                itemHeight: 110,
+                direction: false,
+                videoIndex: _videoIndex,
+                loading: _loading,
+                videoChange: (int index) => videoChange(watchEntity, index)),
           )),
       SliverToBoxAdapter(
           child: BriefScreen(
@@ -249,38 +253,14 @@ class _WatchScreenState extends State<WatchScreen> {
       )),
       SliverToBoxAdapter(
         child: EpisodeScreen(
-          watchEntity: watchEntity,
-          containerHeight: 150,
-          itemWidth: 170,
-          itemHeight: 110,
-          direction: true,
-          videoIndex: _videoIndex,
-          loading: _loading,
-          loadData: (String htmlUrl) => loadData(htmlUrl),
-          playerChange: (String url) => playerChange(url),
-          videoChange: (int index) async {
-            if (_loading) {
-              return;
-            }
-            setState(() {
-              _loading = true;
-              _videoIndex = index;
-            });
-            WatchEntity data =
-                await loadData(watchEntity.episode[index].htmlUrl);
-            playerChange(data.videoData.video[0].list[0].url);
-            watchEntity.info.videoIndex = index;
-            watchEntity.info.shareTitle = watchEntity.info.shareTitle;
-            watchEntity.info.cover = watchEntity.info.cover;
-            watchEntity.videoData = data.videoData;
-
-            // context.read<WatchModel>().setWatchInfo(data);
-            setState(() {
-              _shareTitle = data.info.shareTitle;
-              _loading = false;
-            });
-          },
-        ),
+            watchEntity: watchEntity,
+            containerHeight: 150,
+            itemWidth: 170,
+            itemHeight: 110,
+            direction: true,
+            videoIndex: _videoIndex,
+            loading: _loading,
+            videoChange: (int index) => videoChange(watchEntity, index)),
       ),
       SliverToBoxAdapter(
         child: Container(

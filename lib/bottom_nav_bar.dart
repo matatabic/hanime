@@ -43,12 +43,12 @@ class _BottomNavBarState extends State<BottomNavBar>
     super.initState();
     loadCache();
     initM3u8Downloader();
-    tabController = TabController(vsync: this, length: 3)
-      ..addListener(() {
-        setState(() {
-          currentIndex = tabController.index;
-        });
-      });
+    tabController = TabController(vsync: this, length: 3);
+    // ..addListener(() {
+    //   setState(() {
+    //     currentIndex = tabController.index;
+    //   });
+    // });
   }
 
   @override
@@ -59,7 +59,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           color: Theme.of(context).primaryColor,
           buttonBackgroundColor: Colors.transparent,
           backgroundColor: Colors.black26,
-          index: currentIndex,
+          // index: currentIndex,
           items: <Widget>[
             Icon(Icons.home, size: 30),
             Icon(Icons.cloud_circle, size: 30),
@@ -67,9 +67,9 @@ class _BottomNavBarState extends State<BottomNavBar>
           ],
           onTap: (index) {
             //Handle button tap
-            setState(() {
-              currentIndex = index;
-            });
+            // setState(() {
+            //   currentIndex = index;
+            // });
             tabController.animateTo(index,
                 duration: Duration(milliseconds: 300), curve: Curves.ease);
           },

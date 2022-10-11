@@ -36,7 +36,9 @@ class _FavouriteScreen extends State<FavouriteScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // final favouriteList = [];
     final favouriteList = context.watch<FavouriteModel>().favouriteList;
+    print("fqawefqwfqwfqwfqw");
     return Scaffold(
       floatingActionButton: _deleteMode
           ? SpeedDial(

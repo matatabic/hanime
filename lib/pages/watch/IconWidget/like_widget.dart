@@ -38,7 +38,7 @@ class _LikeIconState extends State<LikeWidget> {
   ///接受弹窗类构造成功传递来的关闭参数
   late Function closeModel;
 
-  bool isPanel = false;
+  bool isFlicker = false;
 
   @override
   void initState() {
@@ -68,16 +68,6 @@ class _LikeIconState extends State<LikeWidget> {
     List<FavouriteEntity> favouriteList =
         context.watch<FavouriteModel>().favouriteList;
 
-    // String currentHtml =
-    //     context.select<WatchModel, String>((value) => value.currentHtml);
-    // String currentShareTitle =
-    //     context.select<WatchModel, String>((value) => value.currentShareTitle);
-    //
-    // String htmlUrl = currentHtml.length > 0 ? currentHtml : widget.info.htmlUrl;
-    // String shareTitle =
-    //     currentShareTitle.length > 0 ? currentShareTitle : widget.info.title;
-    print("widget.info.htmlUrl");
-    print(widget.info.htmlUrl);
     bool isFlicker =
         context.select<WatchModel, bool>((value) => value.isFlicker);
 
@@ -87,7 +77,7 @@ class _LikeIconState extends State<LikeWidget> {
 
     return WillPopScope(
       onWillPop: () {
-        context.read<WatchModel>().clear();
+        // context.read<WatchModel>().clear();
         Navigator.pop(context);
         return Future.value(false);
       },
@@ -101,11 +91,10 @@ class _LikeIconState extends State<LikeWidget> {
           } else {
             bool isFavouriteEpisode = context
                 .read<FavouriteModel>()
-                .isFavouriteEpisode(widget.episodeList,
-                    widget.info..htmlUrl = widget.info.htmlUrl);
+                .isFavouriteEpisode(widget.episodeList, widget.info);
+            context.read<WatchModel>().setIsFlicker(true);
             if (isFavouriteEpisode) {
               context.read<FavouriteModel>().addAnime(widget.info);
-              context.read<WatchModel>().setIsFlicker(true);
               print("已经收藏过了");
             } else {
               showModel();
@@ -199,10 +188,13 @@ class _LikeIconState extends State<LikeWidget> {
                               ),
                             ),
                             onTap: () async {
+                              // setState(() {
+                              //   _isFlicker = true;
+                              // });
                               context
                                   .read<FavouriteModel>()
                                   .addAnimeByFavIndex(widget.info, index);
-                              context.read<WatchModel>().setIsFlicker(true);
+
                               // isPanel = isFlicker;
                               await closeModel();
                             },

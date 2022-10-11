@@ -16,8 +16,6 @@ class EpisodeScreen extends StatefulWidget {
   final double? containerHeight;
   final double itemWidth;
   final double itemHeight;
-  final Function(String) loadData;
-  final Function(String) playerChange;
   final Function(int) videoChange;
   final dynamic videoIndex;
   final bool loading;
@@ -29,8 +27,6 @@ class EpisodeScreen extends StatefulWidget {
       this.containerHeight,
       required this.itemWidth,
       required this.itemHeight,
-      required this.loadData,
-      required this.playerChange,
       required this.videoChange,
       required this.videoIndex,
       required this.loading})
