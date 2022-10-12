@@ -136,7 +136,6 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           for (var k = 0;
               k < _favouriteList[i].children[j].children.length;
               k++) {
-            print(_favouriteList);
             if (_favouriteList[i].children[j].children[k].id > id ||
                 k == _favouriteList[i].children[j].children.length - 1) {
               return [i, j, k];

@@ -117,7 +117,7 @@ class _SearchEngineWidgetState extends State<SearchEngineWidget> {
                   onTap: () {
                     widget.loadData({"type": "query", "data": _query});
                   },
-                  child: Text("搜索"))
+                  child: Text("搜索", style: TextStyle(fontSize: 16)))
             ],
           ),
         ),

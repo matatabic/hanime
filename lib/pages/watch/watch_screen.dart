@@ -54,18 +54,25 @@ class _WatchScreenState extends State<WatchScreen>
 
   @override
   dispose() {
-    super.dispose();
+    player.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: FutureBuilder(
-        builder: _buildFuture,
-        future:
-            _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<WatchModel>().setIsFlicker(false);
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: FutureBuilder(
+          builder: _buildFuture,
+          future:
+              _futureBuilderFuture, // 用户定义的需要异步执行的代码，类型为Future<String>或者null的变量或函数
+        ),
       ),
     );
   }
@@ -200,15 +207,12 @@ class _WatchScreenState extends State<WatchScreen>
 
   Future loadData(htmlUrl) async {
     WatchEntity watchEntity = await getWatchData(htmlUrl);
-    print("loadDataloadDataloadDataloadData");
     return watchEntity;
   }
 
   Widget _createWidget(BuildContext context, AsyncSnapshot snapshot) {
     print("_createWidget");
     WatchEntity watchEntity = snapshot.data;
-    print("watchEntitywatchEntitywatchEntitywatchEntity");
-    print(watchEntity);
     return SafeArea(
         child: SizedBox.expand(
             child: CustomScrollView(controller: _controller, slivers: <Widget>[

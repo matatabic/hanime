@@ -20,7 +20,6 @@ class _MyScreenState extends State<MyScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("收藏下载收藏下载收藏下载收藏下载收藏下载");
     return SafeArea(
       child: DefaultTabController(
           length: 2,
