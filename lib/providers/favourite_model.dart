@@ -48,7 +48,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           "children": [
             FavouriteChildrenChildren.fromJson({
               "id": Utils.getVideoId(watchInfo.htmlUrl),
-              "imgUrl": watchInfo.imgUrl,
+              "imgUrl": watchInfo.cover,
               "htmlUrl": watchInfo.htmlUrl,
               "title": watchInfo.shareTitle
             })
