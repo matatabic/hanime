@@ -40,7 +40,6 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void addAnimeByFavIndex(WatchInfo watchInfo, int favIndex) {
-    print(watchInfo);
     _favouriteList[favIndex].children.insert(
         0,
         FavouriteChildren.fromJson({
@@ -54,7 +53,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
             })
           ]
         }));
-
+    saveData(_favouriteList);
     notifyListeners();
   }
 
@@ -69,6 +68,7 @@ class FavouriteModel with ChangeNotifier, DiagnosticableTreeMixin {
           "htmlUrl": watchInfo.htmlUrl,
           "title": watchInfo.shareTitle
         }));
+    saveData(_favouriteList);
     notifyListeners();
   }
 

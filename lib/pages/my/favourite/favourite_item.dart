@@ -34,6 +34,7 @@ class _FavouriteState extends State<Favourite>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
 
+  bool _isDelete = false;
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
   final ColorTween _iconColorTween = ColorTween();
@@ -111,6 +112,9 @@ class _FavouriteState extends State<Favourite>
           SlidableAction(
             onPressed: (BuildContext context) {
               CustomDialog.showDialog(context, "确认删除该剧集?", () {
+                setState(() {
+                  _isDelete = true;
+                });
                 widgetContext
                     .read<FavouriteModel>()
                     .removeEpisode(_episodeList.name);
@@ -123,21 +127,21 @@ class _FavouriteState extends State<Favourite>
           )
         ],
       ),
-      child: Container(
-        child: ListTileTheme.merge(
-          iconColor: _iconColor.value,
-          textColor: _headerColor.value,
-          child: ListTile(
-            onTap: toggle,
-            leading: Icon(Icons.file_copy),
-            title: Text(_episodeList.name),
-            trailing: RotationTransition(
-              turns: _iconTurns,
-              child: const Icon(Icons.expand_more),
+      child: _isDelete
+          ? Container()
+          : ListTileTheme.merge(
+              iconColor: _iconColor.value,
+              textColor: _headerColor.value,
+              child: ListTile(
+                onTap: toggle,
+                leading: Icon(Icons.file_copy),
+                title: Text(_episodeList.name),
+                trailing: RotationTransition(
+                  turns: _iconTurns,
+                  child: const Icon(Icons.expand_more),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
