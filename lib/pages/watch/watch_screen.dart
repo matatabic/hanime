@@ -199,6 +199,7 @@ class _WatchScreenState extends State<WatchScreen>
     playerChange(data.videoData.video[0].list[0].url);
     setState(() {
       watchEntity.info = data.info;
+      watchEntity.tag = data.tag;
       watchEntity.videoData = data.videoData;
       _shareTitle = data.info.shareTitle;
       _loading = false;
