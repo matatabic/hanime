@@ -38,7 +38,7 @@ class _LikeIconState extends State<LikeWidget> {
   ///接受弹窗类构造成功传递来的关闭参数
   late Function closeModel;
 
-  bool isFlicker = false;
+  bool isFlicker1 = true;
 
   @override
   void initState() {
@@ -46,7 +46,9 @@ class _LikeIconState extends State<LikeWidget> {
     super.initState();
     widget.controller.addListener(() {
       Utils.debounce(() {
-        setState(() {});
+        setState(() {
+          isFlicker1 = false;
+        });
       }, durationTime: 300);
     });
   }
@@ -77,7 +79,6 @@ class _LikeIconState extends State<LikeWidget> {
 
     return WillPopScope(
       onWillPop: () {
-        // context.read<WatchModel>().clear();
         Navigator.pop(context);
         return Future.value(false);
       },
@@ -102,7 +103,7 @@ class _LikeIconState extends State<LikeWidget> {
           }
           return null;
         },
-        isFlicker: isFlicker,
+        isFlicker: isFlicker1 && isFlicker,
         isLiked: isLiked,
         size: 30,
       ),
